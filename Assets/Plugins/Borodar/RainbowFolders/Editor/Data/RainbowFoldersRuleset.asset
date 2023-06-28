@@ -337,3 +337,226 @@ MonoBehaviour:
     BackgroundTexture: {fileID: 0}
     IsBackgroundRecursive: 0
     IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces
+    Ordinal: 27
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 20
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces Dual Render Fusion (Experimental)
+    Ordinal: 28
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 20
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/QCHT Unity Interactions
+    Ordinal: 29
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 20
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples
+    Ordinal: 30
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 20
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/QCHT Unity Interactions/4.0.0-pre.14/QCHT Interaction Samples/Poke
+    Ordinal: 31
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/QCHT Unity Interactions/4.0.0-pre.14/QCHT Interaction Samples/Drawing
+    Ordinal: 32
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/QCHT Unity Interactions/4.0.0-pre.14/QCHT Interaction Samples/Proximal
+    Ordinal: 33
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/QCHT Unity Interactions/4.0.0-pre.14/QCHT Interaction Samples/Distal
+    Ordinal: 34
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/QCHT Unity Interactions/4.0.0-pre.14/QCHT Interaction Samples/Menu
+    Ordinal: 35
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/QCHT Unity Interactions/4.0.0-pre.14/QCHT Interaction Samples/UI
+      Elements
+    Ordinal: 36
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Hit Testing
+      Sample
+    Ordinal: 37
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Image Tracking
+      Sample
+    Ordinal: 38
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Spatial Meshing
+      Sample
+    Ordinal: 39
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Camera Frame
+      Access Sample
+    Ordinal: 40
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Main Menu
+    Ordinal: 41
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Anchor Sample
+    Ordinal: 42
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Plane Detection
+      Sample
+    Ordinal: 43
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/XR Interaction
+      Toolkit Sample
+    Ordinal: 44
+    Priority: 0
+    IconType: 0
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 40
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
