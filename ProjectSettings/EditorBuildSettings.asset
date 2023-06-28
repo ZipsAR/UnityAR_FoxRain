@@ -6,34 +6,57 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/ZipsAROpenXRLoadingTest.unity
+    guid: 43edf4349e3a344d1902d79685ee2afe
+  - enabled: 1
+    path: Assets/Samples/Snapdragon Spaces Dual Render Fusion (Experimental)/0.14.0/Fusion
+      Samples/Scenes/OpenXRLoadingTest.unity
+    guid: 5c1ef0967f588c34db1f88c7ec1271cb
+  - enabled: 1
+    path: Assets/Samples/Snapdragon Spaces Dual Render Fusion (Experimental)/0.14.0/Fusion
+      Samples/Scenes/ControllerPrefabSampleScene.unity
+    guid: bd73d7ee9011b9e47a26e77c4c76e0f9
+  - enabled: 1
+    path: Assets/Samples/Snapdragon Spaces Dual Render Fusion (Experimental)/0.14.0/Fusion
+      Samples/Scenes/CubeManipulation.unity
+    guid: 828586802802e02458bbf10b213f56ec
+  - enabled: 1
+    path: Assets/Samples/Snapdragon Spaces Dual Render Fusion (Experimental)/0.14.0/Fusion
+      Samples/Scenes/LandscapeUISampleScene.unity
+    guid: 9c496e59d02f76f4cbe73e4c923c7bb9
+  - enabled: 1
+    path: Assets/Samples/Snapdragon Spaces Dual Render Fusion (Experimental)/0.14.0/Fusion
+      Samples/Scenes/PortraitUISampleScene.unity
+    guid: c14207df34b75c249ad492b04dc3886d
+  - enabled: 0
     path: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Main Menu/Main
       Menu.unity
     guid: 2b406ea90420fc841839c843c6bfc3d5
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Anchor Sample/Anchor
       Sample.unity
     guid: a6e56af4472621b45b91380052443a24
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Camera Frame
       Access Sample/Camera Frame Access Sample.unity
     guid: 7baa3e9f6af898949bb40acf3ab781df
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Hit Testing
       Sample/Hit Testing Sample.unity
     guid: c583c7f614816bd489b3bcd62bf9aac0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Image Tracking
       Sample/Image Tracking Sample.unity
     guid: 61f68fcb03f5e2640b757852c008c89a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Plane Detection
       Sample/Plane Detection Sample.unity
     guid: 46111d8efce134ef38f645e0c00e1362
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/Spatial Meshing
       Sample/Spatial Meshing Sample.unity
     guid: f218a55ed2e2741418ef6f380d60db57
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/Snapdragon Spaces/0.14.0/Core Samples/Scenes/XR Interaction
       Toolkit Sample/XR Interaction Toolkit Sample.unity
     guid: 457c784199db14427a9e59e7acbf15a2

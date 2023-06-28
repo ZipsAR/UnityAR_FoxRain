@@ -20,6 +20,14 @@
         "com.unity.xr.interaction.toolkit": "2.3.0"
       }
     },
+    "com.qualcomm.snapdragon.spaces.fusion": {
+      "version": "file:com.qualcomm.snapdragon.spaces.fusion_0_14_0.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "com.qualcomm.snapdragon.spaces": "0.13.0"
+      }
+    },
     "com.unity.burst": {
       "version": "1.8.2",
       "depth": 1,
