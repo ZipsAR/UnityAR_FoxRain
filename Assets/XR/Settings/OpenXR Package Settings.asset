@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f547939d43e39c4da87271785d7b72e, type: 3}
   m_Name: FusionFeature Android
   m_EditorClassIdentifier: 
-  m_enabled: 1
+  m_enabled: 0
   nameUi: Dual Render Fusion (Experimental)
   version: 0.14.0
   featureIdInternal: com.qualcomm.snapdragon.spaces.fusion
