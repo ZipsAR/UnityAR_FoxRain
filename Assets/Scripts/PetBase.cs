@@ -12,4 +12,19 @@ public abstract class PetBase : MonoBehaviour
     {
         anim = GetComponent<Animator>();
     }
+
+    private void Update()
+    {
+        switch (GameManager.Instance.currentMode)
+        {
+            case GameManager.Mode.StrollMode:
+                StrollModeUpdate();
+                break;
+        }
+    }
+
+    private void StrollModeUpdate()
+    {
+        
+    }
 }

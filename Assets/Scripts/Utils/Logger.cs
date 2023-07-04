@@ -27,7 +27,7 @@ namespace ZipsAR
             string prevFuncName = new StackFrame(1, true).GetMethod().Name;
             // 이전 Class명
             string prevClassName = new StackTrace().GetFrame(1).GetMethod().ReflectedType?.Name;
-            Debug.Log($"[{prevClassName} / {prevFuncName}] : {message}");
+            Debug.Log($"ZipsAR-[{prevClassName} / {prevFuncName}] : {message}");
         }
 
         [System.Diagnostics.Conditional(ENABLE_LOGS)]
