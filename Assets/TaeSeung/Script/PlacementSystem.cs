@@ -15,10 +15,6 @@ public class PlacementSystem : MonoBehaviour
     {
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        if (gridPosition.y < 0)
-        {
-            gridPosition.y = gridPosition.y * -1;
-        }
         mouseIndicator.transform.position = mousePosition;
         cellIndicator.transform.position = grid.CellToWorld(gridPosition);
     }
