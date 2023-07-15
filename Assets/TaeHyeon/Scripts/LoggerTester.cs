@@ -9,7 +9,6 @@ using Logger = ZipsAR.Logger;
 public class LoggerTester : Singleton<LoggerTester>
 {
     [SerializeField] private TMP_Text countdownText;
-    [SerializeField] private TMP_Text logText;
     private int logIdx;
     private int autoQuitTime = 60;
     private string countdownMsg = "quit app in ";
