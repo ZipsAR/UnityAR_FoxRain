@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 892d29c78eed144f584ac2dbd70b2445, type: 3}
   m_Name: StrollData
   m_EditorClassIdentifier: 
-  playerPetMaxDistance: 0
+  playerPetMaxDistance: 2
   strollTime: 0
   collectedItemCount: 0
   wildPetEncounterCount: 0
