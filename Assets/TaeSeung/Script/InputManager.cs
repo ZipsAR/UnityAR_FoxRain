@@ -17,6 +17,7 @@ public class InputManager : MonoBehaviour
 
     public event Action OnClicked, OnExit;
 
+    Ray ray;
 
     private void Update()
     {
@@ -32,15 +33,20 @@ public class InputManager : MonoBehaviour
 
     public Vector3 GetSelectedMapPosition()
     {
-        Vector3 moustPos = Input.mousePosition;
-        moustPos.z = sceneCamera.nearClipPlane;
-        Ray ray = sceneCamera.ScreenPointToRay(moustPos);
+        
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = sceneCamera.nearClipPlane;
+        ray = sceneCamera.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 100, placementLayermask)) { 
+        if (Physics.Raycast(ray, out hit, 100, placementLayermask)) {
             lastPosition = hit.point;
          }
 
+       
+
         return lastPosition;
     }
+
+
 }

@@ -50,3 +50,5 @@ MonoBehaviour:
   grid: {fileID: 0}
   database: {fileID: 11400000, guid: 23cf6525873a6204e9d5744689468456, type: 2}
   gridVisualization: {fileID: 0}
+  StructureControlUI: {fileID: 0}
+  UIscript: {fileID: 0}
