@@ -6,10 +6,35 @@ using Logger = ZipsAR.Logger;
 
 public class Player : MonoBehaviour
 {
-    public GameObject cameraObj;
-    private void FixedUpdate()
+    private float idleMoveThreshold;
+    private Vector3 previousPos;
+    public float idleTime { get; private set; }
+
+    private void Start()
     {
-        Logger.Log("Origin : " + transform.position);
-        Logger.Log("Camera : " + cameraObj.transform.position);
+        idleMoveThreshold = 0.005f;
+        idleTime = 0f;
+        previousPos = transform.position;
+    }
+
+    private void Update()
+    {
+        if (Vector3.Distance(transform.position, previousPos) < idleMoveThreshold)
+        {
+            idleTime += Time.deltaTime;
+        }
+        else
+        {
+            idleTime = 0f;
+        }
+
+        previousPos = transform.position;
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, StrollManager.Instance.strollData.playerPetMaxDistance);
     }
 }
