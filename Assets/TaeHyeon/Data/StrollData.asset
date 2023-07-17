@@ -17,3 +17,4 @@ MonoBehaviour:
   collectedItemCount: 0
   wildPetEncounterCount: 0
   obstacleClearCount: 0
+  playerIdleTimeThreshold: 3
