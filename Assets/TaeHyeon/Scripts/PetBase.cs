@@ -24,7 +24,7 @@ public abstract class PetBase : MonoBehaviour
     private static readonly int SitParameter = Animator.StringToHash("Sit");
     
     // Stroll Mode
-    public PetStates PetStates { private set; get; }
+    public PetStates petStates { private set; get; }
     
     [SerializeField] private AnimationCurve curve;
     private const float SPEED_COEFFICIENT = 0.02f;
@@ -34,7 +34,7 @@ public abstract class PetBase : MonoBehaviour
     private void Start()
     {
         rotationSpeed = 10f;
-        PetStates = PetStates.Idle;
+        petStates = PetStates.Idle;
         animator = GetComponent<Animator>();
         StartCoroutine(Init());
     }
@@ -61,9 +61,9 @@ public abstract class PetBase : MonoBehaviour
     {
         while (true)
         {
-            if (GameManager.Instance.Player != null)
+            if (GameManager.Instance.player != null)
             {
-                playerObj = GameManager.Instance.Player.gameObject;
+                playerObj = GameManager.Instance.player.gameObject;
                 isInitDone = true;
                 break;
             }
@@ -93,13 +93,13 @@ public abstract class PetBase : MonoBehaviour
         moveDir = (destination - startPoint).normalized;
 
         // Set state
-        PetStates = PetStates.Walk;
+        petStates = PetStates.Walk;
 
         // Set animation
         animator.SetBool(RunningParameter, true);
         
         float t = 0;
-        while (transform.position != destination && PetStates == PetStates.Walk)
+        while (transform.position != destination && petStates == PetStates.Walk)
         {
             // Set position
             t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
@@ -114,7 +114,7 @@ public abstract class PetBase : MonoBehaviour
         }
 
         // Set state
-        PetStates = PetStates.Idle;
+        petStates = PetStates.Idle;
         
         // Set animation
         animator.SetBool(RunningParameter, false);
@@ -124,13 +124,13 @@ public abstract class PetBase : MonoBehaviour
     #region Look
     public void CmdLookPlayer()
     {
-        PetStates = PetStates.Idle;
+        petStates = PetStates.Idle;
         StartCoroutine(LookPlayerSequence());
     }
     
     private IEnumerator LookPlayerSequence()
     {
-        Vector3 targetDir = GameManager.Instance.Player.gameObject.transform.position - transform.position;
+        Vector3 targetDir = GameManager.Instance.player.gameObject.transform.position - transform.position;
         Quaternion targetQuaternion = Quaternion.LookRotation(targetDir);
         
         while (transform.rotation != targetQuaternion)

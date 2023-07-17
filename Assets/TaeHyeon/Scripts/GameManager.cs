@@ -13,16 +13,11 @@ public enum PlayMode
 public class GameManager : Singleton<GameManager>
 {
     public PlayMode currentPlayMode;
-    private Player player;
-    public Player Player
-    {
-        get => player;
-        private set => player = value;
-    }
-    
+    public Player player { get; private set; }
+
     private void Start()
     {
         currentPlayMode = PlayMode.StrollMode;
-        Player = GameObject.Find("AR Camera").GetComponent<Player>();
+        player = GameObject.Find("AR Camera").GetComponent<Player>();
     }
 }

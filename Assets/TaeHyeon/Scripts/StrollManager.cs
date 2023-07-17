@@ -24,7 +24,7 @@ public class StrollManager : Singleton<StrollManager>
         strollData.strollTime += Time.deltaTime;
 
         // Player condition
-        if (GameManager.Instance.Player.IsPlayerIdleForSeconds(strollData.playerIdleTimeThreshold))
+        if (GameManager.Instance.player.IsPlayerIdleForSeconds(strollData.playerIdleTimeThreshold))
         {
             pet.CmdLookPlayer();
             return;
@@ -32,11 +32,11 @@ public class StrollManager : Singleton<StrollManager>
 
 
         // Pet condition
-        switch (pet.PetStates)
+        switch (pet.petStates)
         {
             case PetStates.Idle:
                 Vector2 randomCoord = Random.insideUnitCircle * strollData.playerPetMaxDistance;
-                Vector3 nextCoord = GameManager.Instance.Player.gameObject.transform.position +
+                Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
                                     new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
                 pet.CmdMoveTo(nextCoord);
                 break;
