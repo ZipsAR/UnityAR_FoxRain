@@ -12,7 +12,8 @@ public class StrollData : ScriptableObject
     public int collectedItemCount; // 산책 중 획득한 아이템 개수 
     public int wildPetEncounterCount; // 산책 중 야생 펫을 만난 횟수
     public int obstacleClearCount; // 산책 중 극복한 장애물 개수
-
+    public float playerIdleTimeThreshold; // 이 시간이상 플레이어가 이동하지 않는 경우 펫이 않음
+    
     public void Init()
     {
         // Set all attribute to zero except "playerPetMaxDistance"

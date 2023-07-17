@@ -12,7 +12,7 @@ public class StrollManager : Singleton<StrollManager>
 {
     public StrollData strollData;
     [SerializeField] private PetBase pet;
-    
+
     private void Start()
     {
         strollData.Init();
@@ -22,13 +22,30 @@ public class StrollManager : Singleton<StrollManager>
     private void Update()
     {
         strollData.strollTime += Time.deltaTime;
-        if (pet.PetStates == PetStates.Idle)
+
+        // Player condition
+        if (GameManager.Instance.Player.IsPlayerIdleForSeconds(strollData.playerIdleTimeThreshold))
         {
-            Vector2 randomCoord = Random.insideUnitCircle * strollData.playerPetMaxDistance;
-            Vector3 nextCoord = GameManager.Instance.Player.gameObject.transform.position +
-                                new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
-            pet.MoveTo(nextCoord);
-            Logger.Log("nextCoord : " + nextCoord);
+            pet.CmdLookPlayer();
+            return;
+        }
+
+
+        // Pet condition
+        switch (pet.PetStates)
+        {
+            case PetStates.Idle:
+                Vector2 randomCoord = Random.insideUnitCircle * strollData.playerPetMaxDistance;
+                Vector3 nextCoord = GameManager.Instance.Player.gameObject.transform.position +
+                                    new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
+                pet.CmdMoveTo(nextCoord);
+                break;
+            case PetStates.Walk:
+                break;
+            case PetStates.Sit:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
     

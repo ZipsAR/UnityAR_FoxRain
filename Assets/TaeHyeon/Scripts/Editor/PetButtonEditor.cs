@@ -17,7 +17,7 @@ public class PetButtonEditor : Editor
         //버튼을 만듭니다 . GUILayout.Button("버튼이름" , 가로크기, 세로크기)
         if (GUILayout.Button("MoveTo", GUILayout.Width(120), GUILayout.Height(30))) 
         {
-            petTrigger.MoveTo(new Vector3(1f,0,1f)); 
+            petTrigger.CmdMoveTo(new Vector3(1f,0,1f)); 
         } 
         GUILayout.FlexibleSpace();  // 고정된 여백을 넣습니다.
         EditorGUILayout.EndHorizontal();  // 가로 생성 끝

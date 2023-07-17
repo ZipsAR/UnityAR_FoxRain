@@ -8,30 +8,35 @@ public enum PetStates
 {
     Idle,
     Walk,
+    Sit,
 }
 
 public abstract class PetBase : MonoBehaviour
 {
     [SerializeField] protected PetStatBase stat;
-    [SerializeField] private AnimationCurve curve;
     private Animator animator;
     private GameObject playerObj;
     private bool isInitDone;
 
     // Animation Parameter
     private static readonly int ModeParameter = Animator.StringToHash("Mode");
+    private static readonly int RunningParameter = Animator.StringToHash("Running");
+    private static readonly int SitParameter = Animator.StringToHash("Sit");
     
     // Stroll Mode
+    public PetStates PetStates { private set; get; }
+    
+    [SerializeField] private AnimationCurve curve;
     private const float SPEED_COEFFICIENT = 0.02f;
-    public PetStates PetStates { get; private set; }
+    private Vector3 moveDir;
     private float rotationSpeed;
+    
     private void Start()
     {
         rotationSpeed = 10f;
         PetStates = PetStates.Idle;
         animator = GetComponent<Animator>();
         StartCoroutine(Init());
-        StartCoroutine(MoveCoroutine(new Vector3(1f, 0, 1f)));
     }
 
     private void Update()
@@ -75,21 +80,26 @@ public abstract class PetBase : MonoBehaviour
     {
     }
 
-    public void MoveTo(Vector3 destination)
+    #region Move
+    
+    public void CmdMoveTo(Vector3 destination)
     {
-        StartCoroutine(MoveCoroutine(destination));
+        StartCoroutine(MoveSequence(destination));
     }
 
-    private IEnumerator MoveCoroutine(Vector3 destination)
+    private IEnumerator MoveSequence(Vector3 destination)
     {
         Vector3 startPoint = transform.position;
-        Vector3 dir = (destination - startPoint).normalized;
+        moveDir = (destination - startPoint).normalized;
 
         // Set state
         PetStates = PetStates.Walk;
 
+        // Set animation
+        animator.SetBool(RunningParameter, true);
+        
         float t = 0;
-        while (transform.position != destination)
+        while (transform.position != destination && PetStates == PetStates.Walk)
         {
             // Set position
             t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
@@ -97,7 +107,7 @@ public abstract class PetBase : MonoBehaviour
             
             // Set Rotation
             transform.rotation = Quaternion.Lerp(transform.rotation, 
-                Quaternion.LookRotation(dir), 
+                Quaternion.LookRotation(moveDir), 
                 Time.deltaTime * rotationSpeed);
 
             yield return null;
@@ -105,5 +115,53 @@ public abstract class PetBase : MonoBehaviour
 
         // Set state
         PetStates = PetStates.Idle;
+        
+        // Set animation
+        animator.SetBool(RunningParameter, false);
     }
+    #endregion
+
+    #region Look
+    public void CmdLookPlayer()
+    {
+        PetStates = PetStates.Idle;
+        StartCoroutine(LookPlayerSequence());
+    }
+    
+    private IEnumerator LookPlayerSequence()
+    {
+        Vector3 targetDir = GameManager.Instance.Player.gameObject.transform.position - transform.position;
+        Quaternion targetQuaternion = Quaternion.LookRotation(targetDir);
+        
+        while (transform.rotation != targetQuaternion)
+        {
+            // 현재 rotation과 taretQuaternion의 각도 차이가 5도 이하인 경우 모두 회전한 것으로 판단
+            if (AngleDiffBetween(transform.rotation, targetQuaternion) < 5f)
+            {
+                transform.rotation = targetQuaternion;
+                break;
+            }
+            transform.rotation = Quaternion.Lerp(transform.rotation, 
+                targetQuaternion, 
+                Time.deltaTime * rotationSpeed);
+            yield return null;
+        }
+        CmdSit();
+    }
+
+    private float AngleDiffBetween(Quaternion a, Quaternion b)
+    {
+        Quaternion diff = Quaternion.Inverse(a) * b;
+        float angleDiff = Quaternion.Angle(Quaternion.identity, diff);
+        return angleDiff; // Degree notation
+    }
+
+    #endregion
+    
+    #region Sit
+    public void CmdSit()
+    {
+        animator.SetTrigger(SitParameter);
+    }
+    #endregion
 }
