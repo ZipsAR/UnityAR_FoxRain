@@ -7,19 +7,14 @@ using Logger = ZipsAR.Logger;
 public class Player : MonoBehaviour
 {
     private float idleMoveThreshold;
-    private float idleTime;
     private Vector3 previousPos;
-    
+    public float idleTime { get; private set; }
+
     private void Start()
     {
         idleMoveThreshold = 0.005f;
         idleTime = 0f;
         previousPos = transform.position;
-    }
-
-    public bool IsPlayerIdleForSeconds(float curiousIdleTime)
-    {
-        return curiousIdleTime < idleTime;
     }
 
     private void Update()

@@ -2,13 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Logger = ZipsAR.Logger;
 
 public enum PetStates
 {
     Idle,
     Walk,
     Sit,
+}
+
+public enum Cmd
+{
+    Move = 0,
+    Look = 1,
+    Sit = 2,
 }
 
 public abstract class PetBase : MonoBehaviour
@@ -30,12 +36,20 @@ public abstract class PetBase : MonoBehaviour
     private const float SPEED_COEFFICIENT = 0.02f;
     private Vector3 moveDir;
     private float rotationSpeed;
+    public bool inprogress { get; private set; }
+    private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
     
     private void Start()
     {
         rotationSpeed = 10f;
         petStates = PetStates.Idle;
         animator = GetComponent<Animator>();
+        isCoroutinePlayingList = new List<bool>();
+        for (int i = 0; i < Enum.GetValues(typeof(Cmd)).Length; i++)
+        {
+            isCoroutinePlayingList.Add(false);
+        }
+        animator.SetInteger(ModeParameter, (int)PlayMode.StrollMode);
         StartCoroutine(Init());
     }
 
@@ -73,22 +87,30 @@ public abstract class PetBase : MonoBehaviour
 
     public void SetPetAnimationMode(PlayMode playMode)
     {
-        animator.SetInteger(ModeParameter, (int)playMode);
+        // animator.SetInteger(ModeParameter, (int)playMode);
+        animator.SetInteger("Mode", 1);
     }
 
     private void UpdateStrollMode()
     {
+        inprogress = CheckCoroutinePlaying();
     }
 
     #region Move
     
     public void CmdMoveTo(Vector3 destination)
     {
+        if (CheckCoroutinePlaying())
+        {
+            return;
+        }
         StartCoroutine(MoveSequence(destination));
     }
 
     private IEnumerator MoveSequence(Vector3 destination)
     {
+        isCoroutinePlayingList[(int)Cmd.Move] = true;
+        
         Vector3 startPoint = transform.position;
         moveDir = (destination - startPoint).normalized;
 
@@ -118,18 +140,26 @@ public abstract class PetBase : MonoBehaviour
         
         // Set animation
         animator.SetBool(RunningParameter, false);
+        
+        isCoroutinePlayingList[(int)Cmd.Move] = false;
     }
     #endregion
 
     #region Look
     public void CmdLookPlayer()
     {
+        if (CheckCoroutinePlaying())
+        {
+            return;
+        }
         petStates = PetStates.Idle;
         StartCoroutine(LookPlayerSequence());
     }
     
     private IEnumerator LookPlayerSequence()
     {
+        isCoroutinePlayingList[(int)Cmd.Look] = true;
+        
         Vector3 targetDir = GameManager.Instance.player.gameObject.transform.position - transform.position;
         Quaternion targetQuaternion = Quaternion.LookRotation(targetDir);
         
@@ -142,10 +172,12 @@ public abstract class PetBase : MonoBehaviour
                 break;
             }
             transform.rotation = Quaternion.Lerp(transform.rotation, 
-                targetQuaternion, 
+                targetQuaternion,
                 Time.deltaTime * rotationSpeed);
             yield return null;
         }
+
+        isCoroutinePlayingList[(int)Cmd.Look] = false;
         CmdSit();
     }
 
@@ -161,7 +193,34 @@ public abstract class PetBase : MonoBehaviour
     #region Sit
     public void CmdSit()
     {
+        if (CheckCoroutinePlaying())
+        {
+            return;
+        }
+
+        isCoroutinePlayingList[(int)Cmd.Sit] = true;
+        petStates = PetStates.Sit;
         animator.SetTrigger(SitParameter);
+        
+        // isCoroutinePlayingList[(int)Cmd.Sit] = false; // This part will be executed in the animation part
     }
     #endregion
+
+
+    // Use in Animator
+    public void SitEnd()
+    {
+        isCoroutinePlayingList[(int)Cmd.Sit] = false;
+    }
+
+    // Function to check if there is currently a coroutine running
+    private bool CheckCoroutinePlaying()
+    {
+        foreach (bool isPlaying in isCoroutinePlayingList)
+        {
+            if (isPlaying) return true;
+        }
+
+        return false;
+    }
 }

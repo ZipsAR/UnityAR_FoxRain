@@ -16,20 +16,35 @@ public class StrollManager : Singleton<StrollManager>
     private void Start()
     {
         strollData.Init();
-        pet.SetPetAnimationMode(PlayMode.StrollMode);
     }
 
     private void Update()
     {
         strollData.strollTime += Time.deltaTime;
 
+        // Cannot run another cmd if the pet is running some action
+        if (pet.inprogress)
+        {
+            return;
+        }
+        
         // Player condition
-        if (GameManager.Instance.player.IsPlayerIdleForSeconds(strollData.playerIdleTimeThreshold))
+        if (GameManager.Instance.player.idleTime > strollData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
         {
             pet.CmdLookPlayer();
             return;
         }
 
+        // Move to player area if the pet's position is further than strollData.maxDistance from the player
+        if (Vector3.Distance(GameManager.Instance.player.gameObject.transform.position, pet.transform.position) >
+            strollData.playerPetMaxDistance)
+        {
+            Vector2 randomCoord = Random.insideUnitCircle * strollData.playerPetMaxDistance;
+            Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
+                                new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
+            pet.CmdMoveTo(nextCoord);
+            return;
+        }
 
         // Pet condition
         switch (pet.petStates)
