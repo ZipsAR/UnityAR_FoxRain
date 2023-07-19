@@ -12,6 +12,7 @@ public class ObjectDatabaseSO : ScriptableObject
 }
 
 
+//내가 현재 갖고 있는 하우징 가구에 대한 정보
 [Serializable]
 public class ObjectData
 {
@@ -37,14 +38,16 @@ public class ObjectData
 
 }
 
+//내가 배치시킨 하우징 가구에 대한 정보
 [Serializable]
 public class ObjectLocation
 {
     public Vector3Int location;
     //position = xyz
-    public Quaternion rotation;  
+    public Quaternion rotation;
     //rotation xyz
 
-    
+    public Vector2Int size;
+
     public int OBJID;
 }

@@ -987,6 +987,7 @@ MonoBehaviour:
   placementLayermask:
     serializedVersion: 2
     m_Bits: 8
+  hitting: 0
 --- !u!4 &920066993
 Transform:
   m_ObjectHideFlags: 0
@@ -1048,6 +1049,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1118906438}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &990112184 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8697882705053710519, guid: feb89c3d83a7ba84cbc848a806dfae05,
+    type: 3}
+  m_PrefabInstance: {fileID: 1118906438}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990112179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 985a4bb75867f5e489b4380c0e8e9a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1043671911
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1438,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1043671912}
     m_Modifications:
+    - target: {fileID: 4892642661580582684, guid: feb89c3d83a7ba84cbc848a806dfae05,
+        type: 3}
+      propertyPath: m_Mass
+      value: 0.0000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 4892642661580582684, guid: feb89c3d83a7ba84cbc848a806dfae05,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4892642661580582684, guid: feb89c3d83a7ba84cbc848a806dfae05,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4892642661580582684, guid: feb89c3d83a7ba84cbc848a806dfae05,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7279712198611558326, guid: feb89c3d83a7ba84cbc848a806dfae05,
         type: 3}
       propertyPath: m_Name
@@ -1500,7 +1533,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4892642661580582684, guid: feb89c3d83a7ba84cbc848a806dfae05, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: feb89c3d83a7ba84cbc848a806dfae05, type: 3}
 --- !u!1 &1222149368
 GameObject:
@@ -1755,6 +1789,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 428927096332596968, guid: 2b625e6ab45db6c4d90f68e25165f768,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 428927096332596968, guid: 2b625e6ab45db6c4d90f68e25165f768,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 428927096332596968, guid: 2b625e6ab45db6c4d90f68e25165f768,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 428927096332596968, guid: 2b625e6ab45db6c4d90f68e25165f768,
         type: 3}
@@ -2568,7 +2617,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1350681236}
         m_TargetAssemblyTypeName: PlacementSystem, Assembly-CSharp
-        m_MethodName: StopPlacement
+        m_MethodName: Startinsertion
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3131,6 +3180,11 @@ PrefabInstance:
       propertyPath: UIscript
       value: 
       objectReference: {fileID: 2059011923}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: cursorsystem
+      value: 
+      objectReference: {fileID: 990112184}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
       propertyPath: inputManager

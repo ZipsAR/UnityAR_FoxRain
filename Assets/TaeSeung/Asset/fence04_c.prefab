@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5544388956654608356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1493880301195011595}
+  - component: {fileID: 5773050637819628335}
+  m_Layer: 7
+  m_Name: AABBCollisionBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1493880301195011595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5544388956654608356}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3991574720531089349}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5773050637819628335
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5544388956654608356}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 1, z: 0.7}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1001 &8808919240333133860
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24,6 +69,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5574186882725990369, guid: 9593f8902c7bc4f438b716ab2f662b02,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574186882725990369, guid: 9593f8902c7bc4f438b716ab2f662b02,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574186882725990369, guid: 9593f8902c7bc4f438b716ab2f662b02,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574186882725990369, guid: 9593f8902c7bc4f438b716ab2f662b02,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -40,7 +100,7 @@ PrefabInstance:
     - target: {fileID: 5574186882725990369, guid: 9593f8902c7bc4f438b716ab2f662b02,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.00000004371139
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5574186882725990369, guid: 9593f8902c7bc4f438b716ab2f662b02,
         type: 3}
@@ -50,7 +110,7 @@ PrefabInstance:
     - target: {fileID: 5574186882725990369, guid: 9593f8902c7bc4f438b716ab2f662b02,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5574186882725990369, guid: 9593f8902c7bc4f438b716ab2f662b02,
         type: 3}
@@ -89,3 +149,9 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 308aa88f73dc9c44f80a1842cc73ba1f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9593f8902c7bc4f438b716ab2f662b02, type: 3}
+--- !u!4 &3991574720531089349 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5574186882725990369, guid: 9593f8902c7bc4f438b716ab2f662b02,
+    type: 3}
+  m_PrefabInstance: {fileID: 8808919240333133860}
+  m_PrefabAsset: {fileID: 0}
