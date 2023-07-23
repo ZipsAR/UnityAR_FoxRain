@@ -38,10 +38,9 @@ public class PlacementSystem : MonoBehaviour
     //UI관련 스크립트 및 오브젝트
     [SerializeField]
     private GameObject StructureControlUI;
+
     [SerializeField]
-    private UIInitialize UIscript;
-
-
+    private GameObject ObjectLocation;
 
     private GridData floorData, funitureData;
     private Renderer previewRenderer;
@@ -57,6 +56,9 @@ public class PlacementSystem : MonoBehaviour
     private bool catchmode = false;
     private Vector3Int currentpos;
 
+
+    public GameObject Debugpoint;
+
     private void Start()
     {
         funitureData = new();
@@ -68,23 +70,19 @@ public class PlacementSystem : MonoBehaviour
             Quaternion rot = database.objectsLocation[i].rotation;
             Vector2Int size = database.objectsLocation[i].size;
             int id = database.objectsLocation[i].OBJID;
-
-            GameObject newObject = Instantiate(database.objectsData[id].Prefab);
-            newObject.transform.rotation = rot;
-            newObject.transform.position = grid.CellToWorld(loc);
-            newObject.layer = LayerMask.NameToLayer("PlaceObject");
-
-            placedGameObjects.Add(newObject);
-            //GridData selectedData = database.objectsData[i].ID == 0 ? floorData : funitureData;
-            GridData selectedData = funitureData;
-            selectedData.AddObjectAt(loc, size, id, placedGameObjects.Count - 1);
+            GameObject newObject = MakeNewObject(id, ObjectLocation.transform, loc, rot, size, "PlaceObject");
         }
 
         StopPlacement();
+
         previewRenderer = cellIndicator.GetComponentInChildren<Renderer>();
         cursororigin = mouseIndicator;
         cursorparent = cursororigin.transform.parent.gameObject;
+
+        MapInfo.Instance.MapInitialize();
     }
+
+
 
     private void Update()
     {
@@ -95,12 +93,16 @@ public class PlacementSystem : MonoBehaviour
 
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
-
+        
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
         previewRenderer.material.color = placementValidity ? Color.white : Color.red;
 
         mouseIndicator.transform.position = mousePosition;
-        cellIndicator.transform.position = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), Mathf.Round(mousePosition.z));
+
+        mousePosition = mousePosition * MapInfo.Instance.MapScale;
+        mousePosition = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), Mathf.Round(mousePosition.z));
+        cellIndicator.transform.position = mousePosition / MapInfo.Instance.MapScale;
+
     }
 
 
@@ -122,8 +124,8 @@ public class PlacementSystem : MonoBehaviour
 
         //cellindicator 크기 설정(차지 영역)
         currentobjsize = database.objectsData[selectedObjectIndex].Size;
-        Vector3 scale = new Vector3(currentobjsize.x, currentobjsize.y, 1);
-        cellIndicator.transform.localScale = scale;
+
+        MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
 
         currentrotation = new();
         gridVisualization.SetActive(true);
@@ -148,7 +150,6 @@ public class PlacementSystem : MonoBehaviour
     }
 
 
-
     public void StopPlacement()
     {
         selectedObjectIndex = -1;
@@ -157,7 +158,34 @@ public class PlacementSystem : MonoBehaviour
         inputManager.OnClicked -= PlaceStructure;
         inputManager.OnClicked -= InsertionStructure;
         inputManager.OnExit -= StopPlacement;
+        //InputManagerEventControlManager(PlaceStructure);
     }
+
+
+    private void InputManagerEventControlManager(Action onclick, Action onexit, bool onclickcondi, bool onexitcondi)
+    {
+        if(!onclickcondi)
+            inputManager.OnClicked -= PlaceStructure;
+
+        inputManager.OnClicked -= InsertionStructure;
+        inputManager.OnExit -= StopPlacement;
+
+
+        if (onclickcondi)
+            inputManager.OnClicked += onclick;
+        if(onexitcondi)
+            inputManager.OnExit += onexit;
+
+
+        inputManager.OnClicked -= PlaceStructure;
+        inputManager.OnClicked -= InsertionStructure;
+        inputManager.OnExit -= StopPlacement;
+
+    }
+
+
+
+
 
 
 
@@ -174,9 +202,10 @@ public class PlacementSystem : MonoBehaviour
 
         if (!inputManager.ishit()) return;
 
+
         //현재 커서 위치를 기반으로 grid.WorldToCell하면 월드좌표계를 grid컴포넌트의 그리드로 즉시 변환해주지만, 이상하게 변환되서(버림연산함) 그냥 round시키는 방식으로 바꿈
+        mousePosition = mousePosition * MapInfo.Instance.MapScale;
         Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z)); 
-        
         ObjectLocation newlocation = new ObjectLocation();
 
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
@@ -190,34 +219,23 @@ public class PlacementSystem : MonoBehaviour
         newlocation.size = currentobjsize;
         database.objectsLocation.Add(newlocation);
 
-        //실제 배치
-        GameObject newObject = Instantiate(database.objectsData[selectedObjectIndex].Prefab);
-        newObject.transform.position = grid.CellToWorld(gridPosition);
-        newObject.transform.rotation = currentrotation;
-        newObject.layer = LayerMask.NameToLayer("PlaceObject");
 
-        database.objectsData[selectedObjectIndex].ObjectCount -= 1;
-        UIscript.countlist[selectedObjectIndex].GetComponentInChildren<TMP_Text>().text = "" + database.objectsData[selectedObjectIndex].ObjectCount;
-        placedGameObjects.Add(newObject);
+        //실제배치
+        GameObject newobject = MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject");
+        UIInitialize.Instance.countlist[selectedObjectIndex].GetComponentInChildren<TMP_Text>().text = "" + database.objectsData[selectedObjectIndex].ObjectCount;
 
-        //충돌 영역 추가
-        //GridData selectedData = database.objectsData[selectedObjectIndex].ID == 0 ? floorData :funitureData;
-        GridData selectedData = funitureData;
-        selectedData.AddObjectAt(gridPosition, currentobjsize,
-            database.objectsData[selectedObjectIndex].ID,
-            placedGameObjects.Count - 1);
 
-        
         //수량이 없는 경우 해당 오브젝트 비활성화
         if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
         {
                 Debug.Log($"No Object");
-                UIscript.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
+                UIInitialize.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
                 StopPlacement();
         }
     }
 
 
+    //배치된 물체에 대한 위치수정 또는 삭제
     public void InsertionStructure()
     {
         if (inputManager.IsPointerOverUI())
@@ -228,7 +246,7 @@ public class PlacementSystem : MonoBehaviour
         GameObject   obj = cursorsystem.GetCollisionobject();
         if (!obj) return;
 
-        Vector3 mousePosition = obj.transform.position;
+        Vector3 mousePosition = obj.transform.position * MapInfo.Instance.MapScale;
         Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
         
         if (!catchmode)
@@ -240,6 +258,7 @@ public class PlacementSystem : MonoBehaviour
             catchmode = true;
             cellIndicator.SetActive(true);
         }
+
         else
         {
             //맵 바깥으로 커서를 이동시켰다면 삭제
@@ -248,6 +267,7 @@ public class PlacementSystem : MonoBehaviour
             {
                 cursororigin.transform.SetParent(cursorparent.transform);
                 int index = database.objectsLocation.FindIndex(data => data.location == currentpos);
+
                 if (index >= 0)
                 {
                     int id = database.objectsLocation[index].OBJID;
@@ -274,9 +294,9 @@ public class PlacementSystem : MonoBehaviour
                     PlacementData data = funitureData.GetObjectAt(currentpos);
                     int placeindex = data.PlacedObjectIndex;
 
+                    //배치 위치 수정할 위치가 이미 다른 가구가 배치되어 있으면 안 돼요.
                     if (funitureData.CanPlaceObjectAt(gridPosition,size))
                     {
-                        print("dds");
                         cursororigin.transform.SetParent(cursorparent.transform);
                         funitureData.RemoveObjectAt(currentpos, size);
                         funitureData.AddObjectAt(gridPosition, size, id, placeindex);
@@ -293,19 +313,13 @@ public class PlacementSystem : MonoBehaviour
             }
 
         }
-
-
-        //cursororigin.SetActive(false);
     }
-
-
 
     //배치 가능영역인지 파악
     private bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
     {
         //GridData selectedData = database.objectsData[selectedObjectIndex].ID == 0 ? floorData : funitureData;
         GridData selectedData = funitureData;
-        print("objsize: " + currentobjsize);
 
         return selectedData.CanPlaceObjectAt(gridPosition, currentobjsize);
     }
@@ -316,7 +330,6 @@ public class PlacementSystem : MonoBehaviour
         if (selectedObjectIndex == -1)
             return;
 
-
         Vector3 objrotation = currentrotation.eulerAngles; 
 
         objrotation.y += 90;
@@ -325,10 +338,47 @@ public class PlacementSystem : MonoBehaviour
         currentobjsize.y = tempx;
 
         Vector3 scale = new Vector3(currentobjsize.x, currentobjsize.y, 1);
-        cellIndicator.transform.localScale = scale;
+        cellIndicator.transform.localScale = scale / MapInfo.Instance.MapScale;
 
         currentrotation = Quaternion.Euler(objrotation);
   
     }
+
+    private GameObject MakeNewObject(int id, Transform parent, Vector3Int loc, Quaternion rot, Vector2Int size, String layer)
+    {
+        if (id >= 0)
+        {
+            GameObject newObject = Instantiate(database.objectsData[id].Prefab);
+            newObject.transform.SetParent(ObjectLocation.transform);
+            newObject.transform.rotation = rot;
+            //newObject.transform.position = grid.CellToWorld(loc);
+            newObject.transform.position = ((Vector3)loc) / MapInfo.Instance.MapScale;
+            newObject.transform.localScale = newObject.transform.localScale * (1/MapInfo.Instance.MapScale);
+            newObject.layer = LayerMask.NameToLayer(layer);
+
+            placedGameObjects.Add(newObject);
+            //GridData selectedData = database.objectsData[i].ID == 0 ? floorData : funitureData;
+            GridData selectedData = funitureData;
+            selectedData.AddObjectAt(loc, size, id, placedGameObjects.Count - 1);
+            return newObject;
+        }
+        else return null;
+    }
+}
+
+
+
+
+public class CurrentPointInfo{
+    //현재 오브젝트의 size 상태(rotation때문에 추가됨)
+    private Vector2Int currentobjsize { get; set; }
+    private Quaternion currentrotation { get; set; }
+
+    private GameObject cursororigin { get; set; }
+    private GameObject cursorparent { get; set; }
+
+    private bool catchmode = false;
+
+    private Vector3Int currentpos { get; set; }
 
 }

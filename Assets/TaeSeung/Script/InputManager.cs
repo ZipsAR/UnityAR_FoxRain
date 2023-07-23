@@ -19,7 +19,7 @@ public class InputManager : MonoBehaviour
 
     public event Action OnClicked, OnExit;
 
-    public bool hitting;
+    private bool hitting;
 
     Ray ray;
 
@@ -29,6 +29,8 @@ public class InputManager : MonoBehaviour
             OnClicked?.Invoke();
         if (Input.GetKeyDown(KeyCode.Escape))
             OnExit?.Invoke();
+
+        GetSelectedMapPosition();
     }
 
     public bool IsPointerOverUI()
@@ -40,16 +42,22 @@ public class InputManager : MonoBehaviour
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = sceneCamera.nearClipPlane;
         ray = sceneCamera.ScreenPointToRay(mousePos);
+        
+
+        /*
+        ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        */
+
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 100, placementLayermask))
         {
+            // UIButtonScript.Instance.DebuggingText("hitting : " +hit.collider.gameObject.name);
             lastPosition = hit.point;
             hitting = true;
         }
         else
             hitting = false;
-
 
         return lastPosition;
     }

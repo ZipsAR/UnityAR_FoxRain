@@ -4,19 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIInitialize : MonoBehaviour
+public class UIInitialize : Singleton<UIInitialize>
 {
     // Start is called before the first frame update
     [SerializeField]
     private ObjectDatabaseSO database;
     [SerializeField]
     private GameObject menuPanel;
+
     public List<GameObject> countlist;
+
+
 
     void Start()
     {
-        print(menuPanel.transform.childCount);
-
         for (int i = 0; i < menuPanel.transform.childCount-1; i++)
         {
             GameObject tmptext = menuPanel.transform.GetChild(i).gameObject;
@@ -27,7 +28,7 @@ public class UIInitialize : MonoBehaviour
                 tmptext.GetComponent<Button>().interactable = false;
             }
             countlist.Add(tmptext);
-        }
+        }     
     }
 
     public void Resetsetting()
