@@ -595,7 +595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8596fe74e778458ea35900d27fcd035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  petParts: 0
+  petParts: 1
 --- !u!135 &183045054
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2284,7 +2284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8596fe74e778458ea35900d27fcd035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  petParts: 2
+  petParts: 3
 --- !u!1 &1339581490
 GameObject:
   m_ObjectHideFlags: 0
@@ -2330,7 +2330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8596fe74e778458ea35900d27fcd035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  petParts: 1
+  petParts: 2
 --- !u!135 &1339581493
 SphereCollider:
   m_ObjectHideFlags: 0

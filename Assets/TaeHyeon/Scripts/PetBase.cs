@@ -201,6 +201,7 @@ public abstract class PetBase : MonoBehaviour
     #endregion
     
     #region Sit
+
     public void CmdSit()
     {
         if (CheckCoroutinePlaying())
@@ -214,14 +215,15 @@ public abstract class PetBase : MonoBehaviour
         
         // isCoroutinePlayingList[(int)Cmd.Sit] = false; // This part will be executed in the animation part
     }
-    #endregion
-
-
+    
     // Use in Animator
     public void SitEnd()
     {
         isCoroutinePlayingList[(int)Cmd.Sit] = false;
     }
+
+    #endregion
+
 
     // Function to check if there is currently a coroutine running
     private bool CheckCoroutinePlaying()
@@ -235,4 +237,8 @@ public abstract class PetBase : MonoBehaviour
 
         return false;
     }
+
+    public abstract void InteractHead();
+    public abstract void InteractJaw();
+    public abstract void InteractBody();
 }

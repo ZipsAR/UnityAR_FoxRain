@@ -13,9 +13,20 @@ public class InteractManager : Singleton<InteractManager>
     public InteractData interactData;
     [SerializeField] private PetBase pet;
 
+    public Action interactHeadEvent;
+    public Action interactJawEvent;
+    public Action interactBodyEvent;
+    
+    
+    
+    
     private void Start()
     {
         interactData.Init();
+
+        interactHeadEvent -= InteractWithHead;
+        interactHeadEvent += InteractWithHead;
+
     }
 
     private void Update()
@@ -60,6 +71,12 @@ public class InteractManager : Singleton<InteractManager>
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    private void InteractWithHead()
+    {
+        pet.InteractHead();
+        Logger.Log("interact head in interactManager");
     }
     
 }
