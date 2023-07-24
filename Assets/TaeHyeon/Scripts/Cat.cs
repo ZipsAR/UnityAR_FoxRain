@@ -14,11 +14,13 @@ public class Cat : PetBase
 
     public override void InteractJaw()
     {
-        throw new NotImplementedException();
+        animator.Play("B_wash");
+        Logger.Log("Play B_wash");
     }
 
     public override void InteractBody()
     {
-        throw new NotImplementedException();
+        animator.Play("B_cry");
+        Logger.Log("Play B_cry");
     }
 }

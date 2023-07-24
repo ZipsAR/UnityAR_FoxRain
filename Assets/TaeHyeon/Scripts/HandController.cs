@@ -21,20 +21,36 @@ public class HandController : MonoBehaviour
 
     private void Update()
     {
-        if (!isColliding) return;
-        
-        collisionTimer += Time.deltaTime;
-
-        if (collisionTimer > collisionTimeLimit)
+        switch (GameManager.Instance.currentPlayMode)
         {
-            isColliding = false;
-            collisionTimer = 0f;
-            if (GameManager.Instance.currentPlayMode == PlayMode.InteractMode)
-            {
-                Logger.Log("touch in 2 seconds");
-                InteractManager.Instance.interactHeadEvent();
-            }
+            case PlayMode.InteractMode:
+                if (!isColliding) return;
+        
+                collisionTimer += Time.deltaTime;
+
+                if (collisionTimer > collisionTimeLimit)
+                {
+                    isColliding = false;
+                    collisionTimer = 0f;
+                    
+                    Logger.Log("touch in 2 seconds");
+                    switch (petCollisionPart)
+                    {
+                        case PetParts.Head:
+                            InteractManager.Instance.interactHeadEvent();
+                            break;
+                        case PetParts.Jaw:
+                            InteractManager.Instance.interactJawEvent();
+                            break;
+                        case PetParts.Body:
+                            InteractManager.Instance.interactBodyEvent();
+                            break;
+                    }
+                
+                }
+                break;
         }
+        
     }
     
 

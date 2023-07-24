@@ -27,6 +27,12 @@ public class InteractManager : Singleton<InteractManager>
         interactHeadEvent -= InteractWithHead;
         interactHeadEvent += InteractWithHead;
 
+        interactBodyEvent -= InteractWithBody;
+        interactBodyEvent += InteractWithBody;
+
+        interactJawEvent -= InteractWithJaw;
+        interactJawEvent += InteractWithJaw;
+
     }
 
     private void Update()
@@ -79,4 +85,17 @@ public class InteractManager : Singleton<InteractManager>
         Logger.Log("interact head in interactManager");
     }
     
+    private void InteractWithJaw()
+    {
+        pet.InteractJaw();
+        Logger.Log("interact body in interactManager");
+    }
+    
+    private void InteractWithBody()
+    {
+        pet.InteractBody();
+        Logger.Log("interact jaw in interactManager");
+    }
+    
+
 }
