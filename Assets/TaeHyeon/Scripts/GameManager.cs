@@ -17,7 +17,6 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        currentPlayMode = PlayMode.StrollMode;
         player = GameObject.Find("AR Camera").GetComponent<Player>();
     }
 }

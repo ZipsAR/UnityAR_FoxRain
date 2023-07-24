@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Logger = ZipsAR.Logger;
 
 public enum PetStates
 {
@@ -17,10 +18,18 @@ public enum Cmd
     Sit = 2,
 }
 
+public enum PetParts
+{
+    None,
+    Head,
+    Jaw,
+    Body,
+}
+
 public abstract class PetBase : MonoBehaviour
 {
     [SerializeField] protected PetStatBase stat;
-    private Animator animator;
+    protected Animator animator;
     private GameObject playerObj;
     private bool isInitDone;
 
@@ -44,11 +53,7 @@ public abstract class PetBase : MonoBehaviour
         rotationSpeed = 10f;
         petStates = PetStates.Idle;
         animator = GetComponent<Animator>();
-        isCoroutinePlayingList = new List<bool>();
-        for (int i = 0; i < Enum.GetValues(typeof(Cmd)).Length; i++)
-        {
-            isCoroutinePlayingList.Add(false);
-        }
+
         animator.SetInteger(ModeParameter, (int)PlayMode.StrollMode);
         StartCoroutine(Init());
     }
@@ -79,6 +84,11 @@ public abstract class PetBase : MonoBehaviour
             {
                 playerObj = GameManager.Instance.player.gameObject;
                 isInitDone = true;
+                isCoroutinePlayingList = new List<bool>();
+                for (int i = 0; i < Enum.GetValues(typeof(Cmd)).Length; i++)
+                {
+                    isCoroutinePlayingList.Add(false);
+                }
                 break;
             }
             yield return null;
@@ -216,6 +226,8 @@ public abstract class PetBase : MonoBehaviour
     // Function to check if there is currently a coroutine running
     private bool CheckCoroutinePlaying()
     {
+        if (isCoroutinePlayingList == null) return false;
+        
         foreach (bool isPlaying in isCoroutinePlayingList)
         {
             if (isPlaying) return true;
