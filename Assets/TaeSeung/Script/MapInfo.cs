@@ -9,24 +9,46 @@ public class MapInfo : Singleton<MapInfo>
     public float MapScale;
 
     [SerializeField]
-    private GameObject TileMap, Tile, Cursor;
+    private GameObject TileMap, Tile, Cursor, Plane;
     [SerializeField]
     private Material gridgraph;
 
-    private Vector3 TileMapscale, TileScale, CursorScale;
+    private Vector3 TileMapscale, TileScale, CursorScale, PlaneScale;
+
+
+    private void Start()
+    {
+        MapInitialize();
+    }
+
+
 
     public void MapInitialize()
     {
         float reverseMapScale = 1 / MapScale;
 
-        TileMapscale = TileMap.transform.localScale;
-        TileMap.transform.localScale = TileMapscale * reverseMapScale;
-        CursorScale = Cursor.transform.localScale;
-        Cursor.transform.localScale = CursorScale * reverseMapScale;
-
-        gridgraph.SetVector("_Size", new Vector2(1, 1));
-        TileScale = gridgraph.GetVector("_Size");
-        gridgraph.SetVector("_Size", TileScale * MapScale);
+        if (TileMap)
+        {
+            TileMapscale = TileMap.transform.localScale;
+            TileMap.transform.localScale = TileMapscale * reverseMapScale;
+        }
+        if (Cursor)
+        {
+            CursorScale = Cursor.transform.localScale;
+            Cursor.transform.localScale = CursorScale * reverseMapScale;
+        }
+        if (Plane)
+        {
+            PlaneScale = Plane.transform.localScale;
+            Plane.transform.localScale = PlaneScale * reverseMapScale;
+        }
+        if (gridgraph)
+        {
+            gridgraph.SetVector("_Size", new Vector2(1, 1));
+            TileScale = gridgraph.GetVector("_Size");
+            gridgraph.SetVector("_Size", TileScale * MapScale);
+        }
+        
     }
 
 

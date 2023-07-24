@@ -184,11 +184,6 @@ public class PlacementSystem : MonoBehaviour
     }
 
 
-
-
-
-
-
     //구조물 배치
     private void PlaceStructure()
     {

@@ -1051,10 +1051,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Mapsize: {x: 10, y: 10}
-  MapScale: 4
+  MapScale: 6
   TileMap: {fileID: 686084824}
   Tile: {fileID: 1086197329}
   Cursor: {fileID: 990112179}
+  Plane: {fileID: 0}
   gridgraph: {fileID: 2100000, guid: 02ab6df9cc8e7dd498f822b9b181a2ed, type: 2}
 --- !u!1 &990112179 stripped
 GameObject:
