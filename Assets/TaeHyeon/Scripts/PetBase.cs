@@ -24,6 +24,7 @@ public enum PetParts
     Head,
     Jaw,
     Body,
+    HandDetection,
 }
 
 public abstract class PetBase : MonoBehaviour
@@ -241,4 +242,5 @@ public abstract class PetBase : MonoBehaviour
     public abstract void InteractHead();
     public abstract void InteractJaw();
     public abstract void InteractBody();
+    public abstract void InteractHandDetection();
 }

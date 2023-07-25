@@ -16,6 +16,7 @@ public class InteractManager : Singleton<InteractManager>
     public Action interactHeadEvent;
     public Action interactJawEvent;
     public Action interactBodyEvent;
+    public Action interactHandDetectionEvent;
     
     
     
@@ -33,6 +34,8 @@ public class InteractManager : Singleton<InteractManager>
         interactJawEvent -= InteractWithJaw;
         interactJawEvent += InteractWithJaw;
 
+        interactHandDetectionEvent -= InteractWithHandDetection;
+        interactHandDetectionEvent += InteractWithHandDetection;
     }
 
     private void Update()
@@ -97,5 +100,9 @@ public class InteractManager : Singleton<InteractManager>
         Logger.Log("interact jaw in interactManager");
     }
     
-
+    private void InteractWithHandDetection()
+    {
+        pet.InteractHandDetection();
+        Logger.Log("interact HandDetection in interactManager");
+    }
 }

@@ -45,6 +45,10 @@ public class HandController : MonoBehaviour
                         case PetParts.Body:
                             InteractManager.Instance.interactBodyEvent();
                             break;
+                        case PetParts.HandDetection:
+                            InteractManager.Instance.interactHandDetectionEvent();
+                            break;
+                        
                     }
                 
                 }

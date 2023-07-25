@@ -23,4 +23,10 @@ public class Cat : PetBase
         animator.Play("B_cry");
         Logger.Log("Play B_cry");
     }
+
+    public override void InteractHandDetection()
+    {
+        animator.Play("C_massage");
+        Logger.Log("Play C_massage");
+    }
 }
