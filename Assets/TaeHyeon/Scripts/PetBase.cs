@@ -27,6 +27,14 @@ public enum PetParts
     HandDetection,
 }
 
+/// <summary>
+/// How to add a pet
+/// 1. Create Stat data to pet
+/// 2. Create an override animator for a pet by inheriting petController
+/// 3. Add Sitend event to sitting animation
+/// 4. Pet connection added to InteractManager
+/// </summary>
+
 public abstract class PetBase : MonoBehaviour
 {
     [SerializeField] protected PetStatBase stat;
@@ -69,6 +77,7 @@ public abstract class PetBase : MonoBehaviour
                 UpdateStrollMode();
                 break;
             case PlayMode.InteractMode:
+                UpdateInteractMode();
                 break;
             case PlayMode.AgilityMode:
                 break;
@@ -106,11 +115,24 @@ public abstract class PetBase : MonoBehaviour
     {
         inprogress = CheckCoroutinePlaying();
     }
+    
+    private void UpdateInteractMode()
+    {
+        inprogress = CheckCoroutinePlaying();
+    }
 
+    
+    
+    
+    
+    
+    
     #region Move
     
     public void CmdMoveTo(Vector3 destination)
     {
+        Logger.Log("[Cmd] Move To " + destination);
+
         if (CheckCoroutinePlaying())
         {
             return;
@@ -134,6 +156,13 @@ public abstract class PetBase : MonoBehaviour
         float t = 0;
         while (transform.position != destination && petStates == PetStates.Walk)
         {
+            // If it reaches as close as the distance x, it is considered to have arrived
+            if (Vector3.Distance(transform.position, destination) < 0.02f)
+            {
+                Logger.Log("force stop");
+                break;
+            }
+            
             // Set position
             t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
             transform.position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
@@ -156,9 +185,15 @@ public abstract class PetBase : MonoBehaviour
     }
     #endregion
 
+    
+    
+    
+    
+    
     #region Look
     public void CmdLookPlayer()
     {
+        Logger.Log("[Cmd] Look player");
         if (CheckCoroutinePlaying())
         {
             return;
@@ -201,10 +236,19 @@ public abstract class PetBase : MonoBehaviour
 
     #endregion
     
+    
+    
+    
+    
+    
+    
+    
     #region Sit
 
     public void CmdSit()
     {
+        Logger.Log("[Cmd] Sit");
+        
         if (CheckCoroutinePlaying())
         {
             return;
@@ -226,6 +270,10 @@ public abstract class PetBase : MonoBehaviour
     #endregion
 
 
+    
+    
+    
+    
     // Function to check if there is currently a coroutine running
     private bool CheckCoroutinePlaying()
     {
@@ -239,6 +287,11 @@ public abstract class PetBase : MonoBehaviour
         return false;
     }
 
+    
+    
+    
+    
+    
     public abstract void InteractHead();
     public abstract void InteractJaw();
     public abstract void InteractBody();

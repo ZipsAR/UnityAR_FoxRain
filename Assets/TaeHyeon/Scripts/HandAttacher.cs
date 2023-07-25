@@ -24,6 +24,8 @@ public class HandAttacher : MonoBehaviour
             rightHandObj.AddComponent<HandController>().handSide = HandSide.Right;
             AddCollider(leftHandObj);
             AddCollider(rightHandObj);
+            AddRigidBody(leftHandObj);
+            AddRigidBody(rightHandObj);
             Destroy(gameObject);
         }
     }
@@ -36,5 +38,11 @@ public class HandAttacher : MonoBehaviour
         collider.radius = 0.05f;
         collider.height = 0.2f;
         collider.direction = 2; // Z-Axis
+    }
+
+    private void AddRigidBody(GameObject obj)
+    {
+        Rigidbody rb = obj.AddComponent<Rigidbody>();
+        rb.useGravity = false;
     }
 }
