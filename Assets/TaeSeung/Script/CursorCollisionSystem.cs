@@ -37,9 +37,6 @@ public class CursorCollisionSystem : MonoBehaviour
                     tempmaterials[i] = transparentmaterial;
                 }
             }
-
-
-            Debug.Log("overlap : " + obj.name);
             break;
         }
 

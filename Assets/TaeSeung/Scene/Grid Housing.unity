@@ -1051,7 +1051,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Mapsize: {x: 10, y: 10}
-  MapScale: 6
+  MapScale: 1
+  initialize: 0
   TileMap: {fileID: 686084824}
   Tile: {fileID: 1086197329}
   Cursor: {fileID: 990112179}

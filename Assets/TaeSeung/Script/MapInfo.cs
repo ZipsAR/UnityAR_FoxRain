@@ -8,6 +8,8 @@ public class MapInfo : Singleton<MapInfo>
     public Vector2Int Mapsize;
     public float MapScale;
 
+    public bool initialize;
+
     [SerializeField]
     private GameObject TileMap, Tile, Cursor, Plane;
     [SerializeField]
@@ -18,7 +20,8 @@ public class MapInfo : Singleton<MapInfo>
 
     private void Start()
     {
-        MapInitialize();
+        if(initialize)
+            MapInitialize();
     }
 
 
@@ -36,11 +39,6 @@ public class MapInfo : Singleton<MapInfo>
         {
             CursorScale = Cursor.transform.localScale;
             Cursor.transform.localScale = CursorScale * reverseMapScale;
-        }
-        if (Plane)
-        {
-            PlaneScale = Plane.transform.localScale;
-            Plane.transform.localScale = PlaneScale * reverseMapScale;
         }
         if (gridgraph)
         {

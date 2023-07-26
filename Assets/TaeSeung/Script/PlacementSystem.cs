@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 
 
 //배치와 관련된 모든 함수가 담김.
 
-public class PlacementSystem : MonoBehaviour
+public class PlacementSystem : Singleton<PlacementSystem>
 {
     //mouseindicator : cursor 오브젝트, cellindicator : cell위치 표시해주는 오브젝트
     [SerializeField]
@@ -16,6 +18,8 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField]
     CursorCollisionSystem cursorsystem;
 
+    [SerializeField]
+    private GameObject spawnpoint;
 
     //inputmanager클래스 
     [SerializeField]
@@ -51,6 +55,7 @@ public class PlacementSystem : MonoBehaviour
     private Vector2Int currentobjsize;
     private Quaternion currentrotation;
 
+    private GameObject ClickObject;
     private GameObject cursororigin;
     private GameObject cursorparent;
     private bool catchmode = false;
@@ -58,6 +63,9 @@ public class PlacementSystem : MonoBehaviour
 
 
     public GameObject Debugpoint;
+    private bool click = false;
+
+    XRGrabInteractable interact;
 
     private void Start()
     {
@@ -70,7 +78,9 @@ public class PlacementSystem : MonoBehaviour
             Quaternion rot = database.objectsLocation[i].rotation;
             Vector2Int size = database.objectsLocation[i].size;
             int id = database.objectsLocation[i].OBJID;
-            GameObject newObject = MakeNewObject(id, ObjectLocation.transform, loc, rot, size, "PlaceObject");
+
+            GameObject newObject = Instantiate(database.objectsData[id].Prefab);
+            MakeNewObject(id, ObjectLocation.transform, loc, rot, size, "PlaceObject", newObject, true);
         }
 
         StopPlacement();
@@ -91,6 +101,7 @@ public class PlacementSystem : MonoBehaviour
         if (!mouseIndicator)
             return;
 
+
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
         
@@ -103,6 +114,7 @@ public class PlacementSystem : MonoBehaviour
         mousePosition = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), Mathf.Round(mousePosition.z));
         cellIndicator.transform.position = mousePosition / MapInfo.Instance.MapScale;
 
+
     }
 
 
@@ -110,6 +122,8 @@ public class PlacementSystem : MonoBehaviour
     {
         StopPlacement();
         selectedObjectIndex = database.objectsData.FindIndex(data => data.ID == ID);
+
+
         if (selectedObjectIndex < 0)
         {
             Debug.LogError($"No ID found {ID}");
@@ -131,10 +145,31 @@ public class PlacementSystem : MonoBehaviour
         gridVisualization.SetActive(true);
         cellIndicator.SetActive(true);
         StructureControlUI.SetActive(true);
-        inputManager.OnClicked += PlaceStructure;
-        inputManager.OnExit += StopPlacement;
+
+        //AR 환경상에서는 이 코드를 넣어야 함미다.
+        GameObject newObject = Instantiate(database.objectsData[selectedObjectIndex].Prefab);
+        newObject.transform.position = spawnpoint.transform.position;
+        newObject.transform.localScale = newObject.transform.localScale * (1 / MapInfo.Instance.MapScale);
+
+        interact = newObject.GetComponent<XRGrabInteractable>();
+        SelectExitEventArgs exitargs = makeEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
+        interact.selectExited.AddListener((a)=>PlaceEvent(exitargs));
+
+        
+
+        //컴퓨터에서 할땐 이 코드를 넣으면 됩니다.
+        //inputManager.OnClicked += PlaceStructure;
+        //inputManager.OnExit += StopPlacement;
     }
 
+
+    private void PlaceEvent(SelectExitEventArgs p)
+    {
+        print("asd: " + p.interactableObject.transform.name);
+        PlaceStructure(p.interactableObject.transform.gameObject);
+        
+    }
+        
 
     public void Startinsertion()
     {
@@ -144,8 +179,8 @@ public class PlacementSystem : MonoBehaviour
         //cellIndicator.SetActive(true);
         StructureControlUI.SetActive(true);
      
-        inputManager.OnClicked += InsertionStructure;
-        inputManager.OnExit += StopPlacement;
+        //inputManager.OnClicked += InsertionStructure;
+        //inputManager.OnExit += StopPlacement;
 
     }
 
@@ -155,48 +190,26 @@ public class PlacementSystem : MonoBehaviour
         selectedObjectIndex = -1;
         gridVisualization.SetActive(false);
         cellIndicator.SetActive(false);
-        inputManager.OnClicked -= PlaceStructure;
-        inputManager.OnClicked -= InsertionStructure;
-        inputManager.OnExit -= StopPlacement;
+        
+        //컴퓨터 환경에서는 사용 가능
+        //inputManager.OnClicked -= PlaceStructure;
+        //inputManager.OnClicked -= InsertionStructure;
+        //inputManager.OnExit -= StopPlacement;
         //InputManagerEventControlManager(PlaceStructure);
-    }
 
-
-    private void InputManagerEventControlManager(Action onclick, Action onexit, bool onclickcondi, bool onexitcondi)
-    {
-        if(!onclickcondi)
-            inputManager.OnClicked -= PlaceStructure;
-
-        inputManager.OnClicked -= InsertionStructure;
-        inputManager.OnExit -= StopPlacement;
-
-
-        if (onclickcondi)
-            inputManager.OnClicked += onclick;
-        if(onexitcondi)
-            inputManager.OnExit += onexit;
-
-
-        inputManager.OnClicked -= PlaceStructure;
-        inputManager.OnClicked -= InsertionStructure;
-        inputManager.OnExit -= StopPlacement;
 
     }
-
 
     //구조물 배치
+    /*
     private void PlaceStructure()
     {
-        if (inputManager.IsPointerOverUI())
-        {
-            return;
-        }
+        if (inputManager.IsPointerOverUI()) return;
 
         //현재 커서 위치 가져옴
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-
+        //만약 맵 바깥이면 배치할 필요가 없으니까 그대로 배치 실행 무시
         if (!inputManager.ishit()) return;
-
 
         //현재 커서 위치를 기반으로 grid.WorldToCell하면 월드좌표계를 grid컴포넌트의 그리드로 즉시 변환해주지만, 이상하게 변환되서(버림연산함) 그냥 round시키는 방식으로 바꿈
         mousePosition = mousePosition * MapInfo.Instance.MapScale;
@@ -228,15 +241,68 @@ public class PlacementSystem : MonoBehaviour
                 StopPlacement();
         }
     }
+    */
+
+    //구조물 배치 (AR환경)
+    private void PlaceStructure(GameObject gameObject)
+    {
+        if (inputManager.IsPointerOverUI())
+        {
+            print("aa");
+            return;
+        }
+
+        //현재 커서 위치 가져옴
+        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
+
+        if (!inputManager.ishit())
+        {
+            gameObject.transform.position = spawnpoint.transform.position;
+            gameObject.transform.rotation = spawnpoint.transform.rotation;
+            return;
+        }
+
+        //현재 커서 위치를 기반으로 grid.WorldToCell하면 월드좌표계를 grid컴포넌트의 그리드로 즉시 변환해주지만, 이상하게 변환되서(버림연산함) 그냥 round시키는 방식으로 바꿈
+        mousePosition = mousePosition * MapInfo.Instance.MapScale;
+        Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
+        ObjectLocation newlocation = new ObjectLocation();
+
+        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
+        if (placementValidity == false)
+        {
+            gameObject.transform.position = spawnpoint.transform.position;
+            gameObject.transform.rotation = spawnpoint.transform.rotation;
+            return;
+        }
+
+        //새로 배치될 물체의 위치, 회전 정보를 데이터베이스에 넣는 과정
+        newlocation.location = gridPosition;
+        newlocation.rotation = currentrotation;
+        newlocation.OBJID = selectedObjectIndex;
+        newlocation.size = currentobjsize;
+        database.objectsLocation.Add(newlocation);
+
+
+        //실제배치
+        GameObject newobject = MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject",gameObject, false);
+        UIInitialize.Instance.countlist[selectedObjectIndex].GetComponentInChildren<TMP_Text>().text = "" + database.objectsData[selectedObjectIndex].ObjectCount;
+
+
+        //수량이 없는 경우 해당 오브젝트 비활성화
+        if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
+        {
+            Debug.Log($"No Object");
+            UIInitialize.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
+            StopPlacement();
+        }
+    }
+
 
 
     //배치된 물체에 대한 위치수정 또는 삭제
     public void InsertionStructure()
     {
-        if (inputManager.IsPointerOverUI())
-        {
-            return;
-        }
+        if (inputManager.IsPointerOverUI()) return;
 
         GameObject   obj = cursorsystem.GetCollisionobject();
         if (!obj) return;
@@ -339,6 +405,8 @@ public class PlacementSystem : MonoBehaviour
   
     }
 
+    //computer case
+    /*
     private GameObject MakeNewObject(int id, Transform parent, Vector3Int loc, Quaternion rot, Vector2Int size, String layer)
     {
         if (id >= 0)
@@ -347,8 +415,8 @@ public class PlacementSystem : MonoBehaviour
             newObject.transform.SetParent(ObjectLocation.transform);
             newObject.transform.rotation = rot;
             //newObject.transform.position = grid.CellToWorld(loc);
-            newObject.transform.position = ((Vector3)loc) / MapInfo.Instance.MapScale;
-            newObject.transform.localScale = newObject.transform.localScale * (1/MapInfo.Instance.MapScale);
+            newObject.transform.position = ((Vector3)loc); //  / MapInfo.Instance.MapScale;
+            newObject.transform.localScale = newObject.transform.localScale; // * (1/MapInfo.Instance.MapScale);
             newObject.layer = LayerMask.NameToLayer(layer);
 
             placedGameObjects.Add(newObject);
@@ -359,6 +427,59 @@ public class PlacementSystem : MonoBehaviour
         }
         else return null;
     }
+    */
+
+    //AR case
+    private GameObject MakeNewObject(int id, Transform parent, Vector3Int loc, Quaternion rot, Vector2Int size, String layer, GameObject newObject, bool flag)
+    {
+        if (id >= 0)
+        {
+            //newObject.transform.SetParent(ObjectLocation.transform);
+
+
+            newObject.transform.rotation = rot;
+            //newObject.transform.position = grid.CellToWorld(loc);
+
+            if (!flag)
+            {
+                newObject.transform.SetParent(ObjectLocation.transform);
+                newObject.transform.position = ((Vector3)loc) / MapInfo.Instance.MapScale;
+            }
+
+            else
+            {
+                newObject.transform.position = ((Vector3)loc);
+
+            }
+            //newObject.transform.localScale = newObject.transform.localScale * (1 / MapInfo.Instance.MapScale);
+
+
+            newObject.layer = LayerMask.NameToLayer(layer);
+            newObject.transform.SetParent(ObjectLocation.transform);
+
+            placedGameObjects.Add(newObject);
+
+            //GridData selectedData = database.objectsData[i].ID == 0 ? floorData : funitureData; 
+            //혹시 부딪힐 필요가 없는 에셋이 존재하는 경우 위 코드를 활용해야함.
+
+            GridData selectedData = funitureData;
+            selectedData.AddObjectAt(loc, size, id, placedGameObjects.Count - 1);
+            return newObject;
+        }
+        else return null;
+    }
+
+
+    private SelectExitEventArgs makeEventArgs(XRGrabInteractable interactable, IXRSelectInteractor InteractorSelect, XRInteractionManager interactionManager)
+    {
+        SelectExitEventArgs exiteventargs = new SelectExitEventArgs();
+        exiteventargs.interactableObject = interactable;
+        exiteventargs.interactorObject = InteractorSelect;
+        exiteventargs.manager = interactionManager;
+
+        return exiteventargs;
+    }
+
 }
 
 

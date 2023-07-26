@@ -18,9 +18,6 @@ public class ARhandTest : MonoBehaviour
     void Start()
     {
         Trackables = ARSessionorigin.transform.Find("Trackables");
-        
-        //leftaction = handcontrollers[0];
-        //rightaction = handcontrollers[1];
 
     }
 
@@ -31,9 +28,11 @@ public class ARhandTest : MonoBehaviour
             handcontrollers = Trackables.GetComponentsInChildren<XRHandController>();
 
         string debugmsg = "";
+        int i = 0;
         foreach(XRHandController handcontroller in handcontrollers)
         {
-            debugmsg += handcontroller.Handedness + ": " + handcontroller.currentControllerState.selectInteractionState.active + "\n";
+            debugmsg += i + " "+  handcontroller.Handedness + ": " + handcontroller.currentControllerState.selectInteractionState.active + "\n";
+            i++;
         }
 
         UIButtonScript.Instance.DebuggingText(debugmsg);
@@ -45,7 +44,7 @@ public class ARhandTest : MonoBehaviour
 
     public void click()
     {
-        print("click ÇØÂÇ¿è");
+        UIButtonScript.Instance.DebuggingText("Å¬¸¯ÇØÂÇ¿è");
     }
    
 

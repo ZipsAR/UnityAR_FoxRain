@@ -22,37 +22,33 @@ MonoBehaviour:
   - <Name>k__BackingField: fence01
     <ID>k__BackingField: 1
     <Size>k__BackingField: {x: 3, y: 1}
-    <ObjectCount>k__BackingField: 14
+    <ObjectCount>k__BackingField: 11
     <Prefab>k__BackingField: {fileID: 6585330596295408371, guid: 79dc7b66da8f3f547ba6b3df00981e6a,
       type: 3}
   - <Name>k__BackingField: platform01
     <ID>k__BackingField: 2
     <Size>k__BackingField: {x: 3, y: 1}
-    <ObjectCount>k__BackingField: 24
+    <ObjectCount>k__BackingField: 10
     <Prefab>k__BackingField: {fileID: 352422850378895845, guid: 1d5af2073a5d96a46af8a19c9471b4b7,
       type: 3}
   - <Name>k__BackingField: circle01
     <ID>k__BackingField: 3
     <Size>k__BackingField: {x: 1, y: 1}
-    <ObjectCount>k__BackingField: 15
+    <ObjectCount>k__BackingField: 10
     <Prefab>k__BackingField: {fileID: 3776798791853720209, guid: e3c44e64feece644fa8e3f58f53368fc,
       type: 3}
   - <Name>k__BackingField: frame01
     <ID>k__BackingField: 4
     <Size>k__BackingField: {x: 3, y: 1}
-    <ObjectCount>k__BackingField: 13
+    <ObjectCount>k__BackingField: 10
     <Prefab>k__BackingField: {fileID: 7661533685986042039, guid: 6e285990e4b522c44b02adb502222820,
       type: 3}
   objectsLocation:
-  - location: {x: 9, y: 0, z: 9}
+  - location: {x: 10, y: -2, z: -3}
     rotation: {x: 0, y: 0, z: 0, w: 0}
     size: {x: 3, y: 1}
-    OBJID: 1
-  - location: {x: 10, y: 0, z: 8}
+    OBJID: 2
+  - location: {x: 10, y: -2, z: -2}
     rotation: {x: 0, y: 0, z: 0, w: 0}
-    size: {x: 1, y: 1}
-    OBJID: 3
-  - location: {x: 10, y: 0, z: 10}
-    rotation: {x: 0, y: 0, z: 0, w: 0}
-    size: {x: 1, y: 1}
-    OBJID: 3
+    size: {x: 3, y: 1}
+    OBJID: 2
