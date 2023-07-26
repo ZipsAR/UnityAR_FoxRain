@@ -40,9 +40,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/TaeSeung/Scene/AR Test Scene.unity
     guid: 214168c98dc5b674485910d45632b47c
-  - enabled: 1
+  - enabled: 0
     path: Assets/TaeHyeon/StrollMode.unity
     guid: c76080ac7587c4a1ca398a524d516062
+  - enabled: 1
+    path: Assets/Jaewon/Scene/StoreScene.unity
+    guid: f3d69fa6a405d934cb973cfbb430e6d4
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 16b693aa86aa14d4aa919cf565e651b2,
       type: 2}
