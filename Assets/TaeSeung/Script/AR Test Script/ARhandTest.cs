@@ -24,6 +24,7 @@ public class ARhandTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {        
+        /*
         if (handcontrollers == null)
             handcontrollers = Trackables.GetComponentsInChildren<XRHandController>();
 
@@ -34,9 +35,9 @@ public class ARhandTest : MonoBehaviour
             debugmsg += i + " "+  handcontroller.Handedness + ": " + handcontroller.currentControllerState.selectInteractionState.active + "\n";
             i++;
         }
-
+        
         UIButtonScript.Instance.DebuggingText(debugmsg);
-
+        */
         //print("controllstate: "+rightaction.currentControllerState);
         //GestureType.PINCH;
 

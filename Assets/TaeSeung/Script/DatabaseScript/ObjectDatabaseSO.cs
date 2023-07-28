@@ -42,6 +42,8 @@ public class ObjectData
 [Serializable]
 public class ObjectLocation
 {
+    public int InstanceId;
+
     public Vector3Int location;
     //position = xyz
     public Quaternion rotation;
@@ -50,4 +52,8 @@ public class ObjectLocation
     public Vector2Int size;
 
     public int OBJID;
+
+    public bool placementstatus = false;
 }
+
+

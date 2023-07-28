@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 커서와 충돌된 오브젝트에 대한 정보를 파악해주거나 그 오브젝트의 무언가를 바꿔주는 클래스 
+/// </summary>
 public class CursorCollisionSystem : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -28,7 +31,7 @@ public class CursorCollisionSystem : MonoBehaviour
             renders = obj.GetComponentsInChildren<Renderer>(true);
 
             //이건 충돌된 물체에 대한 머터리얼 바꾸기를 해보려는건데... 어렵네? ㅎ
-            print("render: "+renders.Length);
+            //print("render: "+renders.Length);
             foreach (Renderer temprender in renders)
             {
                 Material[] tempmaterials = temprender.materials;
@@ -46,10 +49,13 @@ public class CursorCollisionSystem : MonoBehaviour
 
     }
 
-    //충돌된 오브젝트에 대한 정보를 실시간으로 보내줄수 있다.
-    public GameObject GetCollisionobject()
-    {
-          return obj;
-    }
+
+
+
+    /// <summary>
+    /// 충돌된 오브젝트에 대한 정보를 보내줌
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetCollisionobject() => obj;
 
 }
