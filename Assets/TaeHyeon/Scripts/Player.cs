@@ -37,12 +37,18 @@ public class Player : MonoBehaviour
         Gizmos.color = Color.red;
         switch (GameManager.Instance.currentPlayMode)
         {
+            case PlayMode.None:
+                break;
             case PlayMode.InteractMode:
-                Gizmos.DrawWireSphere(transform.position, InteractManager.Instance.interactData.playerPetMaxDistance);
+                Gizmos.DrawWireSphere(transform.position, GameManager.Instance.interactManager.interactData.playerPetMaxDistance);
                 break;
             case PlayMode.StrollMode:
-                Gizmos.DrawWireSphere(transform.position, StrollManager.Instance.strollData.playerPetMaxDistance);
+                Gizmos.DrawWireSphere(transform.position, GameManager.Instance.strollManager.strollData.playerPetMaxDistance);
                 break;
+            case PlayMode.AgilityMode:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 }

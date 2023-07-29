@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 // create : stroll mode on enter
 // destroy : stroll mode on exit
-public class StrollManager : Singleton<StrollManager>
+public class StrollManager : MonoBehaviour
 {
     public StrollData strollData;
     [SerializeField] private PetBase pet;

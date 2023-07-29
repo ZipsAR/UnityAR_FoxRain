@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 // create : interact mode on enter
 // destroy : interact mode on exit
-public class InteractManager : Singleton<InteractManager>
+public class InteractManager : MonoBehaviour
 {
     public InteractData interactData;
     [SerializeField] private PetBase pet;
@@ -23,6 +23,8 @@ public class InteractManager : Singleton<InteractManager>
     
     private void Start()
     {
+        pet.SetPetAnimationMode(PlayMode.InteractMode);
+        
         interactData.Init();
 
         interactHeadEvent -= InteractWithHead;
