@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Logger = ZipsAR.Logger;
 
 public enum HandSide
 {
@@ -12,11 +13,18 @@ public class HandAttacher : MonoBehaviour
 {
     private GameObject leftHandObj;
     private GameObject rightHandObj;
+    private GameObject trackables;
 
     private void Update()
     {
-        leftHandObj = GameObject.Find("QC Hand Left");
-        rightHandObj = GameObject.Find("QC Hand Right");
+        trackables = GameObject.Find("Trackables");
+        if (trackables == null)
+        {
+            Debug.Log("zipsar : trackables is null");
+            return;
+        }
+        leftHandObj = trackables.transform.Find("QC Hand Left").gameObject;
+        rightHandObj = trackables.transform.Find("QC Hand Right").gameObject;
 
         if (leftHandObj != null)
         {
@@ -26,7 +34,12 @@ public class HandAttacher : MonoBehaviour
             AddCollider(rightHandObj);
             AddRigidBody(leftHandObj);
             AddRigidBody(rightHandObj);
+            ZipsAR.Logger.Log("Attach Complete");
             Destroy(gameObject);
+        }
+        else
+        {
+            Logger.Log("there is no left hand obj");
         }
     }
 

@@ -12,11 +12,12 @@ public class HandController : MonoBehaviour
     private float collisionTimeLimit;
     private PetParts petCollisionPart;
 
-    private void Start()
+    private void Awake()
     {
         collisionTimer = 0f;
         isColliding = false;
         collisionTimeLimit = 2f;
+        Logger.Log("HandController attached");
     }
 
     private void Update()
@@ -38,15 +39,19 @@ public class HandController : MonoBehaviour
                     {
                         case PetParts.Head:
                             InteractManager.Instance.interactHeadEvent();
+                            Logger.Log("Head Interaction start in HandController");
                             break;
                         case PetParts.Jaw:
                             InteractManager.Instance.interactJawEvent();
+                            Logger.Log("Jaw Interaction start in HandController");
                             break;
                         case PetParts.Body:
                             InteractManager.Instance.interactBodyEvent();
+                            Logger.Log("Body Interaction start in HandController");
                             break;
                         case PetParts.HandDetection:
                             InteractManager.Instance.interactHandDetectionEvent();
+                            Logger.Log( "HandDetection Interaction start in HandController");
                             break;
                         
                     }
@@ -56,7 +61,7 @@ public class HandController : MonoBehaviour
         }
         
     }
-    
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -66,6 +71,7 @@ public class HandController : MonoBehaviour
             Logger.Log(handler.petParts + " start colliding");
             petCollisionPart = handler.petParts;
             isColliding = true;
+            other.gameObject.GetComponent<MeshRenderer>().material = handler.onCollisionMat;
         }
     }
 
@@ -80,8 +86,14 @@ public class HandController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        isColliding = false;
-        collisionTimer = 0f;
-        petCollisionPart = PetParts.None;
+        PetCollisionHandler handler;
+        if ((handler = other.gameObject.GetComponent<PetCollisionHandler>()) != null)
+        {
+            isColliding = false;
+            collisionTimer = 0f;
+            petCollisionPart = PetParts.None;
+            other.gameObject.GetComponent<MeshRenderer>().material = handler.detaultMat;
+            Logger.Log(handler.petParts + " exit colliding");
+        }
     }
 }

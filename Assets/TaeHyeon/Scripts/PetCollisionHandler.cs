@@ -8,9 +8,13 @@ using Logger = ZipsAR.Logger;
 public class PetCollisionHandler : MonoBehaviour
 {
     public PetParts petParts;
+
+    public Material detaultMat;
+    public Material onCollisionMat;
     
     private void Start()
     {
         transform.GetComponent<Collider>().isTrigger = true;
     }
+    
 }

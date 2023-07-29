@@ -19,4 +19,9 @@ public class GameManager : Singleton<GameManager>
     {
         player = GameObject.Find("AR Camera").GetComponent<Player>();
     }
+
+    public void QuitApp()
+    {
+        Application.Quit(0);
+    }
 }
