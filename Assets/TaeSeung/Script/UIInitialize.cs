@@ -4,40 +4,39 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIInitialize : MonoBehaviour
+public class UIInitialize : Singleton<UIInitialize>
 {
     // Start is called before the first frame update
     [SerializeField]
     private ObjectDatabaseSO database;
+
+    //하우징 버튼이 부착될 패널, 하우징 버튼의 프리팹
     [SerializeField]
-    private GameObject menuPanel;
+    private GameObject menuPanel, HousingButtonPrefab;
+
+
     public List<GameObject> countlist;
+
+
 
     void Start()
     {
-        print(menuPanel.transform.childCount);
-
-        for (int i = 0; i < menuPanel.transform.childCount-1; i++)
-        {
-            GameObject tmptext = menuPanel.transform.GetChild(i).gameObject;
-            
-            tmptext.GetComponentInChildren<TMP_Text>().text = "" + database.objectsData[i].ObjectCount;
-            if(database.objectsData[i].ObjectCount <= 0)
-            {
-                tmptext.GetComponent<Button>().interactable = false;
-            }
-            countlist.Add(tmptext);
-        }
+        foreach (ObjectData objdata in database.objectsData) {
+            GameObject newobj = Instantiate(HousingButtonPrefab, menuPanel.transform);
+            newobj.GetComponent<Button>().onClick.AddListener(() => PlacementSystem.Instance.StartPlacement(objdata.ID));
+            newobj.GetComponentInChildren<Image>().color = Random.ColorHSV();
+            newobj.GetComponentInChildren<TMP_Text>().text = objdata.ObjectCount.ToString();
+            if (objdata.ObjectCount <= 0) newobj.GetComponent<Button>().interactable = false;
+            countlist.Add(newobj);
+        }   
     }
 
-    public void Resetsetting()
+    public void ObjCountupdate(int id)
     {
-        for (int i=0; i< database.objectsData.Count; i++)
-        {
-            database.objectsData[i].ObjectCount = 10;
-            countlist[i].GetComponentInChildren<TMP_Text>().text = ""+10;
-            countlist[i].GetComponent<Button>().interactable = true;
-        }
+        GameObject obj = countlist[id];
+        obj.GetComponentInChildren<TMP_Text>().text = database.objectsData[id].ObjectCount.ToString();
+
     }
+
 
 }

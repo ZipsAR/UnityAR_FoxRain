@@ -15,53 +15,38 @@ MonoBehaviour:
   objectsData:
   - <Name>k__BackingField: tunnel01
     <ID>k__BackingField: 0
-    <Size>k__BackingField: {x: 1, y: 1}
-    <ObjectCount>k__BackingField: 0
+    <Size>k__BackingField: {x: 3, y: 1}
+    <ObjectCount>k__BackingField: 18
     <Prefab>k__BackingField: {fileID: 674148214110826250, guid: 5e7053946a02ce645be40e41c438e0e1,
       type: 3}
   - <Name>k__BackingField: fence01
     <ID>k__BackingField: 1
-    <Size>k__BackingField: {x: 1, y: 1}
-    <ObjectCount>k__BackingField: 4
+    <Size>k__BackingField: {x: 3, y: 1}
+    <ObjectCount>k__BackingField: 29
     <Prefab>k__BackingField: {fileID: 6585330596295408371, guid: 79dc7b66da8f3f547ba6b3df00981e6a,
       type: 3}
   - <Name>k__BackingField: platform01
     <ID>k__BackingField: 2
-    <Size>k__BackingField: {x: 1, y: 1}
-    <ObjectCount>k__BackingField: 2
+    <Size>k__BackingField: {x: 3, y: 1}
+    <ObjectCount>k__BackingField: 37
     <Prefab>k__BackingField: {fileID: 352422850378895845, guid: 1d5af2073a5d96a46af8a19c9471b4b7,
       type: 3}
   - <Name>k__BackingField: circle01
     <ID>k__BackingField: 3
     <Size>k__BackingField: {x: 1, y: 1}
-    <ObjectCount>k__BackingField: 3
+    <ObjectCount>k__BackingField: 16
     <Prefab>k__BackingField: {fileID: 3776798791853720209, guid: e3c44e64feece644fa8e3f58f53368fc,
       type: 3}
   - <Name>k__BackingField: frame01
     <ID>k__BackingField: 4
-    <Size>k__BackingField: {x: 1, y: 1}
-    <ObjectCount>k__BackingField: 2
+    <Size>k__BackingField: {x: 3, y: 1}
+    <ObjectCount>k__BackingField: 11
     <Prefab>k__BackingField: {fileID: 7661533685986042039, guid: 6e285990e4b522c44b02adb502222820,
       type: 3}
   objectsLocation:
-  - location: {x: -2, y: 0, z: 8}
-    rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071067}
+  - InstanceId: -212168
+    location: {x: -2, y: -6, z: 9}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    size: {x: 1, y: 3}
     OBJID: 0
-  - location: {x: -2, y: 0, z: 7}
-    rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071067}
-    OBJID: 0
-  - location: {x: -2, y: 0, z: 9}
-    rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071067}
-    OBJID: 0
-  - location: {x: 3, y: 0, z: 8}
-    rotation: {x: 0, y: 0.70710707, z: 0, w: 0.7071066}
-    OBJID: 3
-  - location: {x: 5, y: 0, z: 8}
-    rotation: {x: -5.097857e-25, y: 0.7071037, z: -6.9752467e-25, w: -0.7071098}
-    OBJID: 4
-  - location: {x: -6, y: 0, z: 8}
-    rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071067}
-    OBJID: 0
-  - location: {x: 0, y: 0, z: 8}
-    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-    OBJID: 1
+    placementstatus: 1
