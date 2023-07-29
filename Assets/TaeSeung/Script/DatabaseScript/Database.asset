@@ -16,19 +16,19 @@ MonoBehaviour:
   - <Name>k__BackingField: tunnel01
     <ID>k__BackingField: 0
     <Size>k__BackingField: {x: 3, y: 1}
-    <ObjectCount>k__BackingField: 19
+    <ObjectCount>k__BackingField: 18
     <Prefab>k__BackingField: {fileID: 674148214110826250, guid: 5e7053946a02ce645be40e41c438e0e1,
       type: 3}
   - <Name>k__BackingField: fence01
     <ID>k__BackingField: 1
     <Size>k__BackingField: {x: 3, y: 1}
-    <ObjectCount>k__BackingField: 30
+    <ObjectCount>k__BackingField: 29
     <Prefab>k__BackingField: {fileID: 6585330596295408371, guid: 79dc7b66da8f3f547ba6b3df00981e6a,
       type: 3}
   - <Name>k__BackingField: platform01
     <ID>k__BackingField: 2
     <Size>k__BackingField: {x: 3, y: 1}
-    <ObjectCount>k__BackingField: 35
+    <ObjectCount>k__BackingField: 37
     <Prefab>k__BackingField: {fileID: 352422850378895845, guid: 1d5af2073a5d96a46af8a19c9471b4b7,
       type: 3}
   - <Name>k__BackingField: circle01
@@ -44,39 +44,9 @@ MonoBehaviour:
     <Prefab>k__BackingField: {fileID: 7661533685986042039, guid: 6e285990e4b522c44b02adb502222820,
       type: 3}
   objectsLocation:
-  - InstanceId: -258204
-    location: {x: 5, y: -6, z: 0}
-    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-    size: {x: 3, y: 1}
-    OBJID: 0
-    placementstatus: 1
-  - InstanceId: -258280
-    location: {x: 1, y: -6, z: 4}
-    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-    size: {x: 3, y: 1}
-    OBJID: 2
-    placementstatus: 1
-  - InstanceId: -258372
-    location: {x: -3, y: -6, z: 11}
-    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
-    size: {x: 1, y: 3}
-    OBJID: 0
-    placementstatus: 1
-  - InstanceId: -258448
-    location: {x: -8, y: -6, z: 15}
-    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-    size: {x: 3, y: 1}
-    OBJID: 2
-    placementstatus: 1
-  - InstanceId: -258540
-    location: {x: 2, y: -6, z: -2}
-    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
-    size: {x: 1, y: 3}
-    OBJID: 2
-    placementstatus: 1
-  - InstanceId: -258632
-    location: {x: -7, y: -6, z: -3}
+  - InstanceId: -212168
+    location: {x: -2, y: -6, z: 9}
     rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
-    size: {x: 1, y: 1}
-    OBJID: 3
+    size: {x: 1, y: 3}
+    OBJID: 0
     placementstatus: 1

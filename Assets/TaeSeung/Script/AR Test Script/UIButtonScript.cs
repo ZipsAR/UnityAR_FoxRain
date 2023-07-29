@@ -49,27 +49,4 @@ public class UIButtonScript: Singleton<UIButtonScript>
         Application.Quit();
     }
 
-
-    public void MakeNewObj(int ID)
-    {
-        DebuggingTextInven(ID);
-        selectedObjectindex = database.objectsData.FindIndex(data => data.ID == ID);
-        if(selectedObjectindex < 0)
-        {
-            DebuggingTextInven("WrongIndex");
-        }
-        if (database.objectsData[selectedObjectindex].ObjectCount <= 0)
-        {
-            DebuggingTextInven("NoObject");
-        }
-
-        GameObject newobject = Instantiate(database.objectsData[selectedObjectindex].Prefab);
-        newobject.transform.localScale = newobject.transform.localScale * 0.125f;
-        Vector3 position = arcamera.transform.position;
-        position.z += 0.15f;
-        newobject.transform.position = position;
-
-
-    }
-
 }

@@ -39,9 +39,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     [SerializeField]
     private GameObject gridVisualization;
 
-    //UI관련 스크립트 및 오브젝트
-    [SerializeField]
-    private GameObject StructureControlUI;
 
     //object가 새로 생성될때, 그 부모가 될 오브젝트
     [SerializeField]
@@ -91,15 +88,15 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
             MakeNewObject(id, ObjectLocation.transform, loc, rot, size, "PlaceObject", newObject);
 
-
             interact = newObject.GetComponent<XRGrabInteractable>();
             SelectEnterEventArgs enterArgs = makeEnterEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
             SelectExitEventArgs exitargs = makeExitEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
             interact.selectEntered.AddListener((a) => InsertEnterEvent(enterArgs));
             interact.selectExited.AddListener((a) => InsertCompleteEvent(exitargs));
         }
-
         StopPlacement(true);
+
+
 
         previewRenderer = cellIndicator.GetComponentInChildren<Renderer>();
         cellIndicator.transform.localScale = cellIndicator.transform.localScale / MapInfo.Instance.MapScale;
@@ -178,7 +175,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         StopPlacement(false);
         gridVisualization.SetActive(true);
-        StructureControlUI.SetActive(true);
      
         //inputManager.OnClicked += InsertionStructure;
         //inputManager.OnExit += StopPlacement;
@@ -210,8 +206,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
             gridVisualization.SetActive(true);
         if (!cellIndicator.activeSelf)
             cellIndicator.SetActive(true);
-        if (!StructureControlUI.activeSelf)
-            StructureControlUI.SetActive(true);
+
 
         catchmode = true;
     }
@@ -224,6 +219,11 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         //배치 불가능하면 cellindicator의 머터리얼을 바꿔서 표시해줌.
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
+        if (placementValidity)
+            print("asd");
+        else
+            print("asdgggb");
+
         previewRenderer.material.color = placementValidity ? Color.white : Color.red;
 
         mouseIndicator.transform.position = mousePosition;
@@ -274,7 +274,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         //만들어진 오브젝트에 대한 고유정보, 배치정보 수정 + 그 오브젝트에 대한 모든 정보 리스트에 추가
         database.objectsLocation.Add(newlocation);
-
+        database.objectsData[selectedObjectIndex].ObjectCount -= 1;
 
         interact = gameObject.GetComponent<XRGrabInteractable>();
         SelectEnterEventArgs enterArgs = makeEnterEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
@@ -284,8 +284,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         interact.selectEntered.AddListener((a) => InsertEnterEvent(enterArgs));
         interact.selectExited.AddListener((a) => InsertCompleteEvent(exitargs));
 
-        //ui에 오브젝트 카운트 정보 업뎃
-        UIInitialize.Instance.countlist[selectedObjectIndex].GetComponentInChildren<TMP_Text>().text = "" + database.objectsData[selectedObjectIndex].ObjectCount;
+
 
         //수량이 없는 경우 해당 오브젝트 버튼 자체를 비활성화
         if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
@@ -293,6 +292,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
             Debug.Log($"No Object");
             UIInitialize.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
         }
+        UIInitialize.Instance.ObjCountupdate(selectedObjectIndex);
 
         CreateObject = null;
         StopPlacement(true);
@@ -398,6 +398,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
         }
     }
 
+
+    /// <summary>
+    /// 배치 된 오브젝트 삭제시 중력 풀고 저 멀리로 보내버림
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     private IEnumerator throwdelete(GameObject obj)
     {
          while (Vector3.Distance(obj.transform.position, ObjectLocation.transform.position) < 30)
@@ -429,7 +435,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
-
+    /// <summary>
+    /// 실시간으로 물체 로테이션 값을 받아서 회전된 각도를 구해주는 함수
+    /// </summary>
+    /// <returns></returns>
     public float RotateRealTimebyHand()
     {
         float y = CatchObject.transform.rotation.eulerAngles.y;
@@ -454,6 +463,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
+    /// <summary>
+    /// 최종적으로 물체 배치시 회전 각도에 맞게 하우징 가구를 회전해서 배치해주는 함수
+    /// </summary>
+    /// <param name="zangle"></param>
     private void RotatePlacementByHand(float zangle)
     {
         float z = 0;
@@ -478,7 +491,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
             currentobjsize.y = tempx;
 
         }
-
 
         Vector3 euler = new Vector3(0, z, 0 );
         //CatchObject.transform.rotation = Quaternion.Euler(euler);
