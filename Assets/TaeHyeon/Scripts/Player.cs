@@ -35,6 +35,14 @@ public class Player : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, StrollManager.Instance.strollData.playerPetMaxDistance);
+        switch (GameManager.Instance.currentPlayMode)
+        {
+            case PlayMode.InteractMode:
+                Gizmos.DrawWireSphere(transform.position, InteractManager.Instance.interactData.playerPetMaxDistance);
+                break;
+            case PlayMode.StrollMode:
+                Gizmos.DrawWireSphere(transform.position, StrollManager.Instance.strollData.playerPetMaxDistance);
+                break;
+        }
     }
 }
