@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StoreManager : MonoBehaviour
 {
+    public GameObject[] objList;
     private static StoreManager instance;
     public UImanager uImanager;
     public ItemMov itemMov;

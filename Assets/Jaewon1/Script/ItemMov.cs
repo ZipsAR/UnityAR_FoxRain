@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ItemMov : MonoBehaviour
 {
-    private bool isSelected;
+    public bool isSelected;
     public GameObject childitem;
     private void Start()
     {
@@ -13,15 +13,23 @@ public class ItemMov : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log(isSelected + this.gameObject.name);
         if (isSelected)
         {
-            Debug.Log("È¸Àü");
-            childitem.GetComponent<Transform>().Rotate(new Vector3(0, 10, 0) * Time.deltaTime * 80);
+            childitem.GetComponent<Transform>().Rotate(new Vector3(0, 10, 0) * Time.deltaTime * 40);
+        }
+        if (!isSelected)
+        {
+            childitem.GetComponent<Transform>().rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         }
     }
     public void GetButton()
     {
-        isSelected = true;
+        for (int i=0;i< StoreManager.Instance.objList.Length; i++)
+        {
+            Debug.Log(StoreManager.Instance.objList.Length);
+            StoreManager.Instance.objList[i].GetComponent<ItemMov>().isSelected = false;
+            Debug.Log(StoreManager.Instance.objList[i].name + "="+ StoreManager.Instance.objList[i].GetComponent<ItemMov>().isSelected);
+        }
+        isSelected = !isSelected;
     }
 }
