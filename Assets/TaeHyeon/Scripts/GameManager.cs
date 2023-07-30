@@ -22,6 +22,9 @@ public class GameManager : Singleton<GameManager>
 
     public InteractManager interactManager;
     public StrollManager strollManager;
+
+    public HandController leftHand;
+    public HandController rightHand;
     
     private void Start()
     {
