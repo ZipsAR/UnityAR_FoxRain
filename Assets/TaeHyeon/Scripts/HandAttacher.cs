@@ -34,6 +34,9 @@ public class HandAttacher : MonoBehaviour
             AddCollider(rightHandObj);
             AddRigidBody(leftHandObj);
             AddRigidBody(rightHandObj);
+            GameManager.Instance.leftHand = leftHandObj.GetComponent<HandController>();
+            GameManager.Instance.rightHand = rightHandObj.GetComponent<HandController>();
+            
             ZipsAR.Logger.Log("Attach Complete");
             Destroy(gameObject);
         }

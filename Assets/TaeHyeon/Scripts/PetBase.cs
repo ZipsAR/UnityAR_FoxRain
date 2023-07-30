@@ -63,7 +63,6 @@ public abstract class PetBase : MonoBehaviour
         petStates = PetStates.Idle;
         animator = GetComponent<Animator>();
 
-        animator.SetInteger(ModeParameter, (int)PlayMode.StrollMode);
         StartCoroutine(Init());
     }
 
@@ -80,6 +79,8 @@ public abstract class PetBase : MonoBehaviour
                 UpdateInteractMode();
                 break;
             case PlayMode.AgilityMode:
+                break;
+            case PlayMode.None:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -107,8 +108,7 @@ public abstract class PetBase : MonoBehaviour
 
     public void SetPetAnimationMode(PlayMode playMode)
     {
-        // animator.SetInteger(ModeParameter, (int)playMode);
-        animator.SetInteger("Mode", 1);
+        animator.SetInteger(ModeParameter, (int)playMode);
     }
 
     private void UpdateStrollMode()
@@ -265,6 +265,7 @@ public abstract class PetBase : MonoBehaviour
     public void SitEnd()
     {
         isCoroutinePlayingList[(int)Cmd.Sit] = false;
+        Logger.Log("SitEnd is activate");
     }
 
     #endregion

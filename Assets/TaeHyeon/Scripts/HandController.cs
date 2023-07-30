@@ -38,26 +38,37 @@ public class HandController : MonoBehaviour
                     switch (petCollisionPart)
                     {
                         case PetParts.Head:
-                            InteractManager.Instance.interactHeadEvent();
+                            GameManager.Instance.interactManager.interactHeadEvent();
                             Logger.Log("Head Interaction start in HandController");
                             break;
                         case PetParts.Jaw:
-                            InteractManager.Instance.interactJawEvent();
+                            GameManager.Instance.interactManager.interactJawEvent();
                             Logger.Log("Jaw Interaction start in HandController");
                             break;
                         case PetParts.Body:
-                            InteractManager.Instance.interactBodyEvent();
+                            GameManager.Instance.interactManager.interactBodyEvent();
                             Logger.Log("Body Interaction start in HandController");
                             break;
                         case PetParts.HandDetection:
-                            InteractManager.Instance.interactHandDetectionEvent();
+                            GameManager.Instance.interactManager.interactHandDetectionEvent();
                             Logger.Log( "HandDetection Interaction start in HandController");
                             break;
-                        
+                        case PetParts.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 
                 }
                 break;
+            case PlayMode.StrollMode:
+                break;
+            case PlayMode.AgilityMode:
+                break;
+            case PlayMode.None:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
         
     }
