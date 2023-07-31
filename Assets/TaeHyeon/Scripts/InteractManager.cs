@@ -17,13 +17,14 @@ public class InteractManager : MonoBehaviour
     public Action interactJawEvent;
     public Action interactBodyEvent;
     public Action interactHandDetectionEvent;
-    
-    
-    
+
+    private Queue<int> cmdQueue;
+    private Cmd nextCmd;
     
     private void Start()
     {
         pet.SetPetAnimationMode(PlayMode.InteractMode);
+        cmdQueue = new Queue<int>();
         
         interactData.Init();
 
@@ -39,58 +40,114 @@ public class InteractManager : MonoBehaviour
 
         interactHandDetectionEvent -= InteractWithHandDetection;
         interactHandDetectionEvent += InteractWithHandDetection;
+        
+        // Set initial Cmd
+        EnqueueCmd(Cmd.Move);
     }
 
     private void Update()
     {
-        // Cannot run another cmd if the pet is running some action
-        if (pet.inProcess)
-        {
-            return;
-        }
+        ShowCurQueue();
+        if(pet.inProcess) return;
         
-        // Run if the user does not move for a certain amount of time
-        if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
+        // if Queue is empty
+        if (cmdQueue.Count == 0)
         {
-            pet.CmdLookPlayer();
-            return;
-        }
-
-        // Move to player area if the pet's position is further than strollData.maxDistance from the player
-        if (Vector3.Distance(GameManager.Instance.player.gameObject.transform.position, pet.transform.position) >
-            interactData.playerPetMaxDistance)
-        {
-            Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
-            Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
-                                new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
-            pet.CmdMoveTo(nextCoord);
+            if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
+            {
+                EnqueueCmd(Cmd.Look);
+                EnqueueCmd(Cmd.Sit);
+            }
+            else
+            {
+                EnqueueCmd(Cmd.Move);
+            }
             return;
         }
 
-        
-        
-        
-        
-        // Pet condition
-        switch (pet.petStates)
+        // if queue is not empty
+        if (DequeCmd(out nextCmd))
         {
-            case PetStates.Idle:
-                // In the current code, Petstates cannot be idle, it is either "walk" or "sit
-                // So this part is not executed
-                Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
-                Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
-                                    new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
-                pet.CmdMoveTo(nextCoord);
-                break;
-            case PetStates.Walk:
-                break;
-            case PetStates.Sit:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            switch (nextCmd)
+            {
+                case Cmd.Move:
+                    Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
+                    Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
+                                        new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
+                    pet.CmdMoveTo(nextCoord);
+                    break;
+                case Cmd.Look:
+                    pet.CmdLookPlayer();
+                    break;
+                case Cmd.Sit:
+                    pet.CmdSit();
+                    break;
+            }
         }
     }
 
+    private void ShowCurQueue()
+    {
+        string str = "";
+        foreach (int val in cmdQueue)
+        {
+            str += $"{val} / ";
+        }
+        Logger.Log(str);
+    }
+
+    // private void Update()
+    // {
+    //     // Cannot run another cmd if the pet is running some action
+    //     if (pet.inProcess)
+    //     {
+    //         return;
+    //     }
+    //     
+    //     // Run if the user does not move for a certain amount of time
+    //     if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
+    //     {
+    //         pet.CmdLookPlayer();
+    //         return;
+    //     }
+    //
+    //     // Move to player area if the pet's position is further than strollData.maxDistance from the player
+    //     if (Vector3.Distance(GameManager.Instance.player.gameObject.transform.position, pet.transform.position) >
+    //         interactData.playerPetMaxDistance)
+    //     {
+    //         Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
+    //         Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
+    //                             new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
+    //         pet.CmdMoveTo(nextCoord);
+    //         return;
+    //     }
+    //
+    //     
+    //     
+    //     
+    //     
+    //     // Pet condition
+    //     switch (pet.petStates)
+    //     {
+    //         case PetStates.Idle:
+    //             // In the current code, Petstates cannot be idle, it is either "walk" or "sit
+    //             // So this part is not executed
+    //             Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
+    //             Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
+    //                                 new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
+    //             pet.CmdMoveTo(nextCoord);
+    //             break;
+    //         case PetStates.Walk:
+    //             break;
+    //         case PetStates.Sit:
+    //             break;
+    //         default:
+    //             throw new ArgumentOutOfRangeException();
+    //     }
+    // }
+
+    #region Snack
+    
 /// <summary>
 /// 1. Snack script notifies interactManager that the snack has dropped
 /// 2. interactManager triggers an event to PetBase 
@@ -118,7 +175,31 @@ public class InteractManager : MonoBehaviour
         pet.CmdMoveTo(snackPos);
     }
     
-    
+    #endregion
+
+    private void EnqueueCmd(Cmd cmd)
+    {
+        cmdQueue.Enqueue((int)cmd);
+    }
+
+    /// <summary>
+    /// Get top of cmd
+    /// </summary>
+    /// <param name="result">dequeue command value</param>
+    /// <returns>Whether deqeue is successful</returns>
+    private bool DequeCmd(out Cmd result)
+    {
+        // if cmdQueue is empty
+        if (cmdQueue.Count == 0)
+        {
+            // Meaningless data
+            result = Cmd.Move;
+            return false;
+        }
+
+        result = (Cmd)cmdQueue.Dequeue();
+        return true;
+    }
     private void InteractWithHead()
     {
         pet.InteractHead();

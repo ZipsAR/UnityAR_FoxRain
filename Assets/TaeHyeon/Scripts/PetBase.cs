@@ -245,7 +245,7 @@ public abstract class PetBase : MonoBehaviour
         isCoroutinePlayingList[(int)Cmd.Look] = false;
         
         
-        CmdSit();
+        // CmdSit();
     }
 
     /// <summary>
