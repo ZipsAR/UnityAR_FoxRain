@@ -18,13 +18,13 @@ public class InteractManager : MonoBehaviour
     public Action interactBodyEvent;
     public Action interactHandDetectionEvent;
 
-    private Queue<int> cmdQueue;
-    private Cmd nextCmd;
+    private Queue<Tuple<int, Vector3, GameObject>> cmdQueue;
+    private Tuple<int, Vector3, GameObject> nextCmd;
     
     private void Start()
     {
         pet.SetPetAnimationMode(PlayMode.InteractMode);
-        cmdQueue = new Queue<int>();
+        cmdQueue = new Queue<Tuple<int, Vector3, GameObject>>();
         
         interactData.Init();
 
@@ -49,39 +49,56 @@ public class InteractManager : MonoBehaviour
     {
         ShowCurQueue();
         if(pet.inProcess) return;
-        
-        // if Queue is empty
-        if (cmdQueue.Count == 0)
+
+        // if queue is not empty
+        if (DequeCmd(out nextCmd))
         {
+            switch (nextCmd.Item1)
+            {
+                case (int)Cmd.Move:
+                    Vector3 nextCoord;
+                    if (nextCmd.Item2 == default)
+                    {
+                        Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
+                        nextCoord = GameManager.Instance.player.gameObject.transform.position +
+                                            new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
+                    }
+                    else
+                    {
+                        nextCoord = nextCmd.Item2;
+                    }
+
+                    pet.CmdMoveTo(nextCoord);
+                    
+                    break;
+                
+                
+                case (int)Cmd.Look:
+                    pet.CmdLookPlayer();
+                    break;
+                case (int)Cmd.Sit:
+                    pet.CmdSit();
+                    break;
+                case (int)Cmd.Eat:
+                    pet.CmdEat(nextCmd.Item3);
+                    break;
+                
+            }
+        }
+        // if queue is empty
+        else
+        {
+            // if player stay for a while
             if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
             {
                 EnqueueCmd(Cmd.Look);
                 EnqueueCmd(Cmd.Sit);
             }
-            else
+            // if player-pet distance increase
+            else if(Vector3.Distance(GameManager.Instance.player.gameObject.transform.position, pet.transform.position) >
+                    interactData.playerPetMaxDistance)
             {
                 EnqueueCmd(Cmd.Move);
-            }
-            return;
-        }
-
-        // if queue is not empty
-        if (DequeCmd(out nextCmd))
-        {
-            switch (nextCmd)
-            {
-                case Cmd.Move:
-                    Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
-                    Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
-                                        new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
-                    pet.CmdMoveTo(nextCoord);
-                    break;
-                case Cmd.Look:
-                    pet.CmdLookPlayer();
-                    break;
-                case Cmd.Sit:
-                    pet.CmdSit();
-                    break;
             }
         }
     }
@@ -89,10 +106,12 @@ public class InteractManager : MonoBehaviour
     private void ShowCurQueue()
     {
         string str = "";
-        foreach (int val in cmdQueue)
+        foreach (Tuple<int, Vector3, GameObject> val in cmdQueue)
         {
-            str += $"{val} / ";
+            str += $"{val}\n";
         }
+
+        str += "\n";
         Logger.Log(str);
     }
 
@@ -152,14 +171,14 @@ public class InteractManager : MonoBehaviour
 /// 1. Snack script notifies interactManager that the snack has dropped
 /// 2. interactManager triggers an event to PetBase 
 /// </summary>
-/// <param name="snackPos">Dropped snack position</param>
-    public void NotifySnackDrop(Vector3 snackPos)
+/// <param name="snackTransform">Dropped snack position</param>
+    public void NotifySnackDrop(Transform snackTransform)
     {
-        StartCoroutine(NotifySnackDropSequence(snackPos));
+        StartCoroutine(NotifySnackDropSequence(snackTransform));
         Logger.Log("notify pet to snack is dropped");
     }
 
-    private IEnumerator NotifySnackDropSequence(Vector3 snackPos)
+    private IEnumerator NotifySnackDropSequence(Transform snackTransform)
     {
         // waiting for current command end
         while (pet.inProcess)
@@ -172,14 +191,24 @@ public class InteractManager : MonoBehaviour
         pet.AbortAllCmd();
         
         // Move to snack position
-        pet.CmdMoveTo(snackPos);
+        // pet.CmdMoveTo(snackPos);
+        GameManager.Instance.interactManager.ClearCmdQueue();
+        GameManager.Instance.interactManager.EnqueueCmd(Cmd.Move, snackTransform.position);
+        GameManager.Instance.interactManager.EnqueueCmd(Cmd.Look);
+        GameManager.Instance.interactManager.EnqueueCmd(Cmd.Sit);
+        GameManager.Instance.interactManager.EnqueueCmd(Cmd.Eat, snackObj: snackTransform.gameObject);
+        
+        
     }
     
     #endregion
 
-    private void EnqueueCmd(Cmd cmd)
+    public void EnqueueCmd(Cmd cmd, Vector3 pos = default, GameObject snackObj = default)
     {
-        cmdQueue.Enqueue((int)cmd);
+        // if (cmd == Cmd.Move && pos == default) throw new Exception("move cmd must include move direction");
+        if (cmd == Cmd.Eat && snackObj == default) throw new Exception("eat cmd must include snackObj");
+
+        cmdQueue.Enqueue(new Tuple<int, Vector3, GameObject>((int)cmd, pos, snackObj));
     }
 
     /// <summary>
@@ -187,19 +216,26 @@ public class InteractManager : MonoBehaviour
     /// </summary>
     /// <param name="result">dequeue command value</param>
     /// <returns>Whether deqeue is successful</returns>
-    private bool DequeCmd(out Cmd result)
+    private bool DequeCmd(out Tuple<int, Vector3, GameObject> result)
     {
         // if cmdQueue is empty
         if (cmdQueue.Count == 0)
         {
             // Meaningless data
-            result = Cmd.Move;
+            result = new Tuple<int, Vector3, GameObject>((int)Cmd.Move, Vector3.zero, null);
             return false;
         }
 
-        result = (Cmd)cmdQueue.Dequeue();
+        result = cmdQueue.Dequeue();
         return true;
     }
+
+    public void ClearCmdQueue()
+    {
+        cmdQueue.Clear();
+        Logger.Log("cmdQueue clear");
+    }
+    
     private void InteractWithHead()
     {
         pet.InteractHead();

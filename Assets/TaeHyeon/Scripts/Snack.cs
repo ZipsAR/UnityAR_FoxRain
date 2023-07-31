@@ -30,7 +30,7 @@ public class Snack : MonoBehaviour
         yield return new WaitForSeconds(waitSeconds);
         
         Logger.Log("Notify SnackDrop snack to InteractManager");
-        GameManager.Instance.interactManager.NotifySnackDrop(transform.position);
+        GameManager.Instance.interactManager.NotifySnackDrop(transform);
     }
 
 }

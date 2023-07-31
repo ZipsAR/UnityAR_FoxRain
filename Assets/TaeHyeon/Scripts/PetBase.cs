@@ -16,6 +16,7 @@ public enum Cmd
     Move = 0,
     Look = 1,
     Sit = 2,
+    Eat = 3,
 }
 
 public enum PetParts
@@ -31,8 +32,9 @@ public enum PetParts
 /// How to add a pet
 /// 1. Create Stat data to pet
 /// 2. Create an override animator for a pet by inheriting petController
-/// 3. Add Sitend event to sitting animation
-/// 4. Pet connection added to InteractManager
+/// 3. Add SitEnd event to sitting animation
+/// 4. Add EatEnd event to sitting animation
+/// 5. Pet connection added to InteractManager
 /// </summary>
 
 public abstract class PetBase : MonoBehaviour
@@ -57,7 +59,7 @@ public abstract class PetBase : MonoBehaviour
     private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
     private float fixedPosY; // Pet always moves at the height of this value
     public bool inProcess { private set; get; } // If the pet is executing a command, it's false
-
+    private GameObject snackObj;
 
     private void Start()
     {
@@ -302,7 +304,35 @@ public abstract class PetBase : MonoBehaviour
     #endregion
 
 
+
+
+    #region Eat
+
+    public void CmdEat(GameObject frontSnack)
+    {
+        Logger.Log("[Cmd] Eat");
+        
+        // This cmd will not run if another cmd is running
+        if (CheckCoroutinePlaying())
+        {
+            return;
+        }
+        isCoroutinePlayingList[(int)Cmd.Eat] = true;
+        animator.Play("eat");
+
+        snackObj = frontSnack;
+        // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
+    }
+
+    public void EatEnd()
+    {
+        isCoroutinePlayingList[(int)Cmd.Eat] = false;
+        Destroy(snackObj);
+        snackObj = null;
+        Logger.Log("EatEnd is activate");
+    }
     
+    #endregion
     
     
     
