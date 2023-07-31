@@ -288,7 +288,16 @@ public abstract class PetBase : MonoBehaviour
         return false;
     }
 
-    
+    public void AbortAllCmd()
+    {
+        Logger.Log("Abort all cmd of the current pet");
+        StopAllCoroutines();
+        for (int i = 0; i < isCoroutinePlayingList.Count; i++)
+        {
+            isCoroutinePlayingList[i] = false;
+        }
+        inprogress = false;
+    }
     
     
     

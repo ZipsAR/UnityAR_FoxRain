@@ -66,10 +66,16 @@ public class InteractManager : MonoBehaviour
             return;
         }
 
+        
+        
+        
+        
         // Pet condition
         switch (pet.petStates)
         {
             case PetStates.Idle:
+                // In the current code, Petstates cannot be idle, it is either "walk" or "sit
+                // So this part is not executed
                 Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
                 Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
                                     new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
@@ -84,6 +90,25 @@ public class InteractManager : MonoBehaviour
         }
     }
 
+
+    public void NotifySnackDrop(Vector3 snackPos)
+    {
+        StartCoroutine(NotifySnackDropSequence(snackPos));
+        Logger.Log("notify pet to snack is dropped");
+    }
+
+    private IEnumerator NotifySnackDropSequence(Vector3 snackPos)
+    {
+        while (pet.inprogress)
+        {
+            Logger.Log("waiting for existing command end");
+            yield return null;
+        }
+        pet.AbortAllCmd();
+        pet.CmdMoveTo(snackPos);
+    }
+    
+    
     private void InteractWithHead()
     {
         pet.InteractHead();
