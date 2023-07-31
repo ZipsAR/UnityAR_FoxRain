@@ -27,6 +27,7 @@ public class InteractManager : MonoBehaviour
         
         interactData.Init();
 
+        // Register interaction action by pet part
         interactHeadEvent -= InteractWithHead;
         interactHeadEvent += InteractWithHead;
 
@@ -43,12 +44,12 @@ public class InteractManager : MonoBehaviour
     private void Update()
     {
         // Cannot run another cmd if the pet is running some action
-        if (pet.inprogress)
+        if (pet.inProcess)
         {
             return;
         }
         
-        // Player condition
+        // Run if the user does not move for a certain amount of time
         if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
         {
             pet.CmdLookPlayer();
@@ -90,7 +91,11 @@ public class InteractManager : MonoBehaviour
         }
     }
 
-
+/// <summary>
+/// 1. Snack script notifies interactManager that the snack has dropped
+/// 2. interactManager triggers an event to PetBase 
+/// </summary>
+/// <param name="snackPos">Dropped snack position</param>
     public void NotifySnackDrop(Vector3 snackPos)
     {
         StartCoroutine(NotifySnackDropSequence(snackPos));
@@ -99,12 +104,17 @@ public class InteractManager : MonoBehaviour
 
     private IEnumerator NotifySnackDropSequence(Vector3 snackPos)
     {
-        while (pet.inprogress)
+        // waiting for current command end
+        while (pet.inProcess)
         {
-            Logger.Log("waiting for existing command end");
+            Logger.Log("waiting for current command end");
             yield return null;
         }
+        
+        // Stop All command 
         pet.AbortAllCmd();
+        
+        // Move to snack position
         pet.CmdMoveTo(snackPos);
     }
     

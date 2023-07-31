@@ -23,7 +23,7 @@ public class StrollManager : MonoBehaviour
         strollData.strollTime += Time.deltaTime;
 
         // Cannot run another cmd if the pet is running some action
-        if (pet.inprogress)
+        if (pet.inProcess)
         {
             return;
         }

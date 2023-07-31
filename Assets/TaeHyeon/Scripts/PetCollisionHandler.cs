@@ -2,14 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Logger = ZipsAR.Logger;
 
 [RequireComponent(typeof(Collider))]
 public class PetCollisionHandler : MonoBehaviour
 {
-    public PetParts petParts;
+    public PetParts petParts; // The part of the pet that this collider means
 
-    public Material detaultMat;
+    public Material defaultMat;
     public Material onCollisionMat;
     
     private void Start()
