@@ -56,13 +56,16 @@ public abstract class PetBase : MonoBehaviour
     private float rotationSpeed;
     public bool inprogress { get; private set; }
     private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
+    private float fixedPosY;
+    
     
     private void Start()
     {
         rotationSpeed = 10f;
         petStates = PetStates.Idle;
         animator = GetComponent<Animator>();
-
+        fixedPosY = transform.position.y;
+        
         StartCoroutine(Init());
     }
 
@@ -144,6 +147,9 @@ public abstract class PetBase : MonoBehaviour
     {
         isCoroutinePlayingList[(int)Cmd.Move] = true;
         
+        // Pets must move only on the xz plane
+        destination = new Vector3(destination.x, fixedPosY, destination.z);
+        
         Vector3 startPoint = transform.position;
         moveDir = (destination - startPoint).normalized;
 
@@ -207,6 +213,8 @@ public abstract class PetBase : MonoBehaviour
         isCoroutinePlayingList[(int)Cmd.Look] = true;
         
         Vector3 targetDir = GameManager.Instance.player.gameObject.transform.position - transform.position;
+        targetDir.y = 0;
+        
         Quaternion targetQuaternion = Quaternion.LookRotation(targetDir);
         
         while (transform.rotation != targetQuaternion)
