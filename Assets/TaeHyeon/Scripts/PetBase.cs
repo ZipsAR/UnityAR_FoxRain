@@ -318,7 +318,7 @@ public abstract class PetBase : MonoBehaviour
             return;
         }
         isCoroutinePlayingList[(int)Cmd.Eat] = true;
-        animator.Play("eat");
+        animator.Play("Eat");
 
         snackObj = frontSnack;
         // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
