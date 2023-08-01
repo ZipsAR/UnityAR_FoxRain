@@ -98,6 +98,9 @@ public class InteractManager : MonoBehaviour
                     Logger.Log("bite obj name : " + nextCmd.Item3);
                     pet.CmdBite(nextCmd.Item3);
                     break;
+                case (int)Cmd.Spit:
+                    pet.CmdSpit();
+                    break;
                 default:
                     throw new Exception("Unimplemented command");
                 
@@ -264,6 +267,8 @@ public class InteractManager : MonoBehaviour
         EnqueueCmd(Cmd.Move, toyTransform.position);
         EnqueueCmd(Cmd.Look);
         EnqueueCmd(Cmd.Bite, targetObj: toyTransform.gameObject);
+        EnqueueCmd(Cmd.Move, pos: GameManager.Instance.player.gameObject.transform.position);
+        EnqueueCmd(Cmd.Spit);
     }
     
     #endregion

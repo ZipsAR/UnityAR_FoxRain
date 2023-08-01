@@ -397,7 +397,7 @@ public abstract class PetBase : MonoBehaviour
             return;
         }
         isCoroutinePlayingList[(int)Cmd.Spit] = true;
-        animator.Play("Spit"); //////////////////////////////////////////////////
+        animator.Play("PreSpit");
 
         // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
     }
@@ -407,7 +407,7 @@ public abstract class PetBase : MonoBehaviour
         Logger.Log("DetachToyFromMouth");
         isBiting = false;
         toyObj.transform.SetParent(null);
-        toyObj.GetComponent<Rigidbody>().isKinematic = true;
+        toyObj.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     public void SpitEnd()
