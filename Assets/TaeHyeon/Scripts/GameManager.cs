@@ -15,10 +15,10 @@ public enum PlayMode
 }
 public class GameManager : Singleton<GameManager>
 {
-    public GameObject ARSessions;
-    
+    public GameObject ARSessions; // Set AR Session Related Objects to Don't Destroy Object
+
     public PlayMode currentPlayMode;
-    public Player player { get; private set; }
+    public Player player { get; private set; } // Attached to AR Camera && Used to locate a user
 
     public InteractManager interactManager;
     public StrollManager strollManager;
@@ -48,6 +48,10 @@ public class GameManager : Singleton<GameManager>
         return true;
     }
 
+    /// <summary>
+    /// Caution : Scene name must be spelled correctly because there is no exception handling part
+    /// </summary>
+    /// <param name="sceneName">Scene name to load</param>
     public void LoadScene(String sceneName)
     {
         StartCoroutine(LoadSceneSequence(sceneName));
@@ -57,14 +61,17 @@ public class GameManager : Singleton<GameManager>
     {
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
 
+        // Waiting for next scenes to load
         while (!asyncOperation.isDone)
         {
             yield return null;
             Logger.Log("Progress : " + asyncOperation.progress);
         }
 
-        interactManager = GameObject.Find("Interact Manager").GetComponent<InteractManager>();
-        ChangeMode(PlayMode.InteractMode);
-        // SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        if (sceneName == "InteractMode")
+        {
+            interactManager = GameObject.Find("Interact Manager").GetComponent<InteractManager>();
+            ChangeMode(PlayMode.InteractMode);
+        }
     }
 }

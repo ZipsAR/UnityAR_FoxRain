@@ -30,14 +30,12 @@ public class HandAttacher : MonoBehaviour
         {
             leftHandObj.AddComponent<HandController>().handSide = HandSide.Left;
             rightHandObj.AddComponent<HandController>().handSide = HandSide.Right;
-            AddCollider(leftHandObj);
-            AddCollider(rightHandObj);
-            AddRigidBody(leftHandObj);
-            AddRigidBody(rightHandObj);
+            AddCollider(leftHandObj, rightHandObj);
+            AddRigidBody(leftHandObj, rightHandObj);
             GameManager.Instance.leftHand = leftHandObj.GetComponent<HandController>();
             GameManager.Instance.rightHand = rightHandObj.GetComponent<HandController>();
             
-            ZipsAR.Logger.Log("Attach Complete");
+            Logger.Log("Attach Complete");
             Destroy(gameObject);
         }
         else
@@ -46,19 +44,29 @@ public class HandAttacher : MonoBehaviour
         }
     }
 
-    private void AddCollider(GameObject obj)
+    private void AddCollider(GameObject LHandObj, GameObject RHandObj)
     {
-        CapsuleCollider collider = obj.AddComponent<CapsuleCollider>();
+        CapsuleCollider leftCollider = LHandObj.AddComponent<CapsuleCollider>();
         
-        collider.center = new Vector3(0, 0, 0.07f);
-        collider.radius = 0.05f;
-        collider.height = 0.2f;
-        collider.direction = 2; // Z-Axis
+        leftCollider.center = new Vector3(0, 0, 0.07f);
+        leftCollider.radius = 0.05f;
+        leftCollider.height = 0.2f;
+        leftCollider.direction = 2; // Z-Axis
+        
+        CapsuleCollider rightCollider = RHandObj.AddComponent<CapsuleCollider>();
+        
+        rightCollider.center = new Vector3(0, 0, 0.07f);
+        rightCollider.radius = 0.05f;
+        rightCollider.height = 0.2f;
+        rightCollider.direction = 2; // Z-Axis
     }
 
-    private void AddRigidBody(GameObject obj)
+    private void AddRigidBody(GameObject LHandObj, GameObject RHandObj)
     {
-        Rigidbody rb = obj.AddComponent<Rigidbody>();
-        rb.useGravity = false;
+        Rigidbody leftRB = LHandObj.AddComponent<Rigidbody>();
+        leftRB.useGravity = false;
+        
+        Rigidbody rightRB = RHandObj.AddComponent<Rigidbody>();
+        rightRB.useGravity = false;
     }
 }

@@ -50,19 +50,23 @@ public abstract class PetBase : MonoBehaviour
     // Stroll Mode
     public PetStates petStates { private set; get; }
     
-    [SerializeField] private AnimationCurve curve;
+    [SerializeField] private AnimationCurve curve; // Curve indicating where the pet is moving
     private const float SPEED_COEFFICIENT = 0.02f;
     private Vector3 moveDir;
     private float rotationSpeed;
-    public bool inprogress { get; private set; }
     private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
-    
+    private float fixedPosY; // Pet always moves at the height of this value
+    public bool inProcess { private set; get; } // If the pet is executing a command, it's false
+
+
     private void Start()
     {
         rotationSpeed = 10f;
         petStates = PetStates.Idle;
         animator = GetComponent<Animator>();
-
+        // The position y value of the pet is fixed to the initial y value
+        fixedPosY = transform.position.y;
+        
         StartCoroutine(Init());
     }
 
@@ -87,6 +91,11 @@ public abstract class PetBase : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// What to initialize using other script references
+    /// Update portion runs after this initialization is complete
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Init()
     {
         while (true)
@@ -94,12 +103,14 @@ public abstract class PetBase : MonoBehaviour
             if (GameManager.Instance.player != null)
             {
                 playerObj = GameManager.Instance.player.gameObject;
-                isInitDone = true;
                 isCoroutinePlayingList = new List<bool>();
                 for (int i = 0; i < Enum.GetValues(typeof(Cmd)).Length; i++)
                 {
                     isCoroutinePlayingList.Add(false);
                 }
+                    
+                // Check Initialization Completed
+                isInitDone = true;
                 break;
             }
             yield return null;
@@ -113,12 +124,12 @@ public abstract class PetBase : MonoBehaviour
 
     private void UpdateStrollMode()
     {
-        inprogress = CheckCoroutinePlaying();
+        inProcess = CheckCoroutinePlaying();
     }
     
     private void UpdateInteractMode()
     {
-        inprogress = CheckCoroutinePlaying();
+        inProcess = CheckCoroutinePlaying();
     }
 
     
@@ -133,6 +144,7 @@ public abstract class PetBase : MonoBehaviour
     {
         Logger.Log("[Cmd] Move To " + destination);
 
+        // This cmd will not run if another cmd is running
         if (CheckCoroutinePlaying())
         {
             return;
@@ -143,6 +155,9 @@ public abstract class PetBase : MonoBehaviour
     private IEnumerator MoveSequence(Vector3 destination)
     {
         isCoroutinePlayingList[(int)Cmd.Move] = true;
+        
+        // Pets must move only on the xz plane
+        destination = new Vector3(destination.x, fixedPosY, destination.z);
         
         Vector3 startPoint = transform.position;
         moveDir = (destination - startPoint).normalized;
@@ -194,6 +209,8 @@ public abstract class PetBase : MonoBehaviour
     public void CmdLookPlayer()
     {
         Logger.Log("[Cmd] Look player");
+        
+        // This cmd will not run if another cmd is running
         if (CheckCoroutinePlaying())
         {
             return;
@@ -205,8 +222,10 @@ public abstract class PetBase : MonoBehaviour
     private IEnumerator LookPlayerSequence()
     {
         isCoroutinePlayingList[(int)Cmd.Look] = true;
-        
+
+        // Pet rotates only on the y-axis
         Vector3 targetDir = GameManager.Instance.player.gameObject.transform.position - transform.position;
+        targetDir.y = 0;
         Quaternion targetQuaternion = Quaternion.LookRotation(targetDir);
         
         while (transform.rotation != targetQuaternion)
@@ -224,9 +243,17 @@ public abstract class PetBase : MonoBehaviour
         }
 
         isCoroutinePlayingList[(int)Cmd.Look] = false;
+        
+        
         CmdSit();
     }
 
+    /// <summary>
+    /// Calculate the difference in angle between two quaternions
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
     private float AngleDiffBetween(Quaternion a, Quaternion b)
     {
         Quaternion diff = Quaternion.Inverse(a) * b;
@@ -249,6 +276,7 @@ public abstract class PetBase : MonoBehaviour
     {
         Logger.Log("[Cmd] Sit");
         
+        // This cmd will not run if another cmd is running
         if (CheckCoroutinePlaying())
         {
             return;
@@ -261,7 +289,10 @@ public abstract class PetBase : MonoBehaviour
         // isCoroutinePlayingList[(int)Cmd.Sit] = false; // This part will be executed in the animation part
     }
     
-    // Use in Animator
+    /// <summary>
+    /// Use in Animator
+    /// Check that the sitting motion is over  
+    /// </summary>
     public void SitEnd()
     {
         isCoroutinePlayingList[(int)Cmd.Sit] = false;
@@ -275,7 +306,10 @@ public abstract class PetBase : MonoBehaviour
     
     
     
-    // Function to check if there is currently a coroutine running
+    /// <summary>
+    /// Function to check if there is currently a coroutine running
+    /// </summary>
+    /// <returns></returns>
     private bool CheckCoroutinePlaying()
     {
         if (isCoroutinePlayingList == null) return false;
@@ -288,7 +322,19 @@ public abstract class PetBase : MonoBehaviour
         return false;
     }
 
-    
+    /// <summary>
+    /// Abort all cmd of the current pet
+    /// </summary>
+    public void AbortAllCmd()
+    {
+        Logger.Log("Abort all cmd of the current pet");
+        StopAllCoroutines();
+        for (int i = 0; i < isCoroutinePlayingList.Count; i++)
+        {
+            isCoroutinePlayingList[i] = false;
+        }
+        inProcess = false;
+    }
     
     
     

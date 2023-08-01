@@ -103,7 +103,7 @@ public class HandController : MonoBehaviour
             isColliding = false;
             collisionTimer = 0f;
             petCollisionPart = PetParts.None;
-            other.gameObject.GetComponent<MeshRenderer>().material = handler.detaultMat;
+            other.gameObject.GetComponent<MeshRenderer>().material = handler.defaultMat;
             Logger.Log(handler.petParts + " exit colliding");
         }
     }
