@@ -8,25 +8,25 @@ public class Dog : PetBase
 {
     public override void InteractHead()
     {
-        animator.Play("B_picks");
-        Logger.Log("Play B_picks");
+        animator.Play("InteractHead");
+        Logger.Log("Play InteractHead");
     }
 
     public override void InteractJaw()
     {
-        animator.Play("B_wash");
-        Logger.Log("Play B_wash");
+        animator.Play("InteractJaw");
+        Logger.Log("Play InteractJaw");
     }
 
     public override void InteractBody()
     {
-        animator.Play("B_cry");
-        Logger.Log("Play B_cry");
+        animator.Play("InteractBody");
+        Logger.Log("Play InteractBody");
     }
 
     public override void InteractHandDetection()
     {
-        animator.Play("C_massage");
-        Logger.Log("Play C_massage");
+        animator.Play("InteractHandDetection");
+        Logger.Log("Play InteractHandDetection");
     }
 }
