@@ -20,11 +20,20 @@ public class InteractManager : MonoBehaviour
 
     private Queue<Tuple<int, Vector3, GameObject>> cmdQueue;
     private Tuple<int, Vector3, GameObject> nextCmd;
+
+    // Brushing
+    private float brushingTime;
+    private float brushingTimeThreshold;
+    private bool isBrushing;
     
     private void Start()
     {
         pet.SetPetAnimationMode(PlayMode.InteractMode);
         cmdQueue = new Queue<Tuple<int, Vector3, GameObject>>();
+
+        brushingTime = 0f;
+        brushingTimeThreshold = 1f;
+        isBrushing = false;
         
         interactData.Init();
 
@@ -47,7 +56,7 @@ public class InteractManager : MonoBehaviour
 
     private void Update()
     {
-        ShowCurQueue();
+        if(cmdQueue.Count != 0) ShowCurQueue();
         if(pet.inProcess) return;
 
         // if queue is not empty
@@ -82,6 +91,11 @@ public class InteractManager : MonoBehaviour
                 case (int)Cmd.Eat:
                     pet.CmdEat(nextCmd.Item3);
                     break;
+                case (int)Cmd.Brush:
+                    pet.CmdBrush();
+                    break;
+                default:
+                    throw new Exception("Unimplemented command");
                 
             }
         }
@@ -99,6 +113,18 @@ public class InteractManager : MonoBehaviour
                     interactData.playerPetMaxDistance)
             {
                 EnqueueCmd(Cmd.Move);
+            }
+        }
+
+        if (isBrushing)
+        {
+            brushingTime += Time.deltaTime;
+            if (brushingTime > brushingTimeThreshold)
+            {
+                ClearCmdQueue();
+                EnqueueCmd(Cmd.Brush);
+                isBrushing = false;
+                brushingTime = 0f;
             }
         }
     }
@@ -258,5 +284,20 @@ public class InteractManager : MonoBehaviour
     {
         pet.InteractHandDetection();
         Logger.Log("interact HandDetection in interactManager");
+    }
+
+    /// <summary>
+    /// Called when the comb touches or falls on the pet
+    /// </summary>
+    /// <param name="collisionState">true : onTriggerEnter, false : onTriggerExit</param>
+    public void CombCollision(bool collisionState)
+    {
+        isBrushing = collisionState;
+
+        if (!collisionState)
+        {
+            isBrushing = false;
+            brushingTime = 0f;
+        }
     }
 }

@@ -17,6 +17,7 @@ public enum Cmd
     Look = 1,
     Sit = 2,
     Eat = 3,
+    Brush = 4,
 }
 
 public enum PetParts
@@ -333,8 +334,34 @@ public abstract class PetBase : MonoBehaviour
     }
     
     #endregion
-    
-    
+
+
+
+
+    #region Brush
+
+    public void CmdBrush()
+    {
+        Logger.Log("[Cmd] Brush");
+        
+        // This cmd will not run if another cmd is running
+        if (CheckCoroutinePlaying())
+        {
+            return;
+        }
+        isCoroutinePlayingList[(int)Cmd.Brush] = true;
+        animator.Play("Brush");
+
+        // isCoroutinePlayingList[(int)Cmd.Brush] = false; This part will be executed in the animation part
+    }
+
+    public void BrushEnd()
+    {
+        isCoroutinePlayingList[(int)Cmd.Brush] = false;
+        Logger.Log("BrushEnd is activate");
+    }
+
+    #endregion
     
     /// <summary>
     /// Function to check if there is currently a coroutine running
