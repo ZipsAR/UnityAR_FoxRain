@@ -48,7 +48,6 @@ public abstract class PetBase : MonoBehaviour
 {
     [SerializeField] protected PetStatBase stat;
     protected Animator animator;
-    private GameObject playerObj;
     private bool isInitDone;
 
     // Animation Parameter
@@ -115,7 +114,6 @@ public abstract class PetBase : MonoBehaviour
         {
             if (GameManager.Instance.player != null)
             {
-                playerObj = GameManager.Instance.player.gameObject;
                 isCoroutinePlayingList = new List<bool>();
                 for (int i = 0; i < Enum.GetValues(typeof(Cmd)).Length; i++)
                 {
@@ -145,280 +143,7 @@ public abstract class PetBase : MonoBehaviour
         inProcess = CheckCoroutinePlaying();
     }
     
-    #region Move
     
-    public void CmdMoveTo(Vector3 destination)
-    {
-        Logger.Log("[Cmd] Move To " + destination);
-
-        // This cmd will not run if another cmd is running
-        if (CheckCoroutinePlaying())
-        {
-            return;
-        }
-        StartCoroutine(MoveSequence(destination));
-    }
-
-    private IEnumerator MoveSequence(Vector3 destination)
-    {
-        isCoroutinePlayingList[(int)Cmd.Move] = true;
-        
-        // Pets must move only on the xz plane
-        destination = new Vector3(destination.x, fixedPosY, destination.z);
-        
-        Vector3 startPoint = transform.position;
-        moveDir = (destination - startPoint).normalized;
-
-        // Set state
-        petStates = PetStates.Walk;
-
-        // Set animation
-        animator.SetBool(RunningParameter, true);
-        
-        float t = 0;
-        while (transform.position != destination && petStates == PetStates.Walk)
-        {
-            // If it reaches as close as the distance x, it is considered to have arrived
-            if (Vector3.Distance(transform.position, destination) < 0.02f)
-            {
-                Logger.Log("force stop");
-                break;
-            }
-            
-            // Set position
-            t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
-            transform.position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
-            
-            // Set Rotation
-            transform.rotation = Quaternion.Lerp(transform.rotation, 
-                Quaternion.LookRotation(moveDir), 
-                Time.deltaTime * rotationSpeed);
-
-            yield return null;
-        }
-
-        // Set state
-        petStates = PetStates.Idle;
-        
-        // Set animation
-        animator.SetBool(RunningParameter, false);
-        
-        isCoroutinePlayingList[(int)Cmd.Move] = false;
-    }
-    #endregion
-    
-    #region Look
-    public void CmdLookPlayer()
-    {
-        Logger.Log("[Cmd] Look player");
-        
-        // This cmd will not run if another cmd is running
-        if (CheckCoroutinePlaying())
-        {
-            return;
-        }
-        petStates = PetStates.Idle;
-        StartCoroutine(LookPlayerSequence());
-    }
-    
-    private IEnumerator LookPlayerSequence()
-    {
-        isCoroutinePlayingList[(int)Cmd.Look] = true;
-
-        // Pet rotates only on the y-axis
-        Vector3 targetDir = GameManager.Instance.player.gameObject.transform.position - transform.position;
-        targetDir.y = 0;
-        Quaternion targetQuaternion = Quaternion.LookRotation(targetDir);
-        
-        while (transform.rotation != targetQuaternion)
-        {
-            // 현재 rotation과 taretQuaternion의 각도 차이가 5도 이하인 경우 모두 회전한 것으로 판단
-            if (AngleDiffBetween(transform.rotation, targetQuaternion) < 5f)
-            {
-                transform.rotation = targetQuaternion;
-                break;
-            }
-            transform.rotation = Quaternion.Lerp(transform.rotation, 
-                targetQuaternion,
-                Time.deltaTime * rotationSpeed);
-            yield return null;
-        }
-
-        isCoroutinePlayingList[(int)Cmd.Look] = false;
-        
-        
-        // CmdSit();
-    }
-
-    /// <summary>
-    /// Calculate the difference in angle between two quaternions
-    /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    /// <returns></returns>
-    private float AngleDiffBetween(Quaternion a, Quaternion b)
-    {
-        Quaternion diff = Quaternion.Inverse(a) * b;
-        float angleDiff = Quaternion.Angle(Quaternion.identity, diff);
-        return angleDiff; // Degree notation
-    }
-
-    #endregion
-    
-    #region Sit
-
-    public void CmdSit()
-    {
-        Logger.Log("[Cmd] Sit");
-        
-        // This cmd will not run if another cmd is running
-        if (CheckCoroutinePlaying())
-        {
-            return;
-        }
-
-        isCoroutinePlayingList[(int)Cmd.Sit] = true;
-        petStates = PetStates.Sit;
-        animator.SetTrigger(SitParameter);
-        
-        // isCoroutinePlayingList[(int)Cmd.Sit] = false; // This part will be executed in the animation part
-    }
-    
-    /// <summary>
-    /// Use in Animator
-    /// Check that the sitting motion is over  
-    /// </summary>
-    public void SitEnd()
-    {
-        isCoroutinePlayingList[(int)Cmd.Sit] = false;
-        Logger.Log("SitEnd is activate");
-    }
-
-    #endregion
-    
-    #region Eat
-
-    public void CmdEat(GameObject frontSnack)
-    {
-        Logger.Log("[Cmd] Eat");
-        
-        // This cmd will not run if another cmd is running
-        if (CheckCoroutinePlaying())
-        {
-            return;
-        }
-        isCoroutinePlayingList[(int)Cmd.Eat] = true;
-        animator.Play("Eat");
-
-        snackObj = frontSnack;
-        // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
-    }
-
-    public void EatEnd()
-    {
-        isCoroutinePlayingList[(int)Cmd.Eat] = false;
-        Destroy(snackObj);
-        snackObj = null;
-        Logger.Log("EatEnd is activate");
-    }
-    
-    #endregion
-
-    #region Brush
-
-    public void CmdBrush()
-    {
-        Logger.Log("[Cmd] Brush");
-        
-        // This cmd will not run if another cmd is running
-        if (CheckCoroutinePlaying())
-        {
-            return;
-        }
-        isCoroutinePlayingList[(int)Cmd.Brush] = true;
-        animator.Play("Brush");
-
-        // isCoroutinePlayingList[(int)Cmd.Brush] = false; This part will be executed in the animation part
-    }
-
-    public void BrushEnd()
-    {
-        isCoroutinePlayingList[(int)Cmd.Brush] = false;
-        Logger.Log("BrushEnd is activate");
-    }
-
-    #endregion
-
-    #region Bite
-
-    public void CmdBite(GameObject frontToy)
-    {
-        Logger.Log("[Cmd] Bite");
-        
-        // This cmd will not run if another cmd is running
-        if (CheckCoroutinePlaying())
-        {
-            return;
-        }
-        isCoroutinePlayingList[(int)Cmd.Bite] = true;
-        animator.Play("PreBite");
-        Logger.Log("play prebite animation");
-        toyObj = frontToy;
-        // isCoroutinePlayingList[(int)Cmd.Bite] = false; This part will be executed in the animation part
-    }
-
-    public void AttachToyToMouth()
-    {
-        Logger.Log("AttachToyToMouth");
-        isBiting = true;
-        toyObj.transform.SetParent(toyAttachPoint);
-        toyObj.transform.localPosition = Vector3.zero;
-        toyObj.transform.localRotation = Quaternion.identity;
-        toyObj.GetComponent<Rigidbody>().isKinematic = true;
-    }
-
-    public void BiteEnd()
-    {
-        isCoroutinePlayingList[(int)Cmd.Bite] = false;
-        Logger.Log("BiteEnd is activate");
-    }
-
-    #endregion
-
-    #region Spit
-
-    public void CmdSpit()
-    {
-        Logger.Log("[Cmd] Spit");
-        
-        // This cmd will not run if another cmd is running
-        if (CheckCoroutinePlaying())
-        {
-            return;
-        }
-        isCoroutinePlayingList[(int)Cmd.Spit] = true;
-        animator.Play("PreSpit");
-
-        // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
-    }
-
-    public void DetachToyFromMouth()
-    {
-        Logger.Log("DetachToyFromMouth");
-        isBiting = false;
-        toyObj.transform.SetParent(null);
-        toyObj.GetComponent<Rigidbody>().isKinematic = false;
-    }
-
-    public void SpitEnd()
-    {
-        isCoroutinePlayingList[(int)Cmd.Spit] = false;
-        Logger.Log("SpitEnd is activate");
-    }
-
-    #endregion
-
-
     /// <summary>
     /// Function to check if there is currently a coroutine running
     /// </summary>
@@ -449,11 +174,292 @@ public abstract class PetBase : MonoBehaviour
         inProcess = false;
     }
     
+    #region InteractPart
+
+        public abstract void InteractHead();
+        public abstract void InteractJaw();
+        public abstract void InteractBody();
+        public abstract void InteractHandDetection();
+
+    #endregion
     
     
+    #region Cmds
+
+        #region Move
+        
+            public void CmdMoveTo(Vector3 destination)
+            {
+                Logger.Log("[Cmd] Move To " + destination);
     
-    public abstract void InteractHead();
-    public abstract void InteractJaw();
-    public abstract void InteractBody();
-    public abstract void InteractHandDetection();
+                // This cmd will not run if another cmd is running
+                if (CheckCoroutinePlaying())
+                {
+                    return;
+                }
+                StartCoroutine(MoveSequence(destination));
+            }
+    
+            private IEnumerator MoveSequence(Vector3 destination)
+            {
+                isCoroutinePlayingList[(int)Cmd.Move] = true;
+                
+                // Pets must move only on the xz plane
+                destination = new Vector3(destination.x, fixedPosY, destination.z);
+                
+                Vector3 startPoint = transform.position;
+                moveDir = (destination - startPoint).normalized;
+    
+                // Set state
+                petStates = PetStates.Walk;
+    
+                // Set animation
+                animator.SetBool(RunningParameter, true);
+                
+                float t = 0;
+                while (transform.position != destination && petStates == PetStates.Walk)
+                {
+                    // If it reaches as close as the distance x, it is considered to have arrived
+                    if (Vector3.Distance(transform.position, destination) < 0.02f)
+                    {
+                        Logger.Log("force stop");
+                        break;
+                    }
+                    
+                    // Set position
+                    t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
+                    transform.position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
+                    
+                    // Set Rotation
+                    transform.rotation = Quaternion.Lerp(transform.rotation, 
+                        Quaternion.LookRotation(moveDir), 
+                        Time.deltaTime * rotationSpeed);
+    
+                    yield return null;
+                }
+    
+                // Set state
+                petStates = PetStates.Idle;
+                
+                // Set animation
+                animator.SetBool(RunningParameter, false);
+                
+                isCoroutinePlayingList[(int)Cmd.Move] = false;
+            }
+            
+        #endregion
+        
+        #region Look
+        
+            public void CmdLookPlayer()
+            {
+                Logger.Log("[Cmd] Look player");
+                
+                // This cmd will not run if another cmd is running
+                if (CheckCoroutinePlaying())
+                {
+                    return;
+                }
+                petStates = PetStates.Idle;
+                StartCoroutine(LookPlayerSequence());
+            }
+            
+            private IEnumerator LookPlayerSequence()
+            {
+                isCoroutinePlayingList[(int)Cmd.Look] = true;
+    
+                // Pet rotates only on the y-axis
+                Vector3 targetDir = GameManager.Instance.player.gameObject.transform.position - transform.position;
+                targetDir.y = 0;
+                Quaternion targetQuaternion = Quaternion.LookRotation(targetDir);
+                
+                while (transform.rotation != targetQuaternion)
+                {
+                    // 현재 rotation과 taretQuaternion의 각도 차이가 5도 이하인 경우 모두 회전한 것으로 판단
+                    if (AngleDiffBetween(transform.rotation, targetQuaternion) < 5f)
+                    {
+                        transform.rotation = targetQuaternion;
+                        break;
+                    }
+                    transform.rotation = Quaternion.Lerp(transform.rotation, 
+                        targetQuaternion,
+                        Time.deltaTime * rotationSpeed);
+                    yield return null;
+                }
+    
+                isCoroutinePlayingList[(int)Cmd.Look] = false;
+            }
+    
+            /// <summary>
+            /// Calculate the difference in angle between two quaternions
+            /// </summary>
+            /// <param name="a"></param>
+            /// <param name="b"></param>
+            /// <returns></returns>
+            private float AngleDiffBetween(Quaternion a, Quaternion b)
+            {
+                Quaternion diff = Quaternion.Inverse(a) * b;
+                float angleDiff = Quaternion.Angle(Quaternion.identity, diff);
+                return angleDiff; // Degree notation
+            }
+    
+        #endregion
+        
+        #region Sit
+    
+            public void CmdSit()
+            {
+                Logger.Log("[Cmd] Sit");
+                
+                // This cmd will not run if another cmd is running
+                if (CheckCoroutinePlaying())
+                {
+                    return;
+                }
+    
+                isCoroutinePlayingList[(int)Cmd.Sit] = true;
+                petStates = PetStates.Sit;
+                animator.SetTrigger(SitParameter);
+                
+                // isCoroutinePlayingList[(int)Cmd.Sit] = false; // This part will be executed in the animation part
+            }
+            
+            /// <summary>
+            /// Use in Animator
+            /// Check that the sitting motion is over  
+            /// </summary>
+            public void SitEnd()
+            {
+                isCoroutinePlayingList[(int)Cmd.Sit] = false;
+                Logger.Log("SitEnd is activate");
+            }
+    
+        #endregion
+        
+        #region Eat
+    
+            public void CmdEat(GameObject frontSnack)
+            {
+                Logger.Log("[Cmd] Eat");
+                
+                // This cmd will not run if another cmd is running
+                if (CheckCoroutinePlaying())
+                {
+                    return;
+                }
+                isCoroutinePlayingList[(int)Cmd.Eat] = true;
+                animator.Play("Eat");
+    
+                snackObj = frontSnack;
+                // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
+            }
+    
+            public void EatEnd()
+            {
+                isCoroutinePlayingList[(int)Cmd.Eat] = false;
+                Destroy(snackObj);
+                snackObj = null;
+                Logger.Log("EatEnd is activate");
+            }
+        
+        #endregion
+    
+        #region Brush
+    
+            public void CmdBrush()
+            {
+                Logger.Log("[Cmd] Brush");
+                
+                // This cmd will not run if another cmd is running
+                if (CheckCoroutinePlaying())
+                {
+                    return;
+                }
+                isCoroutinePlayingList[(int)Cmd.Brush] = true;
+                animator.Play("Brush");
+    
+                // isCoroutinePlayingList[(int)Cmd.Brush] = false; This part will be executed in the animation part
+            }
+    
+            public void BrushEnd()
+            {
+                isCoroutinePlayingList[(int)Cmd.Brush] = false;
+                Logger.Log("BrushEnd is activate");
+            }
+    
+        #endregion
+    
+        #region Bite
+    
+            public void CmdBite(GameObject frontToy)
+            {
+                Logger.Log("[Cmd] Bite");
+                
+                // This cmd will not run if another cmd is running
+                if (CheckCoroutinePlaying())
+                {
+                    return;
+                }
+                isCoroutinePlayingList[(int)Cmd.Bite] = true;
+                animator.Play("PreBite");
+                Logger.Log("play prebite animation");
+                toyObj = frontToy;
+                // isCoroutinePlayingList[(int)Cmd.Bite] = false; This part will be executed in the animation part
+            }
+    
+            public void AttachToyToMouth()
+            {
+                Logger.Log("AttachToyToMouth");
+                isBiting = true;
+                toyObj.transform.SetParent(toyAttachPoint);
+                toyObj.transform.localPosition = Vector3.zero;
+                toyObj.transform.localRotation = Quaternion.identity;
+                toyObj.GetComponent<Rigidbody>().isKinematic = true;
+            }
+    
+            public void BiteEnd()
+            {
+                isCoroutinePlayingList[(int)Cmd.Bite] = false;
+                Logger.Log("BiteEnd is activate");
+            }
+    
+        #endregion
+    
+        #region Spit
+    
+            public void CmdSpit()
+            {
+                Logger.Log("[Cmd] Spit");
+                
+                // This cmd will not run if another cmd is running
+                if (CheckCoroutinePlaying())
+                {
+                    return;
+                }
+    
+                if (!isBiting) throw new Exception("no toys in pet's mouth");
+                
+                isCoroutinePlayingList[(int)Cmd.Spit] = true;
+                animator.Play("PreSpit");
+    
+                // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
+            }
+    
+            public void DetachToyFromMouth()
+            {
+                Logger.Log("DetachToyFromMouth");
+                isBiting = false;
+                toyObj.transform.SetParent(null);
+                toyObj.GetComponent<Rigidbody>().isKinematic = false;
+            }
+    
+            public void SpitEnd()
+            {
+                isCoroutinePlayingList[(int)Cmd.Spit] = false;
+                Logger.Log("SpitEnd is activate");
+            }
+    
+        #endregion
+
+    #endregion
 }
