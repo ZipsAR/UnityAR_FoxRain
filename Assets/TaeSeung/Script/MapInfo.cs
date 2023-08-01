@@ -52,8 +52,7 @@ public class MapInfo : Singleton<MapInfo>
 
     public void SetTileScale(Vector3 scale)
     {
-        float reverseMapScale = 1 / MapScale;
-        Tile.transform.localScale = scale * reverseMapScale;
+        Tile.transform.localScale = scale;
     }
 
 

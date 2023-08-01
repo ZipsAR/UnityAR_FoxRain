@@ -33,6 +33,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
     //데이터베이스 인덱스
     [SerializeField]
     private ObjectDatabaseSO database;
+
+
     private int selectedObjectIndex = -2;
 
     //grid시각화 오브젝트
@@ -49,7 +51,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private Renderer previewRenderer;
     private List<GameObject> placedGameObjects = new();
 
-
     //현재 오브젝트의 size 상태(rotation때문에 추가됨), 이 부분은 나중에 deprecated시킬수도 있슴미다
     private GameObject CreateObject; //현재 생성된 오브젝트
     private GameObject CatchObject;  //생성된 오브젝트들 중 내가 잡은 오브젝트
@@ -58,6 +59,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private float changerrotationzvalue; //오브젝트 로테이션될 값
     private Vector3Int currentpos;  //오브젝트의 위치
     private bool catchmode = false; //오브젝트가 잡힌 상태인지?
+    private Vector3 beforepos;
     private XRGrabInteractable interact;    //오브젝트의 interactable 컴포넌트
 
     private GameObject cursororigin, cursorparent;
@@ -66,20 +68,24 @@ public class PlacementSystem : Singleton<PlacementSystem>
     [SerializeField]
     CursorCollisionSystem cursorsystem;
 
+    public GameObject debugyoung;
 
+    public GameObject gridv;
 
+    
+    
     private void Start()
     {
         funitureData = new();
         floorData = new();
 
         MapInfo.Instance.MapInitialize();
+
         //스크립터블 오브젝트에서 이미 배치된 데이터들 가져오기
         for (short i = 0; i < database.objectsLocation.Count; i++) {
-
             int id = database.objectsLocation[i].OBJID;
             GameObject newObject = Instantiate(database.objectsData[id].Prefab);
-            newObject.transform.localScale = newObject.transform.localScale * (1 / MapInfo.Instance.MapScale);
+            newObject.transform.localScale = newObject.transform.localScale / MapInfo.Instance.MapScale;
 
             Vector3Int loc = database.objectsLocation[i].location;
             Quaternion rot = database.objectsLocation[i].rotation;
@@ -96,10 +102,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         }
         StopPlacement(true);
 
-
-
         previewRenderer = cellIndicator.GetComponentInChildren<Renderer>();
-        cellIndicator.transform.localScale = cellIndicator.transform.localScale / MapInfo.Instance.MapScale;
         cursororigin = mouseIndicator;
         cursorparent = cursororigin.transform.parent.gameObject;
     }
@@ -115,10 +118,9 @@ public class PlacementSystem : Singleton<PlacementSystem>
         {
             PlaceCheck(CatchObject);
             RotateRealTimebyHand();
-          
+            Vector3 test = inputManager.GetSelectedMapPositionbyObjectForward(CatchObject.transform);
+            debugyoung.transform.position = test;
         }
-
-
     }
 
 
@@ -181,7 +183,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     }
 
-
     public void StopPlacement(bool indexinitialize)
     {
         if(indexinitialize)
@@ -215,28 +216,57 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceCheck(GameObject catchobject)
     {
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(catchobject.transform);
-        Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
-
+        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+        
         //배치 불가능하면 cellindicator의 머터리얼을 바꿔서 표시해줌.
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
-        if (placementValidity)
-            print("asd");
-        else
-            print("asdgggb");
-
         previewRenderer.material.color = placementValidity ? Color.white : Color.red;
 
         mouseIndicator.transform.position = mousePosition;
+        cellIndicator.transform.localPosition = PlacePosition(gridPosition, currentobjsize);
 
-        mousePosition = mousePosition * MapInfo.Instance.MapScale;
-        mousePosition = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), Mathf.Round(mousePosition.z));
-        cellIndicator.transform.position = mousePosition / MapInfo.Instance.MapScale;
     }
 
+    private Vector3 PlacePosition(Vector3Int gridposition, Vector2Int size)
+    {
+        Vector3 Cellposition = gridposition;
+        float z = Math.Abs(cellIndicator.transform.eulerAngles.y);
+        int sizex = size.x;
+        int sizey = size.y;
+
+        if ((z == 90 || z == 270) && (sizex+sizey) % 2 == 1)
+        {
+            int temp = sizey;
+            sizey = sizex;
+            sizex = temp;
+
+            Vector3 last = cellIndicator.transform.GetChild(0).localPosition;
+            last.y -= 0.25f;
+            cellIndicator.transform.GetChild(0).localPosition = last;
+
+        }
+
+        if (sizex%2 == 1)
+        Cellposition.x = Cellposition.x + 0.5f;
+
+        if(sizey%2 == 1)
+        Cellposition.z = Cellposition.z + 0.5f;
+
+        Cellposition.y = 0.1f;
+
+
+
+
+
+        return Cellposition;
+    }
+    
 
     //구조물 배치 (AR환경)
     private void PlaceStructure(GameObject gameObject)
     {
+        print(currentobjsize);
+        print("ToQLd!");
         //현재 커서 위치 가져옴
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
 
@@ -248,9 +278,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
             return;
         }
 
-        //현재 커서 위치를 기반으로 grid.WorldToCell하면 월드좌표계를 grid컴포넌트의 그리드로 즉시 변환해주지만, 이상하게 변환되서(버림연산함) 그냥 round시키는 방식으로 바꿈
-        mousePosition = mousePosition * MapInfo.Instance.MapScale;
-        Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
+        //mousePosition = mousePosition * MapInfo.Instance.MapScale;
+
+        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+
         ObjectLocation newlocation = new ObjectLocation();
 
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
@@ -262,6 +293,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
             return;
         }
 
+
         //새로 배치될 물체의 위치, 회전 정보를 데이터베이스에 넣는 과정
         newlocation.location = gridPosition;
         newlocation.rotation = currentrotation;
@@ -270,7 +302,11 @@ public class PlacementSystem : Singleton<PlacementSystem>
         newlocation.InstanceId = gameObject.GetInstanceID();
         newlocation.placementstatus = true;
 
+        float k = RotateRealTimebyHand();
+        RotatePlacementByHand(k);
+
         MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject",gameObject);
+        gameObject.transform.localPosition = cellIndicator.transform.localPosition;
 
         //만들어진 오브젝트에 대한 고유정보, 배치정보 수정 + 그 오브젝트에 대한 모든 정보 리스트에 추가
         database.objectsLocation.Add(newlocation);
@@ -316,9 +352,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     private void InsertionStructure(GameObject gameObject) {
 
-        Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform) * MapInfo.Instance.MapScale;
-        Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
-
+        Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
+        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
         //맵 바깥으로 커서를 이동시켰다면 삭제
             if (!inputManager.ishit())
@@ -340,11 +375,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     {
                         gameObject.GetComponent<Rigidbody>().useGravity = true;
                         gameObject.GetComponent<Rigidbody>().isKinematic = false;
-                        gameObject.GetComponent<Rigidbody>().SetDensity(0.5f);
                     }
                     print(Vector3.Distance(gameObject.transform.position, ObjectLocation.transform.position));
                     CreateObject = null;
-                StartCoroutine(throwdelete(gameObject));
+                    StartCoroutine(throwdelete(gameObject));
                     //Destroy(gameObject);
                 }
             }
@@ -362,34 +396,34 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     Quaternion rot = database.objectsLocation[index].rotation;
                     Vector2Int size = database.objectsLocation[index].size;
                     
-                    
                     PlacementData data = funitureData.GetObjectAt(currentpos);
                     int placeindex = data.PlacedObjectIndex;
 
                     //배치 위치 수정할 위치가 이미 다른 가구가 배치되어 있으면 안 돼요. 단, 동일위치에 재배치하는 건 용서해줌
                     if (funitureData.CanPlaceObjectAt(gridPosition, currentobjsize) && gridPosition != pos)
                     {
-                        gameObject.transform.SetParent(null);
                         //배치될 위치 정보 데이터를 바꿔줘요
                         funitureData.RemoveObjectAt(currentpos, size);
                         funitureData.AddObjectAt(gridPosition, size, id, placeindex);
                         database.objectsLocation[index].location = gridPosition;
                         database.objectsLocation[index].rotation = currentrotation;
                         database.objectsLocation[index].size = currentobjsize;
+
                     //배치될 위치로 수정해요
                         gameObject.transform.rotation = currentrotation;
-                        gameObject.transform.position = ((Vector3)gridPosition) * (1 / MapInfo.Instance.MapScale);
-                        gameObject.transform.SetParent(ObjectLocation.transform);
+                        gameObject.transform.localPosition = cellIndicator.transform.localPosition;
 
                         //일 다봤으니 방빼세요
                     }
                     //잘못 배치했으면 그냥 원래 있던자리로 가세요
                     else
                     {
-                        gameObject.transform.SetParent(null);
+                        Vector2Int tempsize = currentobjsize;
+                        tempsize.x = size.y;
+                        tempsize.y = size.x;
+
                         gameObject.transform.rotation = rot;
-                        gameObject.transform.position = ((Vector3)currentpos) * (1 / MapInfo.Instance.MapScale);
-                        gameObject.transform.SetParent(ObjectLocation.transform);
+                        gameObject.transform.localPosition = PlacePosition(currentpos, size);
                 }
                     catchmode = false;
                     cellIndicator.SetActive(false);
@@ -442,23 +476,39 @@ public class PlacementSystem : Singleton<PlacementSystem>
     public float RotateRealTimebyHand()
     {
         float y = CatchObject.transform.rotation.eulerAngles.y;
-
+        float tempy = 0;
+        
         y = Mathf.Abs(y);
 
-        if (y % 360 >= 0 && y % 360 < 90)
+
+
+        if (y % 360 >= 315 || y % 360 < 45)
+        {
             y = 0;
+            tempy = 180;
+        }
 
-        else if (y % 360 >= 90 && y % 360 < 180)
+        else if (y % 360 >= 45 && y % 360 < 135)
+        {
             y = 90;
+            tempy = 90;
+        }
 
-        else if (y % 360 >= 180 && y % 360 < 270)
+        else if (y % 360 >= 135 && y % 360 < 225)
+        {
             y = 180;
+            tempy = 0;
+        }
 
-        else if (y % 360 >= 270 && y % 360 < 360)
+        else if (y % 360 >= 225 && y % 360 < 315)
+        {
             y = 270;
+            tempy = 270;
+        }
 
 
-        cellIndicator.transform.rotation = Quaternion.Euler(new Vector3(90, 0, y));
+        cellIndicator.transform.rotation = Quaternion.Euler(new Vector3(90, 0, tempy));
+        cellIndicator.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, tempy)); 
         return y;
     }
 
@@ -471,7 +521,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         float z = 0;
 
-        if (zangle % 360 >= 90 && zangle % 360 < 180)
+        if (zangle % 360 >= 315 || zangle % 360 < 45)
+        {
+            z = 0;
+        }
+
+        else if (zangle % 360 >= 45 && zangle % 360 < 135)
         {
             z = 90;
             int tempx = currentobjsize.x;
@@ -480,10 +535,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         }
 
-        else if (zangle % 360 >= 180 && zangle % 360 < 270)
+        else if (zangle % 360 >= 135 && zangle % 360 < 225)
             z = 180;
 
-        else if (zangle % 360 >= 270 && zangle % 360 < 360)
+        else if (zangle % 360 >= 225 && zangle % 360 < 315)
         {
             z = 270;
             int tempx = currentobjsize.x;
@@ -492,7 +547,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         }
 
-        Vector3 euler = new Vector3(0, z, 0 );
+
+        Vector3 euler = new Vector3(0, z, 0);
         //CatchObject.transform.rotation = Quaternion.Euler(euler);
         currentrotation = Quaternion.Euler(euler);
 
@@ -516,10 +572,11 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         if (id >= 0)
         {
-            newObject.transform.rotation = rot;
-            newObject.transform.position = ((Vector3)loc) *  ( 1 / MapInfo.Instance.MapScale);         
-            newObject.layer = LayerMask.NameToLayer(layer);
             newObject.transform.SetParent(ObjectLocation.transform);
+            newObject.transform.rotation = rot;
+
+            newObject.transform.localPosition = PlacePosition(loc, size);    
+            newObject.layer = LayerMask.NameToLayer(layer);
 
             placedGameObjects.Add(newObject);
 
@@ -579,6 +636,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceEnterEvent(SelectEnterEventArgs p)
     {
         CatchObject = p.interactableObject.transform.gameObject;
+        print("asdasd");
         PlaceStartStructure();
     }
 
@@ -588,10 +646,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     /// <param name="p"></param>
     private void PlaceEvent(SelectExitEventArgs p)
     {
-        float k = RotateRealTimebyHand();
-        RotatePlacementByHand(k);
         PlaceStructure(p.interactableObject.transform.gameObject);
-
     }
 
 
