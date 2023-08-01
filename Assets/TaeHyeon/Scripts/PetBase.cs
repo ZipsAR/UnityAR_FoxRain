@@ -18,6 +18,8 @@ public enum Cmd
     Sit = 2,
     Eat = 3,
     Brush = 4,
+    Bite = 5,
+    Spit = 6,
 }
 
 public enum PetParts
@@ -33,9 +35,13 @@ public enum PetParts
 /// How to add a pet
 /// 1. Create Stat data to pet
 /// 2. Create an override animator for a pet by inheriting petController
-/// 3. Add SitEnd event to sitting animation
-/// 4. Add EatEnd event to sitting animation
-/// 5. Pet connection added to InteractManager
+/// 3. Pet connection added to InteractManager
+/// 4. Add SitEnd event to sitting animation
+/// 5. Add EatEnd event to sitting animation
+/// 6. Add BiteEnd event to sitting animation
+/// 7. create bite position to mouth
+/// 8. Add AttachToyToMouth event to bite animation
+/// 9. Add DetachToyFromMouth event to spit animation
 /// </summary>
 
 public abstract class PetBase : MonoBehaviour
@@ -61,12 +67,16 @@ public abstract class PetBase : MonoBehaviour
     private float fixedPosY; // Pet always moves at the height of this value
     public bool inProcess { private set; get; } // If the pet is executing a command, it's false
     private GameObject snackObj;
-
+    private GameObject toyObj;
+    private bool isBiting;
+    public Transform toyAttachPoint;
+    
     private void Start()
     {
         rotationSpeed = 10f;
         petStates = PetStates.Idle;
         animator = GetComponent<Animator>();
+        isBiting = false;
         // The position y value of the pet is fixed to the initial y value
         fixedPosY = transform.position.y;
         
@@ -134,12 +144,6 @@ public abstract class PetBase : MonoBehaviour
     {
         inProcess = CheckCoroutinePlaying();
     }
-
-    
-    
-    
-    
-    
     
     #region Move
     
@@ -202,11 +206,6 @@ public abstract class PetBase : MonoBehaviour
         isCoroutinePlayingList[(int)Cmd.Move] = false;
     }
     #endregion
-
-    
-    
-    
-    
     
     #region Look
     public void CmdLookPlayer()
@@ -266,13 +265,6 @@ public abstract class PetBase : MonoBehaviour
 
     #endregion
     
-    
-    
-    
-    
-    
-    
-    
     #region Sit
 
     public void CmdSit()
@@ -303,10 +295,7 @@ public abstract class PetBase : MonoBehaviour
     }
 
     #endregion
-
-
-
-
+    
     #region Eat
 
     public void CmdEat(GameObject frontSnack)
@@ -335,9 +324,6 @@ public abstract class PetBase : MonoBehaviour
     
     #endregion
 
-
-
-
     #region Brush
 
     public void CmdBrush()
@@ -362,7 +348,77 @@ public abstract class PetBase : MonoBehaviour
     }
 
     #endregion
-    
+
+    #region Bite
+
+    public void CmdBite(GameObject frontToy)
+    {
+        Logger.Log("[Cmd] Bite");
+        
+        // This cmd will not run if another cmd is running
+        if (CheckCoroutinePlaying())
+        {
+            return;
+        }
+        isCoroutinePlayingList[(int)Cmd.Bite] = true;
+        animator.Play("PreBite");
+        Logger.Log("play prebite animation");
+        toyObj = frontToy;
+        // isCoroutinePlayingList[(int)Cmd.Bite] = false; This part will be executed in the animation part
+    }
+
+    public void AttachToyToMouth()
+    {
+        Logger.Log("AttachToyToMouth");
+        isBiting = true;
+        toyObj.transform.SetParent(toyAttachPoint);
+        toyObj.transform.localPosition = Vector3.zero;
+        toyObj.transform.localRotation = Quaternion.identity;
+        toyObj.GetComponent<Rigidbody>().isKinematic = true;
+    }
+
+    public void BiteEnd()
+    {
+        isCoroutinePlayingList[(int)Cmd.Bite] = false;
+        Logger.Log("BiteEnd is activate");
+    }
+
+    #endregion
+
+    #region Spit
+
+    public void CmdSpit()
+    {
+        Logger.Log("[Cmd] Spit");
+        
+        // This cmd will not run if another cmd is running
+        if (CheckCoroutinePlaying())
+        {
+            return;
+        }
+        isCoroutinePlayingList[(int)Cmd.Spit] = true;
+        animator.Play("Spit"); //////////////////////////////////////////////////
+
+        // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
+    }
+
+    public void DetachToyFromMouth()
+    {
+        Logger.Log("DetachToyFromMouth");
+        isBiting = false;
+        toyObj.transform.SetParent(null);
+        toyObj.GetComponent<Rigidbody>().isKinematic = true;
+    }
+
+    public void SpitEnd()
+    {
+        isCoroutinePlayingList[(int)Cmd.Spit] = false;
+        Logger.Log("SpitEnd is activate");
+    }
+
+    #endregion
+
+
     /// <summary>
     /// Function to check if there is currently a coroutine running
     /// </summary>

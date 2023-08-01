@@ -94,6 +94,10 @@ public class InteractManager : MonoBehaviour
                 case (int)Cmd.Brush:
                     pet.CmdBrush();
                     break;
+                case (int)Cmd.Bite:
+                    Logger.Log("bite obj name : " + nextCmd.Item3);
+                    pet.CmdBite(nextCmd.Item3);
+                    break;
                 default:
                     throw new Exception("Unimplemented command");
                 
@@ -218,23 +222,61 @@ public class InteractManager : MonoBehaviour
         
         // Move to snack position
         // pet.CmdMoveTo(snackPos);
-        GameManager.Instance.interactManager.ClearCmdQueue();
-        GameManager.Instance.interactManager.EnqueueCmd(Cmd.Move, snackTransform.position);
-        GameManager.Instance.interactManager.EnqueueCmd(Cmd.Look);
-        GameManager.Instance.interactManager.EnqueueCmd(Cmd.Sit);
-        GameManager.Instance.interactManager.EnqueueCmd(Cmd.Eat, snackObj: snackTransform.gameObject);
-        
-        
+        ClearCmdQueue();
+        EnqueueCmd(Cmd.Move, snackTransform.position);
+        EnqueueCmd(Cmd.Look);
+        EnqueueCmd(Cmd.Sit);
+        EnqueueCmd(Cmd.Eat, targetObj: snackTransform.gameObject);
     }
     
     #endregion
 
-    public void EnqueueCmd(Cmd cmd, Vector3 pos = default, GameObject snackObj = default)
+    
+    
+    
+    #region Toy
+    
+    /// <summary>
+    /// 1. Toy script notifies interactManager that the toy has dropped
+    /// 2. interactManager triggers an event to PetBase 
+    /// </summary>
+    /// <param name="toyTransform">Dropped toy position</param>
+    public void NotifyToyDrop(Transform toyTransform)
     {
-        // if (cmd == Cmd.Move && pos == default) throw new Exception("move cmd must include move direction");
-        if (cmd == Cmd.Eat && snackObj == default) throw new Exception("eat cmd must include snackObj");
+        StartCoroutine(NotifyToyDropSequence(toyTransform));
+        Logger.Log("notify pet to toy is dropped");
+    }
 
-        cmdQueue.Enqueue(new Tuple<int, Vector3, GameObject>((int)cmd, pos, snackObj));
+    private IEnumerator NotifyToyDropSequence(Transform toyTransform)
+    {
+        // waiting for current command end
+        while (pet.inProcess)
+        {
+            Logger.Log("waiting for current command end");
+            yield return null;
+        }
+        
+        // Stop All command 
+        pet.AbortAllCmd();
+        
+        // Move to toy position
+        ClearCmdQueue();
+        EnqueueCmd(Cmd.Move, toyTransform.position);
+        EnqueueCmd(Cmd.Look);
+        EnqueueCmd(Cmd.Bite, targetObj: toyTransform.gameObject);
+    }
+    
+    #endregion
+
+    
+    
+    
+    public void EnqueueCmd(Cmd cmd, Vector3 pos = default, GameObject targetObj = default)
+    {
+        if (cmd == Cmd.Eat && targetObj == default) throw new Exception("eat cmd must include targetObj");
+        if (cmd == Cmd.Bite && targetObj == default) throw new Exception("bite cmd must include targetObj");
+        
+        cmdQueue.Enqueue(new Tuple<int, Vector3, GameObject>((int)cmd, pos, targetObj));
     }
 
     /// <summary>
