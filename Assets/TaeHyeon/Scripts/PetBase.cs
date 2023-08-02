@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Logger = ZipsAR.Logger;
 
 public enum PetStates
@@ -31,6 +32,18 @@ public enum PetParts
     HandDetection,
 }
 
+// If this order is changed, the order of sound in the inspector window must be changed accordingly
+public enum PetSounds
+{
+    Bark1,
+    Bark2,
+    Bark3,
+    Gasps,
+    Sniff,
+    Whines,
+    Eat,
+}
+
 /// <summary>
 /// How to add a pet
 /// 1. Create Stat data to pet
@@ -42,6 +55,7 @@ public enum PetParts
 /// 7. create bite position to mouth
 /// 8. Add AttachToyToMouth event to bite animation
 /// 9. Add DetachToyFromMouth event to spit animation
+/// 10. Add petSounds in inspector
 /// </summary>
 
 public abstract class PetBase : MonoBehaviour
@@ -55,6 +69,9 @@ public abstract class PetBase : MonoBehaviour
     private static readonly int RunningParameter = Animator.StringToHash("Running");
     private static readonly int SitParameter = Animator.StringToHash("Sit");
     
+    // Sounds
+    [SerializeField] private List<Sound> petSoundList;
+
     // Stroll Mode
     public PetStates petStates { private set; get; }
     
@@ -76,6 +93,11 @@ public abstract class PetBase : MonoBehaviour
         petStates = PetStates.Idle;
         animator = GetComponent<Animator>();
         isBiting = false;
+
+        // Audio validation check
+        if (petSoundList.Count != Enum.GetNames(typeof(PetSounds)).Length)
+            throw new Exception("Number of petSoundList and number of PetSounds do not match");
+
         // The position y value of the pet is fixed to the initial y value
         fixedPosY = transform.position.y;
         
@@ -159,20 +181,13 @@ public abstract class PetBase : MonoBehaviour
 
         return false;
     }
-
-    /// <summary>
-    /// Abort all cmd of the current pet
-    /// </summary>
-    public void AbortAllCmd()
+    
+    // Sound
+    private void PlaySound(PetSounds sound)
     {
-        Logger.Log("Abort all cmd of the current pet");
-        StopAllCoroutines();
-        for (int i = 0; i < isCoroutinePlayingList.Count; i++)
-        {
-            isCoroutinePlayingList[i] = false;
-        }
-        inProcess = false;
+        GameManager.Instance.interactAudioManager.PlayPetSound(petSoundList[(int)sound].clip);
     }
+
     
     #region InteractPart
 
@@ -185,7 +200,21 @@ public abstract class PetBase : MonoBehaviour
     
     
     #region Cmds
-
+    
+        /// <summary>
+        /// Abort all cmd of the current pet
+        /// </summary>
+        public void AbortAllCmd()
+        {
+            Logger.Log("Abort all cmd of the current pet");
+            StopAllCoroutines();
+            for (int i = 0; i < isCoroutinePlayingList.Count; i++)
+            {
+                isCoroutinePlayingList[i] = false;
+            }
+            inProcess = false;
+        }
+        
         #region Move
         
             public void CmdMoveTo(Vector3 destination)
@@ -203,6 +232,9 @@ public abstract class PetBase : MonoBehaviour
             private IEnumerator MoveSequence(Vector3 destination)
             {
                 isCoroutinePlayingList[(int)Cmd.Move] = true;
+                
+                // Sound
+                PlaySound(PetSounds.Gasps);
                 
                 // Pets must move only on the xz plane
                 destination = new Vector3(destination.x, fixedPosY, destination.z);
@@ -286,7 +318,7 @@ public abstract class PetBase : MonoBehaviour
                         Time.deltaTime * rotationSpeed);
                     yield return null;
                 }
-    
+                
                 isCoroutinePlayingList[(int)Cmd.Look] = false;
             }
     
@@ -311,6 +343,9 @@ public abstract class PetBase : MonoBehaviour
             {
                 Logger.Log("[Cmd] Sit");
                 
+                // Sound
+                PlaySound(PetSounds.Bark3);
+
                 // This cmd will not run if another cmd is running
                 if (CheckCoroutinePlaying())
                 {
@@ -350,6 +385,9 @@ public abstract class PetBase : MonoBehaviour
                 isCoroutinePlayingList[(int)Cmd.Eat] = true;
                 animator.Play("Eat");
     
+                // Sound
+                PlaySound(PetSounds.Eat);
+                
                 snackObj = frontSnack;
                 // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
             }
@@ -378,6 +416,9 @@ public abstract class PetBase : MonoBehaviour
                 isCoroutinePlayingList[(int)Cmd.Brush] = true;
                 animator.Play("Brush");
     
+                // Sound
+                PlaySound(PetSounds.Bark3);
+                
                 // isCoroutinePlayingList[(int)Cmd.Brush] = false; This part will be executed in the animation part
             }
     
@@ -451,6 +492,9 @@ public abstract class PetBase : MonoBehaviour
                 isBiting = false;
                 toyObj.transform.SetParent(null);
                 toyObj.GetComponent<Rigidbody>().isKinematic = false;
+                
+                // Sound
+                PlaySound(PetSounds.Bark2);
             }
     
             public void SpitEnd()

@@ -21,6 +21,7 @@ public class GameManager : Singleton<GameManager>
     public Player player { get; private set; } // Attached to AR Camera && Used to locate a user
 
     public InteractManager interactManager;
+    public InteractAudioManager interactAudioManager;
     public StrollManager strollManager;
 
     public HandController leftHand;
@@ -70,7 +71,10 @@ public class GameManager : Singleton<GameManager>
 
         if (sceneName == "InteractMode")
         {
-            interactManager = GameObject.Find("Interact Manager").GetComponent<InteractManager>();
+            interactManager = 
+                GameObject.Find("Interact Manager").GetComponent<InteractManager>();
+            interactAudioManager =
+                GameObject.Find("Interact Audio Manager").GetComponent<InteractAudioManager>();
             ChangeMode(PlayMode.InteractMode);
         }
     }
