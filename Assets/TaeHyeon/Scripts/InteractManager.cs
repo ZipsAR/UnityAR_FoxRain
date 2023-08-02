@@ -95,6 +95,8 @@ public class InteractManager : MonoBehaviour
             }
         }
     }
+
+    public PetBase GetCurPet() => pet;
     
     #region Snack
     
@@ -172,7 +174,7 @@ public class InteractManager : MonoBehaviour
 
         private void SetInitialCmd()
         {
-            EnqueueCmd(Cmd.Move);
+            // EnqueueCmd(Cmd.Move);
         }
         
         private void ExecuteCmd(CmdDetail cmdDetail)
