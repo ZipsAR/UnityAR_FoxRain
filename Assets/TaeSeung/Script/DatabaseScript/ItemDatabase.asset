@@ -1,0 +1,169 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf335114089767b408416a0b3b583229, type: 3}
+  m_Name: ItemDatabase
+  m_EditorClassIdentifier: 
+  ItemData:
+  - Name: funiture_bed
+    ID: 1000
+    Housingsize: {x: 3, y: 2}
+    BuyPrice: 1000
+    SellPrice: 1000
+    Prefab: {fileID: 1908861269318448, guid: cfc3cb41de0af974d831fed578f4836a, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_bed_table
+    ID: 1001
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 500
+    SellPrice: 500
+    Prefab: {fileID: 1105668781091346, guid: 9247e2062ada8b242bfd94a2bb63d0a9, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_bookshelf
+    ID: 1002
+    Housingsize: {x: 2, y: 1}
+    BuyPrice: 750
+    SellPrice: 750
+    Prefab: {fileID: 1413900915861342, guid: a060471ab5ae95843962195a821d0634, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_drawer_small
+    ID: 1003
+    Housingsize: {x: 2, y: 1}
+    BuyPrice: 750
+    SellPrice: 750
+    Prefab: {fileID: 1089441187514440, guid: 4521e5bd0943ded4fb55c6b6a9d6983c, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_desk
+    ID: 1004
+    Housingsize: {x: 3, y: 2}
+    BuyPrice: 1000
+    SellPrice: 1000
+    Prefab: {fileID: 1157607663814482, guid: 5db4062648c0afc46aec0c8f57e9a01e, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_tv_shelf
+    ID: 1005
+    Housingsize: {x: 2, y: 1}
+    BuyPrice: 750
+    SellPrice: 750
+    Prefab: {fileID: 1211506654769874, guid: 93eb4906be308604ea94dd642b30c363, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_table
+    ID: 1006
+    Housingsize: {x: 5, y: 2}
+    BuyPrice: 1400
+    SellPrice: 1400
+    Prefab: {fileID: 1524366535568974, guid: dbbc369e3e9a1f240958222be21fad8c, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_sofa
+    ID: 1007
+    Housingsize: {x: 4, y: 2}
+    BuyPrice: 1200
+    SellPrice: 1200
+    Prefab: {fileID: 1764648378786810, guid: 1ee0d96f73917e746a95f8eba001975e, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_Closet
+    ID: 1008
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 500
+    SellPrice: 500
+    Prefab: {fileID: 1552773891800394, guid: 3ca3bb4b682d6f149926e977ee2cfa44, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_drawer_big
+    ID: 1009
+    Housingsize: {x: 2, y: 1}
+    BuyPrice: 750
+    SellPrice: 750
+    Prefab: {fileID: 1892955332092476, guid: affae5ed27b771e47af1437978ed34f2, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_hanger
+    ID: 1010
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 500
+    SellPrice: 500
+    Prefab: {fileID: 1896286203611054, guid: 99712ca56a07dd94aba5c27593f5a022, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_chair
+    ID: 1011
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 500
+    SellPrice: 500
+    Prefab: {fileID: 1615271723323240, guid: 353a8a384bc2dcc4b8b935ca379b8f7a, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_box
+    ID: 1012
+    Housingsize: {x: 4, y: 4}
+    BuyPrice: 1100
+    SellPrice: 1100
+    Prefab: {fileID: 1214118423761400, guid: 1a7a4446e92057041855881d5056fc9e, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_chair2
+    ID: 1013
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 500
+    SellPrice: 500
+    Prefab: {fileID: 1611733839842676, guid: 65e179eb740706140b5f476ae9f1fd86, type: 3}
+    DetailInfo: No Data
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
