@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PetStatNames
+{
+    Fullness,
+    Tiredness,
+    Cleanliness,
+    Exp,
+    Level,
+}
+
 // 에디터에서 쉽게 사용할 수 있도록 메뉴를 만듬
 [ CreateAssetMenu( fileName = "PetStat", menuName = "Scriptable Object Asset/PetStat" )]
 public class PetStatBase : ScriptableObject
