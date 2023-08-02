@@ -105,6 +105,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
         previewRenderer = cellIndicator.GetComponentInChildren<Renderer>();
         cursororigin = mouseIndicator;
         cursorparent = cursororigin.transform.parent.gameObject;
+
+
     }
 
 
@@ -208,7 +210,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
         if (!cellIndicator.activeSelf)
             cellIndicator.SetActive(true);
 
-
         catchmode = true;
     }
 
@@ -240,9 +241,11 @@ public class PlacementSystem : Singleton<PlacementSystem>
             sizey = sizex;
             sizex = temp;
 
+            /*
             Vector3 last = cellIndicator.transform.GetChild(0).localPosition;
-            last.y -= 0.25f;
+            last.y = 0.5f;
             cellIndicator.transform.GetChild(0).localPosition = last;
+            */
 
         }
 
@@ -275,6 +278,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
             gameObject.transform.position = spawnpoint.transform.position;
             gameObject.transform.rotation = spawnpoint.transform.rotation;
             StopPlacement(false);
+
             return;
         }
 
@@ -307,6 +311,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject",gameObject);
         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
+        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
 
         //만들어진 오브젝트에 대한 고유정보, 배치정보 수정 + 그 오브젝트에 대한 모든 정보 리스트에 추가
         database.objectsLocation.Add(newlocation);
@@ -329,6 +334,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
             UIInitialize.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
         }
         UIInitialize.Instance.ObjCountupdate(selectedObjectIndex);
+
+
 
         CreateObject = null;
         StopPlacement(true);
@@ -412,6 +419,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     //배치될 위치로 수정해요
                         gameObject.transform.rotation = currentrotation;
                         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
+                        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
 
                         //일 다봤으니 방빼세요
                     }
@@ -508,7 +516,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
         cellIndicator.transform.rotation = Quaternion.Euler(new Vector3(90, 0, tempy));
-        cellIndicator.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, tempy)); 
+        //cellIndicator.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, tempy)); 
         return y;
     }
 
@@ -636,7 +644,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceEnterEvent(SelectEnterEventArgs p)
     {
         CatchObject = p.interactableObject.transform.gameObject;
-        print("asdasd");
         PlaceStartStructure();
     }
 
@@ -647,6 +654,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceEvent(SelectExitEventArgs p)
     {
         PlaceStructure(p.interactableObject.transform.gameObject);
+        MapInfo.Instance.ResetTileScale();
     }
 
 
@@ -666,10 +674,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
     /// <param name="p"></param>
     private void InsertCompleteEvent(SelectExitEventArgs p)
     {
-        float k = RotateRealTimebyHand();
-        RotatePlacementByHand(k);
+        RotatePlacementByHand(RotateRealTimebyHand());
         InsertionStructure(p.interactableObject.transform.gameObject);
         StopPlacement(false);
+        MapInfo.Instance.ResetTileScale();
     }
 
 
