@@ -6,7 +6,7 @@ public class StoreManager : MonoBehaviour
 {
     public GameObject[] objList;
     private static StoreManager instance;
-    public UImanager uImanager;
+    public UICon uImanager;
     public ItemMov itemMov;
     public GameObject viewItem;
 

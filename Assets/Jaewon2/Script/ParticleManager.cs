@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class particleSystem : MonoBehaviour
+public class ParticleManager : MonoBehaviour
 {
     [SerializeField]
     private ParticleSystem particle; 

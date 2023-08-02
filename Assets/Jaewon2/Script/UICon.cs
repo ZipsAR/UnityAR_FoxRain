@@ -8,7 +8,7 @@ public enum Item
     item1 = 100,
     item2 = 200
 }
-public class UImanager : MonoBehaviour
+public class UICon : MonoBehaviour
 {
     Item item;
     public Text T_BuyText; //아이템 구매 버튼 텍스트
