@@ -1,18 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 
-public class SoundSystem : MonoBehaviour
+public class SoundSystem : Singleton<SoundSystem>
 {
+    [SerializeField]
+    private GameObject audiosound;
+
+    [SerializeField]    
+    private AudioClip audioclip;
+
+
+    private GameObject Createobj;
+
     // Start is called before the first frame update
-    void Start()
-    {
-        
+    void Start(){
+
+        Createobj = Instantiate(audiosound);
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void TurnAudio(Vector3 position)
     {
+        AudioSource audio = Createobj.GetComponent<AudioSource>();
         
+        audio.clip = audioclip;
+        audio.Play();  
+
+      
     }
 }
