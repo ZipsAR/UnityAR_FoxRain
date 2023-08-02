@@ -17,8 +17,8 @@ public class GridData
         List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
         PlacementData data = new PlacementData(positionToOccupy, ID, placedObjectIndex);
         foreach(var pos in positionToOccupy) {
-            if (placedObjects.ContainsKey(pos))
-                throw new System.Exception($"Dictionary already contains this cell position {pos}");
+            //if (placedObjects.ContainsKey(pos))
+                //throw new System.Exception($"Dictionary already contains this cell position {pos}");
             placedObjects[pos] = data;
 
             } 

@@ -7,7 +7,6 @@ public class MapInfo : Singleton<MapInfo>
     // Start is called before the first frame update
     public Vector2Int Mapsize;
     public float MapScale;
-
     public bool initialize;
 
     [SerializeField]
@@ -15,13 +14,14 @@ public class MapInfo : Singleton<MapInfo>
     [SerializeField]
     private Material gridgraph;
 
-    private Vector3 TileMapscale, TileScale, CursorScale, PlaneScale;
+    private Vector3 TileMapscale, TileScale, CursorScale, PlaneScale, TileEffectScale;
+
 
 
     private void Start()
     {
-        if(initialize)
-            MapInitialize();
+        if(initialize) MapInitialize();
+        TileEffectScale = Tile.transform.GetChild(0).localScale;
     }
 
 
@@ -52,9 +52,28 @@ public class MapInfo : Singleton<MapInfo>
 
     public void SetTileScale(Vector3 scale)
     {
-        float reverseMapScale = 1 / MapScale;
-        Tile.transform.localScale = scale * reverseMapScale;
+        Tile.transform.localScale = scale;
+
+        /*
+        Vector3 last = cellIndicator.transform.GetChild(0).localPosition;
+        last.y = 0.5f;
+        cellIndicator.transform.GetChild(0).localPosition = last;
+        */
+        print("scale: " + scale);
+
+        Vector3 effectscale = TileEffectScale;
+        effectscale.x = effectscale.x / scale.x;
+        effectscale.y = effectscale.y / scale.y;
+        effectscale.z = effectscale.z / scale.z;
+        Tile.transform.GetChild(0).localScale = effectscale;
     }
+
+    public void ResetTileScale()
+    {
+        Tile.transform.GetChild(0).localScale = TileEffectScale;
+
+    }
+
 
 
 }

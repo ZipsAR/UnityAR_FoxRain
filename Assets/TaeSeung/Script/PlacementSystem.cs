@@ -9,56 +9,58 @@ using UnityEngine.XR.Interaction.Toolkit;
 using static UnityEngine.InputSystem.InputControlExtensions;
 
 
-//¹èÄ¡¿Í °ü·ÃµÈ ¸ðµç ÇÔ¼ö°¡ ´ã±è.
+//ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½.
 
 public class PlacementSystem : Singleton<PlacementSystem>
 {
-    //mouseindicator : cursor ¿ÀºêÁ§Æ®, cellindicator : cellÀ§Ä¡ Ç¥½ÃÇØÁÖ´Â ¿ÀºêÁ§Æ®
+    //mouseindicator : cursor ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®, cellindicator : cellï¿½ï¿½Ä¡ Ç¥ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     [SerializeField]
     GameObject mouseIndicator, cellIndicator;
 
-    //¿ÀºêÁ§Æ® »ý¼ºÀ§Ä¡°¡ µÉ °÷
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½
     [SerializeField]
     private GameObject spawnpoint;
 
-    //inputmanagerÅ¬·¡½º 
+    //inputmanagerÅ¬ï¿½ï¿½ï¿½ï¿½ 
     [SerializeField]
     private InputManager inputManager;
 
-    //±×¸®µå ÄÄÆ÷³ÍÆ®
+    //ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     [SerializeField]
     private Grid grid;
 
-    //database ½ºÅ©¸³ÅÍºí ¿ÀºêÁ§Æ® 
-    //µ¥ÀÌÅÍº£ÀÌ½º ÀÎµ¦½º
+    //database ï¿½ï¿½Å©ï¿½ï¿½ï¿½Íºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® 
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½Ì½ï¿½ ï¿½Îµï¿½ï¿½ï¿½
     [SerializeField]
     private ObjectDatabaseSO database;
+
+
     private int selectedObjectIndex = -2;
 
-    //grid½Ã°¢È­ ¿ÀºêÁ§Æ®
+    //gridï¿½Ã°ï¿½È­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     [SerializeField]
     private GameObject gridVisualization;
 
 
-    //object°¡ »õ·Î »ý¼ºµÉ¶§, ±× ºÎ¸ð°¡ µÉ ¿ÀºêÁ§Æ®
+    //objectï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½, ï¿½ï¿½ ï¿½Î¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     [SerializeField]
     private GameObject ObjectLocation;
 
-    //¹èÄ¡µÉ objectÀÇ Å¸ÀÔ
+    //ï¿½ï¿½Ä¡ï¿½ï¿½ objectï¿½ï¿½ Å¸ï¿½ï¿½
     private GridData floorData, funitureData;
     private Renderer previewRenderer;
     private List<GameObject> placedGameObjects = new();
 
-
-    //ÇöÀç ¿ÀºêÁ§Æ®ÀÇ size »óÅÂ(rotation¶§¹®¿¡ Ãß°¡µÊ), ÀÌ ºÎºÐÀº ³ªÁß¿¡ deprecated½ÃÅ³¼öµµ ÀÖ½¿¹Ì´Ù
-    private GameObject CreateObject; //ÇöÀç »ý¼ºµÈ ¿ÀºêÁ§Æ®
-    private GameObject CatchObject;  //»ý¼ºµÈ ¿ÀºêÁ§Æ®µé Áß ³»°¡ ÀâÀº ¿ÀºêÁ§Æ®
-    private Vector2Int currentobjsize;  //¿ÀºêÁ§Æ®°¡ Â÷ÁöÇÏ´Â Ä­ »çÀÌÁî
-    private Quaternion currentrotation; //¿ÀºêÁ§Æ®ÀÇ ·ÎÅ×ÀÌ¼Ç
-    private float changerrotationzvalue; //¿ÀºêÁ§Æ® ·ÎÅ×ÀÌ¼ÇµÉ °ª
-    private Vector3Int currentpos;  //¿ÀºêÁ§Æ®ÀÇ À§Ä¡
-    private bool catchmode = false; //¿ÀºêÁ§Æ®°¡ ÀâÈù »óÅÂÀÎÁö?
-    private XRGrabInteractable interact;    //¿ÀºêÁ§Æ®ÀÇ interactable ÄÄÆ÷³ÍÆ®
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ size ï¿½ï¿½ï¿½ï¿½(rotationï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½), ï¿½ï¿½ ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ deprecatedï¿½ï¿½Å³ï¿½ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ì´ï¿½
+    private GameObject CreateObject; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+    private GameObject CatchObject;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+    private Vector2Int currentobjsize;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Ä­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private Quaternion currentrotation; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½
+    private float changerrotationzvalue; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼Çµï¿½ ï¿½ï¿½
+    private Vector3Int currentpos;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ä¡
+    private bool catchmode = false; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
+    private Vector3 beforepos;
+    private XRGrabInteractable interact;    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ interactable ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 
     private GameObject cursororigin, cursorparent;
 
@@ -66,20 +68,24 @@ public class PlacementSystem : Singleton<PlacementSystem>
     [SerializeField]
     CursorCollisionSystem cursorsystem;
 
+    public GameObject debugyoung;
 
+    public GameObject gridv;
 
+    
+    
     private void Start()
     {
         funitureData = new();
         floorData = new();
 
         MapInfo.Instance.MapInitialize();
-        //½ºÅ©¸³ÅÍºí ¿ÀºêÁ§Æ®¿¡¼­ ÀÌ¹Ì ¹èÄ¡µÈ µ¥ÀÌÅÍµé °¡Á®¿À±â
-        for (short i = 0; i < database.objectsLocation.Count; i++) {
 
+        //ï¿½ï¿½Å©ï¿½ï¿½ï¿½Íºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Íµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        for (short i = 0; i < database.objectsLocation.Count; i++) {
             int id = database.objectsLocation[i].OBJID;
             GameObject newObject = Instantiate(database.objectsData[id].Prefab);
-            newObject.transform.localScale = newObject.transform.localScale * (1 / MapInfo.Instance.MapScale);
+            newObject.transform.localScale = newObject.transform.localScale / MapInfo.Instance.MapScale;
 
             Vector3Int loc = database.objectsLocation[i].location;
             Quaternion rot = database.objectsLocation[i].rotation;
@@ -96,12 +102,11 @@ public class PlacementSystem : Singleton<PlacementSystem>
         }
         StopPlacement(true);
 
-
-
         previewRenderer = cellIndicator.GetComponentInChildren<Renderer>();
-        cellIndicator.transform.localScale = cellIndicator.transform.localScale / MapInfo.Instance.MapScale;
         cursororigin = mouseIndicator;
         cursorparent = cursororigin.transform.parent.gameObject;
+
+
     }
 
 
@@ -115,16 +120,15 @@ public class PlacementSystem : Singleton<PlacementSystem>
         {
             PlaceCheck(CatchObject);
             RotateRealTimebyHand();
-          
+            Vector3 test = inputManager.GetSelectedMapPositionbyObjectForward(CatchObject.transform);
+            debugyoung.transform.position = test;
         }
-
-
     }
 
 
     public void StartPlacement(int ID)
     {
-        //ÀÌ¹Ì »ý¼ºµÈ ¿ÀºêÁ§Æ®°¡ ÀÖÀ» °æ¿ì, ±× ³ð ÆÄ±«½ÃÅ°°í »õ·Î ´©¸¥ ¿ÀºêÁ§Æ®¸¦ »ý¼º½ÃÅ³ ¿¹Á¤, ±Ùµ¥ ±âÈ¹»ó ±¸Çö º¯°æµÉ¼öµµ ÀÖÀ½
+        //ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½ ï¿½Ä±ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½, ï¿½Ùµï¿½ ï¿½ï¿½È¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (CreateObject)
             Destroy(CreateObject);
 
@@ -144,28 +148,28 @@ public class PlacementSystem : Singleton<PlacementSystem>
             return;
         }
 
-        //cellindicator Å©±â ¼³Á¤(Â÷Áö ¿µ¿ª)
+        //cellindicator Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
         currentobjsize = database.objectsData[selectedObjectIndex].Size;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
         currentrotation = new();
 
-        //AR È¯°æ»ó¿¡¼­´Â ÀÌ ÄÚµå¸¦ ³Ö¾î¾ß ÇÔ.
+        //AR È¯ï¿½ï¿½ó¿¡¼ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Úµå¸¦ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½.
         GameObject newObject = Instantiate(database.objectsData[selectedObjectIndex].Prefab);
         CreateObject = newObject;
         newObject.transform.position = spawnpoint.transform.position;
         newObject.transform.localScale = newObject.transform.localScale * (1 / MapInfo.Instance.MapScale);
         interact = newObject.GetComponent<XRGrabInteractable>();
 
-        //¹°Ã¼¸¦ grabÇÒ¶§ÀÇ ÀÌº¥Æ® Ãß°¡
+        //ï¿½ï¿½Ã¼ï¿½ï¿½ grabï¿½Ò¶ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ß°ï¿½
         SelectEnterEventArgs enterargs = makeEnterEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
         interact.selectEntered.AddListener((a) => PlaceEnterEvent(enterargs));
 
-        //¹°Ã¼¿¡ ´ëÇÑ grabÀ» Ç®¶§ÀÇ ÀÌº¥Æ® Ãß°¡
+        //ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ grabï¿½ï¿½ Ç®ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ß°ï¿½
         SelectExitEventArgs exitargs = makeExitEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
         interact.selectExited.AddListener((a)=>PlaceEvent(exitargs));
 
 
-        //ÄÄÇ»ÅÍ¿¡¼­ ÇÒ¶© ÀÌ ÄÚµå¸¦ ³ÖÀ¸¸é µË´Ï´Ù.
+        //ï¿½ï¿½Ç»ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½Ò¶ï¿½ ï¿½ï¿½ ï¿½Úµå¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë´Ï´ï¿½.
         //inputManager.OnClicked += PlaceStructure;
         //inputManager.OnExit += StopPlacement;
     }
@@ -181,7 +185,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     }
 
-
     public void StopPlacement(bool indexinitialize)
     {
         if(indexinitialize)
@@ -190,7 +193,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         gridVisualization.SetActive(false);
         cellIndicator.SetActive(false);
         catchmode = false;
-        //ÄÄÇ»ÅÍ È¯°æ¿¡¼­´Â »ç¿ë °¡´É
+        //ï¿½ï¿½Ç»ï¿½ï¿½ È¯ï¿½æ¿¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         //inputManager.OnClicked -= PlaceStructure;
         //inputManager.OnClicked -= InsertionStructure;
         //inputManager.OnExit -= StopPlacement;
@@ -207,7 +210,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
         if (!cellIndicator.activeSelf)
             cellIndicator.SetActive(true);
 
-
         catchmode = true;
     }
 
@@ -215,29 +217,60 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceCheck(GameObject catchobject)
     {
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(catchobject.transform);
-        Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
-
-        //¹èÄ¡ ºÒ°¡´ÉÇÏ¸é cellindicatorÀÇ ¸ÓÅÍ¸®¾óÀ» ¹Ù²ã¼­ Ç¥½ÃÇØÁÜ.
+        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+        
+        //ï¿½ï¿½Ä¡ ï¿½Ò°ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ cellindicatorï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ã¼­ Ç¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
-        if (placementValidity)
-            print("asd");
-        else
-            print("asdgggb");
-
         previewRenderer.material.color = placementValidity ? Color.white : Color.red;
 
         mouseIndicator.transform.position = mousePosition;
+        cellIndicator.transform.localPosition = PlacePosition(gridPosition, currentobjsize);
 
-        mousePosition = mousePosition * MapInfo.Instance.MapScale;
-        mousePosition = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), Mathf.Round(mousePosition.z));
-        cellIndicator.transform.position = mousePosition / MapInfo.Instance.MapScale;
     }
 
+    private Vector3 PlacePosition(Vector3Int gridposition, Vector2Int size)
+    {
+        Vector3 Cellposition = gridposition;
+        float z = Math.Abs(cellIndicator.transform.eulerAngles.y);
+        int sizex = size.x;
+        int sizey = size.y;
 
-    //±¸Á¶¹° ¹èÄ¡ (ARÈ¯°æ)
+        if ((z == 90 || z == 270) && (sizex+sizey) % 2 == 1)
+        {
+            int temp = sizey;
+            sizey = sizex;
+            sizex = temp;
+
+            /*
+            Vector3 last = cellIndicator.transform.GetChild(0).localPosition;
+            last.y = 0.5f;
+            cellIndicator.transform.GetChild(0).localPosition = last;
+            */
+
+        }
+
+        if (sizex%2 == 1)
+        Cellposition.x = Cellposition.x + 0.5f;
+
+        if(sizey%2 == 1)
+        Cellposition.z = Cellposition.z + 0.5f;
+
+        Cellposition.y = 0.1f;
+
+
+
+
+
+        return Cellposition;
+    }
+    
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ (ARÈ¯ï¿½ï¿½)
     private void PlaceStructure(GameObject gameObject)
     {
-        //ÇöÀç Ä¿¼­ À§Ä¡ °¡Á®¿È
+        print(currentobjsize);
+        print("ToQLd!");
+        //ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
 
         if (!inputManager.ishit())
@@ -245,12 +278,14 @@ public class PlacementSystem : Singleton<PlacementSystem>
             gameObject.transform.position = spawnpoint.transform.position;
             gameObject.transform.rotation = spawnpoint.transform.rotation;
             StopPlacement(false);
+
             return;
         }
 
-        //ÇöÀç Ä¿¼­ À§Ä¡¸¦ ±â¹ÝÀ¸·Î grid.WorldToCellÇÏ¸é ¿ùµåÁÂÇ¥°è¸¦ gridÄÄÆ÷³ÍÆ®ÀÇ ±×¸®µå·Î Áï½Ã º¯È¯ÇØÁÖÁö¸¸, ÀÌ»óÇÏ°Ô º¯È¯µÇ¼­(¹ö¸²¿¬»êÇÔ) ±×³É round½ÃÅ°´Â ¹æ½ÄÀ¸·Î ¹Ù²Þ
-        mousePosition = mousePosition * MapInfo.Instance.MapScale;
-        Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
+        //mousePosition = mousePosition * MapInfo.Instance.MapScale;
+
+        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+
         ObjectLocation newlocation = new ObjectLocation();
 
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
@@ -262,7 +297,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
             return;
         }
 
-        //»õ·Î ¹èÄ¡µÉ ¹°Ã¼ÀÇ À§Ä¡, È¸Àü Á¤º¸¸¦ µ¥ÀÌÅÍº£ÀÌ½º¿¡ ³Ö´Â °úÁ¤
+
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½Ä¡, È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½
         newlocation.location = gridPosition;
         newlocation.rotation = currentrotation;
         newlocation.OBJID = selectedObjectIndex;
@@ -270,9 +306,16 @@ public class PlacementSystem : Singleton<PlacementSystem>
         newlocation.InstanceId = gameObject.GetInstanceID();
         newlocation.placementstatus = true;
 
-        MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject",gameObject);
+        float k = RotateRealTimebyHand();
+        RotatePlacementByHand(k);
 
-        //¸¸µé¾îÁø ¿ÀºêÁ§Æ®¿¡ ´ëÇÑ °íÀ¯Á¤º¸, ¹èÄ¡Á¤º¸ ¼öÁ¤ + ±× ¿ÀºêÁ§Æ®¿¡ ´ëÇÑ ¸ðµç Á¤º¸ ¸®½ºÆ®¿¡ Ãß°¡
+        MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject",gameObject);
+        gameObject.transform.localPosition = cellIndicator.transform.localPosition;
+        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
+        SoundSystem.Instance.TurnAudio(cellIndicator.transform.position);
+
+
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½
         database.objectsLocation.Add(newlocation);
         database.objectsData[selectedObjectIndex].ObjectCount -= 1;
 
@@ -286,13 +329,15 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
 
-        //¼ö·®ÀÌ ¾ø´Â °æ¿ì ÇØ´ç ¿ÀºêÁ§Æ® ¹öÆ° ÀÚÃ¼¸¦ ºñÈ°¼ºÈ­
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½Æ° ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
         {
             Debug.Log($"No Object");
             UIInitialize.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
         }
         UIInitialize.Instance.ObjCountupdate(selectedObjectIndex);
+
+
 
         CreateObject = null;
         StopPlacement(true);
@@ -307,7 +352,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         currentobjsize =  database.objectsData[database.objectsLocation[index].OBJID].Size;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
 
-        //ÀâÀº ½ÃÁ¡¿¡¼­ÀÇ ¹°Ã¼ À§Ä¡ ÀúÀå (»èÁ¦¿¡¼­ »ç¿ëµÉÁöµµ ¸ô¶ó¿ä)
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½)
         CatchObject = gameObject;
         cellIndicator.SetActive(true);
         catchmode = true;
@@ -316,11 +361,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     private void InsertionStructure(GameObject gameObject) {
 
-        Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform) * MapInfo.Instance.MapScale;
-        Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
+        Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
+        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
-
-        //¸Ê ¹Ù±ùÀ¸·Î Ä¿¼­¸¦ ÀÌµ¿½ÃÄ×´Ù¸é »èÁ¦
+        //ï¿½ï¿½ ï¿½Ù±ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½×´Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (!inputManager.ishit())
             {
                 cursororigin.transform.SetParent(cursorparent.transform);
@@ -340,21 +384,20 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     {
                         gameObject.GetComponent<Rigidbody>().useGravity = true;
                         gameObject.GetComponent<Rigidbody>().isKinematic = false;
-                        gameObject.GetComponent<Rigidbody>().SetDensity(0.5f);
                     }
                     print(Vector3.Distance(gameObject.transform.position, ObjectLocation.transform.position));
                     CreateObject = null;
-                StartCoroutine(throwdelete(gameObject));
+                    StartCoroutine(throwdelete(gameObject));
                     //Destroy(gameObject);
                 }
             }
 
-            //¾ÆÁ÷ Ä¿¼­°¡ ¸Ê ¾È¿¡ ÀÖ´Ù¸é À¯È¿¹üÀ§ÀÌ¹Ç·Î À§Ä¡ ¼öÁ¤
+            //ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹Ç·ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
             else
             {
                 int index = database.objectsLocation.FindIndex(data => data.InstanceId == gameObject.GetInstanceID());
 
-                //ÀÏ´Ü Á¸ÀçÇÏ´Â °¡±¸°¡ ¸Â´ÂÁö ºÎÅÍ È®ÀÎÇØ¿ä
+                //ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ø¿ï¿½
                 if (index >= 0)
                 {
                     int id = database.objectsLocation[index].OBJID;
@@ -362,34 +405,35 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     Quaternion rot = database.objectsLocation[index].rotation;
                     Vector2Int size = database.objectsLocation[index].size;
                     
-                    
                     PlacementData data = funitureData.GetObjectAt(currentpos);
                     int placeindex = data.PlacedObjectIndex;
 
-                    //¹èÄ¡ À§Ä¡ ¼öÁ¤ÇÒ À§Ä¡°¡ ÀÌ¹Ì ´Ù¸¥ °¡±¸°¡ ¹èÄ¡µÇ¾î ÀÖÀ¸¸é ¾È µÅ¿ä. ´Ü, µ¿ÀÏÀ§Ä¡¿¡ Àç¹èÄ¡ÇÏ´Â °Ç ¿ë¼­ÇØÁÜ
+                    //ï¿½ï¿½Ä¡ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ç¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¿ï¿½. ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¡ï¿½Ï´ï¿½ ï¿½ï¿½ ï¿½ë¼­ï¿½ï¿½ï¿½ï¿½
                     if (funitureData.CanPlaceObjectAt(gridPosition, currentobjsize) && gridPosition != pos)
                     {
-                        gameObject.transform.SetParent(null);
-                        //¹èÄ¡µÉ À§Ä¡ Á¤º¸ µ¥ÀÌÅÍ¸¦ ¹Ù²ãÁà¿ä
+                        //ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ù²ï¿½ï¿½ï¿½ï¿½
                         funitureData.RemoveObjectAt(currentpos, size);
                         funitureData.AddObjectAt(gridPosition, size, id, placeindex);
                         database.objectsLocation[index].location = gridPosition;
                         database.objectsLocation[index].rotation = currentrotation;
                         database.objectsLocation[index].size = currentobjsize;
-                    //¹èÄ¡µÉ À§Ä¡·Î ¼öÁ¤ÇØ¿ä
-                        gameObject.transform.rotation = currentrotation;
-                        gameObject.transform.position = ((Vector3)gridPosition) * (1 / MapInfo.Instance.MapScale);
-                        gameObject.transform.SetParent(ObjectLocation.transform);
 
-                        //ÀÏ ´ÙºÃÀ¸´Ï ¹æ»©¼¼¿ä
+                    //ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¿ï¿½
+                        gameObject.transform.rotation = currentrotation;
+                        gameObject.transform.localPosition = cellIndicator.transform.localPosition;
+                        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
+                        SoundSystem.Instance.TurnAudio(cellIndicator.transform.position);
+                        //ï¿½ï¿½ ï¿½Ùºï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æ»©ï¿½ï¿½ï¿½ï¿½
                     }
-                    //Àß¸ø ¹èÄ¡ÇßÀ¸¸é ±×³É ¿ø·¡ ÀÖ´øÀÚ¸®·Î °¡¼¼¿ä
+                    //ï¿½ß¸ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     else
                     {
-                        gameObject.transform.SetParent(null);
+                        Vector2Int tempsize = currentobjsize;
+                        tempsize.x = size.y;
+                        tempsize.y = size.x;
+
                         gameObject.transform.rotation = rot;
-                        gameObject.transform.position = ((Vector3)currentpos) * (1 / MapInfo.Instance.MapScale);
-                        gameObject.transform.SetParent(ObjectLocation.transform);
+                        gameObject.transform.localPosition = PlacePosition(currentpos, size);
                 }
                     catchmode = false;
                     cellIndicator.SetActive(false);
@@ -400,7 +444,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
     /// <summary>
-    /// ¹èÄ¡ µÈ ¿ÀºêÁ§Æ® »èÁ¦½Ã Áß·Â Ç®°í Àú ¸Ö¸®·Î º¸³»¹ö¸²
+    /// ï¿½ï¿½Ä¡ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß·ï¿½ Ç®ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
@@ -422,10 +466,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
     /// <summary>
-    /// ¹èÄ¡°¡ °¡´ÉÇÑ ¿µ¿ªÀÎÁö ÆÄ¾Ç.
+    /// ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¾ï¿½.
     /// </summary>
-    /// <param name="gridPosition">¹èÄ¡ÇÒ À§Ä¡</param>
-    /// <param name="selectedObjectIndex">ÀÌ°Ç ³ªÁß¿¡ ½á¸ÔÀ» ÀÎÀÚ¿©¼­ ÀÏ´Ü ³ÀµÒ</param>
+    /// <param name="gridPosition">ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ä¡</param>
+    /// <param name="selectedObjectIndex">ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½</param>
     /// <returns></returns>
     private bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
     {
@@ -436,42 +480,63 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
     /// <summary>
-    /// ½Ç½Ã°£À¸·Î ¹°Ã¼ ·ÎÅ×ÀÌ¼Ç °ªÀ» ¹Þ¾Æ¼­ È¸ÀüµÈ °¢µµ¸¦ ±¸ÇØÁÖ´Â ÇÔ¼ö
+    /// ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½
     /// </summary>
     /// <returns></returns>
     public float RotateRealTimebyHand()
     {
         float y = CatchObject.transform.rotation.eulerAngles.y;
-
+        float tempy = 0;
+        
         y = Mathf.Abs(y);
 
-        if (y % 360 >= 0 && y % 360 < 90)
+
+
+        if (y % 360 >= 315 || y % 360 < 45)
+        {
             y = 0;
+            tempy = 180;
+        }
 
-        else if (y % 360 >= 90 && y % 360 < 180)
+        else if (y % 360 >= 45 && y % 360 < 135)
+        {
             y = 90;
+            tempy = 90;
+        }
 
-        else if (y % 360 >= 180 && y % 360 < 270)
+        else if (y % 360 >= 135 && y % 360 < 225)
+        {
             y = 180;
+            tempy = 0;
+        }
 
-        else if (y % 360 >= 270 && y % 360 < 360)
+        else if (y % 360 >= 225 && y % 360 < 315)
+        {
             y = 270;
+            tempy = 270;
+        }
 
 
-        cellIndicator.transform.rotation = Quaternion.Euler(new Vector3(90, 0, y));
+        cellIndicator.transform.rotation = Quaternion.Euler(new Vector3(90, 0, tempy));
+        //cellIndicator.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, tempy)); 
         return y;
     }
 
 
     /// <summary>
-    /// ÃÖÁ¾ÀûÀ¸·Î ¹°Ã¼ ¹èÄ¡½Ã È¸Àü °¢µµ¿¡ ¸Â°Ô ÇÏ¿ìÂ¡ °¡±¸¸¦ È¸ÀüÇØ¼­ ¹èÄ¡ÇØÁÖ´Â ÇÔ¼ö
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½Ä¡ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â°ï¿½ ï¿½Ï¿ï¿½Â¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½
     /// </summary>
     /// <param name="zangle"></param>
     private void RotatePlacementByHand(float zangle)
     {
         float z = 0;
 
-        if (zangle % 360 >= 90 && zangle % 360 < 180)
+        if (zangle % 360 >= 315 || zangle % 360 < 45)
+        {
+            z = 0;
+        }
+
+        else if (zangle % 360 >= 45 && zangle % 360 < 135)
         {
             z = 90;
             int tempx = currentobjsize.x;
@@ -480,10 +545,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         }
 
-        else if (zangle % 360 >= 180 && zangle % 360 < 270)
+        else if (zangle % 360 >= 135 && zangle % 360 < 225)
             z = 180;
 
-        else if (zangle % 360 >= 270 && zangle % 360 < 360)
+        else if (zangle % 360 >= 225 && zangle % 360 < 315)
         {
             z = 270;
             int tempx = currentobjsize.x;
@@ -492,7 +557,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         }
 
-        Vector3 euler = new Vector3(0, z, 0 );
+
+        Vector3 euler = new Vector3(0, z, 0);
         //CatchObject.transform.rotation = Quaternion.Euler(euler);
         currentrotation = Quaternion.Euler(euler);
 
@@ -501,30 +567,31 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
     /// <summary>
-    /// »õ ¿ÀºêÁ§Æ® »ý¼º½ÃÅ°°í ¹èÄ¡½ÃÄÑÁÖ´Â ÇÔ¼ö
+    /// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½
     /// </summary>
-    /// <param name="id">ÇØ´ç ¿ÀºêÁ§Æ®ÀÇ id</param>
-    /// <param name="parent">ÇØ´ç ¿ÀºêÁ§Æ®°¡ ¾À °èÃþ»ó ºÎ¸ð·Î µÑ ¿ÀºêÁ§Æ®</param>
-    /// <param name="loc">ÇØ´ç ¿ÀºêÁ§Æ®°¡ ¹èÄ¡µÉ ±×¸®µå À§Ä¡</param>
-    /// <param name="rot">ÇØ´ç ¿ÀºêÁ§Æ®ÀÇ È¸Àü</param>
-    /// <param name="size">ÇØ´ç ¿ÀºêÁ§Æ®ÀÇ Â÷Áö Ä­ ¼ö</param>
-    /// <param name="layer">ÇØ´ç ¿ÀºêÁ§Æ®°¡ ¹èÄ¡µÉ ·¹ÀÌ¾î</param>
-    /// <param name="newObject">¹èÄ¡µÉ ¿ÀºêÁ§Æ®</param>
+    /// <param name="id">ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ id</param>
+    /// <param name="parent">ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®</param>
+    /// <param name="loc">ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡</param>
+    /// <param name="rot">ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ È¸ï¿½ï¿½</param>
+    /// <param name="size">ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä­ ï¿½ï¿½</param>
+    /// <param name="layer">ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½</param>
+    /// <param name="newObject">ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®</param>
     /// <returns></returns>
     /// 
     private GameObject MakeNewObject(int id, Transform parent, Vector3Int loc, Quaternion rot, Vector2Int size, String layer, GameObject newObject)
     {
         if (id >= 0)
         {
-            newObject.transform.rotation = rot;
-            newObject.transform.position = ((Vector3)loc) *  ( 1 / MapInfo.Instance.MapScale);         
-            newObject.layer = LayerMask.NameToLayer(layer);
             newObject.transform.SetParent(ObjectLocation.transform);
+            newObject.transform.rotation = rot;
+
+            newObject.transform.localPosition = PlacePosition(loc, size);    
+            newObject.layer = LayerMask.NameToLayer(layer);
 
             placedGameObjects.Add(newObject);
 
             //GridData selectedData = database.objectsData[i].ID == 0 ? floorData : funitureData; 
-            //È¤½Ã ºÎµúÈú ÇÊ¿ä°¡ ¾ø´Â ¿¡¼ÂÀÌ Á¸ÀçÇÏ´Â °æ¿ì À§ ÄÚµå¸¦ È°¿ëÇØ¾ßÇÔ.
+            //È¤ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½Ê¿ä°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Úµå¸¦ È°ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½.
 
             GridData selectedData = funitureData;
             selectedData.AddObjectAt(loc, size, id, placedGameObjects.Count - 1);
@@ -536,12 +603,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
     /// <summary>
-    /// ¼ÕÀ¸·Î selectµÇ´Â event¿¡¼­ ÇÊ¼öÀûÀ¸·Î º¸³»¾ß ÇÏ´Â SelectEnterEventArgs¸¦ »ý¼º½ÃÄÑÁÖ´Â ÇÔ¼ö.
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ selectï¿½Ç´ï¿½ eventï¿½ï¿½ï¿½ï¿½ ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ SelectEnterEventArgsï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½.
     /// </summary>
-    /// <param name="interactable">Áã¾îÁö´Â ¿ÀºêÁ§Æ®¿¡ ´ëÇÑ Á¤º¸</param>
-    /// <param name="InteractorSelect">Áã´Â ¿ÀºêÁ§Æ®¿¡ ´ëÇÑ Á¤º¸</param>
-    /// <param name="interactionManager">interactionManagerÅ¸ÀÔÀ¸·Î »ó¼Ó¹Þ¾ÆÁø Å¬·¡½º¸é ¸ðµÎ °¡´É</param>
-    /// <returns> À§ ÀÎÀÚ ¼¼°³¸¦ ¹ÙÅÁÀ¸·Î SelectEnterEventArgs°´Ã¼¸¦ ¸¸µé¾î ¹ÝÈ¯ÇÔ</returns>
+    /// <param name="interactable">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="InteractorSelect">ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="interactionManager">interactionManagerÅ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ó¹Þ¾ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</param>
+    /// <returns> ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ SelectEnterEventArgsï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½</returns>
     private SelectEnterEventArgs makeEnterEventArgs(XRGrabInteractable interactable, IXRSelectInteractor InteractorSelect, XRInteractionManager interactionManager)
     {
         SelectEnterEventArgs exiteventargs = new SelectEnterEventArgs();
@@ -553,12 +620,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
     /// <summary>
-    /// select¿¡¼­ ¹þ¾î³ª°ÔµÇ´Â event¿¡¼­ ÇÊ¼öÀûÀ¸·Î º¸³»¾ß ÇÏ´Â SelectExitEventArgs¸¦ »ý¼º½ÃÄÑÁÖ´Â ÇÔ¼ö.
+    /// selectï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î³ªï¿½ÔµÇ´ï¿½ eventï¿½ï¿½ï¿½ï¿½ ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ SelectExitEventArgsï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½.
     /// </summary>
-    /// <param name="interactable">Áã¾îÁö´Â ¿ÀºêÁ§Æ®¿¡ ´ëÇÑ Á¤º¸</param>
-    /// <param name="InteractorSelect">Áã´Â ¿ÀºêÁ§Æ®¿¡ ´ëÇÑ Á¤º¸</param>
-    /// <param name="interactionManager">interactionManagerÅ¸ÀÔÀ¸·Î »ó¼Ó¹Þ¾ÆÁø Å¬·¡½º¸é ¸ðµÎ °¡´É</param>
-    /// <returns> À§ ÀÎÀÚ ¼¼°³¸¦ ¹ÙÅÁÀ¸·Î SelectExitEventArgs°´Ã¼¸¦ ¸¸µé¾î ¹ÝÈ¯ÇÔ</returns>
+    /// <param name="interactable">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="InteractorSelect">ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="interactionManager">interactionManagerÅ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ó¹Þ¾ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</param>
+    /// <returns> ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ SelectExitEventArgsï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½</returns>
     private SelectExitEventArgs makeExitEventArgs(XRGrabInteractable interactable, IXRSelectInteractor InteractorSelect, XRInteractionManager interactionManager)
     {
         SelectExitEventArgs exiteventargs = new SelectExitEventArgs();
@@ -570,10 +637,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
-    //ÀÌº¥Æ® ÇÔ¼ö
+    //ï¿½Ìºï¿½Æ® ï¿½Ô¼ï¿½
 
     /// <summary>
-    /// ¹èÄ¡ ÁØºñ ÀÌº¥Æ®
+    /// ï¿½ï¿½Ä¡ ï¿½Øºï¿½ ï¿½Ìºï¿½Æ®
     /// </summary>
     /// <param name="p"></param>
     private void PlaceEnterEvent(SelectEnterEventArgs p)
@@ -583,20 +650,18 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
     /// <summary>
-    /// ¹èÄ¡ ¿Ï·á ÀÌº¥Æ®
+    /// ï¿½ï¿½Ä¡ ï¿½Ï·ï¿½ ï¿½Ìºï¿½Æ®
     /// </summary>
     /// <param name="p"></param>
     private void PlaceEvent(SelectExitEventArgs p)
     {
-        float k = RotateRealTimebyHand();
-        RotatePlacementByHand(k);
         PlaceStructure(p.interactableObject.transform.gameObject);
-
+        MapInfo.Instance.ResetTileScale();
     }
 
 
     /// <summary>
-    /// ¹èÄ¡ ¼öÁ¤ ÁØºñ ÀÌº¥Æ®
+    /// ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Øºï¿½ ï¿½Ìºï¿½Æ®
     /// </summary>
     /// <param name="p"></param>
     private void InsertEnterEvent(SelectEnterEventArgs p)
@@ -606,32 +671,32 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
     /// <summary>
-    /// ¹èÄ¡ ¼öÁ¤ ¿Ï·á ÀÌº¥Æ®
+    /// ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½Ìºï¿½Æ®
     /// </summary>
     /// <param name="p"></param>
     private void InsertCompleteEvent(SelectExitEventArgs p)
     {
-        float k = RotateRealTimebyHand();
-        RotatePlacementByHand(k);
+        RotatePlacementByHand(RotateRealTimebyHand());
         InsertionStructure(p.interactableObject.transform.gameObject);
         StopPlacement(false);
+        MapInfo.Instance.ResetTileScale();
     }
 
 
     /// <summary>
-    /// ¾ÕÀ¸·Î ¾Æ¿¹ ¾È¾µ ÇÔ¼öµéÀº ¾Æ´Ñµ¥, ÇöÀç AR È¯°æ¾È¿¡¼­´Â ¾È¾µ ÇÔ¼öµéÀÓ.È¤½Ã ¸ô¶ó¼­ deprecated½ÃÅ°°í, ±×³É °Åµé¶° º¸Áö ¾Ê´Â °É ÃßÃµ 
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¿ï¿½ ï¿½È¾ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ñµï¿½, ï¿½ï¿½ï¿½ï¿½ AR È¯ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½È¾ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½.È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ deprecatedï¿½ï¿½Å°ï¿½ï¿½, ï¿½×³ï¿½ ï¿½Åµé¶° ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ ï¿½ï¿½Ãµ 
     /// </summary>
     [Obsolete]
     private void PlaceStructure()
     {
         if (inputManager.IsPointerOverUI()) return;
 
-        //ÇöÀç Ä¿¼­ À§Ä¡ °¡Á®¿È
+        //ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Vector3 mousePosition = inputManager.GetSelectedMapPositionInComputer();
-        //¸¸¾à ¸Ê ¹Ù±ùÀÌ¸é ¹èÄ¡ÇÒ ÇÊ¿ä°¡ ¾øÀ¸´Ï±î ±×´ë·Î ¹èÄ¡ ½ÇÇà ¹«½Ã
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ù±ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ê¿ä°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½×´ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (!inputManager.ishit()) return;
 
-        //ÇöÀç Ä¿¼­ À§Ä¡¸¦ ±â¹ÝÀ¸·Î grid.WorldToCellÇÏ¸é ¿ùµåÁÂÇ¥°è¸¦ gridÄÄÆ÷³ÍÆ®ÀÇ ±×¸®µå·Î Áï½Ã º¯È¯ÇØÁÖÁö¸¸, ÀÌ»óÇÏ°Ô º¯È¯µÇ¼­(¹ö¸²¿¬»êÇÔ) ±×³É round½ÃÅ°´Â ¹æ½ÄÀ¸·Î ¹Ù²Þ
+        //ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ grid.WorldToCellï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥ï¿½è¸¦ gridï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ì»ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½È¯ï¿½Ç¼ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½) ï¿½×³ï¿½ roundï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½
         mousePosition = mousePosition * MapInfo.Instance.MapScale;
         Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
         ObjectLocation newlocation = new ObjectLocation();
@@ -640,18 +705,18 @@ public class PlacementSystem : Singleton<PlacementSystem>
         if (placementValidity == false)
             return;
 
-        //»õ·Î ¹èÄ¡µÉ ¹°Ã¼ÀÇ À§Ä¡, È¸Àü Á¤º¸¸¦ µ¥ÀÌÅÍº£ÀÌ½º¿¡ ³Ö´Â °úÁ¤
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½Ä¡, È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½
         newlocation.location = gridPosition;
         newlocation.rotation = currentrotation;
         newlocation.OBJID = selectedObjectIndex;
         newlocation.size = currentobjsize;
         database.objectsLocation.Add(newlocation);
 
-        //½ÇÁ¦¹èÄ¡
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡
         GameObject newobject = MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject");
         UIInitialize.Instance.countlist[selectedObjectIndex].GetComponentInChildren<TMP_Text>().text = "" + database.objectsData[selectedObjectIndex].ObjectCount;
 
-        //¼ö·®ÀÌ ¾ø´Â °æ¿ì ÇØ´ç ¿ÀºêÁ§Æ® ºñÈ°¼ºÈ­
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È°ï¿½ï¿½È­
         if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
         {
             Debug.Log($"No Object");
@@ -661,9 +726,9 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
     /// <summary>
-    /// ¾ÕÀ¸·Î ¾Æ¿¹ ¾È¾µ ÇÔ¼öµéÀº ¾Æ´Ñµ¥, ÇöÀç AR È¯°æ¾È¿¡¼­´Â ¾È¾µ ÇÔ¼öµéÀÓ.È¤½Ã ¸ô¶ó¼­ deprecated½ÃÅ°°í, ±×³É °Åµé¶° º¸Áö ¾Ê´Â °É ÃßÃµ 
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¿ï¿½ ï¿½È¾ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ñµï¿½, ï¿½ï¿½ï¿½ï¿½ AR È¯ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½È¾ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½.È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ deprecatedï¿½ï¿½Å°ï¿½ï¿½, ï¿½×³ï¿½ ï¿½Åµé¶° ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ ï¿½ï¿½Ãµ 
     /// </summary>
-    //¹èÄ¡µÈ ¹°Ã¼¿¡ ´ëÇÑ À§Ä¡¼öÁ¤ ¶Ç´Â »èÁ¦
+    //ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½
     [Obsolete]
     public void InsertionStructure()
     {
@@ -677,7 +742,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         if (!catchmode)
         {
-            //ÀâÀº ½ÃÁ¡¿¡¼­ÀÇ ¹°Ã¼ À§Ä¡ ÀúÀå (»èÁ¦¿¡¼­ »ç¿ëµÉÁöµµ ¸ô¶ó¿ä)
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½)
             mouseIndicator = obj;
             currentpos = gridPosition;
             cursororigin.transform.SetParent(mouseIndicator.transform);
@@ -687,7 +752,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         else
         {
-            //¸Ê ¹Ù±ùÀ¸·Î Ä¿¼­¸¦ ÀÌµ¿½ÃÄ×´Ù¸é »èÁ¦
+            //ï¿½ï¿½ ï¿½Ù±ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½×´Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½
             inputManager.GetSelectedMapPositionInComputer();
             if (!inputManager.ishit())
             {
@@ -709,7 +774,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
                 }
             }
 
-            //¾ÆÁ÷ Ä¿¼­°¡ ¸Ê ¾È¿¡ ÀÖ´Ù¸é À¯È¿¹üÀ§ÀÌ¹Ç·Î À§Ä¡ ¼öÁ¤
+            //ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹Ç·ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
             else
             {
                 int index = database.objectsLocation.FindIndex(data => data.location == currentpos);
@@ -720,7 +785,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     PlacementData data = funitureData.GetObjectAt(currentpos);
                     int placeindex = data.PlacedObjectIndex;
 
-                    //¹èÄ¡ À§Ä¡ ¼öÁ¤ÇÒ À§Ä¡°¡ ÀÌ¹Ì ´Ù¸¥ °¡±¸°¡ ¹èÄ¡µÇ¾î ÀÖÀ¸¸é ¾È µÅ¿ä.
+                    //ï¿½ï¿½Ä¡ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ç¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¿ï¿½.
                     if (funitureData.CanPlaceObjectAt(gridPosition, size))
                     {
                         cursororigin.transform.SetParent(cursorparent.transform);
@@ -741,7 +806,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
     /// <summary>
-    /// ¾ÕÀ¸·Î ¾Æ¿¹ ¾È¾µ ÇÔ¼öµéÀº ¾Æ´Ñµ¥, ÇöÀç AR È¯°æ¾È¿¡¼­´Â ¾È¾µ ÇÔ¼öµéÀÓ.È¤½Ã ¸ô¶ó¼­ deprecated½ÃÅ°°í, ±×³É °Åµé¶° º¸Áö ¾Ê´Â °É ÃßÃµ 
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¿ï¿½ ï¿½È¾ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ñµï¿½, ï¿½ï¿½ï¿½ï¿½ AR È¯ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½È¾ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½.È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ deprecatedï¿½ï¿½Å°ï¿½ï¿½, ï¿½×³ï¿½ ï¿½Åµé¶° ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ ï¿½ï¿½Ãµ 
     /// </summary>
     [Obsolete]
     private GameObject MakeNewObject(int id, Transform parent, Vector3Int loc, Quaternion rot, Vector2Int size, String layer)
@@ -767,7 +832,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     [Obsolete]
     /// <summary>
-    ///¾ÕÀ¸·Î ¾Æ¿¹ ¾È¾µ ÇÔ¼öµéÀº ¾Æ´Ñµ¥, ÇöÀç AR È¯°æ¾È¿¡¼­´Â ¾È¾µ ÇÔ¼öµéÀÓ.È¤½Ã ¸ô¶ó¼­ deprecated½ÃÅ°°í, ±×³É °Åµé¶° º¸Áö ¾Ê´Â °É ÃßÃµ 
+    ///ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¿ï¿½ ï¿½È¾ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ñµï¿½, ï¿½ï¿½ï¿½ï¿½ AR È¯ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½È¾ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½.È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ deprecatedï¿½ï¿½Å°ï¿½ï¿½, ï¿½×³ï¿½ ï¿½Åµé¶° ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ ï¿½ï¿½Ãµ 
     /// </summary>
     public void RotateStructure()
     {

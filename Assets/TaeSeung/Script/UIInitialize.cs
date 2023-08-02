@@ -15,9 +15,17 @@ public class UIInitialize : Singleton<UIInitialize>
     private GameObject menuPanel, HousingButtonPrefab;
 
 
+    [SerializeField]
+    private GameObject DebugTextUI;
+
+    [SerializeField]
+    private GameObject GridPlane;
+
+
+
+
+
     public List<GameObject> countlist;
-
-
 
     void Start()
     {
@@ -36,6 +44,40 @@ public class UIInitialize : Singleton<UIInitialize>
         GameObject obj = countlist[id];
         obj.GetComponentInChildren<TMP_Text>().text = database.objectsData[id].ObjectCount.ToString();
 
+    }
+
+
+    public void DebuggingText(object newtext)
+    {
+        TMP_Text textmesh = DebugTextUI.GetComponent<TMP_Text>();
+        textmesh.text = newtext.ToString();
+    }
+
+
+    public void ONHOUSING()
+    {
+
+        //평면 인식 상태
+        if (InputManager.Instance.GetSelectedMapPositionbyVision().Length > 0) {
+
+            //Normal mode
+            print("find plane");
+
+        }
+        else
+        {
+
+            print("ignore");
+            //무시함
+        }
+
+        DebuggingText("hosuing!");
+    }
+
+
+    public void ONTEXIT()
+    {
+        Application.Quit();
     }
 
 
