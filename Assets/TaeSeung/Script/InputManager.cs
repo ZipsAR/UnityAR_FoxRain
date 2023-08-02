@@ -20,12 +20,10 @@ public class InputManager: Singleton<InputManager>
     public GameObject Plane;
     //public GameObject Wall;
 
-
-
     private Ray ray;
 
-
-    public event Action OnClicked, OnExit;
+    //[Obsolete]
+    //public event Action OnClicked, OnExit;
 
     private void Start()
     {
@@ -55,8 +53,13 @@ public class InputManager: Singleton<InputManager>
     /// <returns></returns>
     public Vector3 GetSelectedMapPositionbyObject(Transform transform)
     {
-        ray.origin = transform.position;
-        ray.direction = Plane.transform.up * -1;
+        Vector3 Planepos = transform.position;
+        Planepos.y = Plane.transform.position.y - 1;
+
+        ray.origin = Planepos;
+        //ray.origin = transform.position;
+        //ray.direction = Plane.transform.up * -1;
+        ray.direction = Plane.transform.up;
 
         RaycastHit hit;
 
@@ -111,7 +114,7 @@ public class InputManager: Singleton<InputManager>
         {
             for (int i = 0; i < hit.Length; i++)
             {
-                UIInitialize.Instance.DebuggingText("hitting : " + hit[i].collider.gameObject.name);
+                HousingUISystem.Instance.DebuggingText("hitting : " + hit[i].collider.gameObject.name);
                 lastPosition = hit[i].point;
                 hitting = true;
             }

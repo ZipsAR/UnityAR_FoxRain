@@ -9,7 +9,10 @@ public class EffectSystem : Singleton<EffectSystem>
     public Transform Parentposition;
 
     public ParticleSystem placedeffect;
+    public ParticleSystem spawneffect;
+    
     private GameObject placedeffectobj;
+    private GameObject spawneffectobj;
 
 
     void Start()
@@ -28,6 +31,14 @@ public class EffectSystem : Singleton<EffectSystem>
                 placedeffectobj = null;
             }
         }
+        if (spawneffectobj)
+        {
+            if (spawneffectobj.GetComponent<ParticleSystem>().isStopped)
+            {
+                Destroy(spawneffectobj);
+                spawneffectobj= null;
+            }
+        }
     }
 
 
@@ -35,12 +46,20 @@ public class EffectSystem : Singleton<EffectSystem>
     {
         if (!placedeffectobj)
         {
-            print("play!");
             placedeffectobj = Instantiate(placedeffect.transform.gameObject, Parentposition);
             placedeffectobj.transform.localPosition = position;
             placedeffectobj.GetComponent<ParticleSystem>().Play();
         }
+    }
 
+    public void playspawneffect(Vector3 position)
+    {
+        if (!spawneffectobj)
+        {
+            spawneffectobj = Instantiate(spawneffect.transform.gameObject);
+            spawneffectobj.transform.position = position;
+            spawneffectobj.GetComponent<ParticleSystem>().Play();
+        }
     }
 
 
