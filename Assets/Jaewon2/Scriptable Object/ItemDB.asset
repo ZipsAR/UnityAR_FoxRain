@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f2f945f0b11d7d4496a5c9ba9a78041, type: 3}
+  m_Name: ItemDB
+  m_EditorClassIdentifier: 
+  ItemName:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  Item:
+  - {fileID: 8351752075391247549, guid: bbfa95c4949b93b40aa0f2d59cc1d064, type: 3}
+  - {fileID: 8351752075391247549, guid: bbfa95c4949b93b40aa0f2d59cc1d064, type: 3}
+  - {fileID: 8351752075391247549, guid: bbfa95c4949b93b40aa0f2d59cc1d064, type: 3}
+  - {fileID: 5690439281283935922, guid: e5d980923abf3f3469e47570f6a5fc4a, type: 3}
+  - {fileID: 5690439281283935922, guid: e5d980923abf3f3469e47570f6a5fc4a, type: 3}
+  - {fileID: 5690439281283935922, guid: e5d980923abf3f3469e47570f6a5fc4a, type: 3}
+  - {fileID: 5690439281283935922, guid: e5d980923abf3f3469e47570f6a5fc4a, type: 3}
+  - {fileID: 428060373797757266, guid: cf0e11ff148a26f46811c3d3ea091e0b, type: 3}
+  - {fileID: 428060373797757266, guid: cf0e11ff148a26f46811c3d3ea091e0b, type: 3}
+  - {fileID: 428060373797757266, guid: cf0e11ff148a26f46811c3d3ea091e0b, type: 3}
+  buyGold: 640000006400000064000000640000006400000064000000e803000064000000e8030000e8030000
+  soldGold: 32000000320000003200000032000000320000003c000000f80200001e00000058020000bc020000
+  i_number: 0a0000000a0000000a0000000a0000000a0000000a0000000a0000000a0000000a0000000a000000
+  money: 10000
