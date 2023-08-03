@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class Endmanager : MonoBehaviour
 {
-    float time = 0;
-    private void Update()
+    public void ExitButton()
     {
-        time += Time.deltaTime;
-        if (time > 30.0f) Application.Quit();
+        Application.Quit();
     }
 }

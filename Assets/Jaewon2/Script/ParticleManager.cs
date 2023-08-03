@@ -14,6 +14,7 @@ public class ParticleManager : MonoBehaviour
 
     public void OnButtonClick()
     {
+        particle.transform.position = new Vector3(10, 0, 0);
         particle.Play();
     }
 }
