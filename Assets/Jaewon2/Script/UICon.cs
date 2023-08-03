@@ -2,50 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public enum Item
-{
-    item1 = 100,
-    item2 = 200
-}
 public class UICon : MonoBehaviour
 {
-    Item item;
     public Text T_BuyText; //아이템 구매 버튼 텍스트
     public Text T_money;
-    public int money;
+    public float money;
     public bool isSelected;
-    [SerializeField]
-    private ItemDB itemdb;
+    public ItemDatabase itemdata;
     private void Start()
     {
         isSelected = false;
-        T_money.text = "현재 골드 = " + itemdb.money;
-    }
-    private void Update()
-    {
-        ViewRotate(); 
-    }
-    public void ViewRotate()
-    {
+        money = 10000;
+        T_money.text = "현재 골드 = " + money;
     }
     public void BuyItem()
     {
-        T_BuyText.text = "구매하기 가격 = " + (int)Item.item1;
+        T_BuyText.text = "구매하기 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
         isSelected = true;
     }
     public void BuyItemClick()
     {
-        Pay((int)Item.item1);
+        Pay(itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice);
     }
-    public void Pay(int pay)
+    public void Pay(float pay)
     {
-        itemdb.money -= pay;
-        T_money.text = "현재 골드 = " + itemdb.money;
+        money -= pay;
+        T_money.text = "현재 골드 = " + money;
+        Debug.Log("구매하기, 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice);
     }
-    public void SellItem(int sell)
+    public void Sell()
     {
-        itemdb.money += sell;
-        T_money.text = "현재 골드 = " + itemdb.money;
+        money += itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice;
+        T_money.text = "현재 골드 = " + money;
+        Debug.Log("판매하기, 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice);
     }
 }

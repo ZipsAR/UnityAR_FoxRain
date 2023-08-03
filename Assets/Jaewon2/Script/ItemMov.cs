@@ -31,7 +31,6 @@ public class ItemMov : MonoBehaviour
     public void ViewObj()
     {
         StoreManager.Instance.viewItem = Instantiate(childitem, viewObj.transform);
-        Debug.Log(StoreManager.Instance.viewItem.name);
         StoreManager.Instance.viewItem.GetComponent<Transform>().localScale = viewScale;
     }
     //부모의 오브젝트의 레이어가 인벤토리 일 경우를 나눔

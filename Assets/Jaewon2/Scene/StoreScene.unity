@@ -865,6 +865,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1825565654}
+        m_TargetAssemblyTypeName: ParticleManager, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &320866257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1125,7 +1137,7 @@ GameObject:
   - component: {fileID: 337374564}
   - component: {fileID: 337374563}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Des1
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1920,6 +1932,7 @@ MonoBehaviour:
   uImanager: {fileID: 1825565653}
   itemMov: {fileID: 0}
   viewItem: {fileID: 0}
+  itemindex: 0
 --- !u!4 &656807174
 Transform:
   m_ObjectHideFlags: 0
@@ -2021,7 +2034,7 @@ MonoBehaviour:
   T_money: {fileID: 1435527120}
   money: 0
   isSelected: 0
-  itemdb: {fileID: 11400000, guid: c9da195fcc73f2a49a2c5f0f920d6573, type: 2}
+  itemdata: {fileID: 0}
 --- !u!114 &708002214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2501,7 +2514,7 @@ GameObject:
   - component: {fileID: 867556389}
   - component: {fileID: 867556388}
   m_Layer: 5
-  m_Name: Description
+  m_Name: Description2
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4222,14 +4235,15 @@ MonoBehaviour:
   - {fileID: 1211506654769874, guid: 01f739c5963c6a947a049506c2681a34, type: 3}
   - {fileID: 1524366535568974, guid: 82be0775885f6b84999453eb8114a0b3, type: 3}
   - {fileID: 1764648378786810, guid: 8b55fb3337b01874fbc4b22409a5acfa, type: 3}
-  - {fileID: 1842691868646622, guid: 70d494672ebbc5b4a908223b21003cd5, type: 3}
-  - {fileID: 1063040462370530, guid: d48196fe4f16dc741b383962e66b1399, type: 3}
   - {fileID: 1552773891800394, guid: 23b1cf1fff6ebb74dbd8d678cae85da8, type: 3}
   - {fileID: 1892955332092476, guid: be5f098fa243dea42b174b151e659a5a, type: 3}
   - {fileID: 1896286203611054, guid: 8ba5aa999ce7c484badb36cf95cb07f1, type: 3}
   - {fileID: 1615271723323240, guid: 2cf554527e601b74d853eecc132d20f2, type: 3}
   - {fileID: 1214118423761400, guid: add5a2ba4c44a8f448b3b3f5275f2a3d, type: 3}
   - {fileID: 1611733839842676, guid: 832102f4aef2ee446a694d6cfbcaa1be, type: 3}
+  - {fileID: 3523750892749671239, guid: 9021434dfe3bac34c923b26dc094c786, type: 3}
+  - {fileID: 9119582626822745833, guid: 092647a86d319534580c1f4d63ae04e6, type: 3}
+  - {fileID: 2720990299645366154, guid: 79d9b6c54f9762943bf84c82a8fff0fd, type: 3}
   ButtonGened:
   - {fileID: 0}
   - {fileID: 0}
@@ -4718,14 +4732,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1742209785}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 0.2
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -4793,7 +4807,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 0.2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -9753,7 +9767,7 @@ MonoBehaviour:
   T_money: {fileID: 709346618}
   money: 0
   isSelected: 0
-  itemdb: {fileID: 11400000, guid: c9da195fcc73f2a49a2c5f0f920d6573, type: 2}
+  itemdata: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
 --- !u!114 &1825565654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9855,7 +9869,7 @@ GameObject:
   - component: {fileID: 1834783916}
   - component: {fileID: 1834783915}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Des2
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10099,9 +10113,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1825565653}
-        m_TargetAssemblyTypeName: UImanager, Assembly-CSharp
-        m_MethodName: SellItem
-        m_Mode: 3
+        m_TargetAssemblyTypeName: UICon, Assembly-CSharp
+        m_MethodName: Sell
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

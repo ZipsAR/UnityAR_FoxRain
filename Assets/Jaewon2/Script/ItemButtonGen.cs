@@ -31,7 +31,7 @@ public class ItemButtonGen : MonoBehaviour
                 GameObject GenedPanel = GameObject.Instantiate(buttonPanel, parentPanel[1].transform);
                 ButtonGened[i] = GameObject.Instantiate(itemDBObjs[i], GenedPanel.transform);
                 ButtonGened[i].transform.localPosition = new Vector3(0, -40, -0);
-                ButtonGened[i].transform.localScale = new Vector3(80, 80, 80);
+                ButtonGened[i].transform.localScale = new Vector3(300, 300, 300);
                 GenedPanel.GetComponent<ItemMov>().childitem = ButtonGened[i];
             }
             if (itemDBObjs[i].CompareTag("food"))
@@ -39,7 +39,7 @@ public class ItemButtonGen : MonoBehaviour
                 GameObject GenedPanel = GameObject.Instantiate(buttonPanel, parentPanel[2].transform);
                 ButtonGened[i] = GameObject.Instantiate(itemDBObjs[i], GenedPanel.transform);
                 ButtonGened[i].transform.localPosition = new Vector3(0, -40, -0);
-                ButtonGened[i].transform.localScale = new Vector3(80, 80, 80);
+                ButtonGened[i].transform.localScale = new Vector3(300, 300, 300);
                 GenedPanel.GetComponent<ItemMov>().childitem = ButtonGened[i];
             }
         }
