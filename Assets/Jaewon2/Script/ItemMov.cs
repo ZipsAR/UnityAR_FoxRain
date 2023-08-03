@@ -9,12 +9,14 @@ public class ItemMov : MonoBehaviour
     public bool isSelected;
     public GameObject childitem;
     public GameObject viewObj;
+    public GameObject viewObj_Inven;
     public Queue<GameObject> childs;
     private Vector3 viewScale;
     private void Start()
     {
         isSelected = false;
         viewObj = GameObject.Find("ViewObj");
+        viewObj_Inven = GameObject.Find("ViewObj_Inven");
         viewScale = new Vector3(300, 300, 300);
         childs = null;
     }
@@ -25,24 +27,48 @@ public class ItemMov : MonoBehaviour
     public void GetButton()
     {
         isSelected = !isSelected;
-        if(StoreManager.Instance.viewItem != null) DeleteAllChild();
+        if (StoreManager.Instance.viewItem_store != null)
+        {
+            DeleteAllChild();
+        }
+        if (StoreManager.Instance.viewItem_Inven != null)
+        {
+            DeleteAllChild();
+        }
         ViewObj();
     }
     public void ViewObj()
     {
-        StoreManager.Instance.viewItem = Instantiate(childitem, viewObj.transform);
-        StoreManager.Instance.viewItem.GetComponent<Transform>().localScale = viewScale;
+        if (this.CompareTag("Store"))
+        {
+            Debug.Log("비교");
+            StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
+            StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = viewScale;
+        }
+        if (this.CompareTag("Inven"))
+        {
+            Debug.Log("비교");
+            StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem, viewObj_Inven.transform);
+            StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = viewScale;
+        }
     }
     //부모의 오브젝트의 레이어가 인벤토리 일 경우를 나눔
     public void ViewRotate()
     {
-        if (StoreManager.Instance.viewItem != null)
+        if (StoreManager.Instance.viewItem_store != null)
         {
-            StoreManager.Instance.viewItem.transform.Rotate(new Vector3(0, 10, 0) * Time.deltaTime);
+            StoreManager.Instance.viewItem_store.transform.Rotate(new Vector3(0, 10, 0) * Time.deltaTime);
+        }
+        if (StoreManager.Instance.viewItem_Inven != null)
+        {
+            StoreManager.Instance.viewItem_Inven.transform.Rotate(new Vector3(0, 10, 0) * Time.deltaTime);
         }
     }
     public void DeleteAllChild()
     {
-        Destroy(StoreManager.Instance.viewItem);
+        if (this.CompareTag("Store"))
+            Destroy(StoreManager.Instance.viewItem_store.gameObject);
+        if (this.CompareTag("Inven"))
+            Destroy(StoreManager.Instance.viewItem_Inven.gameObject);
     }
 }

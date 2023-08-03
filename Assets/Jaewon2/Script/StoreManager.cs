@@ -8,7 +8,8 @@ public class StoreManager : MonoBehaviour
     private static StoreManager instance;
     public UICon uImanager;
     public ItemMov itemMov;
-    public GameObject viewItem;
+    public GameObject viewItem_store;
+    public GameObject viewItem_Inven;
     public int itemindex;
 
     public static StoreManager Instance
@@ -31,7 +32,6 @@ public class StoreManager : MonoBehaviour
     private void OnEnable()
     {
         Debug.Log("√ ±‚»≠");
-        viewItem = null;
         itemindex = -1;
     }
 }

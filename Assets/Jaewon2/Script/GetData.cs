@@ -7,9 +7,11 @@ public class GetData : MonoBehaviour
 {
     public ItemDatabase itemdata;
     Text itemDetail;
+    Text itemDetail_Inven;
     private void Start()
     {
         itemDetail = GameObject.Find("Des1").GetComponent<Text>();
+        itemDetail_Inven = GameObject.Find("Des1_Inven").GetComponent<Text>();
     }
     public void GetInfo()
     {
@@ -26,6 +28,14 @@ public class GetData : MonoBehaviour
     }
     public void ItemInfo()
     {
-        itemDetail.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
+        if (StoreManager.Instance.viewItem_store != null)
+        {
+            itemDetail.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
+        }
+        if (StoreManager.Instance.viewItem_Inven != null)
+        {
+            itemDetail_Inven.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
+        }
+
     }
 }

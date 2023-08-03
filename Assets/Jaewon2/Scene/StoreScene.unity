@@ -469,7 +469,7 @@ GameObject:
   - component: {fileID: 126360919}
   - component: {fileID: 126360920}
   m_Layer: 5
-  m_Name: Panel_toy
+  m_Name: Panel_toy_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -611,7 +611,7 @@ GameObject:
   - component: {fileID: 208284926}
   - component: {fileID: 208284925}
   m_Layer: 5
-  m_Name: Description
+  m_Name: Description_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1466,7 +1466,7 @@ GameObject:
   - component: {fileID: 380738239}
   - component: {fileID: 380738238}
   m_Layer: 5
-  m_Name: I_Store
+  m_Name: I_Store_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1878,7 +1878,7 @@ GameObject:
   - component: {fileID: 499679435}
   - component: {fileID: 499679434}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Image_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6771,7 +6771,7 @@ GameObject:
   - component: {fileID: 597406380}
   - component: {fileID: 597406379}
   m_Layer: 5
-  m_Name: Back2
+  m_Name: Back2_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6847,7 +6847,7 @@ GameObject:
   - component: {fileID: 643641821}
   - component: {fileID: 643641820}
   m_Layer: 5
-  m_Name: ButtonBack2
+  m_Name: ButtonBack2_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6947,7 +6947,8 @@ MonoBehaviour:
   - {fileID: 0}
   uImanager: {fileID: 1825565653}
   itemMov: {fileID: 0}
-  viewItem: {fileID: 0}
+  viewItem_store: {fileID: 0}
+  viewItem_Inven: {fileID: 0}
   itemindex: 0
 --- !u!4 &656807174
 Transform:
@@ -6989,7 +6990,7 @@ GameObject:
   - component: {fileID: 680382237}
   - component: {fileID: 680382236}
   m_Layer: 5
-  m_Name: Panels
+  m_Name: Panels_Inven
   m_TagString: furniture
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7048,11 +7049,8 @@ MonoBehaviour:
   - {fileID: 3523750892749671239, guid: 9021434dfe3bac34c923b26dc094c786, type: 3}
   - {fileID: 9119582626822745833, guid: 092647a86d319534580c1f4d63ae04e6, type: 3}
   - {fileID: 2720990299645366154, guid: 79d9b6c54f9762943bf84c82a8fff0fd, type: 3}
-  ButtonGened:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  buttonPanel: {fileID: 1022240292773703925, guid: 26c70a29e1c939f4e8108ff0fda63c6e,
+  ButtonGened: []
+  buttonPanel: {fileID: 1022240292773703925, guid: 381baaa63eadf404799aebba43150b0b,
     type: 3}
   parentPanel:
   - {fileID: 1503618381}
@@ -7352,7 +7350,7 @@ GameObject:
   - component: {fileID: 900732393}
   - component: {fileID: 900732392}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Text (Legacy)_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7432,7 +7430,7 @@ GameObject:
   - component: {fileID: 948575236}
   - component: {fileID: 948575235}
   m_Layer: 5
-  m_Name: I_Money
+  m_Name: I_Money_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7627,7 +7625,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1115054775}
   m_Layer: 5
-  m_Name: ViewObj
+  m_Name: ViewObj_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7841,7 +7839,7 @@ GameObject:
   - component: {fileID: 1350728364}
   - component: {fileID: 1350728363}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Text (Legacy)_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7959,7 +7957,7 @@ GameObject:
   - component: {fileID: 1413986416}
   - component: {fileID: 1413986415}
   m_Layer: 5
-  m_Name: Des2
+  m_Name: Des2_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8039,7 +8037,7 @@ GameObject:
   - component: {fileID: 1420591999}
   - component: {fileID: 1420591998}
   m_Layer: 5
-  m_Name: T_Money
+  m_Name: T_Money_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8231,7 +8229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1479393603}
   m_Layer: 5
-  m_Name: Money
+  m_Name: Money_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8422,7 +8420,7 @@ GameObject:
   - component: {fileID: 1503618382}
   - component: {fileID: 1503618383}
   m_Layer: 5
-  m_Name: Panel_furniture
+  m_Name: Panel_furniture_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8436,8 +8434,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1503618381}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.000044598935}
+  m_LocalScale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 680382235}
@@ -8445,7 +8443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 679, y: 227}
+  m_AnchoredPosition: {x: 678.99994, y: 227.00003}
   m_SizeDelta: {x: 660, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1503618383
@@ -8563,7 +8561,7 @@ GameObject:
   - component: {fileID: 1524170499}
   - component: {fileID: 1524170500}
   m_Layer: 5
-  m_Name: Panel_food
+  m_Name: Panel_food_Inven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8577,8 +8575,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1524170498}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.000044598935}
+  m_LocalScale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 680382235}
@@ -8586,7 +8584,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 678.99994, y: 227}
+  m_AnchoredPosition: {x: 678.9998, y: 227.00003}
   m_SizeDelta: {x: 660, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1524170500
@@ -8625,7 +8623,7 @@ GameObject:
   - component: {fileID: 1533574092}
   - component: {fileID: 1533574091}
   m_Layer: 5
-  m_Name: Des1
+  m_Name: Des1_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8705,6 +8703,7 @@ GameObject:
   - component: {fileID: 1535268405}
   - component: {fileID: 1535268404}
   - component: {fileID: 1535268403}
+  - component: {fileID: 1535268406}
   m_Layer: 5
   m_Name: RightButton
   m_TagString: Store
@@ -8827,6 +8826,95 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1535268401}
   m_CullTransparentMesh: 1
+--- !u!114 &1535268406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535268401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 64076595}
+  m_Colliders: []
+  m_InteractionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 1
+  m_DistanceCalculationMode: 1
+  m_SelectMode: 0
+  m_CustomReticle: {fileID: 0}
+  m_AllowGazeInteraction: 0
+  m_AllowGazeSelect: 0
+  m_OverrideGazeTimeToSelect: 0
+  m_GazeTimeToSelect: 0.5
+  m_OverrideTimeToAutoDeselectGaze: 0
+  m_TimeToAutoDeselectGaze: 3
+  m_AllowGazeAssistance: 0
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
+  m_StartingInteractionStrengthFilters: []
+  m_OnFirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnLastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1541551897
 GameObject:
   m_ObjectHideFlags: 0
@@ -9158,7 +9246,7 @@ GameObject:
   - component: {fileID: 1703377358}
   - component: {fileID: 1703377357}
   m_Layer: 5
-  m_Name: Detail
+  m_Name: Detail_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9539,7 +9627,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1816239738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10217,8 +10305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b91560bce4b0b84aabcd3741c125456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: 
-  fileName: save
 --- !u!4 &1904529723
 Transform:
   m_ObjectHideFlags: 0
@@ -10247,7 +10333,7 @@ GameObject:
   - component: {fileID: 1914031278}
   - component: {fileID: 1914031277}
   m_Layer: 5
-  m_Name: RightButton
+  m_Name: RightButton_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10445,7 +10531,7 @@ GameObject:
   - component: {fileID: 1985618319}
   - component: {fileID: 1985618318}
   m_Layer: 5
-  m_Name: Description2
+  m_Name: Description2_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15451,7 +15537,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2134328038}
   m_Layer: 5
-  m_Name: BackGround
+  m_Name: BackGround_Inven
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
