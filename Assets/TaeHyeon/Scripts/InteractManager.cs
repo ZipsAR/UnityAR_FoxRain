@@ -21,13 +21,40 @@ public class InteractManager : MonoBehaviour
         }
     }
 
+    private struct StatChangeCriteria
+    {
+        public int fluctuatingValuePerTime;
+        public int fluctuatingValuePerDistance;
+
+        public float curTime;
+        public float curDistance;
+        
+        public float unitTime;
+        public float unitDistance;
+        
+        public StatChangeCriteria(
+            int fluctuatingValuePerTime,
+            int fluctuatingValuePerDistance,
+            
+            float curTime,
+            float curDistance,
+            
+            float unitTime,
+            float unitDistance)
+        {
+            this.fluctuatingValuePerTime = fluctuatingValuePerTime;
+            this.fluctuatingValuePerDistance = fluctuatingValuePerDistance;
+
+            this.curTime = curTime;
+            this.curDistance = curDistance;
+            
+            this.unitTime = unitTime;
+            this.unitDistance = unitDistance;
+        }
+    }
+
     public InteractData interactData;
     [SerializeField] private PetBase pet;
-
-    public Action interactHeadEvent;
-    public Action interactJawEvent;
-    public Action interactBodyEvent;
-    public Action interactHandDetectionEvent;
 
     private Queue<CmdDetail> cmdQueue;
     private CmdDetail nextCmd;
@@ -48,27 +75,22 @@ public class InteractManager : MonoBehaviour
     
     // Stat
     private Coroutine distanceCheckCoroutine;
-    private float distanceCheckPeriod;
+    private Coroutine timeCheckCoroutine;
+    // private float distanceCheckPeriod;
     private Vector3 prevPetPos;
     
     // Fullness
-    private float fullnessDecreaseDistancePerMove;
-    private float fullnessCurMoveDistance;
-    private int fullnessDecreaseAmount;
+    private StatChangeCriteria fullnessCreteria;
     
     // Tiredness
-    private float tirednessIncreaseDistancePerMove;
-    private float tirednessCurMoveDistance;
-    private int tirednessIncreaseAmount;
-    
-    // Cleanliness
-    private float cleanlinessTimeThreshold;
-    private float cleanlinessCurTime;
-    private int cleanlinessDecreaseAmount;
-    private Coroutine cleanlinessTimeCheckCoroutine;
-    
+    private StatChangeCriteria tirednessCreteria;
 
-    
+    // Cleanliness
+    private StatChangeCriteria cleanlinessCreteria;
+
+
+
+
     private void Start()
     {
         pet.SetPetAnimationMode(PlayMode.InteractMode);
@@ -88,42 +110,20 @@ public class InteractManager : MonoBehaviour
         isBrushing = false;
         
         // Stat
-        distanceCheckPeriod = 0.5f;
         prevPetPos = pet.gameObject.transform.position;
-        distanceCheckCoroutine = StartCoroutine(TrackPetDistanceCoroutine());
 
         // Fullness
-        fullnessDecreaseDistancePerMove = 1f;
-        fullnessCurMoveDistance = 0f;
-        fullnessDecreaseAmount = 2;
+        fullnessCreteria = new StatChangeCriteria(2, 5, 0f, 0f, 1f, 1f);
         
         // Tiredness
-        tirednessIncreaseDistancePerMove = 1f;
-        tirednessCurMoveDistance = 0f;
-        tirednessIncreaseAmount = 3;
+        tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
 
         // Cleanliness
-        cleanlinessTimeThreshold = 5f;
-        cleanlinessCurTime = 0f;
-        cleanlinessDecreaseAmount = 2;
-        cleanlinessTimeCheckCoroutine = StartCoroutine(TrackPetCleanlinessCoroutine());
+        cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
         
         interactData.Init();
 
         SetInitialCmd();
-        
-        // Register interaction action by pet part
-        interactHeadEvent -= InteractWithHead;
-        interactHeadEvent += InteractWithHead;
-
-        interactBodyEvent -= InteractWithBody;
-        interactBodyEvent += InteractWithBody;
-
-        interactJawEvent -= InteractWithJaw;
-        interactJawEvent += InteractWithJaw;
-
-        interactHandDetectionEvent -= InteractWithHandDetection;
-        interactHandDetectionEvent += InteractWithHandDetection;
     }
 
     private void Update()
@@ -136,7 +136,10 @@ public class InteractManager : MonoBehaviour
         if (DequeCmd(out nextCmd)) ExecuteCmd(nextCmd); // if queue is not empty, execute cmd
         else AddMatchingConditionCmd(); // if queue is empty, Add commands that meet the current conditions
         
-
+        // Track stat
+        StatUpdateByDistance();
+        StatUpdateByTime();
+        
         // Check the time player brushing pet
         if (isBrushing)
         {
@@ -154,52 +157,63 @@ public class InteractManager : MonoBehaviour
 
     public PetBase GetCurPet() => pet;
 
-    #region StatCoroutine
+    #region TrackStat
 
-        private IEnumerator TrackPetDistanceCoroutine()
+        private void StatUpdateByDistance()
         {
-            while (true)
+            float distanceMoved = Vector3.Distance(pet.transform.position, prevPetPos);
+            
+            // Decreasing fullness 
+            fullnessCreteria.curDistance += distanceMoved;
+            if (fullnessCreteria.curDistance > fullnessCreteria.unitDistance)
             {
-                // Calculation of decreasing the fullness of a pet 
-                fullnessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
-                if (fullnessCurMoveDistance > fullnessDecreaseDistancePerMove)
-                {
-                    fullnessCurMoveDistance -= fullnessDecreaseDistancePerMove;
-                    pet.DecreaseStat(PetStatNames.Fullness, fullnessDecreaseAmount);
-                }
-    
-                // Calculation of increasing the tiredness of a pet 
-                tirednessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
-                if (tirednessCurMoveDistance > tirednessIncreaseDistancePerMove)
-                {
-                    tirednessCurMoveDistance -= tirednessIncreaseDistancePerMove;
-                    pet.IncreaseStat(PetStatNames.Tiredness, tirednessIncreaseAmount);
-                }
-                
-                // Save the current pet's location to the previous location variable
-                prevPetPos = pet.gameObject.transform.position;
-                
-                yield return new WaitForSeconds(distanceCheckPeriod);
+                fullnessCreteria.curDistance -= fullnessCreteria.unitDistance;
+                pet.DecreaseStat(PetStatNames.Fullness, fullnessCreteria.fluctuatingValuePerDistance);
+            }
+
+            // Decreasing cleanliness
+            cleanlinessCreteria.curDistance += distanceMoved;
+            if (cleanlinessCreteria.curDistance > cleanlinessCreteria.unitDistance)
+            {
+                cleanlinessCreteria.curDistance -= cleanlinessCreteria.unitDistance;
+                pet.DecreaseStat(PetStatNames.Cleanliness, cleanlinessCreteria.fluctuatingValuePerDistance);
             }
             
-            // This coroutine is terminated when the interaction mode is terminated
+            // Increasing tiredness 
+            tirednessCreteria.curDistance += distanceMoved;
+            if (tirednessCreteria.curDistance > tirednessCreteria.unitDistance)
+            {
+                tirednessCreteria.curDistance -= tirednessCreteria.unitDistance;
+                pet.IncreaseStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerDistance);
+            }
+            
+            // Save the current pet's location to the previous location variable
+            prevPetPos = pet.gameObject.transform.position;
         }
         
-        private IEnumerator TrackPetCleanlinessCoroutine()
+        private void StatUpdateByTime()
         {
-            while (true)
+            fullnessCreteria.curTime += Time.deltaTime;
+            cleanlinessCreteria.curTime += Time.deltaTime;
+            tirednessCreteria.curTime += Time.deltaTime;
+
+            if (fullnessCreteria.curTime > fullnessCreteria.unitTime)
             {
-                cleanlinessCurTime += Time.deltaTime;
-    
-                if (cleanlinessCurTime > cleanlinessTimeThreshold)
-                {
-                    cleanlinessCurTime = 0f;
-                    pet.DecreaseStat(PetStatNames.Cleanliness, cleanlinessDecreaseAmount);
-                }
-                yield return null;
+                fullnessCreteria.curTime = 0f;
+                pet.DecreaseStat(PetStatNames.Fullness, fullnessCreteria.fluctuatingValuePerTime);
             }
             
-            // This coroutine is terminated when the interaction mode is terminated
+            if (cleanlinessCreteria.curTime > cleanlinessCreteria.unitTime)
+            {
+                cleanlinessCreteria.curTime = 0f;
+                pet.DecreaseStat(PetStatNames.Cleanliness, cleanlinessCreteria.fluctuatingValuePerTime);
+            }
+
+            if (tirednessCreteria.curTime > tirednessCreteria.unitTime)
+            {
+                tirednessCreteria.curTime = 0f;
+                pet.IncreaseStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerTime);
+            }
         }
 
     #endregion
@@ -563,6 +577,6 @@ public class InteractManager : MonoBehaviour
     private void OnDestroy()
     {
         StopCoroutine(distanceCheckCoroutine);
-        StopCoroutine(cleanlinessTimeCheckCoroutine);
+        StopCoroutine(timeCheckCoroutine);
     }
 }
