@@ -431,6 +431,10 @@ public abstract class PetBase : MonoBehaviour
                 // Sound
                 PlaySound(PetSounds.Bark3);
                 
+                // Stat
+                IncreaseStat(PetStatNames.Cleanliness, 10);
+                IncreaseStat(PetStatNames.Exp, 7);
+                
                 // isCoroutinePlayingList[(int)Cmd.Brush] = false; This part will be executed in the animation part
             }
     

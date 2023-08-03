@@ -52,7 +52,11 @@ public class InteractManager : MonoBehaviour
     private float tirednessCurMoveDistance;
     private int tirednessIncreaseAmount;
     
-    
+    // Cleanliness
+    private float cleanlinessTimeThreshold;
+    private float cleanlinessCurTime;
+    private int cleanlinessDecreaseAmount;
+    private Coroutine cleanlinessTimeCheckCoroutine;
     
     private void Start()
     {
@@ -79,6 +83,11 @@ public class InteractManager : MonoBehaviour
         tirednessCurMoveDistance = 0f;
         tirednessIncreaseAmount = 3;
 
+        // Cleanliness
+        cleanlinessTimeThreshold = 5f;
+        cleanlinessCurTime = 0f;
+        cleanlinessDecreaseAmount = 2;
+        cleanlinessTimeCheckCoroutine = StartCoroutine(TrackPetCleanlinessCoroutine());
         
         interactData.Init();
 
@@ -125,34 +134,58 @@ public class InteractManager : MonoBehaviour
     }
 
     public PetBase GetCurPet() => pet;
-    
-    private IEnumerator TrackPetDistanceCoroutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(distanceCheckPeriod);
-            
-            // Calculation of decreasing the fullness of a pet 
-            fullnessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
-            if (fullnessCurMoveDistance > fullnessDecreaseDistancePerMove)
-            {
-                fullnessCurMoveDistance -= fullnessDecreaseDistancePerMove;
-                pet.DecreaseStat(PetStatNames.Fullness, fullnessDecreaseAmount);
-            }
 
-            // Calculation of increasing the tiredness of a pet 
-            tirednessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
-            if (tirednessCurMoveDistance > tirednessIncreaseDistancePerMove)
+    #region StatCoroutine
+
+        private IEnumerator TrackPetDistanceCoroutine()
+        {
+            while (true)
             {
-                tirednessCurMoveDistance -= tirednessIncreaseDistancePerMove;
-                pet.IncreaseStat(PetStatNames.Tiredness, tirednessIncreaseAmount);
+                // Calculation of decreasing the fullness of a pet 
+                fullnessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
+                if (fullnessCurMoveDistance > fullnessDecreaseDistancePerMove)
+                {
+                    fullnessCurMoveDistance -= fullnessDecreaseDistancePerMove;
+                    pet.DecreaseStat(PetStatNames.Fullness, fullnessDecreaseAmount);
+                }
+    
+                // Calculation of increasing the tiredness of a pet 
+                tirednessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
+                if (tirednessCurMoveDistance > tirednessIncreaseDistancePerMove)
+                {
+                    tirednessCurMoveDistance -= tirednessIncreaseDistancePerMove;
+                    pet.IncreaseStat(PetStatNames.Tiredness, tirednessIncreaseAmount);
+                }
+                
+                // Save the current pet's location to the previous location variable
+                prevPetPos = pet.gameObject.transform.position;
+                
+                yield return new WaitForSeconds(distanceCheckPeriod);
             }
             
-            // Save the current pet's location to the previous location variable
-            prevPetPos = pet.gameObject.transform.position;
+            // This coroutine is terminated when the interaction mode is terminated
         }
-    }
+        
+        private IEnumerator TrackPetCleanlinessCoroutine()
+        {
+            while (true)
+            {
+                cleanlinessCurTime += Time.deltaTime;
     
+                if (cleanlinessCurTime > cleanlinessTimeThreshold)
+                {
+                    cleanlinessCurTime = 0f;
+                    pet.DecreaseStat(PetStatNames.Cleanliness, cleanlinessDecreaseAmount);
+                }
+                yield return null;
+            }
+            
+            // This coroutine is terminated when the interaction mode is terminated
+        }
+
+    #endregion
+    
+
     #region Snack
     
         /// <summary>
@@ -391,5 +424,6 @@ public class InteractManager : MonoBehaviour
     private void OnDestroy()
     {
         StopCoroutine(distanceCheckCoroutine);
+        StopCoroutine(cleanlinessTimeCheckCoroutine);
     }
 }
