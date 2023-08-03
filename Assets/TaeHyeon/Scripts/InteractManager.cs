@@ -470,7 +470,18 @@ public class InteractManager : MonoBehaviour
             
             isColliding = true;
             curPetCollisionPart = petPart;
-            checkPetCollisionTimeCoroutine = StartCoroutine(CheckPetCollisionTime());
+
+            if (petPart == PetParts.HandDetection)
+            {
+                checkPetCollisionTimeCoroutine = StartCoroutine(CheckPetCollisionTime());
+            }
+            else
+            {
+                CallInteractEvent(petPart);
+                
+                StartCoroutine(IgnoreInteractionForSeconds(interactionCoolTime));
+                ResetCollisionInfo();
+            }
         }
 
         private IEnumerator CheckPetCollisionTime()
