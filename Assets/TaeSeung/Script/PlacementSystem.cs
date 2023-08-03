@@ -78,7 +78,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         funitureData = new();
         floorData = new();
-
+        //database = FileIOSystem.Instance.Load();
         MapInfo.Instance.MapInitialize();
 
         //��ũ���ͺ� ������Ʈ���� �̹� ��ġ�� �����͵� ��������
@@ -157,6 +157,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         GameObject newObject = Instantiate(database.objectsData[selectedObjectIndex].Prefab);
         CreateObject = newObject;
         newObject.transform.position = spawnpoint.transform.position;
+        EffectSystem.Instance.playspawneffect(spawnpoint.transform.position);
         newObject.transform.localScale = newObject.transform.localScale * (1 / MapInfo.Instance.MapScale);
         interact = newObject.GetComponent<XRGrabInteractable>();
 
@@ -277,6 +278,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         {
             gameObject.transform.position = spawnpoint.transform.position;
             gameObject.transform.rotation = spawnpoint.transform.rotation;
+            EffectSystem.Instance.playspawneffect(spawnpoint.transform.position);
             StopPlacement(false);
 
             return;
@@ -293,6 +295,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         {
             gameObject.transform.position = spawnpoint.transform.position;
             gameObject.transform.rotation = spawnpoint.transform.rotation;
+            EffectSystem.Instance.playspawneffect(spawnpoint.transform.position);
             StopPlacement(false);
             return;
         }
@@ -312,7 +315,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject",gameObject);
         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
-        SoundSystem.Instance.TurnAudio(cellIndicator.transform.position);
+        SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
 
 
         //������� ������Ʈ�� ���� ��������, ��ġ���� ���� + �� ������Ʈ�� ���� ��� ���� ����Ʈ�� �߰�
@@ -327,15 +330,15 @@ public class PlacementSystem : Singleton<PlacementSystem>
         interact.selectEntered.AddListener((a) => InsertEnterEvent(enterArgs));
         interact.selectExited.AddListener((a) => InsertCompleteEvent(exitargs));
 
-
+        //FileIOSystem.Instance.Save();
 
         //������ ���� ��� �ش� ������Ʈ ��ư ��ü�� ��Ȱ��ȭ
         if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
         {
             Debug.Log($"No Object");
-            UIInitialize.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
+            HousingUISystem.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
         }
-        UIInitialize.Instance.ObjCountupdate(selectedObjectIndex);
+        HousingUISystem.Instance.ObjCountupdate(selectedObjectIndex);
 
 
 
@@ -422,7 +425,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
                         gameObject.transform.rotation = currentrotation;
                         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
                         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
-                        SoundSystem.Instance.TurnAudio(cellIndicator.transform.position);
+                        SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
                         //�� �ٺ����� �滩����
                     }
                     //�߸� ��ġ������ �׳� ���� �ִ��ڸ��� ������
@@ -434,6 +437,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
                         gameObject.transform.rotation = rot;
                         gameObject.transform.localPosition = PlacePosition(currentpos, size);
+                        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
                 }
                     catchmode = false;
                     cellIndicator.SetActive(false);
@@ -714,13 +718,13 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         //������ġ
         GameObject newobject = MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject");
-        UIInitialize.Instance.countlist[selectedObjectIndex].GetComponentInChildren<TMP_Text>().text = "" + database.objectsData[selectedObjectIndex].ObjectCount;
+        HousingUISystem.Instance.countlist[selectedObjectIndex].GetComponentInChildren<TMP_Text>().text = "" + database.objectsData[selectedObjectIndex].ObjectCount;
 
         //������ ���� ��� �ش� ������Ʈ ��Ȱ��ȭ
         if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
         {
             Debug.Log($"No Object");
-            UIInitialize.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
+            HousingUISystem.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
             StopPlacement(true);
         }
     }

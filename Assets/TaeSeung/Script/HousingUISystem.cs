@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIInitialize : Singleton<UIInitialize>
+public class HousingUISystem : Singleton<HousingUISystem>
 {
     // Start is called before the first frame update
     [SerializeField]

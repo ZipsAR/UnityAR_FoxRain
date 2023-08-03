@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [CreateAssetMenu]  //우클릭 시켜서 생성가능 한 에셋 목록에 포함시킨다
 public class ObjectDatabaseSO : ScriptableObject
 {
