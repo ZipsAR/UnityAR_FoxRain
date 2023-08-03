@@ -398,6 +398,11 @@ public class InteractManager : MonoBehaviour
         private void InteractWithHead()
         {
             pet.InteractHead();
+            
+            // Stat
+            pet.DecreaseStat(PetStatNames.Tiredness, 5);
+            pet.IncreaseStat(PetStatNames.Exp, 5);
+            
             Logger.Log("interact head in interactManager");
         }
         
@@ -410,12 +415,22 @@ public class InteractManager : MonoBehaviour
         private void InteractWithBody()
         {
             pet.InteractBody();
+            
+            // Stat
+            pet.DecreaseStat(PetStatNames.Tiredness, 7);
+            pet.IncreaseStat(PetStatNames.Exp, 7);
+            
             Logger.Log("interact jaw in interactManager");
         }
         
         private void InteractWithHandDetection()
         {
             pet.InteractHandDetection();
+            
+            // Stat
+            pet.DecreaseStat(PetStatNames.Tiredness, 10);
+            pet.IncreaseStat(PetStatNames.Exp, 10);
+
             Logger.Log("interact HandDetection in interactManager");
         }
 
