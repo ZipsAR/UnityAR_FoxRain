@@ -16,12 +16,10 @@ public enum StatUIRating
 public class InteractUIManager : MonoBehaviour
 {
     [SerializeField] private Button exitBtn;
+    
+    // Stats
     [SerializeField] private Canvas overlayCanvas;
     [SerializeField] private PetStatBase trackingStat;
-
-    // [SerializeField] private Slider fullnessSlider;
-    // [SerializeField] private Slider cleanlinessSlider;
-    // [SerializeField] private Slider tirednessSlider;
 
     [SerializeField] private List<StatUIRef> statUIList;
     [SerializeField] private List<Sprite> statRatingSpriteList;
@@ -29,6 +27,14 @@ public class InteractUIManager : MonoBehaviour
     public Color badColor;
     public Color normalColor;
     public Color goodColor;
+    
+    // Level
+    public GameObject star;
+    public Transform starContainer;
+    
+    // Exp
+    public Slider expSlider;
+    
     
     private void Awake()
     {
@@ -45,10 +51,6 @@ public class InteractUIManager : MonoBehaviour
 
     private void Update()
     {
-        // fullnessSlider.value = trackingStat.fullness / 100f;
-        // cleanlinessSlider.value = trackingStat.cleanliness / 100f;
-        // tirednessSlider.value = trackingStat.tiredness / 100f;
-
         foreach (StatUIRef statUI in statUIList)
         {
             switch (statUI.statName)
@@ -72,10 +74,15 @@ public class InteractUIManager : MonoBehaviour
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            
-            
-            
         }
+        
+        // Level
+        ClearStars();
+        InsertStars(trackingStat.level);
+        
+        // Exp
+        expSlider.value = trackingStat.exp / 100f;
+
     }
 
     private void CheckStatRating(StatUIRef statUIRef, bool isReversed)
@@ -118,9 +125,22 @@ public class InteractUIManager : MonoBehaviour
         }
     }
 
-    private void CheckStatReverseRating(StatUIRef statUIRef)
+    private void ClearStars()
     {
-        
+        int childCount = starContainer.childCount;
+        for (int i = childCount - 1; i >= 0; i--)
+        {
+            GameObject child = starContainer.GetChild(i).gameObject;
+            Destroy(child);
+        }
+    }
+
+    private void InsertStars(int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            Instantiate(star, starContainer);
+        }
     }
 }
 
