@@ -23,12 +23,16 @@ public class InteractManager : MonoBehaviour
 
     private struct StatChangeCriteria
     {
-        public int fluctuatingValuePerTime;
+        // Stat values that vary every unitTime
+        public int fluctuatingValuePerTime; 
+        // Stat value that changes each time the pet moves a certain distance
         public int fluctuatingValuePerDistance;
-
+        
+        // Time elapsed and distance traveled since stat value was updated
         public float curTime;
         public float curDistance;
         
+        // Stat changes at this time and distance
         public float unitTime;
         public float unitDistance;
         
@@ -74,23 +78,11 @@ public class InteractManager : MonoBehaviour
     private bool isBrushing;
     
     // Stat
-    private Coroutine distanceCheckCoroutine;
-    private Coroutine timeCheckCoroutine;
-    // private float distanceCheckPeriod;
     private Vector3 prevPetPos;
-    
-    // Fullness
     private StatChangeCriteria fullnessCreteria;
-    
-    // Tiredness
     private StatChangeCriteria tirednessCreteria;
-
-    // Cleanliness
     private StatChangeCriteria cleanlinessCreteria;
-
-
-
-
+    
     private void Start()
     {
         pet.SetPetAnimationMode(PlayMode.InteractMode);
@@ -152,7 +144,6 @@ public class InteractManager : MonoBehaviour
                 brushingTime = 0f;
             }
         }
-        
     }
 
     public PetBase GetCurPet() => pet;
@@ -473,9 +464,16 @@ public class InteractManager : MonoBehaviour
 
     #region InteractInfoFromHand
 
+        /// <summary>
+        /// Called when player start touching the interaction part of the pet in player's hand
+        /// </summary>
+        /// <param name="petPart">The part of the pet touched by the player</param>
         public void PetPartCollisionEnter(PetParts petPart)
         {
+            // If player is already touching another part, exit
             if(isColliding) return;
+            
+            // If the interaction is ignored, exit
             if (isInteractionIgnored)
             {
                 Logger.Log("interaction is ignored, please wait for a while");
@@ -485,10 +483,13 @@ public class InteractManager : MonoBehaviour
             isColliding = true;
             curPetCollisionPart = petPart;
 
+            // If it's a "hand" interaction,
+            // make sure player is touching it for a certain period of time 
             if (petPart == PetParts.HandDetection)
             {
                 checkPetCollisionTimeCoroutine = StartCoroutine(CheckPetCollisionTime());
             }
+            // The rest of the interaction runs immediately upon touch
             else
             {
                 CallInteractEvent(petPart);
@@ -517,6 +518,13 @@ public class InteractManager : MonoBehaviour
             }
         }
 
+        /// <summary>
+        /// To prevent a player from making a mistake,
+        /// interaction is prevented for a certain period of time
+        /// after the interaction is executed
+        /// </summary>
+        /// <param name="coolTime">Time the interaction is ignored</param>
+        /// <returns></returns>
         private IEnumerator IgnoreInteractionForSeconds(float coolTime)
         {
             isInteractionIgnored = true;
@@ -532,6 +540,11 @@ public class InteractManager : MonoBehaviour
             Logger.Log("ignore interaction end");
         }
 
+        /// <summary>
+        /// Run different events depending on the part of the pet
+        /// </summary>
+        /// <param name="petPart">the interaction site of a pet</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private void CallInteractEvent(PetParts petPart)
         {
             switch (petPart)
@@ -557,15 +570,24 @@ public class InteractManager : MonoBehaviour
             ResetCollisionInfo();
         }
 
+        /// <summary>
+        /// Run when hands fall off the area of the pet
+        /// </summary>
+        /// <param name="petPart">the falling part of a pet</param>
         public void PetPartCollisionExit(PetParts petPart)
         {
+            // If the hand and the pet weren't colliding, exit
             if(!isColliding) return;
+            
+            // If the part that fell is not in contact with it
+            // Considering the situation where the hand touches several pet parts
+            // at the same time and then falls off
             if(curPetCollisionPart != petPart) return;
             
             StopCoroutine(checkPetCollisionTimeCoroutine);
             ResetCollisionInfo();
         }
-
+        
         private void ResetCollisionInfo()
         {
             collisionTimer = 0;
@@ -573,10 +595,4 @@ public class InteractManager : MonoBehaviour
         }
 
     #endregion
-    
-    private void OnDestroy()
-    {
-        StopCoroutine(distanceCheckCoroutine);
-        StopCoroutine(timeCheckCoroutine);
-    }
 }
