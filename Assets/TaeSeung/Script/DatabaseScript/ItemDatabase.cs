@@ -8,7 +8,7 @@ using UnityEngine;
 public class ItemDatabase : ScriptableObject
 {
     // Start is called before the first frame update
-    public List<Item> ItemData;
+    public List<ItemData> ItemData;
 
 
 }

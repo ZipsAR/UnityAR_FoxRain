@@ -59,7 +59,7 @@ public class MapInfo : Singleton<MapInfo>
         last.y = 0.5f;
         cellIndicator.transform.GetChild(0).localPosition = last;
         */
-        print("scale: " + scale);
+        //print("scale: " + scale);
 
         Vector3 effectscale = TileEffectScale;
         effectscale.x = effectscale.x / scale.x;

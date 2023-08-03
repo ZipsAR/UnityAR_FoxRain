@@ -16,13 +16,13 @@ MonoBehaviour:
   - <Name>k__BackingField: funiture_bed
     <ID>k__BackingField: 1000
     <Size>k__BackingField: {x: 3, y: 2}
-    <ObjectCount>k__BackingField: 52
+    <ObjectCount>k__BackingField: 46
     <Prefab>k__BackingField: {fileID: 1908861269318448, guid: cfc3cb41de0af974d831fed578f4836a,
       type: 3}
   - <Name>k__BackingField: funiture_bed_table
     <ID>k__BackingField: 1001
     <Size>k__BackingField: {x: 1, y: 1}
-    <ObjectCount>k__BackingField: 7
+    <ObjectCount>k__BackingField: 5
     <Prefab>k__BackingField: {fileID: 1105668781091346, guid: 9247e2062ada8b242bfd94a2bb63d0a9,
       type: 3}
   - <Name>k__BackingField: funiture_bookshelf
@@ -64,13 +64,13 @@ MonoBehaviour:
   - <Name>k__BackingField: funiture_Closet
     <ID>k__BackingField: 1008
     <Size>k__BackingField: {x: 1, y: 1}
-    <ObjectCount>k__BackingField: 10
+    <ObjectCount>k__BackingField: 9
     <Prefab>k__BackingField: {fileID: 1552773891800394, guid: 3ca3bb4b682d6f149926e977ee2cfa44,
       type: 3}
   - <Name>k__BackingField: funiture_drawer_big
     <ID>k__BackingField: 1009
     <Size>k__BackingField: {x: 2, y: 1}
-    <ObjectCount>k__BackingField: 11
+    <ObjectCount>k__BackingField: 9
     <Prefab>k__BackingField: {fileID: 1892955332092476, guid: affae5ed27b771e47af1437978ed34f2,
       type: 3}
   - <Name>k__BackingField: funiture_hanger
@@ -82,7 +82,7 @@ MonoBehaviour:
   - <Name>k__BackingField: funiture_chair
     <ID>k__BackingField: 1011
     <Size>k__BackingField: {x: 1, y: 1}
-    <ObjectCount>k__BackingField: 11
+    <ObjectCount>k__BackingField: 9
     <Prefab>k__BackingField: {fileID: 1615271723323240, guid: 353a8a384bc2dcc4b8b935ca379b8f7a,
       type: 3}
   - <Name>k__BackingField: funiture_box

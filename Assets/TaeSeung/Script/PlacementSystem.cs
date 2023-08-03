@@ -78,7 +78,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         funitureData = new();
         floorData = new();
-
+        //database = FileIOSystem.Instance.Load();
         MapInfo.Instance.MapInitialize();
 
         //��ũ���ͺ� ������Ʈ���� �̹� ��ġ�� �����͵� ��������
@@ -330,7 +330,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         interact.selectEntered.AddListener((a) => InsertEnterEvent(enterArgs));
         interact.selectExited.AddListener((a) => InsertCompleteEvent(exitargs));
 
-
+        //FileIOSystem.Instance.Save();
 
         //������ ���� ��� �ش� ������Ʈ ��ư ��ü�� ��Ȱ��ȭ
         if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
