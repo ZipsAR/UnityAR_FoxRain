@@ -6,6 +6,15 @@ using Logger = ZipsAR.Logger;
 
 public class Dog : PetBase
 {
+    protected override void PetStatInitialize()
+    {
+        stat.fullness = 40;
+        stat.tiredness = 40;
+        stat.cleanliness = 50;
+        stat.exp = 0;
+        stat.level = 1;
+    }
+    
     public override void InteractHead()
     {
         animator.Play("InteractHead");

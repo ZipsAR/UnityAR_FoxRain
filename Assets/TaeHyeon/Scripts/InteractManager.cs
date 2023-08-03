@@ -37,14 +37,57 @@ public class InteractManager : MonoBehaviour
     private float brushingTimeThreshold;
     private bool isBrushing;
     
+    // Stat
+    private Coroutine distanceCheckCoroutine;
+    private float distanceCheckPeriod;
+    private Vector3 prevPetPos;
+    
+    // Fullness
+    private float fullnessDecreaseDistancePerMove;
+    private float fullnessCurMoveDistance;
+    private int fullnessDecreaseAmount;
+    
+    // Tiredness
+    private float tirednessIncreaseDistancePerMove;
+    private float tirednessCurMoveDistance;
+    private int tirednessIncreaseAmount;
+    
+    // Cleanliness
+    private float cleanlinessTimeThreshold;
+    private float cleanlinessCurTime;
+    private int cleanlinessDecreaseAmount;
+    private Coroutine cleanlinessTimeCheckCoroutine;
+    
     private void Start()
     {
         pet.SetPetAnimationMode(PlayMode.InteractMode);
         cmdQueue = new Queue<CmdDetail>();
 
+        // Brushing
         brushingTime = 0f;
         brushingTimeThreshold = 1f;
         isBrushing = false;
+        
+        // Stat
+        distanceCheckPeriod = 0.5f;
+        prevPetPos = pet.gameObject.transform.position;
+        distanceCheckCoroutine = StartCoroutine(TrackPetDistanceCoroutine());
+
+        // Fullness
+        fullnessDecreaseDistancePerMove = 1f;
+        fullnessCurMoveDistance = 0f;
+        fullnessDecreaseAmount = 2;
+        
+        // Tiredness
+        tirednessIncreaseDistancePerMove = 1f;
+        tirednessCurMoveDistance = 0f;
+        tirednessIncreaseAmount = 3;
+
+        // Cleanliness
+        cleanlinessTimeThreshold = 5f;
+        cleanlinessCurTime = 0f;
+        cleanlinessDecreaseAmount = 2;
+        cleanlinessTimeCheckCoroutine = StartCoroutine(TrackPetCleanlinessCoroutine());
         
         interactData.Init();
 
@@ -70,17 +113,10 @@ public class InteractManager : MonoBehaviour
         
         // Do not run other commands if the pet is running a command
         if(pet.inProcess) return;
-
-        // if queue is not empty, execute cmd
-        if (DequeCmd(out nextCmd))
-        {
-            ExecuteCmd(nextCmd);
-        }
-        // if queue is empty, Add commands that meet the current conditions
-        else
-        {
-            AddMatchingConditionCmd();
-        }
+        
+        if (DequeCmd(out nextCmd)) ExecuteCmd(nextCmd); // if queue is not empty, execute cmd
+        else AddMatchingConditionCmd(); // if queue is empty, Add commands that meet the current conditions
+        
 
         // Check the time player brushing pet
         if (isBrushing)
@@ -94,10 +130,62 @@ public class InteractManager : MonoBehaviour
                 brushingTime = 0f;
             }
         }
+        
     }
 
     public PetBase GetCurPet() => pet;
+
+    #region StatCoroutine
+
+        private IEnumerator TrackPetDistanceCoroutine()
+        {
+            while (true)
+            {
+                // Calculation of decreasing the fullness of a pet 
+                fullnessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
+                if (fullnessCurMoveDistance > fullnessDecreaseDistancePerMove)
+                {
+                    fullnessCurMoveDistance -= fullnessDecreaseDistancePerMove;
+                    pet.DecreaseStat(PetStatNames.Fullness, fullnessDecreaseAmount);
+                }
     
+                // Calculation of increasing the tiredness of a pet 
+                tirednessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
+                if (tirednessCurMoveDistance > tirednessIncreaseDistancePerMove)
+                {
+                    tirednessCurMoveDistance -= tirednessIncreaseDistancePerMove;
+                    pet.IncreaseStat(PetStatNames.Tiredness, tirednessIncreaseAmount);
+                }
+                
+                // Save the current pet's location to the previous location variable
+                prevPetPos = pet.gameObject.transform.position;
+                
+                yield return new WaitForSeconds(distanceCheckPeriod);
+            }
+            
+            // This coroutine is terminated when the interaction mode is terminated
+        }
+        
+        private IEnumerator TrackPetCleanlinessCoroutine()
+        {
+            while (true)
+            {
+                cleanlinessCurTime += Time.deltaTime;
+    
+                if (cleanlinessCurTime > cleanlinessTimeThreshold)
+                {
+                    cleanlinessCurTime = 0f;
+                    pet.DecreaseStat(PetStatNames.Cleanliness, cleanlinessDecreaseAmount);
+                }
+                yield return null;
+            }
+            
+            // This coroutine is terminated when the interaction mode is terminated
+        }
+
+    #endregion
+    
+
     #region Snack
     
         /// <summary>
@@ -332,4 +420,10 @@ public class InteractManager : MonoBehaviour
         }
 
     #endregion
+
+    private void OnDestroy()
+    {
+        StopCoroutine(distanceCheckCoroutine);
+        StopCoroutine(cleanlinessTimeCheckCoroutine);
+    }
 }
