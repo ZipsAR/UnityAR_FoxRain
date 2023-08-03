@@ -31,6 +31,15 @@ public class InteractManager : MonoBehaviour
 
     private Queue<CmdDetail> cmdQueue;
     private CmdDetail nextCmd;
+    
+    // Interact check variable
+    private Coroutine checkPetCollisionTimeCoroutine;
+    private float collisionTimer;
+    private bool isColliding;
+    private float collisionTimeLimit;
+    private PetParts curPetCollisionPart;
+    private float interactionCoolTime;
+    private bool isInteractionIgnored;
 
     // Brushing
     private float brushingTime;
@@ -58,11 +67,21 @@ public class InteractManager : MonoBehaviour
     private int cleanlinessDecreaseAmount;
     private Coroutine cleanlinessTimeCheckCoroutine;
     
+
+    
     private void Start()
     {
         pet.SetPetAnimationMode(PlayMode.InteractMode);
         cmdQueue = new Queue<CmdDetail>();
 
+        // Interact check variable
+        collisionTimer = 0;
+        isColliding = false;
+        collisionTimeLimit = 2f;
+        curPetCollisionPart = PetParts.None;
+        interactionCoolTime = 1f;
+        isInteractionIgnored = false;
+        
         // Brushing
         brushingTime = 0f;
         brushingTimeThreshold = 1f;
@@ -184,8 +203,8 @@ public class InteractManager : MonoBehaviour
         }
 
     #endregion
-    
 
+    
     #region Snack
     
         /// <summary>
@@ -258,6 +277,7 @@ public class InteractManager : MonoBehaviour
     
     #endregion
 
+    
     #region Cmd
 
         private void SetInitialCmd()
@@ -378,6 +398,7 @@ public class InteractManager : MonoBehaviour
         
     #endregion
     
+    
     #region InteractWithPet
 
         /// <summary>
@@ -398,6 +419,11 @@ public class InteractManager : MonoBehaviour
         private void InteractWithHead()
         {
             pet.InteractHead();
+            
+            // Stat
+            pet.DecreaseStat(PetStatNames.Tiredness, 5);
+            pet.IncreaseStat(PetStatNames.Exp, 5);
+            
             Logger.Log("interact head in interactManager");
         }
         
@@ -410,17 +436,130 @@ public class InteractManager : MonoBehaviour
         private void InteractWithBody()
         {
             pet.InteractBody();
+            
+            // Stat
+            pet.DecreaseStat(PetStatNames.Tiredness, 7);
+            pet.IncreaseStat(PetStatNames.Exp, 7);
+            
             Logger.Log("interact jaw in interactManager");
         }
         
         private void InteractWithHandDetection()
         {
             pet.InteractHandDetection();
+            
+            // Stat
+            pet.DecreaseStat(PetStatNames.Tiredness, 10);
+            pet.IncreaseStat(PetStatNames.Exp, 10);
+
             Logger.Log("interact HandDetection in interactManager");
         }
 
     #endregion
 
+    #region InteractInfoFromHand
+
+        public void PetPartCollisionEnter(PetParts petPart)
+        {
+            if(isColliding) return;
+            if (isInteractionIgnored)
+            {
+                Logger.Log("interaction is ignored, please wait for a while");
+                return;
+            }
+            
+            isColliding = true;
+            curPetCollisionPart = petPart;
+
+            if (petPart == PetParts.HandDetection)
+            {
+                checkPetCollisionTimeCoroutine = StartCoroutine(CheckPetCollisionTime());
+            }
+            else
+            {
+                CallInteractEvent(petPart);
+                
+                StartCoroutine(IgnoreInteractionForSeconds(interactionCoolTime));
+                ResetCollisionInfo();
+            }
+        }
+
+        private IEnumerator CheckPetCollisionTime()
+        {
+            while (true)
+            {
+                collisionTimer += Time.deltaTime;
+
+                if (collisionTimer > collisionTimeLimit)
+                {
+                    CallInteractEvent(curPetCollisionPart);
+
+                    StartCoroutine(IgnoreInteractionForSeconds(interactionCoolTime));
+                    ResetCollisionInfo();
+                    break;
+                }
+                
+                yield return null;
+            }
+        }
+
+        private IEnumerator IgnoreInteractionForSeconds(float coolTime)
+        {
+            isInteractionIgnored = true;
+            Logger.Log("ignore interaction start");
+
+            while (coolTime > 0)
+            {
+                coolTime -= Time.deltaTime;
+                yield return null;
+            }
+
+            isInteractionIgnored = false;
+            Logger.Log("ignore interaction end");
+        }
+
+        private void CallInteractEvent(PetParts petPart)
+        {
+            switch (petPart)
+            {
+                case PetParts.None:
+                    break;
+                case PetParts.Head:
+                    InteractWithHead();
+                    break;
+                case PetParts.Jaw:
+                    InteractWithJaw();
+                    break;
+                case PetParts.Body:
+                    InteractWithBody();
+                    break;
+                case PetParts.HandDetection:
+                    InteractWithHandDetection();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(petPart), petPart, null);
+            }
+
+            ResetCollisionInfo();
+        }
+
+        public void PetPartCollisionExit(PetParts petPart)
+        {
+            if(!isColliding) return;
+            if(curPetCollisionPart != petPart) return;
+            
+            StopCoroutine(checkPetCollisionTimeCoroutine);
+            ResetCollisionInfo();
+        }
+
+        private void ResetCollisionInfo()
+        {
+            collisionTimer = 0;
+            isColliding = false;
+        }
+
+    #endregion
+    
     private void OnDestroy()
     {
         StopCoroutine(distanceCheckCoroutine);
