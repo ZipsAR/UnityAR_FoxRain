@@ -17,6 +17,7 @@ public class ItemGen : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("È°¼ºÈ­");
         for (int a = 0; a < 2; a++)
         {
             if (a == 1)

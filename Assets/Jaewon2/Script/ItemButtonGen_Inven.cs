@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemButtonGen : MonoBehaviour
+public class ItemButtonGen_Inven : MonoBehaviour
 {
     public GameObject[] itemDBObjs;
     public GameObject[] ButtonGened;
     public GameObject buttonPanel;
-    public GameObject[] parentPanel = new  GameObject[3];
+    public GameObject[] parentPanel = new GameObject[3];
+    public ItemDatabase itemdata;
     private void Start()
     {
         ButtonGened = new GameObject[itemDBObjs.Length];
@@ -17,7 +18,8 @@ public class ItemButtonGen : MonoBehaviour
     {
         for (int i = 0; i < itemDBObjs.Length; i++)
         {
-            if (itemDBObjs[i].CompareTag("furniture")) 
+            Debug.Log("Gen");
+            if (itemDBObjs[i].CompareTag("furniture"))
             {
                 GameObject GenedPanel = GameObject.Instantiate(buttonPanel, parentPanel[0].transform);
                 ButtonGened[i] = GameObject.Instantiate(itemDBObjs[i], GenedPanel.transform);
