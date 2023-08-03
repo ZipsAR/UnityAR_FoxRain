@@ -43,11 +43,14 @@ public class InteractManager : MonoBehaviour
     private Vector3 prevPetPos;
     
     // Fullness
-    private float fullnessDecreaseThreshold;
+    private float fullnessDecreaseDistancePerMove;
     private float fullnessCurMoveDistance;
     private int fullnessDecreaseAmount;
     
-    
+    // Tiredness
+    private float tirednessIncreaseDistancePerMove;
+    private float tirednessCurMoveDistance;
+    private int tirednessIncreaseAmount;
     
     
     
@@ -67,10 +70,15 @@ public class InteractManager : MonoBehaviour
         distanceCheckCoroutine = StartCoroutine(TrackPetDistanceCoroutine());
 
         // Fullness
-        fullnessDecreaseThreshold = 1f;
+        fullnessDecreaseDistancePerMove = 1f;
         fullnessCurMoveDistance = 0f;
         fullnessDecreaseAmount = 2;
         
+        // Tiredness
+        tirednessIncreaseDistancePerMove = 1f;
+        tirednessCurMoveDistance = 0f;
+        tirednessIncreaseAmount = 3;
+
         
         interactData.Init();
 
@@ -124,16 +132,24 @@ public class InteractManager : MonoBehaviour
         {
             yield return new WaitForSeconds(distanceCheckPeriod);
             
+            // Calculation of decreasing the fullness of a pet 
             fullnessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
-            if (fullnessCurMoveDistance > fullnessDecreaseThreshold)
+            if (fullnessCurMoveDistance > fullnessDecreaseDistancePerMove)
             {
-                fullnessCurMoveDistance -= fullnessDecreaseThreshold;
-                pet.DecreaseStat(PetStatNames.Fullness, 2);
+                fullnessCurMoveDistance -= fullnessDecreaseDistancePerMove;
+                pet.DecreaseStat(PetStatNames.Fullness, fullnessDecreaseAmount);
             }
 
-            prevPetPos = pet.gameObject.transform.position;
+            // Calculation of increasing the tiredness of a pet 
+            tirednessCurMoveDistance += Vector3.Distance(pet.transform.position, prevPetPos);
+            if (tirednessCurMoveDistance > tirednessIncreaseDistancePerMove)
+            {
+                tirednessCurMoveDistance -= tirednessIncreaseDistancePerMove;
+                pet.IncreaseStat(PetStatNames.Tiredness, tirednessIncreaseAmount);
+            }
             
-            Logger.Log("Current fullnessCurMoveDistance : " + fullnessCurMoveDistance);
+            // Save the current pet's location to the previous location variable
+            prevPetPos = pet.gameObject.transform.position;
         }
     }
     

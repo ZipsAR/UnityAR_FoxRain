@@ -407,6 +407,8 @@ public abstract class PetBase : MonoBehaviour
                 IncreaseStat(PetStatNames.Fullness, 10);
                 IncreaseStat(PetStatNames.Exp, 10);
                 
+                DecreaseStat(PetStatNames.Tiredness, 10);
+
                 Logger.Log("EatEnd is activate");
             }
         
@@ -505,6 +507,10 @@ public abstract class PetBase : MonoBehaviour
                 
                 // Sound
                 PlaySound(PetSounds.Bark2);
+                
+                // Stat
+                IncreaseStat(PetStatNames.Tiredness, 5);
+                IncreaseStat(PetStatNames.Exp, 40);
             }
     
             public void SpitEnd()
@@ -536,7 +542,22 @@ public abstract class PetBase : MonoBehaviour
                     stat.cleanliness = Mathf.Clamp(stat.cleanliness + val, 0, 100);
                     break;
                 case PetStatNames.Exp:
-                    stat.exp = Mathf.Clamp(stat.exp + val, 0, 100);
+                    int combinedExp = stat.exp + val;
+                    if (combinedExp >= 100)
+                    {
+                        int levelGain = combinedExp / 100;
+                        int expGain = combinedExp % 100;
+                        stat.level = Mathf.Clamp(stat.level + levelGain, 1, 10);
+                        stat.exp = expGain;
+                        Logger.Log("levelGain : " + levelGain);
+                        Logger.Log("expGain : " + expGain);
+                    }
+                    else
+                    {
+                        stat.exp = combinedExp;
+                        Logger.Log("current exp after increase : " + stat.exp);
+                    }
+                    
                     break;
                 case PetStatNames.Level:
                     stat.level = Mathf.Clamp(stat.level + val, 1, 10);
