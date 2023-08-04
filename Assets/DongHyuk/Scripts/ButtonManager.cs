@@ -46,7 +46,7 @@ public class ButtonManager : MonoBehaviour
                 break;
                 case "ButtonEdit":
                 {
-                    GameManager.Instance.LoadScene("Grid Housing");
+                    GameManager.Instance.LoadScene("HousingMode");
                 }
                 break;
                 case "ButtonBasket":
