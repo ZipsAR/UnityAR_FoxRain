@@ -2068,7 +2068,7 @@ public class UltimateRadialMenu : MonoBehaviour
 		float referenceSize = scalingAxis == ScalingAxis.Height ? canvasRectTrans.sizeDelta.y : canvasRectTrans.sizeDelta.x;
 		
 		// Configure the target size for the graphic.
-		float textureSize = referenceSize * ( menuSize / 10 );
+		float textureSize = referenceSize * ( menuSize / 5 );
 
 		// If baseTrans is null, store this object's RectTrans so that it can be positioned.
 		if( BaseTransform == null )
