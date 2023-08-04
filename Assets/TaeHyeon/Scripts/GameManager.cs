@@ -77,5 +77,8 @@ public class GameManager : Singleton<GameManager>
                 GameObject.Find("Interact Audio Manager").GetComponent<InteractAudioManager>();
             ChangeMode(PlayMode.InteractMode);
         }
+        if(sceneName == "HousingMode"){
+            PlacementSystem.Instance.ReleaseGrib();
+        }
     }
 }

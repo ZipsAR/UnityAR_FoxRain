@@ -10,39 +10,39 @@ public class HousingUISystem : Singleton<HousingUISystem>
     [SerializeField]
     private ObjectDatabaseSO database;
 
-    //ÇÏ¿ìÂ¡ ¹öÆ°ÀÌ ºÎÂøµÉ ÆÐ³Î, ÇÏ¿ìÂ¡ ¹öÆ°ÀÇ ÇÁ¸®ÆÕ
+    //ï¿½Ï¿ï¿½Â¡ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½, ï¿½Ï¿ï¿½Â¡ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     [SerializeField]
     private GameObject menuPanel, HousingButtonPrefab;
-
 
     [SerializeField]
     private GameObject DebugTextUI;
 
     [SerializeField]
     private GameObject GridPlane;
-
-
-
-
-
     public List<GameObject> countlist;
 
-    void Start()
+    private bool housingmode = true;
+
+
+    public void InitializeUI()
     {
-        foreach (ObjectData objdata in database.objectsData) {
+        
+        foreach (MyData objdata in FileIOSystem.Instance.invendatabase.mydata) {
+
             GameObject newobj = Instantiate(HousingButtonPrefab, menuPanel.transform);
-            newobj.GetComponent<Button>().onClick.AddListener(() => PlacementSystem.Instance.StartPlacement(objdata.ID));
+            newobj.GetComponent<Button>().onClick.AddListener(() => PlacementSystem.Instance.StartPlacement(objdata.id));
             newobj.GetComponentInChildren<Image>().color = Random.ColorHSV();
-            newobj.GetComponentInChildren<TMP_Text>().text = objdata.ObjectCount.ToString();
-            if (objdata.ObjectCount <= 0) newobj.GetComponent<Button>().interactable = false;
+            newobj.GetComponentInChildren<TMP_Text>().text = objdata.count.ToString();
+            if (objdata.count <= 0) newobj.GetComponent<Button>().interactable = false;
             countlist.Add(newobj);
+    
         }   
     }
 
     public void ObjCountupdate(int id)
     {
         GameObject obj = countlist[id];
-        obj.GetComponentInChildren<TMP_Text>().text = database.objectsData[id].ObjectCount.ToString();
+        obj.GetComponentInChildren<TMP_Text>().text = FileIOSystem.Instance.invendatabase.mydata[id].count.ToString();
 
     }
 
@@ -56,19 +56,16 @@ public class HousingUISystem : Singleton<HousingUISystem>
 
     public void ONHOUSING()
     {
-
-        //Æò¸é ÀÎ½Ä »óÅÂ
-        if (InputManager.Instance.GetSelectedMapPositionbyVision().Length > 0) {
-
-            //Normal mode
-            print("find plane");
+        if (housingmode) {
+            PlacementSystem.Instance.ProtectGrib();
+            housingmode = false;
+            //ì”¬ ë„˜ì–´ê°€ëŠ” ã…‡ã…‡
 
         }
         else
         {
-
-            print("ignore");
-            //¹«½ÃÇÔ
+            PlacementSystem.Instance.ReleaseGrib();
+            housingmode = true;
         }
 
         DebuggingText("hosuing!");

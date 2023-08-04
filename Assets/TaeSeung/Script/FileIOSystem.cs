@@ -7,36 +7,39 @@ using UnityEngine;
 
 public class FileIOSystem : Singleton<FileIOSystem>
 {
-    public InventoryDatabase invendatabase { get; private set; }
-    public HousingObjectdatabase housingdatabase { get; private set; } 
-    public StatDatabase statdatabase { get; private set; } 
+    public InventoryDatabase invendatabase;
+    public HousingObjectdatabase housingdatabase;
+    public StatDatabase statdatabase;
     public string path;
 
-    public const string InvenCall = "Invendatabase";
-    public const string HousingCall = "Housingdatabase";
-    public const string StatCall = "Statdatabase";
+    public const string InvenFilename = "Invendatabase";
+    public const string HousingFilename = "Housingdatabase";
+    public const string StatFilename = "Statdatabase";
 
     private void Awake()
     {
         path = Application.persistentDataPath;
         try
         {
-            StartLoad();
+            AllLoad();
         }
         catch(IOException e)
         {
-            StartSave();
-            invendatabase = new();
-            housingdatabase = new();
-            statdatabase = new();
+            AllSave();
+            if(invendatabase == null)
+                invendatabase = new();
+            if (housingdatabase == null)
+                housingdatabase = new();
+            if (statdatabase == null)
+                statdatabase = new();
         }
     }
 
 
     //Save data file
-    public void Save<T>(T database, string databasemode)
+    public void Save<T>(T database, string Filename)
     {
-        FileStream filestream = new FileStream(string.Format("{0}/{1}.json",path, databasemode), FileMode.Create);
+        FileStream filestream = new FileStream(string.Format("{0}/{1}.json",path, Filename), FileMode.Create);
         string jsondata = JsonUtility.ToJson(database);
         byte[] data = Encoding.UTF8.GetBytes(jsondata);
         filestream.Write(data, 0, data.Length);
@@ -45,9 +48,9 @@ public class FileIOSystem : Singleton<FileIOSystem>
 
 
     //Load data file
-    public void Load<T>(ref T database, string databasemode)
+    public void Load<T>(ref T database, string Filename)
     {
-        FileStream filestream = new FileStream(string.Format("{0}/{1}.json", path, databasemode), FileMode.Open);
+        FileStream filestream = new FileStream(string.Format("{0}/{1}.json", path, Filename), FileMode.Open);
         byte[] data = new byte[filestream.Length];
         filestream.Read(data, 0, data.Length);
         filestream.Close();
@@ -56,7 +59,7 @@ public class FileIOSystem : Singleton<FileIOSystem>
 
     }
 
-    public void StartSave()
+    public void AllSave()
     {
         FileSave<InventoryDatabase>("Invendatabase", invendatabase);
         FileSave<HousingObjectdatabase>("Housingdatabase", housingdatabase);
@@ -64,11 +67,11 @@ public class FileIOSystem : Singleton<FileIOSystem>
     }
 
     //Load data file
-    public void StartLoad()
+    public void AllLoad()
     {
-        invendatabase = JsonUtility.FromJson<InventoryDatabase>(FileOpen(InvenCall));
-        housingdatabase = JsonUtility.FromJson<HousingObjectdatabase>(FileOpen(HousingCall));
-        statdatabase = JsonUtility.FromJson<StatDatabase>(FileOpen(StatCall));
+        invendatabase = JsonUtility.FromJson<InventoryDatabase>(FileOpen(InvenFilename));
+        housingdatabase = JsonUtility.FromJson<HousingObjectdatabase>(FileOpen(HousingFilename));
+        statdatabase = JsonUtility.FromJson<StatDatabase>(FileOpen(StatFilename));
     }
 
 

@@ -319,14 +319,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9214925, g: 1, b: 0.75849056, a: 0.9764706}
+  m_Color: {r: 0.8584906, g: 0.7214641, b: 0.11878477, a: 0.9764706}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: ca28a9bc1d733ce40851164c1fcb601e, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1736,92 +1736,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c42d747c81fc5c4cb479566ad26d02d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  database:
-    objectsData:
-    - <Name>k__BackingField: funiture_bed
-      <ID>k__BackingField: 1000
-      <Size>k__BackingField: {x: 3, y: 2}
-      <ObjectCount>k__BackingField: 46
-      <Prefab>k__BackingField: {fileID: 1908861269318448, guid: cfc3cb41de0af974d831fed578f4836a,
-        type: 3}
-    - <Name>k__BackingField: funiture_bed_table
-      <ID>k__BackingField: 1001
-      <Size>k__BackingField: {x: 1, y: 1}
-      <ObjectCount>k__BackingField: 5
-      <Prefab>k__BackingField: {fileID: 1105668781091346, guid: 9247e2062ada8b242bfd94a2bb63d0a9,
-        type: 3}
-    - <Name>k__BackingField: funiture_bookshelf
-      <ID>k__BackingField: 1002
-      <Size>k__BackingField: {x: 2, y: 1}
-      <ObjectCount>k__BackingField: 20
-      <Prefab>k__BackingField: {fileID: 1413900915861342, guid: a060471ab5ae95843962195a821d0634,
-        type: 3}
-    - <Name>k__BackingField: funiture_drawer_small
-      <ID>k__BackingField: 1003
-      <Size>k__BackingField: {x: 2, y: 1}
-      <ObjectCount>k__BackingField: 18
-      <Prefab>k__BackingField: {fileID: 1089441187514440, guid: 4521e5bd0943ded4fb55c6b6a9d6983c,
-        type: 3}
-    - <Name>k__BackingField: funiture_desk
-      <ID>k__BackingField: 1004
-      <Size>k__BackingField: {x: 3, y: 2}
-      <ObjectCount>k__BackingField: 7
-      <Prefab>k__BackingField: {fileID: 1157607663814482, guid: 5db4062648c0afc46aec0c8f57e9a01e,
-        type: 3}
-    - <Name>k__BackingField: funiture_tv_shelf
-      <ID>k__BackingField: 1005
-      <Size>k__BackingField: {x: 2, y: 1}
-      <ObjectCount>k__BackingField: 11
-      <Prefab>k__BackingField: {fileID: 1211506654769874, guid: 93eb4906be308604ea94dd642b30c363,
-        type: 3}
-    - <Name>k__BackingField: funiture_table
-      <ID>k__BackingField: 1006
-      <Size>k__BackingField: {x: 5, y: 3}
-      <ObjectCount>k__BackingField: 10
-      <Prefab>k__BackingField: {fileID: 1524366535568974, guid: dbbc369e3e9a1f240958222be21fad8c,
-        type: 3}
-    - <Name>k__BackingField: funiture_sofa
-      <ID>k__BackingField: 1007
-      <Size>k__BackingField: {x: 4, y: 2}
-      <ObjectCount>k__BackingField: 10
-      <Prefab>k__BackingField: {fileID: 1764648378786810, guid: 1ee0d96f73917e746a95f8eba001975e,
-        type: 3}
-    - <Name>k__BackingField: funiture_Closet
-      <ID>k__BackingField: 1008
-      <Size>k__BackingField: {x: 1, y: 1}
-      <ObjectCount>k__BackingField: 9
-      <Prefab>k__BackingField: {fileID: 1552773891800394, guid: 3ca3bb4b682d6f149926e977ee2cfa44,
-        type: 3}
-    - <Name>k__BackingField: funiture_drawer_big
-      <ID>k__BackingField: 1009
-      <Size>k__BackingField: {x: 2, y: 1}
-      <ObjectCount>k__BackingField: 9
-      <Prefab>k__BackingField: {fileID: 1892955332092476, guid: affae5ed27b771e47af1437978ed34f2,
-        type: 3}
-    - <Name>k__BackingField: funiture_hanger
-      <ID>k__BackingField: 1010
-      <Size>k__BackingField: {x: 1, y: 1}
-      <ObjectCount>k__BackingField: 11
-      <Prefab>k__BackingField: {fileID: 1896286203611054, guid: 99712ca56a07dd94aba5c27593f5a022,
-        type: 3}
-    - <Name>k__BackingField: funiture_chair
-      <ID>k__BackingField: 1011
-      <Size>k__BackingField: {x: 1, y: 1}
-      <ObjectCount>k__BackingField: 9
-      <Prefab>k__BackingField: {fileID: 1615271723323240, guid: 353a8a384bc2dcc4b8b935ca379b8f7a,
-        type: 3}
-    - <Name>k__BackingField: funiture_box
-      <ID>k__BackingField: 1012
-      <Size>k__BackingField: {x: 4, y: 4}
-      <ObjectCount>k__BackingField: 11
-      <Prefab>k__BackingField: {fileID: 1214118423761400, guid: 1a7a4446e92057041855881d5056fc9e,
-        type: 3}
-    - <Name>k__BackingField: funiture_chair2
-      <ID>k__BackingField: 1013
-      <Size>k__BackingField: {x: 1, y: 1}
-      <ObjectCount>k__BackingField: 11
-      <Prefab>k__BackingField: {fileID: 1611733839842676, guid: 65e179eb740706140b5f476ae9f1fd86,
-        type: 3}
+  invendatabase:
+    mydata:
+    - id: 1000
+      count: 10
+    - id: 1002
+      count: 10
+    - id: 1003
+      count: 10
+    - id: 1011
+      count: 10
+  housingdatabase:
     objectsLocation: []
   path: 
 --- !u!4 &1137110637
@@ -2826,6 +2751,12 @@ PrefabInstance:
       objectReference: {fileID: 2046920528}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: itemdatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e,
+        type: 2}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: cellIndicator
       value: 
       objectReference: {fileID: 540249380}
@@ -3405,7 +3336,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 75, y: -39.9999}
+  m_AnchoredPosition: {x: 75, y: -5.3}
   m_SizeDelta: {x: -167, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1723392152
