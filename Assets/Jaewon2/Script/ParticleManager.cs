@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public class ParticleManager : MonoBehaviour
 {
-    [SerializeField]
-    private ParticleSystem particle; 
+    public ParticleSystem particle; 
 
     private void Start()
     {
-        particle.Stop();
+        particle.Play();
     }
 
-    public void OnButtonClick()
+    public void PlayParticle()
     {
-        particle.transform.position = new Vector3(10, 0, 0);
-        particle.Play();
+        Debug.Log("플레이중");
+        this.particle.Play();
     }
 }

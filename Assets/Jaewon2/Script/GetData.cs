@@ -34,8 +34,8 @@ public class GetData : MonoBehaviour
         }
         if (StoreManager.Instance.viewItem_Inven != null)
         {
-            itemDetail_Inven.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
+            itemDetail_Inven.text = "ÀÎ½Ä";
+            //itemDetail_Inven.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
         }
-
     }
 }
