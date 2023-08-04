@@ -22,8 +22,20 @@ public class MapInfo : Singleton<MapInfo>
     {
         if(initialize) MapInitialize();
         TileEffectScale = Tile.transform.GetChild(0).localScale;
+
+        SetOrigin();
     }
 
+
+    public void SetOrigin()
+    {
+        this.transform.position = new Vector3(0, -0.6f, 1);
+    }
+
+    public void SetAnotherPosition(Vector3 newposition)
+    {
+        this.transform.position = newposition;
+    }
 
 
     public void MapInitialize()
@@ -59,7 +71,6 @@ public class MapInfo : Singleton<MapInfo>
         last.y = 0.5f;
         cellIndicator.transform.GetChild(0).localPosition = last;
         */
-        //print("scale: " + scale);
 
         Vector3 effectscale = TileEffectScale;
         effectscale.x = effectscale.x / scale.x;

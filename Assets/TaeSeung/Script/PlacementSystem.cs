@@ -29,11 +29,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     [SerializeField]
     private Grid grid;
 
-    //database ��ũ���ͺ� ������Ʈ 
-    //�����ͺ��̽� �ε���
-    [SerializeField]
-    private ObjectDatabaseSO database;
-
 
     private int selectedObjectIndex = -2;
 
@@ -68,29 +63,30 @@ public class PlacementSystem : Singleton<PlacementSystem>
     [SerializeField]
     CursorCollisionSystem cursorsystem;
 
-    public GameObject debugyoung;
 
-    public GameObject gridv;
+    //실제 에셋 정보는 여기서 가져옴(스크립터블오브젝트 형태)
+    [SerializeField]
+    private ItemDatabase itemdatabase;
 
-    
-    
-    private void Start()
+    public void InitializePlace()
     {
         funitureData = new();
         floorData = new();
-        //database = FileIOSystem.Instance.Load();
         MapInfo.Instance.MapInitialize();
 
         //��ũ���ͺ� ������Ʈ���� �̹� ��ġ�� �����͵� ��������
-        for (short i = 0; i < database.objectsLocation.Count; i++) {
-            int id = database.objectsLocation[i].OBJID;
-            GameObject newObject = Instantiate(database.objectsData[id].Prefab);
+        for (short i = 0; i < FileIOSystem.Instance.housingdatabase.objectsLocation.Count; i++) {
+            //id는 키값
+            int id = FileIOSystem.Instance.housingdatabase.objectsLocation[i].id;
+            int dataindex = itemdatabase.ItemData.FindIndex(data => data.ID == id);
+
+            GameObject newObject = Instantiate(itemdatabase.ItemData[dataindex].Prefab);
             newObject.transform.localScale = newObject.transform.localScale / MapInfo.Instance.MapScale;
 
-            Vector3Int loc = database.objectsLocation[i].location;
-            Quaternion rot = database.objectsLocation[i].rotation;
-            Vector2Int size = database.objectsLocation[i].size;
-            database.objectsLocation[i].InstanceId = newObject.GetInstanceID();
+            Vector3Int loc = FileIOSystem.Instance.housingdatabase.objectsLocation[i].location;
+            Quaternion rot = FileIOSystem.Instance.housingdatabase.objectsLocation[i].rotation;
+            Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[i].size;
+            FileIOSystem.Instance.housingdatabase.objectsLocation[i].InstanceId = newObject.GetInstanceID();
 
             MakeNewObject(id, ObjectLocation.transform, loc, rot, size, "PlaceObject", newObject);
 
@@ -110,18 +106,23 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
-
     private void Update()
     {
        if (!mouseIndicator)
             return;
+
+       if (floorData == null)
+        {
+            HousingUISystem.Instance.InitializeUI();
+            InitializePlace();
+        }
+        
 
         if (catchmode)
         {
             PlaceCheck(CatchObject);
             RotateRealTimebyHand();
             Vector3 test = inputManager.GetSelectedMapPositionbyObjectForward(CatchObject.transform);
-            debugyoung.transform.position = test;
         }
     }
 
@@ -131,10 +132,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
         //�̹� ������ ������Ʈ�� ���� ���, �� �� �ı���Ű�� ���� ���� ������Ʈ�� ������ų ����, �ٵ� ��ȹ�� ���� ����ɼ��� ����
         if (CreateObject)
             Destroy(CreateObject);
-
+        
         StopPlacement(true);
-        selectedObjectIndex = database.objectsData.FindIndex(data => data.ID == ID);
-
+        selectedObjectIndex = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == ID);
+        int infoindex = itemdatabase.ItemData.FindIndex(data => data.ID == ID);
 
         if (selectedObjectIndex < 0)
         {
@@ -142,25 +143,29 @@ public class PlacementSystem : Singleton<PlacementSystem>
             return;
         }
 
-        if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
+        if (FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].count <= 0)
         {
             Debug.Log($"No Object");
             return;
         }
 
         //cellindicator ũ�� ����(���� ����)
-        currentobjsize = database.objectsData[selectedObjectIndex].Size;
+        currentobjsize = itemdatabase.ItemData[infoindex].Housingsize;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
         currentrotation = new();
 
         //AR ȯ��󿡼��� �� �ڵ带 �־�� ��.
-        GameObject newObject = Instantiate(database.objectsData[selectedObjectIndex].Prefab);
+        GameObject newObject = Instantiate(itemdatabase.ItemData[infoindex].Prefab);
         CreateObject = newObject;
         newObject.transform.position = spawnpoint.transform.position;
-        EffectSystem.Instance.playspawneffect(spawnpoint.transform.position);
         newObject.transform.localScale = newObject.transform.localScale * (1 / MapInfo.Instance.MapScale);
-        interact = newObject.GetComponent<XRGrabInteractable>();
 
+        //이펙트 및 사운드 효과 파트
+        EffectSystem.Instance.playspawneffect(spawnpoint.transform.position);
+
+
+        //grip관련 이벤트 추가
+        interact = newObject.GetComponent<XRGrabInteractable>();
         //��ü�� grab�Ҷ��� �̺�Ʈ �߰�
         SelectEnterEventArgs enterargs = makeEnterEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
         interact.selectEntered.AddListener((a) => PlaceEnterEvent(enterargs));
@@ -175,7 +180,32 @@ public class PlacementSystem : Singleton<PlacementSystem>
         //inputManager.OnExit += StopPlacement;
     }
 
- 
+
+    public void ProtectGrib()
+    {
+        XRGrabInteractable[] objs =  GameObject.FindObjectsOfType<XRGrabInteractable>();
+
+        foreach(XRGrabInteractable obj in objs) {
+            obj.enabled = false;
+        }
+
+        HousingUISystem.Instance.DebuggingText("good!");
+    }
+
+
+    public void ReleaseGrib() {
+        XRGrabInteractable[] objs = GameObject.FindObjectsOfType<XRGrabInteractable>();
+
+        foreach (XRGrabInteractable obj in objs)
+        {
+            obj.enabled = true;
+        }
+
+        HousingUISystem.Instance.DebuggingText("good!");
+    } 
+
+
+
     public void Startinsertion()
     {
         StopPlacement(false);
@@ -270,7 +300,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceStructure(GameObject gameObject)
     {
         print(currentobjsize);
-        print("ToQLd!");
+
         //���� Ŀ�� ��ġ ������
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
 
@@ -287,7 +317,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
         //mousePosition = mousePosition * MapInfo.Instance.MapScale;
 
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-
         ObjectLocation newlocation = new ObjectLocation();
 
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
@@ -301,10 +330,13 @@ public class PlacementSystem : Singleton<PlacementSystem>
         }
 
 
+        int id = FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].id;
+
+
         //���� ��ġ�� ��ü�� ��ġ, ȸ�� ������ �����ͺ��̽��� �ִ� ����
         newlocation.location = gridPosition;
         newlocation.rotation = currentrotation;
-        newlocation.OBJID = selectedObjectIndex;
+        newlocation.id = id;
         newlocation.size = currentobjsize;
         newlocation.InstanceId = gameObject.GetInstanceID();
         newlocation.placementstatus = true;
@@ -319,8 +351,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
         //������� ������Ʈ�� ���� ��������, ��ġ���� ���� + �� ������Ʈ�� ���� ��� ���� ����Ʈ�� �߰�
-        database.objectsLocation.Add(newlocation);
-        database.objectsData[selectedObjectIndex].ObjectCount -= 1;
+        FileIOSystem.Instance.housingdatabase.objectsLocation.Add(newlocation);
+        FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].count -= 1;
 
         interact = gameObject.GetComponent<XRGrabInteractable>();
         SelectEnterEventArgs enterArgs = makeEnterEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
@@ -330,17 +362,17 @@ public class PlacementSystem : Singleton<PlacementSystem>
         interact.selectEntered.AddListener((a) => InsertEnterEvent(enterArgs));
         interact.selectExited.AddListener((a) => InsertCompleteEvent(exitargs));
 
-        //FileIOSystem.Instance.Save();
 
         //������ ���� ��� �ش� ������Ʈ ��ư ��ü�� ��Ȱ��ȭ
-        if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
+        if (FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].count <= 0)
         {
             Debug.Log($"No Object");
             HousingUISystem.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
         }
         HousingUISystem.Instance.ObjCountupdate(selectedObjectIndex);
 
-
+        FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase,FileIOSystem.HousingFilename);
+        FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
 
         CreateObject = null;
         StopPlacement(true);
@@ -349,17 +381,18 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     public void InsertionStartStructure(GameObject gameObject)
     {
-        int index = database.objectsLocation.FindIndex(data => data.InstanceId == gameObject.GetInstanceID());
+        int index = FileIOSystem.Instance.housingdatabase.objectsLocation.FindIndex(data => data.InstanceId == gameObject.GetInstanceID());
         if (index < 0) return;
 
-        currentobjsize =  database.objectsData[database.objectsLocation[index].OBJID].Size;
+        //오브젝트 사이즈에 맞게 아래 타일 크기를 수정해요
+        currentobjsize = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
 
         //���� ���������� ��ü ��ġ ���� (�������� �������� �����)
         CatchObject = gameObject;
         cellIndicator.SetActive(true);
         catchmode = true;
-        currentpos = database.objectsLocation[index].location;
+        currentpos = FileIOSystem.Instance.housingdatabase.objectsLocation[index].location;
     }
 
     private void InsertionStructure(GameObject gameObject) {
@@ -371,15 +404,19 @@ public class PlacementSystem : Singleton<PlacementSystem>
             if (!inputManager.ishit())
             {
                 cursororigin.transform.SetParent(cursorparent.transform);
-                int index = database.objectsLocation.FindIndex(data => data.location == currentpos);
-
-                if (index >= 0)
+                int index = FileIOSystem.Instance.housingdatabase.objectsLocation.FindIndex(data => data.location == currentpos);
+            
+            if (index >= 0)
                 {
-                    int id = database.objectsLocation[index].OBJID;
-                    Vector2Int size = database.objectsLocation[index].size;
+                    int id = FileIOSystem.Instance.housingdatabase.objectsLocation[index].id;
+                    Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
                     funitureData.RemoveObjectAt(currentpos, size);
-                    database.objectsData[id].ObjectCount++;
-                    database.objectsLocation.RemoveAt(index);
+
+                    int myindex= FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == id);
+                    if (myindex != -1)
+                    {
+                    FileIOSystem.Instance.invendatabase.mydata[myindex].count++;
+                    FileIOSystem.Instance.housingdatabase.objectsLocation.RemoveAt(index);
                     catchmode = false;
                     cellIndicator.SetActive(false);
 
@@ -388,25 +425,30 @@ public class PlacementSystem : Singleton<PlacementSystem>
                         gameObject.GetComponent<Rigidbody>().useGravity = true;
                         gameObject.GetComponent<Rigidbody>().isKinematic = false;
                     }
+
                     print(Vector3.Distance(gameObject.transform.position, ObjectLocation.transform.position));
                     CreateObject = null;
                     StartCoroutine(throwdelete(gameObject));
-                    //Destroy(gameObject);
+
+                    FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+                    FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase, FileIOSystem.HousingFilename);
                 }
+                //Destroy(gameObject);
+            }
             }
 
             //���� Ŀ���� �� �ȿ� �ִٸ� ��ȿ�����̹Ƿ� ��ġ ����
             else
             {
-                int index = database.objectsLocation.FindIndex(data => data.InstanceId == gameObject.GetInstanceID());
+                int index = FileIOSystem.Instance.housingdatabase.objectsLocation.FindIndex(data => data.InstanceId == gameObject.GetInstanceID());
 
                 //�ϴ� �����ϴ� ������ �´��� ���� Ȯ���ؿ�
                 if (index >= 0)
                 {
-                    int id = database.objectsLocation[index].OBJID;
-                    Vector3Int pos = database.objectsLocation[index].location;
-                    Quaternion rot = database.objectsLocation[index].rotation;
-                    Vector2Int size = database.objectsLocation[index].size;
+                    int id = FileIOSystem.Instance.housingdatabase.objectsLocation[index].id;
+                    Vector3Int pos = FileIOSystem.Instance.housingdatabase.objectsLocation[index].location;
+                    Quaternion rot = FileIOSystem.Instance.housingdatabase.objectsLocation[index].rotation;
+                    Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
                     
                     PlacementData data = funitureData.GetObjectAt(currentpos);
                     int placeindex = data.PlacedObjectIndex;
@@ -417,17 +459,19 @@ public class PlacementSystem : Singleton<PlacementSystem>
                         //��ġ�� ��ġ ���� �����͸� �ٲ����
                         funitureData.RemoveObjectAt(currentpos, size);
                         funitureData.AddObjectAt(gridPosition, size, id, placeindex);
-                        database.objectsLocation[index].location = gridPosition;
-                        database.objectsLocation[index].rotation = currentrotation;
-                        database.objectsLocation[index].size = currentobjsize;
+                        FileIOSystem.Instance.housingdatabase.objectsLocation[index].location = gridPosition;
+                        FileIOSystem.Instance.housingdatabase.objectsLocation[index].rotation = currentrotation;
+                        FileIOSystem.Instance.housingdatabase.objectsLocation[index].size = currentobjsize;
 
                     //��ġ�� ��ġ�� �����ؿ�
                         gameObject.transform.rotation = currentrotation;
                         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
                         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
                         SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
-                        //�� �ٺ����� �滩����
-                    }
+
+                        FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase , FileIOSystem.HousingFilename);
+                    //�� �ٺ����� �滩����
+                }
                     //�߸� ��ġ������ �׳� ���� �ִ��ڸ��� ������
                     else
                     {
@@ -687,6 +731,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
+
+    /*
     /// <summary>
     /// ������ �ƿ� �Ⱦ� �Լ����� �ƴѵ�, ���� AR ȯ��ȿ����� �Ⱦ� �Լ�����.Ȥ�� ���� deprecated��Ű��, �׳� �ŵ鶰 ���� �ʴ� �� ��õ 
     /// </summary>
@@ -854,5 +900,5 @@ public class PlacementSystem : Singleton<PlacementSystem>
         cellIndicator.transform.localScale = scale / MapInfo.Instance.MapScale;
 
     }
-
+    */
 }
