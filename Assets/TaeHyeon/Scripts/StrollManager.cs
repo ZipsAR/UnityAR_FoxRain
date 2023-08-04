@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 // create : stroll mode on enter
 // destroy : stroll mode on exit
-public class StrollManager : Singleton<StrollManager>
+public class StrollManager : MonoBehaviour
 {
     public StrollData strollData;
     [SerializeField] private PetBase pet;
@@ -23,7 +23,7 @@ public class StrollManager : Singleton<StrollManager>
         strollData.strollTime += Time.deltaTime;
 
         // Cannot run another cmd if the pet is running some action
-        if (pet.inprogress)
+        if (pet.inProcess)
         {
             return;
         }
