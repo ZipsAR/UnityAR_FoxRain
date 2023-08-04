@@ -12,6 +12,9 @@ public enum PlayMode
     InteractMode = 1,
     StrollMode = 2,
     AgilityMode = 3,
+    StoreMode = 4,
+    HousingMode = 5
+    
 }
 public class GameManager : Singleton<GameManager>
 {

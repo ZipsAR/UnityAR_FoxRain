@@ -38,15 +38,51 @@ public class HandUIController : MonoBehaviour
     }
     private bool isCollidingCam()
     {
-        Physics.Raycast(transform.position + transform.forward.normalized * 0.15f, transform.forward * (-1.0f), out handUIRay, 2.0f);
-        if(handUIRay.collider.name == "AR Camera") return true;
+        bool isHit = Physics.Raycast(transform.position + transform.forward.normalized * 0.15f, transform.forward * (-1.0f), out handUIRay, 2.0f);
+        if(isHit)
+        {
+            if(handUIRay.collider.name == "AR Camera") return true;
+            else return false;
+        }        
         else return false;
     }
     private void handUIVisible()
     {
         if(isCollidingCam())
         {
-            handCanvasObj1.SetActive(true);
+            switch((int)GameManager.Instance.currentPlayMode)
+            {
+                case 1:
+                {
+                    handCanvasObj1.SetActive(true);
+                    handCanvasObj2.SetActive(false);
+                    handCanvasObj3.SetActive(false);
+                }
+                break;
+                case 4:
+                {
+                    handCanvasObj1.SetActive(false);
+                    handCanvasObj2.SetActive(true);
+                    handCanvasObj3.SetActive(false);
+                }
+                break;
+                case 5:
+                {
+                    handCanvasObj1.SetActive(false);
+                    handCanvasObj2.SetActive(false);
+                    handCanvasObj3.SetActive(true);
+                }
+                break;
+                default:
+                {
+                    handCanvasObj1.SetActive(false);
+                    handCanvasObj2.SetActive(false);
+                    handCanvasObj3.SetActive(false);
+                }
+                break;
+            }
+
+            
         	/*//AR Camera
             Debug.Log(handUIRay.collider.name);*/
         }
