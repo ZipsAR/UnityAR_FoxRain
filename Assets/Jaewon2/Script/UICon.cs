@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UICon : MonoBehaviour
 {
-    public Text T_BuyText; //¾ÆÀÌÅÛ ±¸¸Å ¹öÆ° ÅØ½ºÆ®
+    public Text T_BuyText; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½Ø½ï¿½Æ®
     public Text T_money;
     public float money;
     public bool isSelected;
@@ -13,11 +13,11 @@ public class UICon : MonoBehaviour
     {
         isSelected = false;
         money = 10000;
-        T_money.text = "ÇöÀç °ñµå = " + money;
+        T_money.text = money.ToString();
     }
     public void BuyItem()
     {
-        T_BuyText.text = "±¸¸ÅÇÏ±â °¡°Ý = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
+        T_BuyText.text = "ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
         isSelected = true;
     }
     public void BuyItemClick()
@@ -27,13 +27,13 @@ public class UICon : MonoBehaviour
     public void Pay(float pay)
     {
         money -= pay;
-        T_money.text = "ÇöÀç °ñµå = " + money;
-        Debug.Log("±¸¸ÅÇÏ±â, °¡°Ý = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice);
+        T_money.text = "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ = " + money;
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½, ï¿½ï¿½ï¿½ï¿½ = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice);
     }
     public void Sell()
     {
         money += itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice;
-        T_money.text = "ÇöÀç °ñµå = " + money;
-        Debug.Log("ÆÇ¸ÅÇÏ±â, °¡°Ý = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice);
+        T_money.text = "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ = " + money;
+        Debug.Log("ï¿½Ç¸ï¿½ï¿½Ï±ï¿½, ï¿½ï¿½ï¿½ï¿½ = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice);
     }
 }
