@@ -48,7 +48,7 @@ public class FileIOSystem : Singleton<FileIOSystem>
 
 
     //Load data file
-    public void Load<T>(ref T database, string Filename)
+    public void Load<T>(T database, string Filename)
     {
         FileStream filestream = new FileStream(string.Format("{0}/{1}.json", path, Filename), FileMode.Open);
         byte[] data = new byte[filestream.Length];

@@ -7,18 +7,14 @@ using TMPro;
 public class HousingUISystem : Singleton<HousingUISystem>
 {
     // Start is called before the first frame update
-    [SerializeField]
-    private ObjectDatabaseSO database;
 
     //�Ͽ�¡ ��ư�� ������ �г�, �Ͽ�¡ ��ư�� ������
     [SerializeField]
     private GameObject menuPanel, HousingButtonPrefab;
 
-    [SerializeField]
-    private GameObject DebugTextUI;
+    //[SerializeField]
+    //private GameObject DebugTextUI;
 
-    [SerializeField]
-    private GameObject GridPlane;
     public List<GameObject> countlist;
 
     private bool housingmode = true;
@@ -49,8 +45,8 @@ public class HousingUISystem : Singleton<HousingUISystem>
 
     public void DebuggingText(object newtext)
     {
-        TMP_Text textmesh = DebugTextUI.GetComponent<TMP_Text>();
-        textmesh.text = newtext.ToString();
+        //TMP_Text textmesh = DebugTextUI.GetComponent<TMP_Text>();
+        //textmesh.text = newtext.ToString();
     }
 
 

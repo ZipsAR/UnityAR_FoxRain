@@ -62,8 +62,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     [Obsolete]
     [SerializeField]
     CursorCollisionSystem cursorsystem;
-    public GameObject debugyoung;
-    public GameObject gridv;
 
 
     //실제 에셋 정보는 여기서 가져옴(스크립터블오브젝트 형태)
@@ -125,7 +123,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
             PlaceCheck(CatchObject);
             RotateRealTimebyHand();
             Vector3 test = inputManager.GetSelectedMapPositionbyObjectForward(CatchObject.transform);
-            debugyoung.transform.position = test;
         }
     }
 
@@ -183,6 +180,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         //inputManager.OnExit += StopPlacement;
     }
 
+
     public void ProtectGrib()
     {
         XRGrabInteractable[] objs =  GameObject.FindObjectsOfType<XRGrabInteractable>();
@@ -204,7 +202,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
         }
 
         HousingUISystem.Instance.DebuggingText("good!");
-    }
+    } 
+
 
 
     public void Startinsertion()
@@ -225,9 +224,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         gridVisualization.SetActive(false);
         cellIndicator.SetActive(false);
         catchmode = false;
-
-
-
+        //��ǻ�� ȯ�濡���� ��� ����
         //inputManager.OnClicked -= PlaceStructure;
         //inputManager.OnClicked -= InsertionStructure;
         //inputManager.OnExit -= StopPlacement;
@@ -253,6 +250,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(catchobject.transform);
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         
+        //��ġ �Ұ����ϸ� cellindicator�� ���͸����� �ٲ㼭 ǥ������.
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
         previewRenderer.material.color = placementValidity ? Color.white : Color.red;
 
@@ -289,6 +287,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
         Cellposition.z = Cellposition.z + 0.5f;
 
         Cellposition.y = 0.1f;
+
+
+
+
 
         return Cellposition;
     }
