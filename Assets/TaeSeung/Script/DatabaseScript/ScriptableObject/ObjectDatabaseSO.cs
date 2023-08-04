@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 [CreateAssetMenu]  //우클릭 시켜서 생성가능 한 에셋 목록에 포함시킨다
 public class ObjectDatabaseSO : ScriptableObject
 {
@@ -17,17 +18,20 @@ public class ObjectDatabaseSO : ScriptableObject
 [Serializable]
 public class ObjectData
 {
+   // public List<ObjectData> objectdata;
+
+
     [field: SerializeField]
     //오브젝트 이름
-    public string Name { get;  private set; }
+    public string Name { get;  set; }
 
     [field: SerializeField]
     //오브젝트 아이디
-    public int ID { get; private set; }
+    public int ID { get;  set; }
 
     [field: SerializeField]
     //오브젝트 크기
-    public Vector2Int Size { get; private set; } = Vector2Int.one;
+    public Vector2Int Size { get; set; } = Vector2Int.one;
 
     [field: SerializeField]
     //오브젝트 갯수
@@ -35,26 +39,8 @@ public class ObjectData
 
     [field : SerializeField]
     //오브젝트 에셋
-    public GameObject Prefab { get; private set; }
+    public GameObject Prefab { get; set; }
 
-}
-
-//내가 배치시킨 하우징 가구에 대한 정보
-[Serializable]
-public class ObjectLocation
-{
-    public int InstanceId;
-
-    public Vector3Int location;
-    //position = xyz
-    public Quaternion rotation;
-    //rotation xyz
-
-    public Vector2Int size;
-
-    public int OBJID;
-
-    public bool placementstatus = false;
 }
 
 

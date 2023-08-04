@@ -63,7 +63,7 @@ MonoBehaviour:
       type: 3}
   - <Name>k__BackingField: funiture_Closet
     <ID>k__BackingField: 1008
-    <Size>k__BackingField: {x: 1, y: 1}
+    <Size>k__BackingField: {x: 3, y: 1}
     <ObjectCount>k__BackingField: 9
     <Prefab>k__BackingField: {fileID: 1552773891800394, guid: 3ca3bb4b682d6f149926e977ee2cfa44,
       type: 3}
