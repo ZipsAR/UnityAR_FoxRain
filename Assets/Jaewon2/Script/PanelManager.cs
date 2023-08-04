@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PanelManager : MonoBehaviour
 {
     public GameObject[] Panels;
+    public Text tagName;
     public GameObject currentPanel;
     public int panelNum;
     public void Start()
@@ -16,6 +18,7 @@ public class PanelManager : MonoBehaviour
             Panels[i].SetActive(false);
         }
         currentPanel.SetActive(true);
+        tagName.text = "Store-Furniture";
     }
     public void PanelCon_Right()
     {
@@ -30,6 +33,18 @@ public class PanelManager : MonoBehaviour
         {
             panelNum = -1;
         }
+        switch (panelNum)
+        {
+            case 0:
+                tagName.text = "Store-Furniture";
+                break;
+            case 1:
+                tagName.text = "Store-Toy";
+                break;
+            case 2:
+                tagName.text = "Store-Food";
+                break;
 
+        }
     }
 }
