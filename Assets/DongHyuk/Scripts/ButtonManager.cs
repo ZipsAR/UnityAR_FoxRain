@@ -46,11 +46,13 @@ public class ButtonManager : MonoBehaviour
                 break;
                 case "ButtonEdit":
                 {
+                    GameManager.Instance.ChangeMode(PlayMode.HousingMode);
                     GameManager.Instance.LoadScene("HousingMode");
                 }
                 break;
                 case "ButtonBasket":
                 {
+                    GameManager.Instance.ChangeMode(PlayMode.StoreMode);
                     GameManager.Instance.LoadScene("StoreScene");
                 }
                 break;
