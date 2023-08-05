@@ -46,16 +46,17 @@ public enum PetSounds
 
 /// <summary>
 /// How to add a pet
-/// 1. Create Stat data to pet
-/// 2. Create an override animator for a pet by inheriting petController
-/// 3. Pet connection added to InteractManager
-/// 4. Add SitEnd event to sitting animation
-/// 5. Add EatEnd event to sitting animation
-/// 6. Add BiteEnd event to sitting animation
-/// 7. create bite position to mouth
-/// 8. Add AttachToyToMouth event to bite animation
-/// 9. Add DetachToyFromMouth event to spit animation
+/// 1.  Create Stat data to pet
+/// 2.  Create an override animator for a pet by inheriting petController
+/// 3.  Pet connection added to InteractManager
+/// 4.  Add SitEnd event to sitting animation
+/// 5.  Add EatEnd event to sitting animation
+/// 6.  Add BiteEnd event to sitting animation
+/// 7.  create bite position to mouth
+/// 8.  Add AttachToyToMouth event to bite animation
+/// 9.  Add DetachToyFromMouth event to spit animation
 /// 10. Add petSounds in inspector
+/// 11. Set InteractTerminated Event to Interact animation in last frame
 /// </summary>
 
 public abstract class PetBase : MonoBehaviour
@@ -90,6 +91,7 @@ public abstract class PetBase : MonoBehaviour
     private GameObject toyObj;
     private bool isBiting;
     public Transform toyAttachPoint;
+    private static readonly int Interact = Animator.StringToHash("Interact");
 
 
     private void Start()
@@ -167,6 +169,7 @@ public abstract class PetBase : MonoBehaviour
     public void SetPetAnimationMode(PlayMode playMode)
     {
         animator.SetInteger(Mode, (int)playMode);
+        animator.SetInteger(Interact, (int)PetParts.None);
     }
 
     private void UpdateStrollMode()
@@ -205,11 +208,16 @@ public abstract class PetBase : MonoBehaviour
     
     #region InteractPart
 
-        public abstract void InteractHead();
-        public abstract void InteractJaw();
-        public abstract void InteractBody();
-        public abstract void InteractHandDetection();
+        public void InteractHead() => animator.SetInteger(Interact, (int)PetParts.Head);
+        public void InteractJaw() => animator.SetInteger(Interact, (int)PetParts.Jaw);
+        public void InteractBody() => animator.SetInteger(Interact, (int)PetParts.Body);
+        public void InteractHandDetection() => animator.SetInteger(Interact, (int)PetParts.HandDetection);
 
+        public void InteractTerminated()
+        {
+            animator.SetInteger(Interact, (int)PetParts.None);
+        }
+        
     #endregion
     
     
