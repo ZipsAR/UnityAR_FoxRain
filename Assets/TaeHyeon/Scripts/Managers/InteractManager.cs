@@ -152,12 +152,16 @@ public class InteractManager : MonoBehaviour
     
     private void InitializeInteractData()
     {
+        interactData.playerPetMaxDistance = 2f;
+        interactData.playerIdleTimeThreshold = 3f;
+        
+        interactData.bitingDistance = 0.1f;
+        interactData.playerFrontDistance = 0.5f;
+
         interactData.isBrushing = false;
         interactData.brushingTime = 0f;
         interactData.brushingTimeThreshold = 1f;
 
-        interactData.bitingDistance = 0.2f;
-        
         interactData.isColliding = false;
         interactData.collisionTimer = 0f;
         interactData.collisionTimeLimit = 2f;
@@ -271,12 +275,9 @@ public class InteractManager : MonoBehaviour
             pet.AbortAllCmd();
             
             // Move to snack position
-            // pet.CmdMoveTo(snackPos);
             ClearCmdQueue();
-            // EnqueueCmd(Cmd.Move, snackTransform.position);
-            EnqueueCmd(Cmd.Move, GetPointBeforeBiting(transform.position, snackTransform.position));
-            EnqueueCmd(Cmd.Look);
-            EnqueueCmd(Cmd.Sit);
+            EnqueueCmd(Cmd.Move, GetPointBeforeDistance(transform.position, snackTransform.position, interactData.bitingDistance));
+            EnqueueCmd(Cmd.Look, snackTransform.position);
             EnqueueCmd(Cmd.Eat, targetObj: snackTransform.gameObject);
         }
     
@@ -306,24 +307,25 @@ public class InteractManager : MonoBehaviour
 
             // Stop All command 
             pet.AbortAllCmd();
-            
+
             // Move to toy position
             ClearCmdQueue();
-            // EnqueueCmd(Cmd.Move, toyTransform.position);
-            EnqueueCmd(Cmd.Move, GetPointBeforeBiting(transform.position, toyTransform.position));
+            
+            EnqueueCmd(Cmd.Move, pos: GetPointBeforeDistance(transform.position, toyTransform.position, interactData.bitingDistance));
+            EnqueueCmd(Cmd.Look, pos: toyTransform.position);
             EnqueueCmd(Cmd.Bite, targetObj: toyTransform.gameObject);
             EnqueueCmd(Cmd.Look);
-            EnqueueCmd(Cmd.Move, pos: GameManager.Instance.player.gameObject.transform.position);
+            EnqueueCmd(Cmd.Move);
             EnqueueCmd(Cmd.Look);
             EnqueueCmd(Cmd.Spit);
         }
 
-        private Vector3 GetPointBeforeBiting(Vector3 startPoint, Vector3 endPoint)
+        private Vector3 GetPointBeforeDistance(Vector3 startPoint, Vector3 endPoint, float beforeDistance)
         {
             float distance = Vector3.Distance(startPoint, endPoint);
-            float x = endPoint.x - (interactData.bitingDistance / distance) * (endPoint.x - startPoint.x);
+            float x = endPoint.x - (beforeDistance / distance) * (endPoint.x - startPoint.x);
             float y = startPoint.y;
-            float z = endPoint.z - (interactData.bitingDistance / distance) * (endPoint.z - startPoint.z);
+            float z = endPoint.z - (beforeDistance / distance) * (endPoint.z - startPoint.z);
 
             return new Vector3(x, y, z);
         }
@@ -343,25 +345,27 @@ public class InteractManager : MonoBehaviour
             switch (cmdDetail.cmdIdx)
             {
                 case (int)Cmd.Move:
-                    Vector3 nextCoord;
-                    
-                    // Move to a random location around the player if there is no designated location
+                    // Go to current player position
                     if (nextCmd.targetDir == default)
                     {
-                        Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
-                        nextCoord = GameManager.Instance.player.gameObject.transform.position +
-                                    new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
+                        // pet.CmdMoveTo(GameManager.Instance.player.transform.position);
+                        pet.CmdMoveTo(GetPointBeforeDistance(
+                            pet.gameObject.transform.position, 
+                            GameManager.Instance.player.transform.position, 
+                            interactData.playerFrontDistance));
+                        
                     }
                     else
                     {
-                        nextCoord = nextCmd.targetDir;
+                        pet.CmdMoveTo(nextCmd.targetDir);
                     }
-
-                    pet.CmdMoveTo(nextCoord);
                     break;
                 
                 case (int)Cmd.Look:
-                    pet.CmdLookPlayer();
+                    if(nextCmd.targetDir == default)
+                        pet.CmdLook(GameManager.Instance.player.gameObject.transform.position);
+                    else
+                        pet.CmdLook(nextCmd.targetDir);
                     break;
                 case (int)Cmd.Sit:
                     pet.CmdSit();
@@ -389,14 +393,18 @@ public class InteractManager : MonoBehaviour
             // if player stay for a while
             if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
             {
-                EnqueueCmd(Cmd.Look);
+                EnqueueCmd(Cmd.Look, GameManager.Instance.player.gameObject.transform.position);
                 EnqueueCmd(Cmd.Sit);
             }
             // if player-pet distance increase
             else if(Vector3.Distance(GameManager.Instance.player.gameObject.transform.position, pet.transform.position) >
                     interactData.playerPetMaxDistance)
             {
-                EnqueueCmd(Cmd.Move);
+                Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
+                Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
+                            new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
+                
+                EnqueueCmd(Cmd.Move, nextCoord);
             }
         }
         
@@ -408,6 +416,9 @@ public class InteractManager : MonoBehaviour
         {
             if (cmd == Cmd.Eat && targetObj == default) throw new Exception("eat cmd must include targetObj");
             if (cmd == Cmd.Bite && targetObj == default) throw new Exception("bite cmd must include targetObj");
+            
+            // if (cmd == Cmd.Look && pos == default) means look current player position
+            // if (cmd == Cmd.Move && pos == default) means goto current player position
             
             cmdQueue.Enqueue(new CmdDetail((int)cmd, pos, targetObj));
         }

@@ -293,9 +293,9 @@ public abstract class PetBase : MonoBehaviour
         
         #region Look
         
-            public void CmdLookPlayer()
+            public void CmdLook(Vector3 targetPos)
             {
-                Logger.Log("[Cmd] Look player");
+                Logger.Log("[Cmd] Look " + targetPos);
                 
                 // This cmd will not run if another cmd is running
                 if (CheckCoroutinePlaying())
@@ -303,15 +303,15 @@ public abstract class PetBase : MonoBehaviour
                     return;
                 }
                 petStates = PetStates.Idle;
-                StartCoroutine(LookPlayerSequence());
+                StartCoroutine(LookSequence(targetPos));
             }
             
-            private IEnumerator LookPlayerSequence()
+            private IEnumerator LookSequence(Vector3 targetPos)
             {
                 isCoroutinePlayingList[(int)Cmd.Look] = true;
     
                 // Pet rotates only on the y-axis
-                Vector3 targetDir = GameManager.Instance.player.gameObject.transform.position - transform.position;
+                Vector3 targetDir = targetPos - transform.position;
                 targetDir.y = 0;
                 Quaternion targetQuaternion = Quaternion.LookRotation(targetDir);
                 
