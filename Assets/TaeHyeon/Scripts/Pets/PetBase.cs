@@ -605,7 +605,7 @@ public abstract class PetBase : MonoBehaviour
             // ShowCurPetStat();
         }
 
-        protected abstract void PetStatInitialize();
+         public abstract void InitializeStatByDefault();
         
         private void ShowCurPetStat()
         {
