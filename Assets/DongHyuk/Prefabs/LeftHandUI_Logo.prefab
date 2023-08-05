@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 17744466}
+  database: {fileID: 0}
 --- !u!54 &4839689365228740525
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -397,6 +398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 620578394}
+  database: {fileID: 0}
 --- !u!54 &1892347143243324701
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -743,6 +745,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 1028046523}
+  database: {fileID: 0}
 --- !u!54 &410156928985982798
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1218,6 +1221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 1578897767}
+  database: {fileID: 0}
 --- !u!54 &4631405862774957665
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1487,6 +1491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 1916256905}
+  database: {fileID: 0}
 --- !u!54 &3715041156701642544
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1734,6 +1739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 277857544155639049}
+  database: {fileID: 0}
 --- !u!54 &850140149429075528
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2054,6 +2060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 1508926267540323770}
+  database: {fileID: 0}
 --- !u!54 &517245666182606118
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2222,6 +2229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 1758878328563970183}
+  database: {fileID: 0}
 --- !u!54 &647961725358836992
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2344,6 +2352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 2321559786889192092}
+  database: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
 --- !u!54 &5408345079251474075
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2795,6 +2804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 3828549577339707611}
+  database: {fileID: 0}
 --- !u!54 &3475506388572481119
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2963,6 +2973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 4061270206248755918}
+  database: {fileID: 0}
 --- !u!54 &6192414236603323487
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3085,6 +3096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 4078843480988798407}
+  database: {fileID: 0}
 --- !u!54 &5898325966859366820
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3283,6 +3295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 4566970748794804671}
+  database: {fileID: 0}
 --- !u!54 &5872880487366050842
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3527,6 +3540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 4868735268289775562}
+  database: {fileID: 0}
 --- !u!54 &8982930928529595505
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3969,6 +3983,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 7453837550793460625}
+  database: {fileID: 0}
 --- !u!54 &3169965025386113395
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4091,6 +4106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 7569659500979194539}
+  database: {fileID: 0}
 --- !u!54 &7747356457763231352
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4568,6 +4584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonItSelf: {fileID: 8767049061222607165}
+  database: {fileID: 0}
 --- !u!54 &8583859405551057606
 Rigidbody:
   m_ObjectHideFlags: 0
