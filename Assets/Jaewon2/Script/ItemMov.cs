@@ -28,11 +28,11 @@ public class ItemMov : MonoBehaviour
     public void GetButton()
     {
         isSelected = !isSelected;
-        if (StoreManager.Instance.viewItem_store != null)
+        if (StoreManager.Instance.viewItem_store.activeSelf)
         {
             DeleteAllChild();
         }
-        if (StoreManager.Instance.viewItem_Inven != null)
+        if (StoreManager.Instance.viewItem_Inven.activeSelf)
         {
             DeleteAllChild();
         }
@@ -83,8 +83,16 @@ public class ItemMov : MonoBehaviour
     public void DeleteAllChild()
     {
         if (this.CompareTag("Store"))
-            Destroy(StoreManager.Instance.viewItem_store.gameObject);
+        {
+            //Destroy(StoreManager.Instance.viewItem_store.gameObject);
+            StoreManager.Instance.viewItem_store.SetActive(false);
+            Debug.Log("DeleteAllchild_inStore");
+        }
         if (this.CompareTag("Inven"))
-            Destroy(StoreManager.Instance.viewItem_Inven.gameObject);
+        {
+            //Destroy(StoreManager.Instance.viewItem_Inven.gameObject);
+            StoreManager.Instance.viewItem_Inven.SetActive(false);
+            Debug.Log("DeleteAllchild_inInven");
+        }
     }
 }

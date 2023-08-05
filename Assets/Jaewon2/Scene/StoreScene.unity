@@ -2175,8 +2175,10 @@ MonoBehaviour:
   uImanager: {fileID: 1825565653}
   itemMov: {fileID: 0}
   getData: {fileID: 0}
-  viewItem_store: {fileID: 0}
-  viewItem_Inven: {fileID: 0}
+  viewItem_store: {fileID: 6787778663694176831, guid: cb49b21767601564f8ba85f3fb70c702,
+    type: 3}
+  viewItem_Inven: {fileID: 6787778663694176831, guid: cb49b21767601564f8ba85f3fb70c702,
+    type: 3}
   itemindex: 0
   Itemindex_Inven: 0
 --- !u!4 &656807174
@@ -2863,7 +2865,7 @@ GameObject:
   - component: {fileID: 1115054775}
   m_Layer: 5
   m_Name: ViewObj_Inven
-  m_TagString: Store
+  m_TagString: Inven
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
