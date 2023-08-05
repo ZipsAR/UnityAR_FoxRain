@@ -69,6 +69,8 @@ public abstract class PetBase : MonoBehaviour
     private static readonly int ModeParameter = Animator.StringToHash("Mode");
     private static readonly int RunningParameter = Animator.StringToHash("Running");
     private static readonly int SitParameter = Animator.StringToHash("Sit");
+    private static readonly int Spit = Animator.StringToHash("Spit");
+    private static readonly int Bite = Animator.StringToHash("Bite");
     
     // Sounds
     [SerializeField] private List<Sound> petSoundList;
@@ -87,7 +89,8 @@ public abstract class PetBase : MonoBehaviour
     private GameObject toyObj;
     private bool isBiting;
     public Transform toyAttachPoint;
-    
+
+
     private void Start()
     {
         rotationSpeed = 10f;
@@ -462,9 +465,9 @@ public abstract class PetBase : MonoBehaviour
                     return;
                 }
                 isCoroutinePlayingList[(int)Cmd.Bite] = true;
-                animator.Play("PreBite");
-                Logger.Log("play prebite animation");
+                animator.SetTrigger(Bite);
                 toyObj = frontToy;
+
                 // isCoroutinePlayingList[(int)Cmd.Bite] = false; This part will be executed in the animation part
             }
     
@@ -501,8 +504,8 @@ public abstract class PetBase : MonoBehaviour
                 if (!isBiting) throw new Exception("no toys in pet's mouth");
                 
                 isCoroutinePlayingList[(int)Cmd.Spit] = true;
-                animator.Play("PreSpit");
-    
+                animator.SetTrigger(Spit);
+                
                 // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
             }
     
