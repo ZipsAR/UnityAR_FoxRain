@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.XR.Interaction.Toolkit;
 using Logger = ZipsAR.Logger;
 
 public enum PetStates
@@ -510,6 +511,10 @@ public abstract class PetBase : MonoBehaviour
                 Logger.Log("DetachToyFromMouth");
                 isBiting = false;
                 toyObj.transform.SetParent(null);
+                toyObj.GetComponent<Rigidbody>().isKinematic = false;
+                
+                // Enable this object to be grabbed
+                toyObj.GetComponent<XRGrabInteractable>().enabled = true;
                 toyObj.GetComponent<Rigidbody>().isKinematic = false;
                 
                 // Sound

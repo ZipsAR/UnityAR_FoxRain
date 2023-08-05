@@ -20,6 +20,9 @@ public class Toy : MonoBehaviour
         Logger.Log("selected Exited");
         GetComponent<Rigidbody>().useGravity = true;
 
+        // Disable Grabbing of this object
+        GetComponent<XRGrabInteractable>().enabled = false;
+
         // Event occurs after a certain period of time as soon as the user places the Grab snack
         StartCoroutine(NotifyToInteractManagerAfterTSeconds(responseTime));
     }
@@ -27,6 +30,8 @@ public class Toy : MonoBehaviour
     private IEnumerator NotifyToInteractManagerAfterTSeconds(float waitSeconds)
     {
         yield return new WaitForSeconds(waitSeconds);
+
+        GetComponent<Rigidbody>().isKinematic = true;
         
         Logger.Log("Notify toy Drop to InteractManager");
         GameManager.Instance.interactManager.NotifyToyDrop(transform);

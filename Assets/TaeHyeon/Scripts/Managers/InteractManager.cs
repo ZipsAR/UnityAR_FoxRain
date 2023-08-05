@@ -513,7 +513,7 @@ public class InteractManager : MonoBehaviour
             if(interactData.isColliding) return;
             
             // If the interaction is ignored, exit
-            if (interactData.isInteractionIgnored)
+            if (interactData.isInteractionIgnored || pet.inProcess)
             {
                 Logger.Log("interaction is ignored, please wait for a while");
                 return;
