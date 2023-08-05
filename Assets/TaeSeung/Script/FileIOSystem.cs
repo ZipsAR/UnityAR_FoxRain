@@ -16,7 +16,7 @@ public class FileIOSystem : Singleton<FileIOSystem>
     public const string HousingFilename = "Housingdatabase";
     public const string StatFilename = "Statdatabase";
 
-    private void Awake()
+    private void Start()
     {
         path = Application.persistentDataPath;
         try
