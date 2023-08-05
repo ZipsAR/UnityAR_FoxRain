@@ -182,15 +182,98 @@ MonoBehaviour:
     itemSound:
       eatSound: {fileID: 0}
       throwSound: {fileID: 0}
-  - Name: BoneToy
+  - Name: BallToy
     ID: 2001
     Housingsize: {x: 1, y: 1}
     BuyPrice: 400
     SellPrice: 320
+    Prefab: {fileID: 629580141820727744, guid: 8d7451146c30a40368f2a7bef7b00999, type: 3}
+    DetailInfo: "\uAC15\uC544\uC9C0\uAC00 \uC81C\uC77C \uC88B\uC544\uD558\uB294 \uACF5"
+    itemCategory: 2000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: BirdToy
+    ID: 2002
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 440
+    SellPrice: 352
+    Prefab: {fileID: 2640600744100432755, guid: 2ab551f906f09441ab63b353cd03f0d8,
+      type: 3}
+    DetailInfo: "\uADC0\uC5EC\uC6B4 \uC624\uB9AC"
+    itemCategory: 2000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: BoneToy
+    ID: 2003
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 500
+    SellPrice: 400
     Prefab: {fileID: 5141218689676214025, guid: 35b889ffce7984b1ab71b534d63e8e49,
       type: 3}
-    DetailInfo: "\uBF08\uB2E4\uADC0 \uC7A5\uB09C\uAC10\uC785\uB2C8\uB2E4. \uAC15\uC544\uC9C0\uB4E4\uC774
-      \uC544\uC8FC \uC88B\uC544\uD569\uB2C8\uB2E4."
+    DetailInfo: "\uD074\uB798\uC2DD\uD55C \uBF08\uB2E4\uADC0"
+    itemCategory: 2000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: CrocodileToy
+    ID: 2004
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 450
+    SellPrice: 360
+    Prefab: {fileID: 6955864280951840591, guid: 2191e707e67ba41c6885ff31e78a1fc4,
+      type: 3}
+    DetailInfo: "\uD558\uB098\uB3C4 \uC548 \uBB34\uC11C\uC6B4 \uC545\uC5B4"
+    itemCategory: 2000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: FishToy
+    ID: 2005
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 300
+    SellPrice: 240
+    Prefab: {fileID: 3452373452339690997, guid: a409ebd91322e46b899f4c916ad2eb55,
+      type: 3}
+    DetailInfo: "\uACE0\uC591\uC774\uAC00 \uC88B\uC544\uD558\uAC8C \uC0DD\uAE34 \uC0DD\uC120"
+    itemCategory: 2000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: LobsterToy
+    ID: 2006
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 400
+    SellPrice: 320
+    Prefab: {fileID: 6241821842273918048, guid: 0c0dee8f26d4b4a9db2640eb88d2f908,
+      type: 3}
+    DetailInfo: "\uB9DB\uC788\uC5B4 \uBCF4\uC774\uC9C0\uB9CC \uBABB \uBA39\uB294
+      \uB78D\uC2A4\uD130"
+    itemCategory: 2000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: MouseToy
+    ID: 2007
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 300
+    SellPrice: 240
+    Prefab: {fileID: 1932061168482324926, guid: d56d21284fb704f7886ad76faea28ad4,
+      type: 3}
+    DetailInfo: "\uC791\uACE0 \uADC0\uC5EC\uC6B4 \uC0DD\uC950"
+    itemCategory: 2000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: SpikyToy
+    ID: 2008
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 480
+    SellPrice: 384
+    Prefab: {fileID: 3852132196151276542, guid: 5ec6d282ad24c4c90a870e7b71788154,
+      type: 3}
+    DetailInfo: "\uC2DC\uB044\uB7EC\uC6CC \uBCF4\uC774\uB294 \uACE0\uBB34\uACF5"
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
