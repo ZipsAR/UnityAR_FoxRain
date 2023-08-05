@@ -4,17 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Logger = ZipsAR.Logger;
 
-public class Dog : PetBase
+public class Cat : PetBase
 {
     protected override void PetStatInitialize()
     {
-        stat.fullness = 40;
-        stat.tiredness = 40;
-        stat.cleanliness = 50;
+        stat.fullness = 50;
+        stat.tiredness = 30;
+        stat.cleanliness = 60;
         stat.exp = 0;
         stat.level = 1;
+        
+        stat.speed = 10;
     }
-    
+
     public override void InteractHead()
     {
         animator.Play("InteractHead");

@@ -45,46 +45,118 @@ public class InteractUIManager : MonoBehaviour
 
     private void Start()
     {
+        // Canvas Setting
         overlayCanvas.worldCamera = GameManager.Instance.player.gameObject.GetComponent<Camera>();
         overlayCanvas.planeDistance = 0.11f;
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        foreach (StatUIRef statUI in statUIList)
+        InteractEventManager.OnPetStatInitialized += OnPetStatInitialized;
+        InteractEventManager.OnPetStatChanged += OnPetStatChanged;
+    }
+
+    private void OnDisable()
+    {
+        InteractEventManager.OnPetStatInitialized -= OnPetStatInitialized;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
+    }
+
+    private void OnPetStatInitialized(object sender, PetStatInitializedArgs e)
+    {
+        PetStatBase initializedPetStat = e.petStatBase;
+
+        // Level
+        ClearStars();
+        InsertStars(initializedPetStat.level);
+        
+        // Exp
+        expSlider.value = initializedPetStat.exp / 100f;
+        
+        // Stat
+        foreach (StatUIRef statUIRef in statUIList)
         {
-            switch (statUI.statName)
+            switch (statUIRef.statName)
             {
                 case PetStatNames.Fullness:
-                    statUI.slider.value = trackingStat.fullness / 100f;
-                    CheckStatRating(statUI, false);
+                    statUIRef.slider.value = initializedPetStat.fullness / 100f;
+                    CheckStatRating(statUIRef, false);
                     break;
                 case PetStatNames.Tiredness:
-                    statUI.slider.value = trackingStat.tiredness / 100f;
-                    CheckStatRating(statUI, true);
+                    statUIRef.slider.value = initializedPetStat.tiredness / 100f;
+                    CheckStatRating(statUIRef, true);
                     break;
                 case PetStatNames.Cleanliness:
-                    statUI.slider.value = trackingStat.cleanliness / 100f;
-                    CheckStatRating(statUI, false);
+                    statUIRef.slider.value = initializedPetStat.cleanliness / 100f;
+                    CheckStatRating(statUIRef, false);
                     break;
-                // case PetStatNames.Exp:
-                //     break;
-                // case PetStatNames.Level:
-                //     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
         
-        // Level
-        ClearStars();
-        InsertStars(trackingStat.level);
         
-        // Exp
-        expSlider.value = trackingStat.exp / 100f;
-
     }
+    
+    private void OnPetStatChanged(object sender, PetStatChangedEventArgs e)
+    {
+        StatUIRef changeUIRef;
 
+        switch (e.changedStatName)
+        {
+            // Level
+            case PetStatNames.Level:
+                ClearStars();
+                InsertStars(e.postStatAmount);
+                return;
+            
+            // Exp
+            case PetStatNames.Exp:
+                expSlider.value = e.postStatAmount / 100f;
+                return;
+            
+            default:
+                // Stat
+                switch (e.changedStatName)
+                {
+                    case PetStatNames.Fullness:
+                        changeUIRef = statUIList[(int)PetStatNames.Fullness]; 
+                        if (changeUIRef.statName != PetStatNames.Fullness)
+                            throw new Exception("Stat trying to change does not match the current ui");
+                
+                        changeUIRef.slider.value = e.postStatAmount / 100f; 
+                        CheckStatRating(changeUIRef, false);
+                        break;
+            
+                    case PetStatNames.Tiredness:
+                        changeUIRef = statUIList[(int)PetStatNames.Tiredness]; 
+                        if (changeUIRef.statName != PetStatNames.Tiredness)
+                            throw new Exception("Stat trying to change does not match the current ui");
+                
+                        changeUIRef.slider.value = e.postStatAmount / 100f; 
+                        CheckStatRating(changeUIRef, true);
+                        break;
+            
+                    case PetStatNames.Cleanliness:
+                        changeUIRef = statUIList[(int)PetStatNames.Cleanliness]; 
+                        if (changeUIRef.statName != PetStatNames.Cleanliness)
+                            throw new Exception("Stat trying to change does not match the current ui");
+                
+                        changeUIRef.slider.value = e.postStatAmount / 100f; 
+                        CheckStatRating(changeUIRef, false);
+                        break;
+                    // case PetStatNames.Exp:
+                    //     break;
+                    // case PetStatNames.Level:
+                    //     break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                break;
+        }
+    }
+    
     private void CheckStatRating(StatUIRef statUIRef, bool isReversed)
     {
         if (isReversed)

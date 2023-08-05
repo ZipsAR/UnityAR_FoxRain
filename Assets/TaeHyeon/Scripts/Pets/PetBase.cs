@@ -125,6 +125,10 @@ public abstract class PetBase : MonoBehaviour
                 break;
             case PlayMode.None:
                 break;
+            case PlayMode.StoreMode:
+                break;
+            case PlayMode.HousingMode:
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -155,6 +159,8 @@ public abstract class PetBase : MonoBehaviour
         }
     }
 
+    public PetStatBase GetStat() => stat;
+    
     public void SetPetAnimationMode(PlayMode playMode)
     {
         animator.SetInteger(ModeParameter, (int)playMode);
@@ -188,7 +194,7 @@ public abstract class PetBase : MonoBehaviour
     }
     
     // Sound
-    private void PlaySound(PetSounds sound)
+    public void PlaySound(PetSounds sound)
     {
         GameManager.Instance.interactAudioManager.PlayPetSound(petSoundList[(int)sound].clip);
     }
@@ -404,10 +410,9 @@ public abstract class PetBase : MonoBehaviour
                 snackObj = null;
                 
                 // Stat
-                IncreaseStat(PetStatNames.Fullness, 10);
-                IncreaseStat(PetStatNames.Exp, 10);
-                
-                DecreaseStat(PetStatNames.Tiredness, 10);
+                UpdateStat(PetStatNames.Fullness, 10);
+                UpdateStat(PetStatNames.Exp, 10);
+                UpdateStat(PetStatNames.Tiredness, -10);
 
                 Logger.Log("EatEnd is activate");
             }
@@ -432,8 +437,8 @@ public abstract class PetBase : MonoBehaviour
                 PlaySound(PetSounds.Bark3);
                 
                 // Stat
-                IncreaseStat(PetStatNames.Cleanliness, 10);
-                IncreaseStat(PetStatNames.Exp, 7);
+                UpdateStat(PetStatNames.Cleanliness, 10);
+                UpdateStat(PetStatNames.Exp, 7);
                 
                 // isCoroutinePlayingList[(int)Cmd.Brush] = false; This part will be executed in the animation part
             }
@@ -513,8 +518,9 @@ public abstract class PetBase : MonoBehaviour
                 PlaySound(PetSounds.Bark2);
                 
                 // Stat
-                IncreaseStat(PetStatNames.Tiredness, 5);
-                IncreaseStat(PetStatNames.Exp, 40);
+                UpdateStat(PetStatNames.Tiredness, 5);
+                UpdateStat(PetStatNames.Exp, 40);
+                Logger.Log("exp update plus 40");
             }
     
             public void SpitEnd()
@@ -528,77 +534,73 @@ public abstract class PetBase : MonoBehaviour
     #endregion
 
 
-    #region Stat
-
-        public void IncreaseStat(PetStatNames statName, int val)
+     #region Stat
+     
+        public void UpdateStat(PetStatNames statName, int amountOfChange)
         {
-            if (val <= 0) throw new Exception("The stat value to be added must always be positive");
-            
+            if (amountOfChange == 0) throw new Exception("Stat change value must not always be zero");
+            int preStatValue;
+            int postStatValue;
             switch (statName)
             {
                 case PetStatNames.Fullness:
-                    stat.fullness = Mathf.Clamp(stat.fullness + val, 0, 100);
+                    preStatValue = stat.fullness;
+                    postStatValue = Mathf.Clamp(stat.fullness + amountOfChange, stat.statMin, stat.statMax);
+                    stat.fullness = postStatValue;
                     break;
+                
                 case PetStatNames.Tiredness:
-                    stat.tiredness = Mathf.Clamp(stat.tiredness + val, 0, 100);
+                    preStatValue = stat.tiredness;
+                    postStatValue = Mathf.Clamp(stat.tiredness + amountOfChange, stat.statMin, stat.statMax);
+                    stat.tiredness = postStatValue;
                     break;
+                
                 case PetStatNames.Cleanliness:
-                    stat.cleanliness = Mathf.Clamp(stat.cleanliness + val, 0, 100);
+                    preStatValue = stat.cleanliness;
+                    postStatValue = Mathf.Clamp(stat.cleanliness + amountOfChange, stat.statMin, stat.statMax);
+                    stat.cleanliness = postStatValue;
                     break;
+                
                 case PetStatNames.Exp:
-                    int combinedExp = stat.exp + val;
-                    if (combinedExp >= 100)
+                    preStatValue = stat.exp;
+                    int combinedExp = stat.exp + amountOfChange;
+                    
+                    if (combinedExp >= stat.expMax)
                     {
-                        int levelGain = combinedExp / 100;
-                        int expGain = combinedExp % 100;
-                        stat.level = Mathf.Clamp(stat.level + levelGain, 1, 10);
-                        stat.exp = expGain;
+                        int preLevel = stat.level;
+                        int levelGain = combinedExp / stat.expMax;
+                        int expGain = combinedExp % stat.expMax;
+                        int postLevel = Mathf.Clamp(stat.level + levelGain, 1, stat.levelMax);
+                        stat.level = postLevel;
+                        InteractEventManager.RaisePetStatChanged(stat, PetStatNames.Level, preLevel, postLevel);
+
+                        postStatValue = expGain;
+                        stat.exp = postStatValue;
                         Logger.Log("levelGain : " + levelGain);
                         Logger.Log("expGain : " + expGain);
                     }
                     else
                     {
-                        stat.exp = combinedExp;
+                        postStatValue = combinedExp;
+                        stat.exp = postStatValue;
                         Logger.Log("current exp after increase : " + stat.exp);
                     }
-                    
                     break;
+                
                 case PetStatNames.Level:
-                    stat.level = Mathf.Clamp(stat.level + val, 1, 10);
+                    preStatValue = stat.level;
+                    postStatValue = Mathf.Clamp(stat.level + amountOfChange, 1, stat.levelMax);
+                    stat.level = postStatValue;
                     break;
+                
                 default:
                     throw new ArgumentOutOfRangeException(nameof(statName), statName, null);
             }
 
-            ShowCurPetStat();
-        }
-
-        public void DecreaseStat(PetStatNames statName, int val)
-        {
-            if (val <= 0) throw new Exception("The subtracted stat value should always be positive");
+            // Notify to InteractUIManager
+            InteractEventManager.RaisePetStatChanged(stat, statName, preStatValue, postStatValue);
             
-            switch (statName)
-            {
-                case PetStatNames.Fullness:
-                    stat.fullness = Mathf.Clamp(stat.fullness - val, 0, 100);
-                    break;
-                case PetStatNames.Tiredness:
-                    stat.tiredness = Mathf.Clamp(stat.tiredness - val, 0, 100);
-                    break;
-                case PetStatNames.Cleanliness:
-                    stat.cleanliness = Mathf.Clamp(stat.cleanliness - val, 0, 100);
-                    break;
-                case PetStatNames.Exp:
-                    stat.exp = Mathf.Clamp(stat.exp - val, 0, 100);
-                    break;
-                case PetStatNames.Level:
-                    stat.level = Mathf.Clamp(stat.level - val, 1, 10);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(statName), statName, null);
-            }
-
-            ShowCurPetStat();
+            // ShowCurPetStat();
         }
 
         protected abstract void PetStatInitialize();

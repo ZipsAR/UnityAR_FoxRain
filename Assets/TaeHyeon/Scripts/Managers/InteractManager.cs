@@ -57,26 +57,12 @@ public class InteractManager : MonoBehaviour
         }
     }
 
-    public InteractData interactData;
+    [SerializeField] private InteractData interactData;
     [SerializeField] private PetBase pet;
 
     private Queue<CmdDetail> cmdQueue;
     private CmdDetail nextCmd;
-    
-    // Interact check variable
-    private Coroutine checkPetCollisionTimeCoroutine;
-    private float collisionTimer;
-    private bool isColliding;
-    private float collisionTimeLimit;
-    private PetParts curPetCollisionPart;
-    private float interactionCoolTime;
-    private bool isInteractionIgnored;
 
-    // Brushing
-    private float brushingTime;
-    private float brushingTimeThreshold;
-    private bool isBrushing;
-    
     // Stat
     private Vector3 prevPetPos;
     private StatChangeCriteria fullnessCreteria;
@@ -88,21 +74,15 @@ public class InteractManager : MonoBehaviour
         pet.SetPetAnimationMode(PlayMode.InteractMode);
         cmdQueue = new Queue<CmdDetail>();
 
-        // Interact check variable
-        collisionTimer = 0;
-        isColliding = false;
-        collisionTimeLimit = 2f;
-        curPetCollisionPart = PetParts.None;
-        interactionCoolTime = 1f;
-        isInteractionIgnored = false;
-        
-        // Brushing
-        brushingTime = 0f;
-        brushingTimeThreshold = 1f;
-        isBrushing = false;
-        
-        // Stat
+        // Stat for distance
         prevPetPos = pet.gameObject.transform.position;
+        
+        // Load Stat form local file
+        LoadStat();
+        
+        // Stat UI Init
+        InteractEventManager.NotifyStatInitialized(pet.GetStat());
+        Logger.Log("pet stat UI initialized");
 
         // Fullness
         fullnessCreteria = new StatChangeCriteria(2, 5, 0f, 0f, 1f, 1f);
@@ -112,10 +92,15 @@ public class InteractManager : MonoBehaviour
 
         // Cleanliness
         cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
-        
-        interactData.Init();
+
+        InitializeInteractData();
 
         SetInitialCmd();
+    }
+    
+    private void OnDestroy()
+    {
+        SaveStat();
     }
 
     private void Update()
@@ -133,23 +118,52 @@ public class InteractManager : MonoBehaviour
         StatUpdateByTime();
         
         // Check the time player brushing pet
-        if (isBrushing)
+        if (interactData.isBrushing)
         {
-            brushingTime += Time.deltaTime;
-            if (brushingTime > brushingTimeThreshold)
+            interactData.brushingTime += Time.deltaTime;
+            if (interactData.brushingTime > interactData.brushingTimeThreshold)
             {
                 ClearCmdQueue();
                 EnqueueCmd(Cmd.Brush);
-                isBrushing = false;
-                brushingTime = 0f;
+                interactData.isBrushing = false;
+                interactData.brushingTime = 0f;
             }
         }
     }
+    
+    private void InitializeInteractData()
+    {
+        interactData.isBrushing = false;
+        interactData.brushingTime = 0f;
+        interactData.brushingTimeThreshold = 1f;
+        
+        interactData.isColliding = false;
+        interactData.collisionTimer = 0f;
+        interactData.collisionTimeLimit = 2f;
+        interactData.curPetCollisionPart = PetParts.None;
+        interactData.checkPetCollisionTimeCoroutine = null;
 
+        interactData.isInteractionIgnored = false;
+        interactData.interactionCoolTime = 1f;
+    }
+    
     public PetBase GetCurPet() => pet;
 
-    #region TrackStat
+    public InteractData GetInteractData() => interactData;
+    
+    #region Stat
 
+        private void SaveStat()
+        {
+            FileIOSystem.Instance.statdatabase.savedStat = pet.GetStat();
+            FileIOSystem.Instance.Save(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
+        }
+
+        private void LoadStat()
+        {
+            FileIOSystem.Instance.Load(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
+        }
+    
         private void StatUpdateByDistance()
         {
             float distanceMoved = Vector3.Distance(pet.transform.position, prevPetPos);
@@ -159,7 +173,7 @@ public class InteractManager : MonoBehaviour
             if (fullnessCreteria.curDistance > fullnessCreteria.unitDistance)
             {
                 fullnessCreteria.curDistance -= fullnessCreteria.unitDistance;
-                pet.DecreaseStat(PetStatNames.Fullness, fullnessCreteria.fluctuatingValuePerDistance);
+                pet.UpdateStat(PetStatNames.Fullness, -fullnessCreteria.fluctuatingValuePerDistance);
             }
 
             // Decreasing cleanliness
@@ -167,7 +181,7 @@ public class InteractManager : MonoBehaviour
             if (cleanlinessCreteria.curDistance > cleanlinessCreteria.unitDistance)
             {
                 cleanlinessCreteria.curDistance -= cleanlinessCreteria.unitDistance;
-                pet.DecreaseStat(PetStatNames.Cleanliness, cleanlinessCreteria.fluctuatingValuePerDistance);
+                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCreteria.fluctuatingValuePerDistance);
             }
             
             // Increasing tiredness 
@@ -175,7 +189,7 @@ public class InteractManager : MonoBehaviour
             if (tirednessCreteria.curDistance > tirednessCreteria.unitDistance)
             {
                 tirednessCreteria.curDistance -= tirednessCreteria.unitDistance;
-                pet.IncreaseStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerDistance);
+                pet.UpdateStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerDistance);
             }
             
             // Save the current pet's location to the previous location variable
@@ -191,19 +205,19 @@ public class InteractManager : MonoBehaviour
             if (fullnessCreteria.curTime > fullnessCreteria.unitTime)
             {
                 fullnessCreteria.curTime = 0f;
-                pet.DecreaseStat(PetStatNames.Fullness, fullnessCreteria.fluctuatingValuePerTime);
+                pet.UpdateStat(PetStatNames.Fullness, -fullnessCreteria.fluctuatingValuePerTime);
             }
             
             if (cleanlinessCreteria.curTime > cleanlinessCreteria.unitTime)
             {
                 cleanlinessCreteria.curTime = 0f;
-                pet.DecreaseStat(PetStatNames.Cleanliness, cleanlinessCreteria.fluctuatingValuePerTime);
+                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCreteria.fluctuatingValuePerTime);
             }
 
             if (tirednessCreteria.curTime > tirednessCreteria.unitTime)
             {
                 tirednessCreteria.curTime = 0f;
-                pet.IncreaseStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerTime);
+                pet.UpdateStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerTime);
             }
         }
 
@@ -412,12 +426,12 @@ public class InteractManager : MonoBehaviour
         /// <param name="collisionState">true : onTriggerEnter, false : onTriggerExit</param>
         public void CombCollision(bool collisionState)
         {
-            isBrushing = collisionState;
+            interactData.isBrushing = collisionState;
 
             if (!collisionState)
             {
-                isBrushing = false;
-                brushingTime = 0f;
+                interactData.isBrushing = false;
+                interactData.brushingTime = 0f;
             }
         }
         
@@ -426,8 +440,11 @@ public class InteractManager : MonoBehaviour
             pet.InteractHead();
             
             // Stat
-            pet.DecreaseStat(PetStatNames.Tiredness, 5);
-            pet.IncreaseStat(PetStatNames.Exp, 5);
+            pet.UpdateStat(PetStatNames.Tiredness, -5);
+            pet.UpdateStat(PetStatNames.Exp, 5);
+            
+            // Sound
+            pet.PlaySound(PetSounds.Gasps);
             
             Logger.Log("interact head in interactManager");
         }
@@ -435,6 +452,11 @@ public class InteractManager : MonoBehaviour
         private void InteractWithJaw()
         {
             pet.InteractJaw();
+            
+            // Stat
+            pet.UpdateStat(PetStatNames.Tiredness, 4);
+            pet.UpdateStat(PetStatNames.Exp, 3);
+            
             Logger.Log("interact body in interactManager");
         }
         
@@ -443,9 +465,8 @@ public class InteractManager : MonoBehaviour
             pet.InteractBody();
             
             // Stat
-            pet.DecreaseStat(PetStatNames.Tiredness, 7);
-            pet.IncreaseStat(PetStatNames.Exp, 7);
-            
+            pet.UpdateStat(PetStatNames.Tiredness, -7);
+            pet.UpdateStat(PetStatNames.Exp, 7);
             Logger.Log("interact jaw in interactManager");
         }
         
@@ -454,9 +475,8 @@ public class InteractManager : MonoBehaviour
             pet.InteractHandDetection();
             
             // Stat
-            pet.DecreaseStat(PetStatNames.Tiredness, 10);
-            pet.IncreaseStat(PetStatNames.Exp, 10);
-
+            pet.UpdateStat(PetStatNames.Tiredness, -10);
+            pet.UpdateStat(PetStatNames.Exp, 10);
             Logger.Log("interact HandDetection in interactManager");
         }
 
@@ -471,30 +491,30 @@ public class InteractManager : MonoBehaviour
         public void PetPartCollisionEnter(PetParts petPart)
         {
             // If player is already touching another part, exit
-            if(isColliding) return;
+            if(interactData.isColliding) return;
             
             // If the interaction is ignored, exit
-            if (isInteractionIgnored)
+            if (interactData.isInteractionIgnored)
             {
                 Logger.Log("interaction is ignored, please wait for a while");
                 return;
             }
             
-            isColliding = true;
-            curPetCollisionPart = petPart;
+            interactData.isColliding = true;
+            interactData.curPetCollisionPart = petPart;
 
             // If it's a "hand" interaction,
             // make sure player is touching it for a certain period of time 
             if (petPart == PetParts.HandDetection)
             {
-                checkPetCollisionTimeCoroutine = StartCoroutine(CheckPetCollisionTime());
+                interactData.checkPetCollisionTimeCoroutine = StartCoroutine(CheckPetCollisionTime());
             }
             // The rest of the interaction runs immediately upon touch
             else
             {
                 CallInteractEvent(petPart);
                 
-                StartCoroutine(IgnoreInteractionForSeconds(interactionCoolTime));
+                StartCoroutine(IgnoreInteractionForSeconds(interactData.interactionCoolTime));
                 ResetCollisionInfo();
             }
         }
@@ -503,13 +523,13 @@ public class InteractManager : MonoBehaviour
         {
             while (true)
             {
-                collisionTimer += Time.deltaTime;
+                interactData.collisionTimer += Time.deltaTime;
 
-                if (collisionTimer > collisionTimeLimit)
+                if (interactData.collisionTimer > interactData.collisionTimeLimit)
                 {
-                    CallInteractEvent(curPetCollisionPart);
+                    CallInteractEvent(interactData.curPetCollisionPart);
 
-                    StartCoroutine(IgnoreInteractionForSeconds(interactionCoolTime));
+                    StartCoroutine(IgnoreInteractionForSeconds(interactData.interactionCoolTime));
                     ResetCollisionInfo();
                     break;
                 }
@@ -527,7 +547,7 @@ public class InteractManager : MonoBehaviour
         /// <returns></returns>
         private IEnumerator IgnoreInteractionForSeconds(float coolTime)
         {
-            isInteractionIgnored = true;
+            interactData.isInteractionIgnored = true;
             Logger.Log("ignore interaction start");
 
             while (coolTime > 0)
@@ -536,7 +556,7 @@ public class InteractManager : MonoBehaviour
                 yield return null;
             }
 
-            isInteractionIgnored = false;
+            interactData.isInteractionIgnored = false;
             Logger.Log("ignore interaction end");
         }
 
@@ -577,21 +597,21 @@ public class InteractManager : MonoBehaviour
         public void PetPartCollisionExit(PetParts petPart)
         {
             // If the hand and the pet weren't colliding, exit
-            if(!isColliding) return;
+            if(!interactData.isColliding) return;
             
             // If the part that fell is not in contact with it
             // Considering the situation where the hand touches several pet parts
             // at the same time and then falls off
-            if(curPetCollisionPart != petPart) return;
+            if(interactData.curPetCollisionPart != petPart) return;
             
-            StopCoroutine(checkPetCollisionTimeCoroutine);
+            StopCoroutine(interactData.checkPetCollisionTimeCoroutine);
             ResetCollisionInfo();
         }
         
         private void ResetCollisionInfo()
         {
-            collisionTimer = 0;
-            isColliding = false;
+            interactData.collisionTimer = 0;
+            interactData.isColliding = false;
         }
 
     #endregion
