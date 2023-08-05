@@ -27,13 +27,9 @@ public class FileIOSystem : Singleton<FileIOSystem>
         }
         catch(IOException e)
         {
-            AllSave();
-            if(invendatabase == null)
-                invendatabase = new();
-            if (housingdatabase == null)
-                housingdatabase = new();
-            if (statdatabase == null)
-                statdatabase = new();
+            Save(housingdatabase, HousingFilename);
+            Save(invendatabase, InvenFilename);
+
         }
     }
 
