@@ -4909,7 +4909,6 @@ MonoBehaviour:
   money: 0
   isSelected: 0
   itemdata: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
-  JsonItemdata: {fileID: 0}
 --- !u!114 &1816239741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5113,7 +5112,6 @@ MonoBehaviour:
   money: 0
   isSelected: 0
   itemdata: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
-  JsonItemdata: {fileID: 0}
 --- !u!114 &1825565655
 MonoBehaviour:
   m_ObjectHideFlags: 0
