@@ -1343,7 +1343,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &350397845
 MonoBehaviour:
@@ -1357,7 +1357,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bee426e6c1f70b0409ad7671c2b3f76f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fileIOSystem: {fileID: 1321906331}
 --- !u!1 &363434605
 GameObject:
   m_ObjectHideFlags: 0
@@ -2890,89 +2889,6 @@ RectTransform:
   m_AnchoredPosition: {x: -661, y: -109}
   m_SizeDelta: {x: 1000, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1321906330
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1321906332}
-  - component: {fileID: 1321906331}
-  m_Layer: 0
-  m_Name: ItemDataBase
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1321906331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1321906330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c42d747c81fc5c4cb479566ad26d02d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  invendatabase:
-    mydata:
-    - id: 1001
-      count: 0
-    - id: 1002
-      count: 0
-    - id: 1003
-      count: 0
-    - id: 1004
-      count: 0
-    - id: 1005
-      count: 0
-    - id: 1006
-      count: 0
-    - id: 1007
-      count: 0
-    - id: 1008
-      count: 0
-    - id: 1009
-      count: 0
-    - id: 1010
-      count: 0
-    - id: 1011
-      count: 0
-    - id: 1012
-      count: 0
-    - id: 1013
-      count: 0
-    - id: 1014
-      count: 0
-    - id: 2001
-      count: 0
-    - id: 2002
-      count: 0
-    - id: 3001
-      count: 0
-  housingdatabase:
-    objectsLocation: []
-  path: 
---- !u!4 &1321906332
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1321906330}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.042578697, y: 1.1788906, z: 3.2770069}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1331654434
 GameObject:
   m_ObjectHideFlags: 0
@@ -4993,7 +4909,7 @@ MonoBehaviour:
   money: 0
   isSelected: 0
   itemdata: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
-  JsonItemdata: {fileID: 1321906331}
+  JsonItemdata: {fileID: 0}
 --- !u!114 &1816239741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5063,7 +4979,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1816239737}
   m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0, z: 4.96}
+  m_LocalPosition: {x: 0, y: 0, z: 2.81}
   m_LocalScale: {x: 0.003, y: 0.003, z: 0.003}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5073,7 +4989,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 2.16, y: 0}
+  m_AnchoredPosition: {x: 1.13, y: 0}
   m_SizeDelta: {x: 1920.0001, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1825565648
@@ -5166,7 +5082,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825565648}
   m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0, z: 5.16}
+  m_LocalPosition: {x: 0, y: 0, z: 2.84}
   m_LocalScale: {x: 0.003, y: 0.003, z: 0.003}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5177,7 +5093,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -2.16, y: 0}
+  m_AnchoredPosition: {x: -1.36, y: 0}
   m_SizeDelta: {x: 1920.0001, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1825565653
@@ -5197,7 +5113,7 @@ MonoBehaviour:
   money: 0
   isSelected: 0
   itemdata: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
-  JsonItemdata: {fileID: 1321906331}
+  JsonItemdata: {fileID: 0}
 --- !u!114 &1825565655
 MonoBehaviour:
   m_ObjectHideFlags: 0

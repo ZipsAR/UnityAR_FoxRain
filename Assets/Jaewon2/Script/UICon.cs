@@ -9,13 +9,12 @@ public class UICon : MonoBehaviour
     public float money; //after FileIOSystem.Inven.monry > public
     public bool isSelected;
     public ItemDatabase itemdata;
-    public FileIOSystem JsonItemdata;
     private void Start()
     {
         isSelected = false;
         money = 10000;
         T_money.text = money.ToString();
-        JsonItemdata.AllLoad();
+        FileIOSystem.Instance.AllLoad();
     }
     public void BuyItem()
     {
@@ -27,10 +26,10 @@ public class UICon : MonoBehaviour
         money -= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
         T_money.text = money.ToString();
         Debug.Log("BuyPrice = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice);
-        JsonItemdata.invendatabase.mydata[StoreManager.Instance.itemindex].count++;
-        JsonItemdata.AllSave();
-        JsonItemdata.AllLoad();
-        string c = JsonUtility.ToJson(JsonItemdata.invendatabase);
+        FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count++;
+        FileIOSystem.Instance.AllSave();
+        FileIOSystem.Instance.AllLoad();
+        string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
         Debug.Log(c);
     }
     public void Sell()
@@ -38,10 +37,10 @@ public class UICon : MonoBehaviour
         money += itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice;
         T_money.text = money.ToString();
         Debug.Log("SellPrice = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice);
-        JsonItemdata.invendatabase.mydata[StoreManager.Instance.itemindex].count--;
-        JsonItemdata.AllSave();
-        JsonItemdata.AllLoad();
-        string c = JsonUtility.ToJson(JsonItemdata.invendatabase);
+        FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count--;
+        FileIOSystem.Instance.AllSave();
+        FileIOSystem.Instance.AllLoad();
+        string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
         Debug.Log(c);
     }
 }
