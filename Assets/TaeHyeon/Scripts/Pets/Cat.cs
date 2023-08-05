@@ -6,7 +6,7 @@ using Logger = ZipsAR.Logger;
 
 public class Cat : PetBase
 {
-    protected override void PetStatInitialize()
+    public override void InitializeStatByDefault()
     {
         stat.fullness = 50;
         stat.tiredness = 30;

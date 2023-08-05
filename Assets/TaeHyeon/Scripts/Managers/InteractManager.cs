@@ -76,10 +76,7 @@ public class InteractManager : MonoBehaviour
 
         // Stat for distance
         prevPetPos = pet.gameObject.transform.position;
-        
-        // Load Stat form local file
-        LoadStat();
-        
+
         // Stat UI Init
         InteractEventManager.NotifyStatInitialized(pet.GetStat());
         Logger.Log("pet stat UI initialized");
@@ -97,7 +94,28 @@ public class InteractManager : MonoBehaviour
 
         SetInitialCmd();
     }
-    
+
+    private void InitializePetStatByLoadStat()
+    {
+        pet.SetPetStatBase(FileIOSystem.Instance.statdatabase.savedStat);
+    }
+
+    private void OnEnable()
+    {
+        // Load Stat form local file
+        if (FileIOSystem.Instance.IsFileExist(FileIOSystem.StatFilename))
+        {
+            LoadStat();
+            InitializePetStatByLoadStat();
+            Logger.Log("Load Saved stat file");
+        }
+        else
+        {
+            pet.InitializeStatByDefault();
+            Logger.Log("there is no saved stat file");
+        }
+    }
+
     private void OnDisable()
     {
         SaveStat();
