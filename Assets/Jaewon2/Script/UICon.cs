@@ -30,7 +30,7 @@ public class UICon : MonoBehaviour
         FileIOSystem.Instance.AllSave();
         FileIOSystem.Instance.AllLoad();
         string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
-        Debug.Log(c);
+        Debug.Log("구매 = "+ StoreManager.Instance.itemindex + c);
     }
     public void Sell()
     {
@@ -41,6 +41,6 @@ public class UICon : MonoBehaviour
         FileIOSystem.Instance.AllSave();
         FileIOSystem.Instance.AllLoad();
         string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
-        Debug.Log(c);
+        Debug.Log("판매 = "+ StoreManager.Instance.itemindex+c);
     }
 }

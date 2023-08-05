@@ -1043,7 +1043,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &332932792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4909,7 +4909,6 @@ MonoBehaviour:
   money: 0
   isSelected: 0
   itemdata: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
-  JsonItemdata: {fileID: 0}
 --- !u!114 &1816239741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5113,7 +5112,6 @@ MonoBehaviour:
   money: 0
   isSelected: 0
   itemdata: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
-  JsonItemdata: {fileID: 0}
 --- !u!114 &1825565655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5646,7 +5644,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1941697464
 Transform:
   m_ObjectHideFlags: 0

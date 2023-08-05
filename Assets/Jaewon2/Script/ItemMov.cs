@@ -86,13 +86,11 @@ public class ItemMov : MonoBehaviour
         {
             //Destroy(StoreManager.Instance.viewItem_store.gameObject);
             StoreManager.Instance.viewItem_store.SetActive(false);
-            Debug.Log("DeleteAllchild_inStore");
         }
         if (this.CompareTag("Inven"))
         {
             //Destroy(StoreManager.Instance.viewItem_Inven.gameObject);
             StoreManager.Instance.viewItem_Inven.SetActive(false);
-            Debug.Log("DeleteAllchild_inInven");
         }
     }
 }
