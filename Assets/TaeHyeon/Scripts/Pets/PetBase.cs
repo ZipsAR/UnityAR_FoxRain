@@ -125,6 +125,10 @@ public abstract class PetBase : MonoBehaviour
                 break;
             case PlayMode.None:
                 break;
+            case PlayMode.StoreMode:
+                break;
+            case PlayMode.HousingMode:
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }

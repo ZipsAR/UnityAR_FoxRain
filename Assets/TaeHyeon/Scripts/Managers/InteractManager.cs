@@ -76,6 +76,10 @@ public class InteractManager : MonoBehaviour
 
         // Stat for distance
         prevPetPos = pet.gameObject.transform.position;
+        
+        // Load Stat form local file
+        LoadStat();
+        
         // Stat UI Init
         InteractEventManager.NotifyStatInitialized(pet.GetStat());
         Logger.Log("pet stat UI initialized");
@@ -93,21 +97,10 @@ public class InteractManager : MonoBehaviour
 
         SetInitialCmd();
     }
-
-    private void InitializeInteractData()
+    
+    private void OnDestroy()
     {
-        interactData.isBrushing = false;
-        interactData.brushingTime = 0f;
-        interactData.brushingTimeThreshold = 1f;
-        
-        interactData.isColliding = false;
-        interactData.collisionTimer = 0f;
-        interactData.collisionTimeLimit = 2f;
-        interactData.curPetCollisionPart = PetParts.None;
-        interactData.checkPetCollisionTimeCoroutine = null;
-
-        interactData.isInteractionIgnored = false;
-        interactData.interactionCoolTime = 1f;
+        SaveStat();
     }
 
     private void Update()
@@ -137,13 +130,40 @@ public class InteractManager : MonoBehaviour
             }
         }
     }
+    
+    private void InitializeInteractData()
+    {
+        interactData.isBrushing = false;
+        interactData.brushingTime = 0f;
+        interactData.brushingTimeThreshold = 1f;
+        
+        interactData.isColliding = false;
+        interactData.collisionTimer = 0f;
+        interactData.collisionTimeLimit = 2f;
+        interactData.curPetCollisionPart = PetParts.None;
+        interactData.checkPetCollisionTimeCoroutine = null;
 
+        interactData.isInteractionIgnored = false;
+        interactData.interactionCoolTime = 1f;
+    }
+    
     public PetBase GetCurPet() => pet;
 
     public InteractData GetInteractData() => interactData;
     
-    #region TrackStat
+    #region Stat
 
+        private void SaveStat()
+        {
+            FileIOSystem.Instance.statdatabase.savedStat = pet.GetStat();
+            FileIOSystem.Instance.Save(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
+        }
+
+        private void LoadStat()
+        {
+            FileIOSystem.Instance.Load(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
+        }
+    
         private void StatUpdateByDistance()
         {
             float distanceMoved = Vector3.Distance(pet.transform.position, prevPetPos);
