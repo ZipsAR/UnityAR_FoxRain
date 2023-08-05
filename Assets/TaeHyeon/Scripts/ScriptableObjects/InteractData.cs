@@ -17,6 +17,9 @@ public class InteractData : ScriptableObject
     public float brushingTime;
     public float brushingTimeThreshold;
 
+    // Biting
+    [Header("Biting Distance")] public float bitingDistance;
+    
     [Header("Hand interaction Info")]
     // Hand interaction Info
     public bool isColliding;

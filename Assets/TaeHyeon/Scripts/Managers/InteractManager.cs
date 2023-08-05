@@ -155,6 +155,8 @@ public class InteractManager : MonoBehaviour
         interactData.isBrushing = false;
         interactData.brushingTime = 0f;
         interactData.brushingTimeThreshold = 1f;
+
+        interactData.bitingDistance = 0.2f;
         
         interactData.isColliding = false;
         interactData.collisionTimer = 0f;
@@ -271,7 +273,8 @@ public class InteractManager : MonoBehaviour
             // Move to snack position
             // pet.CmdMoveTo(snackPos);
             ClearCmdQueue();
-            EnqueueCmd(Cmd.Move, snackTransform.position);
+            // EnqueueCmd(Cmd.Move, snackTransform.position);
+            EnqueueCmd(Cmd.Move, GetPointBeforeBiting(transform.position, snackTransform.position));
             EnqueueCmd(Cmd.Look);
             EnqueueCmd(Cmd.Sit);
             EnqueueCmd(Cmd.Eat, targetObj: snackTransform.gameObject);
@@ -300,17 +303,29 @@ public class InteractManager : MonoBehaviour
                 Logger.Log("waiting for current command end");
                 yield return null;
             }
-            
+
             // Stop All command 
             pet.AbortAllCmd();
             
             // Move to toy position
             ClearCmdQueue();
-            EnqueueCmd(Cmd.Move, toyTransform.position);
-            EnqueueCmd(Cmd.Look);
+            // EnqueueCmd(Cmd.Move, toyTransform.position);
+            EnqueueCmd(Cmd.Move, GetPointBeforeBiting(transform.position, toyTransform.position));
             EnqueueCmd(Cmd.Bite, targetObj: toyTransform.gameObject);
+            EnqueueCmd(Cmd.Look);
             EnqueueCmd(Cmd.Move, pos: GameManager.Instance.player.gameObject.transform.position);
+            EnqueueCmd(Cmd.Look);
             EnqueueCmd(Cmd.Spit);
+        }
+
+        private Vector3 GetPointBeforeBiting(Vector3 startPoint, Vector3 endPoint)
+        {
+            float distance = Vector3.Distance(startPoint, endPoint);
+            float x = endPoint.x - (interactData.bitingDistance / distance) * (endPoint.x - startPoint.x);
+            float y = startPoint.y;
+            float z = endPoint.z - (interactData.bitingDistance / distance) * (endPoint.z - startPoint.z);
+
+            return new Vector3(x, y, z);
         }
     
     #endregion
