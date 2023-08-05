@@ -99,7 +99,7 @@ public abstract class PetBase : MonoBehaviour
             throw new Exception("Number of petSoundList and number of PetSounds do not match");
 
         // Init pet stat individually
-        PetStatInitialize();
+        // PetStatInitialize();
         ShowCurPetStat();
         Logger.Log("pet stat initialized");
         
@@ -158,8 +158,6 @@ public abstract class PetBase : MonoBehaviour
             yield return null;
         }
     }
-
-    public PetStatBase GetStat() => stat;
     
     public void SetPetAnimationMode(PlayMode playMode)
     {
@@ -533,10 +531,14 @@ public abstract class PetBase : MonoBehaviour
 
     #endregion
 
-
-     #region Stat
+    
+    #region Stat
      
-        public void UpdateStat(PetStatNames statName, int amountOfChange)
+         public PetStatBase GetStat() => stat;
+
+         public void SetPetStatBase(PetStatBase loadedStat) => stat = loadedStat;
+
+         public void UpdateStat(PetStatNames statName, int amountOfChange)
         {
             if (amountOfChange == 0) throw new Exception("Stat change value must not always be zero");
             int preStatValue;

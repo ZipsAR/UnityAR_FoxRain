@@ -79,6 +79,7 @@ public class InteractManager : MonoBehaviour
         
         // Load Stat form local file
         LoadStat();
+        InitializePetStatByLoadStat();
         
         // Stat UI Init
         InteractEventManager.NotifyStatInitialized(pet.GetStat());
@@ -97,7 +98,12 @@ public class InteractManager : MonoBehaviour
 
         SetInitialCmd();
     }
-    
+
+    private void InitializePetStatByLoadStat()
+    {
+        pet.SetPetStatBase(FileIOSystem.Instance.statdatabase.savedStat);
+    }
+
     private void OnDisable()
     {
         SaveStat();
