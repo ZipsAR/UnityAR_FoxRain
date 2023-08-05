@@ -19,6 +19,8 @@ public class FileIOSystem : Singleton<FileIOSystem>
     private void Start()
     {
         path = Application.persistentDataPath;
+        print(IsFileExist(InvenFilename));
+
         try
         {
             AllLoad();
@@ -34,6 +36,23 @@ public class FileIOSystem : Singleton<FileIOSystem>
                 statdatabase = new();
         }
     }
+
+
+    /// <summary>
+    /// Check file exist
+    /// </summary>
+    /// <param name="filename">choice find filename</param>
+    /// <returns>exist: true, else: false </returns>
+    public bool IsFileExist(string filename)
+    {
+        if (File.Exists(path + "/" + filename + ".json"))
+            return true;
+
+        else
+            return false;
+    }
+
+
 
 
     //Save data file
