@@ -98,7 +98,7 @@ public class InteractManager : MonoBehaviour
         SetInitialCmd();
     }
     
-    private void OnDestroy()
+    private void OnDisable()
     {
         SaveStat();
     }
