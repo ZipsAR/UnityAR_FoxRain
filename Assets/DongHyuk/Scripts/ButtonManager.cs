@@ -7,6 +7,9 @@ public class ButtonManager : MonoBehaviour
 {
     public GameObject buttonItSelf;
 
+    [SerializeField]
+    private ItemDatabase database;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -82,6 +85,12 @@ public class ButtonManager : MonoBehaviour
                     buttonItSelf.transform.parent.gameObject.SetActive(false);
                     for(int i = 1; i < 5; i++)
                         buttonItSelf.transform.parent.parent.parent.GetChild(i).gameObject.SetActive(true);
+
+                    int idx = database.ItemData.FindIndex(data => data.ID == 1011); //임시로 의자(1011) 생성함. 추후 DB입력 완료되면 빗으로 수정
+                    GameObject combobject = Instantiate(database.ItemData[idx].Prefab);
+                    combobject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                    combobject.transform.position = GameManager.Instance.leftHand.transform.position;            
+
                 }
                 break;
                 case "RadialButton3":
