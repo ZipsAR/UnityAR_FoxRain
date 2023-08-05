@@ -171,11 +171,22 @@ MonoBehaviour:
     itemSound:
       eatSound: {fileID: 0}
       throwSound: {fileID: 0}
+  - Name: Comb
+    ID: 2000
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 300
+    SellPrice: 240
+    Prefab: {fileID: 203621444003351315, guid: 163998f8056714b99b93561a3b01255b, type: 3}
+    DetailInfo: "\uD3AB\uC774 \uC88B\uC544\uD558\uB294 \uBE57!"
+    itemCategory: 2000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
   - Name: BoneToy
     ID: 2001
     Housingsize: {x: 1, y: 1}
-    BuyPrice: 500
-    SellPrice: 500
+    BuyPrice: 400
+    SellPrice: 320
     Prefab: {fileID: 5141218689676214025, guid: 35b889ffce7984b1ab71b534d63e8e49,
       type: 3}
     DetailInfo: "\uBF08\uB2E4\uADC0 \uC7A5\uB09C\uAC10\uC785\uB2C8\uB2E4. \uAC15\uC544\uC9C0\uB4E4\uC774
@@ -184,25 +195,62 @@ MonoBehaviour:
     itemSound:
       eatSound: {fileID: 0}
       throwSound: {fileID: 0}
-  - Name: Comb
-    ID: 2002
-    Housingsize: {x: 1, y: 1}
-    BuyPrice: 500
-    SellPrice: 500
-    Prefab: {fileID: 203621444003351315, guid: 163998f8056714b99b93561a3b01255b, type: 3}
-    DetailInfo: "\uBE57\uC785\uB2C8\uB2E4. \uCCAD\uACB0\uB3C4\uB97C \uC5EC\uC90D\uB2C8\uB2E4."
-    itemCategory: 2000
-    itemSound:
-      eatSound: {fileID: 0}
-      throwSound: {fileID: 0}
   - Name: BoneSnack
-    ID: 3001
+    ID: 3000
     Housingsize: {x: 1, y: 1}
     BuyPrice: 500
-    SellPrice: 500
+    SellPrice: 400
     Prefab: {fileID: 3910887079519108017, guid: 4c0489d7f80774ecca786880e7b02f3e,
       type: 3}
     DetailInfo: "\uBF08\uB2E4\uADC0 \uBAA8\uC591 \uAC04\uC2DD\uC785\uB2C8\uB2E4. "
+    itemCategory: 3000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: AppleSnack
+    ID: 3001
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 600
+    SellPrice: 480
+    Prefab: {fileID: 3426476143141822275, guid: c6b85e0423c074669b92c5c071bce37b,
+      type: 3}
+    DetailInfo: "\uB9DB\uC788\uB294 \uC0AC\uACFC!"
+    itemCategory: 3000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: BananaSnack
+    ID: 3002
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 550
+    SellPrice: 440
+    Prefab: {fileID: 1318835593607769837, guid: 46f051e1a55f94195bc6c8a9b73ce9d4,
+      type: 3}
+    DetailInfo: "\uC544\uC8FC \uB2EC\uB2EC\uD55C \uBC14\uB098\uB098"
+    itemCategory: 3000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: OrangeSnack
+    ID: 3003
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 550
+    SellPrice: 440
+    Prefab: {fileID: 3121923051155183410, guid: ce3e4d1d2262f4ae4b9611ff369ae9d6,
+      type: 3}
+    DetailInfo: "\uC0C8\uCF64 \uB2EC\uCF64\uD55C \uC624\uB79C\uC9C0"
+    itemCategory: 3000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: HalfOrangeSnack
+    ID: 3004
+    Housingsize: {x: 1, y: 1}
+    BuyPrice: 300
+    SellPrice: 240
+    Prefab: {fileID: 2273176550276457144, guid: b97a0d4b033fb4a118064f22496d792a,
+      type: 3}
+    DetailInfo: "\uC0DD\uAC01\uBCF4\uB2E4 \uC0C8\uCF64\uD55C \uBC18\uCABD \uC624\uB79C\uC9C0"
     itemCategory: 3000
     itemSound:
       eatSound: {fileID: 0}
