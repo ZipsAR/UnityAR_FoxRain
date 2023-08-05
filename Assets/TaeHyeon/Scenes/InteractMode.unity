@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 16826962}
   - component: {fileID: 16826963}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: Exp Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -900,7 +900,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b77deb974d629457ba313ab3d8323d16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stat: {fileID: 11400000, guid: ff8e114ff10354ad982ec416136f42fa, type: 2}
+  stat:
+    statMin: 0
+    statMax: 100
+    expMax: 100
+    levelMax: 10
+    fullness: 0
+    tiredness: 0
+    cleanliness: 0
+    exp: 0
+    level: 0
+    health: 0
+    speed: 0
+    reactionSpeed: 0
+    jumpPower: 0
+    disobedienceRate: 0
   petSoundList:
   - name: Bark1
     clip: {fileID: 8300000, guid: d1fa193c6bc44488984a50c0afa594e2, type: 3}
@@ -1444,7 +1458,7 @@ GameObject:
   - component: {fileID: 223572325}
   - component: {fileID: 223572324}
   m_Layer: 5
-  m_Name: State
+  m_Name: Fullness State
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2456,7 +2470,7 @@ PrefabInstance:
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
@@ -2466,17 +2480,17 @@ PrefabInstance:
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
@@ -2516,12 +2530,12 @@ PrefabInstance:
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 80
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
@@ -4097,7 +4111,7 @@ GameObject:
   - component: {fileID: 1219322292}
   - component: {fileID: 1219322293}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: Tiredness Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4903,7 +4917,7 @@ GameObject:
   - component: {fileID: 1453657130}
   - component: {fileID: 1453657129}
   m_Layer: 5
-  m_Name: State
+  m_Name: Cleanliness State
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5726,7 +5740,7 @@ GameObject:
   - component: {fileID: 1834142540}
   - component: {fileID: 1834142539}
   m_Layer: 5
-  m_Name: State
+  m_Name: Tiredness State
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5801,7 +5815,7 @@ GameObject:
   - component: {fileID: 1848700160}
   - component: {fileID: 1848700161}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: Cleanliness Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6535,17 +6549,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exitBtn: {fileID: 1378733531}
   overlayCanvas: {fileID: 230113479}
-  trackingStat: {fileID: 11400000, guid: ff8e114ff10354ad982ec416136f42fa, type: 2}
+  trackingStat:
+    statMin: 0
+    statMax: 100
+    expMax: 100
+    levelMax: 10
+    fullness: 0
+    tiredness: 0
+    cleanliness: 0
+    exp: 0
+    level: 0
+    health: 0
+    speed: 0
+    reactionSpeed: 0
+    jumpPower: 0
+    disobedienceRate: 0
   statUIList:
   - statName: 0
     slider: {fileID: 9141174177225118538}
     stateImg: {fileID: 223572324}
-  - statName: 2
-    slider: {fileID: 1848700161}
-    stateImg: {fileID: 1453657129}
   - statName: 1
     slider: {fileID: 1219322293}
     stateImg: {fileID: 1834142539}
+  - statName: 2
+    slider: {fileID: 1848700161}
+    stateImg: {fileID: 1453657129}
   statRatingSpriteList:
   - {fileID: 21300000, guid: d5cca64a8cf604e2f8aa6a24608a2153, type: 3}
   - {fileID: 21300000, guid: 506f56bbff11949cfb783bfd7b5acc25, type: 3}
@@ -6811,7 +6839,7 @@ PrefabInstance:
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
@@ -6821,17 +6849,17 @@ PrefabInstance:
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
@@ -6871,12 +6899,12 @@ PrefabInstance:
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3457453071048806230, guid: 9cbd72a9d69e34fdc8a08e092315bb26,
         type: 3}
@@ -7876,7 +7904,7 @@ GameObject:
   - component: {fileID: 9141174177225118539}
   - component: {fileID: 9141174177225118538}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: Fullness Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

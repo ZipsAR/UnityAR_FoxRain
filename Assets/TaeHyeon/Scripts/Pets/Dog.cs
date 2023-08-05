@@ -13,6 +13,8 @@ public class Dog : PetBase
         stat.cleanliness = 50;
         stat.exp = 0;
         stat.level = 1;
+
+        stat.speed = 15;
     }
     
     public override void InteractHead()

@@ -101,8 +101,11 @@ public class InteractManager : MonoBehaviour
         brushingTimeThreshold = 1f;
         isBrushing = false;
         
-        // Stat
+        // Stat for distance
         prevPetPos = pet.gameObject.transform.position;
+        // Stat UI Init
+        InteractEventManager.NotifyStatInitialized(pet.GetStat());
+        Logger.Log("pet stat UI initialized");
 
         // Fullness
         fullnessCreteria = new StatChangeCriteria(2, 5, 0f, 0f, 1f, 1f);
@@ -159,7 +162,7 @@ public class InteractManager : MonoBehaviour
             if (fullnessCreteria.curDistance > fullnessCreteria.unitDistance)
             {
                 fullnessCreteria.curDistance -= fullnessCreteria.unitDistance;
-                pet.DecreaseStat(PetStatNames.Fullness, fullnessCreteria.fluctuatingValuePerDistance);
+                pet.UpdateStat(PetStatNames.Fullness, -fullnessCreteria.fluctuatingValuePerDistance);
             }
 
             // Decreasing cleanliness
@@ -167,7 +170,7 @@ public class InteractManager : MonoBehaviour
             if (cleanlinessCreteria.curDistance > cleanlinessCreteria.unitDistance)
             {
                 cleanlinessCreteria.curDistance -= cleanlinessCreteria.unitDistance;
-                pet.DecreaseStat(PetStatNames.Cleanliness, cleanlinessCreteria.fluctuatingValuePerDistance);
+                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCreteria.fluctuatingValuePerDistance);
             }
             
             // Increasing tiredness 
@@ -175,7 +178,7 @@ public class InteractManager : MonoBehaviour
             if (tirednessCreteria.curDistance > tirednessCreteria.unitDistance)
             {
                 tirednessCreteria.curDistance -= tirednessCreteria.unitDistance;
-                pet.IncreaseStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerDistance);
+                pet.UpdateStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerDistance);
             }
             
             // Save the current pet's location to the previous location variable
@@ -191,19 +194,19 @@ public class InteractManager : MonoBehaviour
             if (fullnessCreteria.curTime > fullnessCreteria.unitTime)
             {
                 fullnessCreteria.curTime = 0f;
-                pet.DecreaseStat(PetStatNames.Fullness, fullnessCreteria.fluctuatingValuePerTime);
+                pet.UpdateStat(PetStatNames.Fullness, -fullnessCreteria.fluctuatingValuePerTime);
             }
             
             if (cleanlinessCreteria.curTime > cleanlinessCreteria.unitTime)
             {
                 cleanlinessCreteria.curTime = 0f;
-                pet.DecreaseStat(PetStatNames.Cleanliness, cleanlinessCreteria.fluctuatingValuePerTime);
+                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCreteria.fluctuatingValuePerTime);
             }
 
             if (tirednessCreteria.curTime > tirednessCreteria.unitTime)
             {
                 tirednessCreteria.curTime = 0f;
-                pet.IncreaseStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerTime);
+                pet.UpdateStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerTime);
             }
         }
 
@@ -426,8 +429,11 @@ public class InteractManager : MonoBehaviour
             pet.InteractHead();
             
             // Stat
-            pet.DecreaseStat(PetStatNames.Tiredness, 5);
-            pet.IncreaseStat(PetStatNames.Exp, 5);
+            pet.UpdateStat(PetStatNames.Tiredness, -5);
+            pet.UpdateStat(PetStatNames.Exp, 5);
+            
+            // Sound
+            pet.PlaySound(PetSounds.Gasps);
             
             Logger.Log("interact head in interactManager");
         }
@@ -435,6 +441,11 @@ public class InteractManager : MonoBehaviour
         private void InteractWithJaw()
         {
             pet.InteractJaw();
+            
+            // Stat
+            pet.UpdateStat(PetStatNames.Tiredness, 4);
+            pet.UpdateStat(PetStatNames.Exp, 3);
+            
             Logger.Log("interact body in interactManager");
         }
         
@@ -443,9 +454,8 @@ public class InteractManager : MonoBehaviour
             pet.InteractBody();
             
             // Stat
-            pet.DecreaseStat(PetStatNames.Tiredness, 7);
-            pet.IncreaseStat(PetStatNames.Exp, 7);
-            
+            pet.UpdateStat(PetStatNames.Tiredness, -7);
+            pet.UpdateStat(PetStatNames.Exp, 7);
             Logger.Log("interact jaw in interactManager");
         }
         
@@ -454,9 +464,8 @@ public class InteractManager : MonoBehaviour
             pet.InteractHandDetection();
             
             // Stat
-            pet.DecreaseStat(PetStatNames.Tiredness, 10);
-            pet.IncreaseStat(PetStatNames.Exp, 10);
-
+            pet.UpdateStat(PetStatNames.Tiredness, -10);
+            pet.UpdateStat(PetStatNames.Exp, 10);
             Logger.Log("interact HandDetection in interactManager");
         }
 
