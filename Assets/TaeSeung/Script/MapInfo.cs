@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class MapInfo : Singleton<MapInfo>
 {
     // Start is called before the first frame update
     public Vector2Int Mapsize;
     public float MapScale;
+    private float FirstScale;
     public bool initialize;
 
     [SerializeField]
@@ -14,7 +16,7 @@ public class MapInfo : Singleton<MapInfo>
     [SerializeField]
     private Material gridgraph;
 
-    private Vector3 TileMapscale, TileScale, CursorScale, PlaneScale, TileEffectScale;
+    private Vector3 TileMapscale, TileScale, CursorScale, TileEffectScale;
 
 
 
@@ -22,14 +24,15 @@ public class MapInfo : Singleton<MapInfo>
     {
         if(initialize) MapInitialize();
         TileEffectScale = Tile.transform.GetChild(0).localScale;
-
         SetOrigin();
     }
-
 
     public void SetOrigin()
     {
         this.transform.position = new Vector3(0, -0.6f, 1);
+        this.transform.eulerAngles = new Vector3(0, 0, 0);
+        //SetReScale(FirstScale);
+        
     }
 
     public void SetAnotherPosition(Vector3 newposition)
@@ -41,7 +44,7 @@ public class MapInfo : Singleton<MapInfo>
     public void MapInitialize()
     {
         float reverseMapScale = 1 / MapScale;
-
+        FirstScale = MapScale;
         if (TileMap)
         {
             TileMapscale = TileMap.transform.localScale;
@@ -58,9 +61,7 @@ public class MapInfo : Singleton<MapInfo>
             TileScale = gridgraph.GetVector("_Size");
             gridgraph.SetVector("_Size", TileScale * MapScale);
         }
-        
     }
-
 
     public void SetTileScale(Vector3 scale)
     {
@@ -79,12 +80,61 @@ public class MapInfo : Singleton<MapInfo>
         Tile.transform.GetChild(0).localScale = effectscale;
     }
 
+
+
+
+    public void SetReScale(float rescale){
+
+        MapScale = rescale;
+        float reverseMapScale = 1 / MapScale;
+
+        if (TileMap)
+            TileMap.transform.localScale = TileMapscale * reverseMapScale;
+
+        if (Cursor)
+            Cursor.transform.localScale = CursorScale * reverseMapScale;
+
+        if (gridgraph)
+            gridgraph.SetVector("_Size", TileScale * MapScale);
+    }
+
     public void ResetTileScale()
     {
         Tile.transform.GetChild(0).localScale = TileEffectScale;
+    }
 
+    public void SetMapHousingmode()
+    {
+        PlacementSystem.Instance.ReleaseGrib();
+        this.gameObject.SetActive(true);
+    }
+
+    public void SetMapNormalmode()
+    {
+        PlacementSystem.Instance.ProtectGrib();
+        this.gameObject.SetActive(true);
+    }
+
+    public void SetInvisiblemode()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    public void MapGrabmode(){
+        this.GetComponent<XRGrabInteractable>().enabled = true;
+    }
+
+    public void MapUnGrabmode() {
+        this.GetComponent<XRGrabInteractable>().enabled = false;
     }
 
 
+    public void Catchout()
+    {
+        Vector3 rotate = this.gameObject.transform.rotation.eulerAngles;
+        rotate.x = 0;
+        rotate.z = 0;
+        this.transform.eulerAngles = rotate;
+    }
 
 }
