@@ -112,6 +112,7 @@ public class InteractManager : MonoBehaviour
         else
         {
             pet.InitializeStatByDefault();
+            SaveStat();
             Logger.Log("there is no saved stat file");
         }
     }

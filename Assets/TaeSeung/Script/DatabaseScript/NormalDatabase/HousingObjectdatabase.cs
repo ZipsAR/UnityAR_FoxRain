@@ -24,7 +24,7 @@ public class HousingObjectdatabase
 public class StatDatabase
 {
       //������ ���� �����ε�, ������ �����̰� ��������Ű����� ���߿� ��Ծ
-      public PetStatBase savedStat;
+      public PetStatBase savedStat = new();
 }
 
 
