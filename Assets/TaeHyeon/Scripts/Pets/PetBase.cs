@@ -71,6 +71,7 @@ public abstract class PetBase : MonoBehaviour
     private static readonly int SitParameter = Animator.StringToHash("Sit");
     private static readonly int Spit = Animator.StringToHash("Spit");
     private static readonly int Bite = Animator.StringToHash("Bite");
+    private static readonly int Eat = Animator.StringToHash("Eat");
     
     // Sounds
     [SerializeField] private List<Sound> petSoundList;
@@ -396,7 +397,7 @@ public abstract class PetBase : MonoBehaviour
                     return;
                 }
                 isCoroutinePlayingList[(int)Cmd.Eat] = true;
-                animator.Play("Eat");
+                animator.SetTrigger(Eat);
     
                 // Sound
                 PlaySound(PetSounds.Eat);
