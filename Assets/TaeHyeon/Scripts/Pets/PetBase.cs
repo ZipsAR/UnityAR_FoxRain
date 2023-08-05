@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 using Logger = ZipsAR.Logger;
 
@@ -66,12 +65,13 @@ public abstract class PetBase : MonoBehaviour
     private bool isInitDone;
 
     // Animation Parameter
-    private static readonly int ModeParameter = Animator.StringToHash("Mode");
-    private static readonly int RunningParameter = Animator.StringToHash("Running");
-    private static readonly int SitParameter = Animator.StringToHash("Sit");
+    private static readonly int Mode = Animator.StringToHash("Mode");
+    private static readonly int Running = Animator.StringToHash("Running");
+    private static readonly int Sit = Animator.StringToHash("Sit");
     private static readonly int Spit = Animator.StringToHash("Spit");
     private static readonly int Bite = Animator.StringToHash("Bite");
     private static readonly int Eat = Animator.StringToHash("Eat");
+    private static readonly int Brush = Animator.StringToHash("Brush");
     
     // Sounds
     [SerializeField] private List<Sound> petSoundList;
@@ -166,7 +166,7 @@ public abstract class PetBase : MonoBehaviour
     
     public void SetPetAnimationMode(PlayMode playMode)
     {
-        animator.SetInteger(ModeParameter, (int)playMode);
+        animator.SetInteger(Mode, (int)playMode);
     }
 
     private void UpdateStrollMode()
@@ -260,7 +260,7 @@ public abstract class PetBase : MonoBehaviour
                 petStates = PetStates.Walk;
     
                 // Set animation
-                animator.SetBool(RunningParameter, true);
+                animator.SetBool(Running, true);
                 
                 float t = 0;
                 while (transform.position != destination && petStates == PetStates.Walk)
@@ -274,10 +274,11 @@ public abstract class PetBase : MonoBehaviour
                     
                     // Set position
                     t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
-                    transform.position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
+                    Transform trans;
+                    (trans = transform).position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
                     
                     // Set Rotation
-                    transform.rotation = Quaternion.Lerp(transform.rotation, 
+                    transform.rotation = Quaternion.Lerp(trans.rotation, 
                         Quaternion.LookRotation(moveDir), 
                         Time.deltaTime * rotationSpeed);
     
@@ -288,7 +289,7 @@ public abstract class PetBase : MonoBehaviour
                 petStates = PetStates.Idle;
                 
                 // Set animation
-                animator.SetBool(RunningParameter, false);
+                animator.SetBool(Running, false);
                 
                 isCoroutinePlayingList[(int)Cmd.Move] = false;
             }
@@ -321,7 +322,7 @@ public abstract class PetBase : MonoBehaviour
                 
                 while (transform.rotation != targetQuaternion)
                 {
-                    // 현재 rotation과 taretQuaternion의 각도 차이가 5도 이하인 경우 모두 회전한 것으로 판단
+                    // 현재 rotation과 targetQuaternion의 각도 차이가 5도 이하인 경우 모두 회전한 것으로 판단
                     if (AngleDiffBetween(transform.rotation, targetQuaternion) < 5f)
                     {
                         transform.rotation = targetQuaternion;
@@ -368,7 +369,7 @@ public abstract class PetBase : MonoBehaviour
     
                 isCoroutinePlayingList[(int)Cmd.Sit] = true;
                 petStates = PetStates.Sit;
-                animator.SetTrigger(SitParameter);
+                animator.SetTrigger(Sit);
                 
                 // isCoroutinePlayingList[(int)Cmd.Sit] = false; // This part will be executed in the animation part
             }
@@ -434,8 +435,8 @@ public abstract class PetBase : MonoBehaviour
                     return;
                 }
                 isCoroutinePlayingList[(int)Cmd.Brush] = true;
-                animator.Play("Brush");
-    
+                animator.SetTrigger(Brush);
+                
                 // Sound
                 PlaySound(PetSounds.Bark3);
                 
