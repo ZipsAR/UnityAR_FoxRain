@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
             case PlayMode.None:
                 break;
             case PlayMode.InteractMode:
-                Gizmos.DrawWireSphere(transform.position, GameManager.Instance.interactManager.interactData.playerPetMaxDistance);
+                Gizmos.DrawWireSphere(transform.position, GameManager.Instance.interactManager.GetInteractData().playerPetMaxDistance);
                 break;
             case PlayMode.StrollMode:
                 Gizmos.DrawWireSphere(transform.position, GameManager.Instance.strollManager.strollData.playerPetMaxDistance);

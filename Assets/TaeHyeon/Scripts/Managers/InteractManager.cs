@@ -57,20 +57,11 @@ public class InteractManager : MonoBehaviour
         }
     }
 
-    public InteractData interactData;
+    [SerializeField] private InteractData interactData;
     [SerializeField] private PetBase pet;
 
     private Queue<CmdDetail> cmdQueue;
     private CmdDetail nextCmd;
-    
-    // Interact check variable
-    // private Coroutine checkPetCollisionTimeCoroutine;
-    // private float collisionTimer;
-    // private bool isColliding;
-    // private float collisionTimeLimit;
-    // private PetParts curPetCollisionPart;
-    // private float interactionCoolTime;
-    // private bool isInteractionIgnored;
 
     // Stat
     private Vector3 prevPetPos;
@@ -82,14 +73,6 @@ public class InteractManager : MonoBehaviour
     {
         pet.SetPetAnimationMode(PlayMode.InteractMode);
         cmdQueue = new Queue<CmdDetail>();
-
-        // Interact check variable
-        // collisionTimer = 0;
-        // isColliding = false;
-        // collisionTimeLimit = 2f;
-        // curPetCollisionPart = PetParts.None;
-        // interactionCoolTime = 1f;
-        // isInteractionIgnored = false;
 
         // Stat for distance
         prevPetPos = pet.gameObject.transform.position;
@@ -122,6 +105,9 @@ public class InteractManager : MonoBehaviour
         interactData.collisionTimeLimit = 2f;
         interactData.curPetCollisionPart = PetParts.None;
         interactData.checkPetCollisionTimeCoroutine = null;
+
+        interactData.isInteractionIgnored = false;
+        interactData.interactionCoolTime = 1f;
     }
 
     private void Update()
@@ -154,6 +140,8 @@ public class InteractManager : MonoBehaviour
 
     public PetBase GetCurPet() => pet;
 
+    public InteractData GetInteractData() => interactData;
+    
     #region TrackStat
 
         private void StatUpdateByDistance()
