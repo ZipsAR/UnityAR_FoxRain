@@ -28,11 +28,11 @@ public class ItemMov : MonoBehaviour
     public void GetButton()
     {
         isSelected = !isSelected;
-        if (StoreManager.Instance.viewItem_store != null)
+        if (StoreManager.Instance.viewItem_store.activeSelf)
         {
             DeleteAllChild();
         }
-        if (StoreManager.Instance.viewItem_Inven != null)
+        if (StoreManager.Instance.viewItem_Inven.activeSelf)
         {
             DeleteAllChild();
         }
@@ -40,11 +40,11 @@ public class ItemMov : MonoBehaviour
     }
     public void ViewObj()
     {
-        Debug.Log(this.gameObject.name);
         if (this.gameObject.name == "ItemButton(Clone)")
         {
             if (childitem.CompareTag("furniture"))
             {
+                Debug.Log("Store");
                 StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
                 StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = viewScale;
             }
@@ -56,14 +56,14 @@ public class ItemMov : MonoBehaviour
         }
         if (this.gameObject.name == "ItemButton_Inven(Clone)")
         {
-            if (childitem.CompareTag("furniture"))
+            if (childitem_Inven.CompareTag("furniture"))
             {
-                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem, viewObj_Inven.transform);
+                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
                 StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = viewScale;
             }
             else
             {
-                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem, viewObj_Inven.transform);
+                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
                 StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(800, 800, 800);
             }
         }
@@ -83,8 +83,16 @@ public class ItemMov : MonoBehaviour
     public void DeleteAllChild()
     {
         if (this.CompareTag("Store"))
-            Destroy(StoreManager.Instance.viewItem_store.gameObject);
+        {
+            //Destroy(StoreManager.Instance.viewItem_store.gameObject);
+            StoreManager.Instance.viewItem_store.SetActive(false);
+            Debug.Log("DeleteAllchild_inStore");
+        }
         if (this.CompareTag("Inven"))
-            Destroy(StoreManager.Instance.viewItem_Inven.gameObject);
+        {
+            //Destroy(StoreManager.Instance.viewItem_Inven.gameObject);
+            StoreManager.Instance.viewItem_Inven.SetActive(false);
+            Debug.Log("DeleteAllchild_inInven");
+        }
     }
 }

@@ -15,16 +15,36 @@ public class GetData : MonoBehaviour
     }
     public void GetInfo()
     {
-            for (int i = 0; i < itemdata.ItemData.Count; i++)
+        for (int i = 0; i < itemdata.ItemData.Count; i++)
+        {
+            GameObject c = GameObject.Instantiate(itemdata.ItemData[i].Prefab);
+            c.transform.localScale = Vector3.zero;
+            if (this.GetComponent<ItemMov>().childitem.name == c.name)
             {
-                GameObject c =GameObject.Instantiate(itemdata.ItemData[i].Prefab);
-                c.transform.localScale = Vector3.zero;
-                if (this.GetComponent<ItemMov>().childitem.name == c.name)
+                if (this.CompareTag("Store"))
                 {
-                StoreManager.Instance.itemindex = i;
-                Debug.Log(StoreManager.Instance.itemindex);
+                    StoreManager.Instance.itemindex = i;
                 }
             }
+            Destroy(c);
+        }
+    }
+    public void GetInfo_Inven()
+    {
+        for (int i = 0; i < itemdata.ItemData.Count; i++)
+        {
+            GameObject c = GameObject.Instantiate(itemdata.ItemData[i].Prefab);
+            c.transform.localScale = Vector3.zero;
+            if (this.GetComponent<ItemMov>().childitem_Inven.name == c.name)
+            {
+                if (this.CompareTag("Inven"))
+                {
+                    StoreManager.Instance.Itemindex_Inven = i;
+                    Debug.Log("인덱스 추출 = " + StoreManager.Instance.Itemindex_Inven);
+                }
+            }
+            Destroy(c);
+        }
     }
     public void ItemInfo()
     {
@@ -32,10 +52,14 @@ public class GetData : MonoBehaviour
         {
             itemDetail.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
         }
+    }
+    public void ItemInfo_Inven()
+    {
+        Debug.Log("인벤토리 오브젝트 = " + StoreManager.Instance.viewItem_Inven.name);
         if (StoreManager.Instance.viewItem_Inven != null)
         {
-            itemDetail_Inven.text = "인식";
-            //itemDetail_Inven.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
+            Debug.Log("StoreManager.Instance.viewItem_Inven 감지");
+            itemDetail_Inven.text = itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].DetailInfo;
         }
     }
 }
