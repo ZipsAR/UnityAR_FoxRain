@@ -21,6 +21,8 @@ public class Snack : MonoBehaviour
         Logger.Log("selected Exited");
         GetComponent<Rigidbody>().useGravity = true;
 
+        GetComponent<XRGrabInteractable>().enabled = false;
+        
         // Event occurs after a certain period of time as soon as the user places the Grab snack
         StartCoroutine(NotifyToInteractManagerAfterTSeconds(responseTime));
     }
@@ -28,6 +30,8 @@ public class Snack : MonoBehaviour
     private IEnumerator NotifyToInteractManagerAfterTSeconds(float waitSeconds)
     {
         yield return new WaitForSeconds(waitSeconds);
+        
+        GetComponent<Rigidbody>().isKinematic = true;
         
         Logger.Log("Notify SnackDrop snack to InteractManager");
         GameManager.Instance.interactManager.NotifySnackDrop(transform);
