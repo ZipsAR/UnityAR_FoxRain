@@ -40,11 +40,11 @@ public class ItemMov : MonoBehaviour
     }
     public void ViewObj()
     {
-        Debug.Log(this.gameObject.name);
         if (this.gameObject.name == "ItemButton(Clone)")
         {
             if (childitem.CompareTag("furniture"))
             {
+                Debug.Log("Store");
                 StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
                 StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = viewScale;
             }
@@ -56,14 +56,14 @@ public class ItemMov : MonoBehaviour
         }
         if (this.gameObject.name == "ItemButton_Inven(Clone)")
         {
-            if (childitem.CompareTag("furniture"))
+            if (childitem_Inven.CompareTag("furniture"))
             {
-                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem, viewObj_Inven.transform);
+                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
                 StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = viewScale;
             }
             else
             {
-                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem, viewObj_Inven.transform);
+                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
                 StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(800, 800, 800);
             }
         }
