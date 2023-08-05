@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,10 +12,15 @@ public enum PetStatNames
     Level,
 }
 
-// 에디터에서 쉽게 사용할 수 있도록 메뉴를 만듬
-[ CreateAssetMenu( fileName = "PetStat", menuName = "Scriptable Object Asset/PetStat" )]
-public class PetStatBase : ScriptableObject
+[System.Serializable]
+public class PetStatBase
 {
+    public int statMin = 0;
+    public int statMax = 100;
+
+    public int expMax = 100;
+    public int levelMax = 10;
+    
     [Header("Interact Part Stats")]
     [Range(0,100)]public int fullness; // 포만감
     [Range(0,100)]public int tiredness; // 피로도

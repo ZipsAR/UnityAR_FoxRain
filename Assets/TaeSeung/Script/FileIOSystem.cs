@@ -16,24 +16,39 @@ public class FileIOSystem : Singleton<FileIOSystem>
     public const string HousingFilename = "Housingdatabase";
     public const string StatFilename = "Statdatabase";
 
-    private void Awake()
+    private void Start()
     {
         path = Application.persistentDataPath;
+        print(IsFileExist(InvenFilename));
+
         try
         {
             AllLoad();
         }
         catch(IOException e)
         {
-            AllSave();
-            if(invendatabase == null)
-                invendatabase = new();
-            if (housingdatabase == null)
-                housingdatabase = new();
-            if (statdatabase == null)
-                statdatabase = new();
+            Save(housingdatabase, HousingFilename);
+            Save(invendatabase, InvenFilename);
+
         }
     }
+
+
+    /// <summary>
+    /// Check file exist
+    /// </summary>
+    /// <param name="filename">choice find filename</param>
+    /// <returns>exist: true, else: false </returns>
+    public bool IsFileExist(string filename)
+    {
+        if (File.Exists(path + "/" + filename + ".json"))
+            return true;
+
+        else
+            return false;
+    }
+
+
 
 
     //Save data file
