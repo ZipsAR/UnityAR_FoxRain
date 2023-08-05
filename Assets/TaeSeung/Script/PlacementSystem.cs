@@ -1,63 +1,52 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
-using static UnityEngine.InputSystem.InputControlExtensions;
 
 
 //��ġ�� ���õ� ��� �Լ��� ���.
 
 public class PlacementSystem : Singleton<PlacementSystem>
 {
-    //mouseindicator : cursor ������Ʈ, cellindicator : cell��ġ ǥ�����ִ� ������Ʈ
+
     [SerializeField]
     GameObject mouseIndicator, cellIndicator;
 
-    //������Ʈ ������ġ�� �� ��
     [SerializeField]
     private GameObject spawnpoint;
 
-    //inputmanagerŬ���� 
     [SerializeField]
     private InputManager inputManager;
 
-    //�׸��� ������Ʈ
     [SerializeField]
     private Grid grid;
-
-
     private int selectedObjectIndex = -2;
 
-    //grid�ð�ȭ ������Ʈ
     [SerializeField]
     private GameObject gridVisualization;
 
-
-    //object�� ���� �����ɶ�, �� �θ� �� ������Ʈ
     [SerializeField]
     private GameObject ObjectLocation;
 
-    //��ġ�� object�� Ÿ��
     private GridData floorData, funitureData;
-    private Renderer previewRenderer;
     private List<GameObject> placedGameObjects = new();
 
-    //���� ������Ʈ�� size ����(rotation������ �߰���), �� �κ��� ���߿� deprecated��ų���� �ֽ��̴�
-    private GameObject CreateObject; //���� ������ ������Ʈ
-    private GameObject CatchObject;  //������ ������Ʈ�� �� ���� ���� ������Ʈ
-    private Vector2Int currentobjsize;  //������Ʈ�� �����ϴ� ĭ ������
-    private Quaternion currentrotation; //������Ʈ�� �����̼�
-    private float changerrotationzvalue; //������Ʈ �����̼ǵ� ��
-    private Vector3Int currentpos;  //������Ʈ�� ��ġ
-    private bool catchmode = false; //������Ʈ�� ���� ��������?
-    private Vector3 beforepos;
-    private XRGrabInteractable interact;    //������Ʈ�� interactable ������Ʈ
+
+    private GameObject CreateObject; 
+    public GameObject CatchObject;  
+    private Vector2Int currentobjsize;  
+    private Quaternion currentrotation; 
+    private Vector3Int currentpos;  
+    private bool catchmode = false;
+    private XRGrabInteractable interact;
+    public List<XRGrabInteractable> ObjGrabcomponents;
+
 
     private GameObject cursororigin, cursorparent;
+
+
 
     [Obsolete]
     [SerializeField]
@@ -73,8 +62,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
         funitureData = new();
         floorData = new();
         MapInfo.Instance.MapInitialize();
+        MapInfo.Instance.MapUnGrabmode();
 
-        //��ũ���ͺ� ������Ʈ���� �̹� ��ġ�� �����͵� ��������
         for (short i = 0; i < FileIOSystem.Instance.housingdatabase.objectsLocation.Count; i++) {
             //id는 키값
             int id = FileIOSystem.Instance.housingdatabase.objectsLocation[i].id;
@@ -91,6 +80,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
             MakeNewObject(id, ObjectLocation.transform, loc, rot, size, "PlaceObject", newObject);
 
             interact = newObject.GetComponent<XRGrabInteractable>();
+            ObjGrabcomponents.Add(interact);
             SelectEnterEventArgs enterArgs = makeEnterEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
             SelectExitEventArgs exitargs = makeExitEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
             interact.selectEntered.AddListener((a) => InsertEnterEvent(enterArgs));
@@ -98,11 +88,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
         }
         StopPlacement(true);
 
-        previewRenderer = cellIndicator.GetComponentInChildren<Renderer>();
         cursororigin = mouseIndicator;
         cursorparent = cursororigin.transform.parent.gameObject;
-
-
     }
 
 
@@ -113,8 +100,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
        if (floorData == null)
         {
-            HousingUISystem.Instance.InitializeUI();
             InitializePlace();
+            MapInfo.Instance.SetInvisiblemode();
         }
         
 
@@ -129,7 +116,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     public void StartPlacement(int ID)
     {
-        //�̹� ������ ������Ʈ�� ���� ���, �� �� �ı���Ű�� ���� ���� ������Ʈ�� ������ų ����, �ٵ� ��ȹ�� ���� ����ɼ��� ����
         if (CreateObject)
             Destroy(CreateObject);
         
@@ -149,12 +135,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
             return;
         }
 
-        //cellindicator ũ�� ����(���� ����)
         currentobjsize = itemdatabase.ItemData[infoindex].Housingsize;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
         currentrotation = new();
 
-        //AR ȯ��󿡼��� �� �ڵ带 �־�� ��.
         GameObject newObject = Instantiate(itemdatabase.ItemData[infoindex].Prefab);
         CreateObject = newObject;
         newObject.transform.position = spawnpoint.transform.position;
@@ -166,42 +150,30 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         //grip관련 이벤트 추가
         interact = newObject.GetComponent<XRGrabInteractable>();
-        //��ü�� grab�Ҷ��� �̺�Ʈ �߰�
         SelectEnterEventArgs enterargs = makeEnterEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
         interact.selectEntered.AddListener((a) => PlaceEnterEvent(enterargs));
 
-        //��ü�� ���� grab�� Ǯ���� �̺�Ʈ �߰�
         SelectExitEventArgs exitargs = makeExitEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
         interact.selectExited.AddListener((a)=>PlaceEvent(exitargs));
 
-
-        //��ǻ�Ϳ��� �Ҷ� �� �ڵ带 ������ �˴ϴ�.
-        //inputManager.OnClicked += PlaceStructure;
-        //inputManager.OnExit += StopPlacement;
     }
 
 
     public void ProtectGrib()
     {
-        XRGrabInteractable[] objs =  GameObject.FindObjectsOfType<XRGrabInteractable>();
 
-        foreach(XRGrabInteractable obj in objs) {
+        foreach(XRGrabInteractable obj in ObjGrabcomponents) {
             obj.enabled = false;
         }
-
-        HousingUISystem.Instance.DebuggingText("good!");
     }
 
 
     public void ReleaseGrib() {
-        XRGrabInteractable[] objs = GameObject.FindObjectsOfType<XRGrabInteractable>();
-
-        foreach (XRGrabInteractable obj in objs)
+        foreach (XRGrabInteractable obj in ObjGrabcomponents)
         {
             obj.enabled = true;
         }
 
-        HousingUISystem.Instance.DebuggingText("good!");
     } 
 
 
@@ -224,15 +196,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         gridVisualization.SetActive(false);
         cellIndicator.SetActive(false);
         catchmode = false;
-        //��ǻ�� ȯ�濡���� ��� ����
-        //inputManager.OnClicked -= PlaceStructure;
-        //inputManager.OnClicked -= InsertionStructure;
-        //inputManager.OnExit -= StopPlacement;
-        //InputManagerEventControlManager(PlaceStructure);
-
-
     }
-
 
     private void PlaceStartStructure()
     {
@@ -244,15 +208,13 @@ public class PlacementSystem : Singleton<PlacementSystem>
         catchmode = true;
     }
 
-
     private void PlaceCheck(GameObject catchobject)
     {
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(catchobject.transform);
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         
-        //��ġ �Ұ����ϸ� cellindicator�� ���͸����� �ٲ㼭 ǥ������.
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
-        previewRenderer.material.color = placementValidity ? Color.white : Color.red;
+        //previewRenderer.material.color = placementValidity ? Color.white : Color.red;
 
         mouseIndicator.transform.position = mousePosition;
         cellIndicator.transform.localPosition = PlacePosition(gridPosition, currentobjsize);
@@ -272,36 +234,21 @@ public class PlacementSystem : Singleton<PlacementSystem>
             sizey = sizex;
             sizex = temp;
 
-            /*
-            Vector3 last = cellIndicator.transform.GetChild(0).localPosition;
-            last.y = 0.5f;
-            cellIndicator.transform.GetChild(0).localPosition = last;
-            */
-
         }
 
         if (sizex%2 == 1)
         Cellposition.x = Cellposition.x + 0.5f;
-
         if(sizey%2 == 1)
         Cellposition.z = Cellposition.z + 0.5f;
 
         Cellposition.y = 0.1f;
-
-
-
-
-
         return Cellposition;
     }
     
-
-    //������ ��ġ (ARȯ��)
     private void PlaceStructure(GameObject gameObject)
     {
         print(currentobjsize);
 
-        //���� Ŀ�� ��ġ ������
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
 
         if (!inputManager.ishit())
@@ -331,9 +278,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
         int id = FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].id;
-
-
-        //���� ��ġ�� ��ü�� ��ġ, ȸ�� ������ �����ͺ��̽��� �ִ� ����
         newlocation.location = gridPosition;
         newlocation.rotation = currentrotation;
         newlocation.id = id;
@@ -349,12 +293,11 @@ public class PlacementSystem : Singleton<PlacementSystem>
         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
         SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
 
-
-        //������� ������Ʈ�� ���� ��������, ��ġ���� ���� + �� ������Ʈ�� ���� ��� ���� ����Ʈ�� �߰�
         FileIOSystem.Instance.housingdatabase.objectsLocation.Add(newlocation);
         FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].count -= 1;
 
         interact = gameObject.GetComponent<XRGrabInteractable>();
+        ObjGrabcomponents.Add(interact);
         SelectEnterEventArgs enterArgs = makeEnterEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
         SelectExitEventArgs exitargs = makeExitEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
         interact.selectEntered.RemoveAllListeners();
@@ -363,7 +306,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
         interact.selectExited.AddListener((a) => InsertCompleteEvent(exitargs));
 
 
-        //������ ���� ��� �ش� ������Ʈ ��ư ��ü�� ��Ȱ��ȭ
         if (FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].count <= 0)
         {
             Debug.Log($"No Object");
@@ -388,8 +330,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
         currentobjsize = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
 
-        //���� ���������� ��ü ��ġ ���� (�������� �������� �����)
-        CatchObject = gameObject;
         cellIndicator.SetActive(true);
         catchmode = true;
         currentpos = FileIOSystem.Instance.housingdatabase.objectsLocation[index].location;
@@ -400,7 +340,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
-        //�� �ٱ����� Ŀ���� �̵����״ٸ� ����
             if (!inputManager.ishit())
             {
                 cursororigin.transform.SetParent(cursorparent.transform);
@@ -437,12 +376,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
             }
             }
 
-            //���� Ŀ���� �� �ȿ� �ִٸ� ��ȿ�����̹Ƿ� ��ġ ����
             else
             {
                 int index = FileIOSystem.Instance.housingdatabase.objectsLocation.FindIndex(data => data.InstanceId == gameObject.GetInstanceID());
 
-                //�ϴ� �����ϴ� ������ �´��� ���� Ȯ���ؿ�
                 if (index >= 0)
                 {
                     int id = FileIOSystem.Instance.housingdatabase.objectsLocation[index].id;
@@ -453,7 +390,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     PlacementData data = funitureData.GetObjectAt(currentpos);
                     int placeindex = data.PlacedObjectIndex;
 
-                    //��ġ ��ġ ������ ��ġ�� �̹� �ٸ� ������ ��ġ�Ǿ� ������ �� �ſ�. ��, ������ġ�� ���ġ�ϴ� �� �뼭����
                     if (funitureData.CanPlaceObjectAt(gridPosition, currentobjsize) && gridPosition != pos)
                     {
                         //��ġ�� ��ġ ���� �����͸� �ٲ����
@@ -468,11 +404,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
                         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
                         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
                         SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
-
                         FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase , FileIOSystem.HousingFilename);
-                    //�� �ٺ����� �滩����
                 }
-                    //�߸� ��ġ������ �׳� ���� �ִ��ڸ��� ������
                     else
                     {
                         Vector2Int tempsize = currentobjsize;
@@ -528,7 +461,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
     /// <summary>
-    /// �ǽð����� ��ü �����̼� ���� �޾Ƽ� ȸ���� ������ �����ִ� �Լ�
+    /// 
     /// </summary>
     /// <returns></returns>
     public float RotateRealTimebyHand()
@@ -572,7 +505,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
     /// <summary>
-    /// ���������� ��ü ��ġ�� ȸ�� ������ �°� �Ͽ�¡ ������ ȸ���ؼ� ��ġ���ִ� �Լ�
+    /// 
     /// </summary>
     /// <param name="zangle"></param>
     private void RotatePlacementByHand(float zangle)
@@ -714,6 +647,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     /// <param name="p"></param>
     private void InsertEnterEvent(SelectEnterEventArgs p)
     {
+        CatchObject = p.interactableObject.transform.gameObject;
         Startinsertion();
         InsertionStartStructure(p.interactableObject.transform.gameObject);
     }
@@ -902,3 +836,9 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
     */
 }
+
+
+
+
+
+

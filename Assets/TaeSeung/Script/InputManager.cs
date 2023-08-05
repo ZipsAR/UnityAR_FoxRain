@@ -32,13 +32,7 @@ public class InputManager: Singleton<InputManager>
 
     private void Update()
     {
-        /*
-        if (Input.GetMouseButtonDown(0))
-            OnClicked?.Invoke();
-        if (Input.GetKeyDown(KeyCode.Escape))
-            OnExit?.Invoke();
-        */
-        //GetSelectedMapPosition();
+
 
     }
 
@@ -122,16 +116,12 @@ public class InputManager: Singleton<InputManager>
         else
             hitting = false;
 
-
         return hit;
     }
 
 
 
     public bool ishit() => hitting;
-
-
-
 
     [Obsolete]
     public Vector3 GetSelectedMapPositionInComputer()

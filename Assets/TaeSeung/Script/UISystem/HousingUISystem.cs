@@ -19,6 +19,12 @@ public class HousingUISystem : Singleton<HousingUISystem>
 
     private bool housingmode = true;
 
+    private void Start()
+    {
+        InitializeUI();
+        MapInfo.Instance.SetMapHousingmode();
+    }
+
 
     public void InitializeUI()
     {
@@ -48,25 +54,6 @@ public class HousingUISystem : Singleton<HousingUISystem>
         //TMP_Text textmesh = DebugTextUI.GetComponent<TMP_Text>();
         //textmesh.text = newtext.ToString();
     }
-
-
-    public void ONHOUSING()
-    {
-        if (housingmode) {
-            PlacementSystem.Instance.ProtectGrib();
-            housingmode = false;
-            //씬 넘어가는 ㅇㅇ
-
-        }
-        else
-        {
-            PlacementSystem.Instance.ReleaseGrib();
-            housingmode = true;
-        }
-
-        DebuggingText("hosuing!");
-    }
-
 
     public void ONTEXIT()
     {

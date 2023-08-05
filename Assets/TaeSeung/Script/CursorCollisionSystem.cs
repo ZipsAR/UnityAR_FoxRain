@@ -9,53 +9,51 @@ public class CursorCollisionSystem : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    [SerializeField]
-    Material transparentmaterial;
-
-    GameObject obj;
-
-    Renderer[] renders;
+    GameObject Parent;
+    MeshRenderer thismaterial;
+    Color Initializecolor;
+    bool iscollision;
 
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        int layermask = 1 << LayerMask.NameToLayer("ObjectCursorCollision");
-        SphereCollider sphere  = this.GetComponent<SphereCollider>();
-        Collider[] colliders = Physics.OverlapSphere(this.transform.position, sphere.radius,layermask);
+        Parent = this.transform.parent.gameObject;
+        thismaterial = this.GetComponent<MeshRenderer>();
+        Initializecolor = thismaterial.material.color;
+        
+    }
 
-        //충돌 판정이 된 경우, 충돌된 물체에 대한 정보를 담는다.
-        foreach (Collider collider in colliders)
-        {
-            obj = collider.gameObject.transform.parent.gameObject;
-            renders = obj.GetComponentsInChildren<Renderer>(true);
+    private void Update()
+    {
+        int mask = LayerMask.GetMask("ObjectCursorCollision");
+        //print(mask);
+    }
 
-            //이건 충돌된 물체에 대한 머터리얼 바꾸기를 해보려는건데... 어렵네? ㅎ
-            //print("render: "+renders.Length);
-            foreach (Renderer temprender in renders)
+    private void OnTriggerStay(Collider other)
+    {
+        int mask = 7;
+
+        if (PlacementSystem.Instance.CatchObject != null)
+        { 
+            if (other.gameObject.layer == mask && PlacementSystem.Instance.CatchObject.transform.GetInstanceID() != other.gameObject.transform.parent.GetInstanceID())
             {
-                Material[] tempmaterials = temprender.materials;
-                for (int i = 0; i < tempmaterials.Length; i++)
-                {
-                    tempmaterials[i] = transparentmaterial;
-                }
+                iscollision = true;
+
+                Parent.GetComponent<MeshRenderer>().material.color = Color.red;
+                thismaterial.material.color = Color.red;
             }
-            break;
         }
+    }
 
-        //아무것도 안 닿아져 있을 경우, obj를 null로 판정
-        if (colliders.Length == 0)
-            obj = null;
-
+    private void OnTriggerExit(Collider other)
+    {
+        iscollision = false;
+        thismaterial.material.color = Initializecolor;
     }
 
 
+    public bool Iscollision() => iscollision;
 
 
-    /// <summary>
-    /// 충돌된 오브젝트에 대한 정보를 보내줌
-    /// </summary>
-    /// <returns></returns>
-    public GameObject GetCollisionobject() => obj;
 
 }
