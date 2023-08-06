@@ -16,7 +16,8 @@ public class GiftBox : MonoBehaviour
     [SerializeField] private GameObject idleEffect;
     [SerializeField] private GameObject openEffect;
     [SerializeField] private GameObject afterEffect;
-    
+    [SerializeField] private GameObject giftEffect;
+
     private static readonly int Open = Animator.StringToHash("Open");
 
     private float roatationTime;
@@ -47,6 +48,9 @@ public class GiftBox : MonoBehaviour
             curEffect = Instantiate(openEffect, transform);
             lidAnimator.SetTrigger(Open);
             GetComponent<Collider>().enabled = false;
+            
+            // Effect
+            Instantiate(giftEffect, gift.transform);
             
             StartCoroutine(StartRotation());
             StartCoroutine(StartRising());
