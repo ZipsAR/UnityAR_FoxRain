@@ -2,11 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GiftBoxSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject giftBoxObj;
-    [SerializeField] private GameObject sampleGift;
+    // [SerializeField] private GameObject sampleGift;
+
+    [SerializeField] private ItemDatabase itemDatabase;
+    
     private void Awake()
     {
         InteractEventManager.OnPetStatChanged += SpawnGiftBox;
@@ -25,11 +29,11 @@ public class GiftBoxSpawner : MonoBehaviour
         
         Vector3 spawnPos = GetPointBeforeDistance(curPetPos, playerPos, data.playerFrontDistance);
 
-        Quaternion spawnRotation = Quaternion.LookRotation(playerPos - spawnPos);
+        Quaternion spawnRotation = Quaternion.LookRotation(-(playerPos - spawnPos));
         GameObject spawnedObj = Instantiate(giftBoxObj, spawnPos, spawnRotation);
         GiftBox giftBox = spawnedObj.GetComponent<GiftBox>();
         
-        giftBox.SetGift(sampleGift);
+        giftBox.SetGift(GetRandomItem());
     }
     
     
@@ -41,5 +45,19 @@ public class GiftBoxSpawner : MonoBehaviour
         float z = endPoint.z - (beforeDistance / distance) * (endPoint.z - startPoint.z);
 
         return new Vector3(x, y, z);
+    }
+
+    private GameObject GetRandomItem()
+    {
+        if (itemDatabase.ItemData.Count <= 0) return null;
+        ItemData data;
+
+        do
+        {
+            int randomIdx = Random.Range(0, itemDatabase.ItemData.Count);
+            data = itemDatabase.ItemData[randomIdx];    
+        } while (data.itemCategory == ItemData.ItemCategory.Funiture);
+        
+        return data.Prefab;
     }
 }
