@@ -27,8 +27,7 @@ public class CursorCollisionSystem : MonoBehaviour
 
     private void Update()
     {
-        print(thisInitializecolor);
-        print(childInitializecolor);
+        print(iscollision);
     }
 
     private void OnTriggerStay(Collider other)
@@ -39,7 +38,7 @@ public class CursorCollisionSystem : MonoBehaviour
         { 
             if (other.gameObject.layer == mask && PlacementSystem.Instance.CatchObject.transform.GetInstanceID() != other.gameObject.transform.parent.GetInstanceID())
             {
-                iscollision = true;
+                iscollision = false;
                 thismaterial.material.SetColor("_Color", new Vector4(1,0,0,0.5f));
                 childmaterial[1].material.SetColor("_Color", new Vector4(1,0,0,0.5f));
             }
@@ -48,7 +47,7 @@ public class CursorCollisionSystem : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        iscollision = false;
+        iscollision = true;
         thismaterial.material.SetColor("_Color", new Vector4(1,1,1,1));
         childmaterial[1].material.SetColor("_Color", new Vector4(0, 1, 0, 0.5f));
 

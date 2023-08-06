@@ -15,6 +15,9 @@ public class PlacementSystem : Singleton<PlacementSystem>
     GameObject mouseIndicator, cellIndicator;
 
     [SerializeField]
+    CursorCollisionSystem Cursorsystem;
+
+    [SerializeField]
     private GameObject spawnpoint;
 
     [SerializeField]
@@ -30,9 +33,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
     [SerializeField]
     private GameObject ObjectLocation;
 
-    private GridData floorData, funitureData;
-    private List<GameObject> placedGameObjects = new();
+    //private GridData floorData, funitureData;
 
+    //private List<GameObject> placedGameObjects = new();
+
+
+    private bool Initilaize = true;
 
     private GameObject CreateObject; 
     public GameObject CatchObject;  
@@ -48,19 +54,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
 
-    [Obsolete]
-    [SerializeField]
-    CursorCollisionSystem cursorsystem;
-
-
     //실제 에셋 정보는 여기서 가져옴(스크립터블오브젝트 형태)
     [SerializeField]
     private ItemDatabase itemdatabase;
 
     public void InitializePlace()
     {
-        funitureData = new();
-        floorData = new();
         MapInfo.Instance.MapInitialize();
         MapInfo.Instance.MapUnGrabmode();
 
@@ -93,24 +92,32 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
+
+
     private void Update()
     {
        if (!mouseIndicator)
             return;
 
-       if (floorData == null)
+       if (Initilaize)
         {
             InitializePlace();
             MapInfo.Instance.SetInvisiblemode();
+            Initilaize = false;
         }
-        
 
+
+       //if catch some obj
         if (catchmode)
         {
             PlaceCheck(CatchObject);
             RotateRealTimebyHand();
-            Vector3 test = inputManager.GetSelectedMapPositionbyObjectForward(CatchObject.transform);
+            inputManager.GetSelectedMapPositionbyObjectForward(CatchObject.transform);
         }
+
+        //if (!InputManager.Instance.ishit()) cellIndicator.SetActive(false);
+        //else cellIndicator.SetActive(true);
+           
     }
 
 
@@ -212,10 +219,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(catchobject.transform);
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        
-        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
-        //previewRenderer.material.color = placementValidity ? Color.white : Color.red;
 
+        bool placementValidity = Cursorsystem.Iscollision();
         mouseIndicator.transform.position = mousePosition;
         cellIndicator.transform.localPosition = PlacePosition(gridPosition, currentobjsize);
 
@@ -247,8 +252,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     
     private void PlaceStructure(GameObject gameObject)
     {
-        print(currentobjsize);
-
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
 
         if (!inputManager.ishit())
@@ -257,16 +260,13 @@ public class PlacementSystem : Singleton<PlacementSystem>
             gameObject.transform.rotation = spawnpoint.transform.rotation;
             EffectSystem.Instance.playspawneffect(spawnpoint.transform.position);
             StopPlacement(false);
-
             return;
         }
-
-        //mousePosition = mousePosition * MapInfo.Instance.MapScale;
 
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         ObjectLocation newlocation = new ObjectLocation();
 
-        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
+        bool placementValidity = Cursorsystem.Iscollision();
         if (placementValidity == false)
         {
             gameObject.transform.position = spawnpoint.transform.position;
@@ -334,8 +334,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
         eulerr.x = 90;
         eulerr.y = 0;
 
-        //cellIndicator.transform.rotation = 
-
         cellIndicator.SetActive(true);
         catchmode = true;
         currentpos = FileIOSystem.Instance.housingdatabase.objectsLocation[index].location;
@@ -355,7 +353,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
                 {
                     int id = FileIOSystem.Instance.housingdatabase.objectsLocation[index].id;
                     Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
-                    funitureData.RemoveObjectAt(currentpos, size);
+
+                   
 
                     int myindex= FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == id);
                     if (myindex != -1)
@@ -393,19 +392,13 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     Quaternion rot = FileIOSystem.Instance.housingdatabase.objectsLocation[index].rotation;
                     Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
                     
-                    PlacementData data = funitureData.GetObjectAt(currentpos);
-                    int placeindex = data.PlacedObjectIndex;
 
-                    if (funitureData.CanPlaceObjectAt(gridPosition, currentobjsize) && gridPosition != pos)
+                    if (Cursorsystem.Iscollision())
                     {
-                        //��ġ�� ��ġ ���� �����͸� �ٲ����
-                        funitureData.RemoveObjectAt(currentpos, size);
-                        funitureData.AddObjectAt(gridPosition, size, id, placeindex);
                         FileIOSystem.Instance.housingdatabase.objectsLocation[index].location = gridPosition;
                         FileIOSystem.Instance.housingdatabase.objectsLocation[index].rotation = currentrotation;
                         FileIOSystem.Instance.housingdatabase.objectsLocation[index].size = currentobjsize;
 
-                    //��ġ�� ��ġ�� �����ؿ�
                         gameObject.transform.rotation = currentrotation;
                         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
                         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
@@ -451,19 +444,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     }
 
-
-    /// <summary>
-    /// ��ġ�� ������ �������� �ľ�.
-    /// </summary>
-    /// <param name="gridPosition">��ġ�� ��ġ</param>
-    /// <param name="selectedObjectIndex">�̰� ���߿� ����� ���ڿ��� �ϴ� ����</param>
-    /// <returns></returns>
-    private bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
-    {
-        //GridData selectedData = database.objectsData[selectedObjectIndex].ID == 0 ? floorData : funitureData;
-        GridData selectedData = funitureData;
-        return selectedData.CanPlaceObjectAt(gridPosition, currentobjsize);
-    }
 
 
     /// <summary>
@@ -578,12 +558,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
             newObject.transform.localPosition = PlacePosition(loc, size);    
             newObject.layer = LayerMask.NameToLayer(layer);
 
-            placedGameObjects.Add(newObject);
-
-            //GridData selectedData = database.objectsData[i].ID == 0 ? floorData : funitureData; 
-
-            GridData selectedData = funitureData;
-            selectedData.AddObjectAt(loc, size, id, placedGameObjects.Count - 1);
             return newObject;
         }
         else return null;
@@ -635,6 +609,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceEnterEvent(SelectEnterEventArgs p)
     {
         CatchObject = p.interactableObject.transform.gameObject;
+        print(CatchObject);
         PlaceStartStructure();
     }
 
