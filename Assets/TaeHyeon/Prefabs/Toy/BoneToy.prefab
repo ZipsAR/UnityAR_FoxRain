@@ -310,6 +310,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e41469694ed48cfbedfde4a2f0c25f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  instantiateEffect: {fileID: 5101465248222061424, guid: bf18866d96e3443a8a17aea0b34e28bf,
+    type: 3}
   responseTime: 2
 --- !u!1 &5447155396818893161
 GameObject:
