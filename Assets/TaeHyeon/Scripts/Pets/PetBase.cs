@@ -93,6 +93,8 @@ public abstract class PetBase : MonoBehaviour
     public Transform toyAttachPoint;
     private static readonly int Interact = Animator.StringToHash("Interact");
 
+    // Effects
+    [SerializeField] private Transform levelEffectAttachPoint;
 
     private void Start()
     {
@@ -638,5 +640,12 @@ public abstract class PetBase : MonoBehaviour
         }
 
     #endregion
-    
+
+    #region Effects
+
+        public Transform GetEffectPosition() => levelEffectAttachPoint;
+        
+        
+
+    #endregion
 }
