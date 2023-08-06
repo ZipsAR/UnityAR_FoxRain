@@ -33,7 +33,7 @@ public class GiftBoxSpawner : MonoBehaviour
         GameObject spawnedObj = Instantiate(giftBoxObj, spawnPos, spawnRotation);
         GiftBox giftBox = spawnedObj.GetComponent<GiftBox>();
         
-        giftBox.SetGift(GetRandomItem());
+        giftBox.SpawnGift(GetRandomItem());
     }
     
     

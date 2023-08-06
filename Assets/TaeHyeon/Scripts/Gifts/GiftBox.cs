@@ -38,9 +38,10 @@ public class GiftBox : MonoBehaviour
         }    
     }
 
-    public void SetGift(GameObject giftObj)
+    public void SpawnGift(GameObject giftObj)
     {
-        gift = Instantiate(giftObj, giftTransform);
+        gift = Instantiate(giftObj);
+        gift.transform.position = giftTransform.position;
         if (gift.TryGetComponent(out Rigidbody component)) component.isKinematic = true;
     }
 
