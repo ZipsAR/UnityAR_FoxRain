@@ -291,6 +291,7 @@ MonoBehaviour:
   - {fileID: 6612597275366691617}
   - {fileID: -4691212995547874367}
   - {fileID: -1417126264671852512}
+  - {fileID: -583701424029708721}
   - {fileID: -4098901728583372186}
   - {fileID: -3169148355141319908}
   - {fileID: 3525226828136718932}
@@ -328,6 +329,28 @@ MonoBehaviour:
   company: Unity
   priority: 0
   required: 0
+--- !u!114 &-583701424029708721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f547939d43e39c4da87271785d7b72e, type: 3}
+  m_Name: FusionFeature Android
+  m_EditorClassIdentifier: 
+  m_enabled: 1
+  nameUi: Dual Render Fusion (Experimental)
+  version: 0.14.0
+  featureIdInternal: com.qualcomm.snapdragon.spaces.fusion
+  openxrExtensionStrings: XR_UNITY_android_present
+  company: Qualcomm
+  priority: 0
+  required: 1
+  RequireSpacesServices: 0
+  ValidateOpenScene: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,10 +591,10 @@ MonoBehaviour:
   priority: 0
   required: 1
   CheckInstalledRuntime: 1
-  LaunchAppOnViewer: 1
+  LaunchAppOnViewer: 0
   PreventSleepMode: 1
   ShowLaunchMessageOnHost: 0
-  LaunchControllerOnHost: 1
+  LaunchControllerOnHost: 0
   UseCustomController: 0
   ExportHeadless: 0
   AlternateStartActivity: 
