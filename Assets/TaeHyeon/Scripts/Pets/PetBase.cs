@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.XR.Interaction.Toolkit;
 using Logger = ZipsAR.Logger;
 
 public enum PetStates
@@ -46,16 +46,17 @@ public enum PetSounds
 
 /// <summary>
 /// How to add a pet
-/// 1. Create Stat data to pet
-/// 2. Create an override animator for a pet by inheriting petController
-/// 3. Pet connection added to InteractManager
-/// 4. Add SitEnd event to sitting animation
-/// 5. Add EatEnd event to sitting animation
-/// 6. Add BiteEnd event to sitting animation
-/// 7. create bite position to mouth
-/// 8. Add AttachToyToMouth event to bite animation
-/// 9. Add DetachToyFromMouth event to spit animation
+/// 1.  Create Stat data to pet
+/// 2.  Create an override animator for a pet by inheriting petController
+/// 3.  Pet connection added to InteractManager
+/// 4.  Add SitEnd event to sitting animation
+/// 5.  Add EatEnd event to sitting animation
+/// 6.  Add BiteEnd event to sitting animation
+/// 7.  create bite position to mouth
+/// 8.  Add AttachToyToMouth event to bite animation
+/// 9.  Add DetachToyFromMouth event to spit animation
 /// 10. Add petSounds in inspector
+/// 11. Set InteractTerminated Event to Interact animation in last frame
 /// </summary>
 
 public abstract class PetBase : MonoBehaviour
@@ -65,9 +66,13 @@ public abstract class PetBase : MonoBehaviour
     private bool isInitDone;
 
     // Animation Parameter
-    private static readonly int ModeParameter = Animator.StringToHash("Mode");
-    private static readonly int RunningParameter = Animator.StringToHash("Running");
-    private static readonly int SitParameter = Animator.StringToHash("Sit");
+    private static readonly int Mode = Animator.StringToHash("Mode");
+    private static readonly int Running = Animator.StringToHash("Running");
+    private static readonly int Sit = Animator.StringToHash("Sit");
+    private static readonly int Spit = Animator.StringToHash("Spit");
+    private static readonly int Bite = Animator.StringToHash("Bite");
+    private static readonly int Eat = Animator.StringToHash("Eat");
+    private static readonly int Brush = Animator.StringToHash("Brush");
     
     // Sounds
     [SerializeField] private List<Sound> petSoundList;
@@ -86,7 +91,9 @@ public abstract class PetBase : MonoBehaviour
     private GameObject toyObj;
     private bool isBiting;
     public Transform toyAttachPoint;
-    
+    private static readonly int Interact = Animator.StringToHash("Interact");
+
+
     private void Start()
     {
         rotationSpeed = 10f;
@@ -161,7 +168,8 @@ public abstract class PetBase : MonoBehaviour
     
     public void SetPetAnimationMode(PlayMode playMode)
     {
-        animator.SetInteger(ModeParameter, (int)playMode);
+        animator.SetInteger(Mode, (int)playMode);
+        animator.SetInteger(Interact, (int)PetParts.None);
     }
 
     private void UpdateStrollMode()
@@ -200,11 +208,16 @@ public abstract class PetBase : MonoBehaviour
     
     #region InteractPart
 
-        public abstract void InteractHead();
-        public abstract void InteractJaw();
-        public abstract void InteractBody();
-        public abstract void InteractHandDetection();
+        public void InteractHead() => animator.SetInteger(Interact, (int)PetParts.Head);
+        public void InteractJaw() => animator.SetInteger(Interact, (int)PetParts.Jaw);
+        public void InteractBody() => animator.SetInteger(Interact, (int)PetParts.Body);
+        public void InteractHandDetection() => animator.SetInteger(Interact, (int)PetParts.HandDetection);
 
+        public void InteractTerminated()
+        {
+            animator.SetInteger(Interact, (int)PetParts.None);
+        }
+        
     #endregion
     
     
@@ -255,7 +268,7 @@ public abstract class PetBase : MonoBehaviour
                 petStates = PetStates.Walk;
     
                 // Set animation
-                animator.SetBool(RunningParameter, true);
+                animator.SetBool(Running, true);
                 
                 float t = 0;
                 while (transform.position != destination && petStates == PetStates.Walk)
@@ -269,10 +282,11 @@ public abstract class PetBase : MonoBehaviour
                     
                     // Set position
                     t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
-                    transform.position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
+                    Transform trans;
+                    (trans = transform).position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
                     
                     // Set Rotation
-                    transform.rotation = Quaternion.Lerp(transform.rotation, 
+                    transform.rotation = Quaternion.Lerp(trans.rotation, 
                         Quaternion.LookRotation(moveDir), 
                         Time.deltaTime * rotationSpeed);
     
@@ -283,7 +297,7 @@ public abstract class PetBase : MonoBehaviour
                 petStates = PetStates.Idle;
                 
                 // Set animation
-                animator.SetBool(RunningParameter, false);
+                animator.SetBool(Running, false);
                 
                 isCoroutinePlayingList[(int)Cmd.Move] = false;
             }
@@ -292,9 +306,9 @@ public abstract class PetBase : MonoBehaviour
         
         #region Look
         
-            public void CmdLookPlayer()
+            public void CmdLook(Vector3 targetPos)
             {
-                Logger.Log("[Cmd] Look player");
+                Logger.Log("[Cmd] Look " + targetPos);
                 
                 // This cmd will not run if another cmd is running
                 if (CheckCoroutinePlaying())
@@ -302,21 +316,21 @@ public abstract class PetBase : MonoBehaviour
                     return;
                 }
                 petStates = PetStates.Idle;
-                StartCoroutine(LookPlayerSequence());
+                StartCoroutine(LookSequence(targetPos));
             }
             
-            private IEnumerator LookPlayerSequence()
+            private IEnumerator LookSequence(Vector3 targetPos)
             {
                 isCoroutinePlayingList[(int)Cmd.Look] = true;
     
                 // Pet rotates only on the y-axis
-                Vector3 targetDir = GameManager.Instance.player.gameObject.transform.position - transform.position;
+                Vector3 targetDir = targetPos - transform.position;
                 targetDir.y = 0;
                 Quaternion targetQuaternion = Quaternion.LookRotation(targetDir);
                 
                 while (transform.rotation != targetQuaternion)
                 {
-                    // 현재 rotation과 taretQuaternion의 각도 차이가 5도 이하인 경우 모두 회전한 것으로 판단
+                    // 현재 rotation과 targetQuaternion의 각도 차이가 5도 이하인 경우 모두 회전한 것으로 판단
                     if (AngleDiffBetween(transform.rotation, targetQuaternion) < 5f)
                     {
                         transform.rotation = targetQuaternion;
@@ -363,7 +377,7 @@ public abstract class PetBase : MonoBehaviour
     
                 isCoroutinePlayingList[(int)Cmd.Sit] = true;
                 petStates = PetStates.Sit;
-                animator.SetTrigger(SitParameter);
+                animator.SetTrigger(Sit);
                 
                 // isCoroutinePlayingList[(int)Cmd.Sit] = false; // This part will be executed in the animation part
             }
@@ -392,7 +406,7 @@ public abstract class PetBase : MonoBehaviour
                     return;
                 }
                 isCoroutinePlayingList[(int)Cmd.Eat] = true;
-                animator.Play("Eat");
+                animator.SetTrigger(Eat);
     
                 // Sound
                 PlaySound(PetSounds.Eat);
@@ -429,8 +443,8 @@ public abstract class PetBase : MonoBehaviour
                     return;
                 }
                 isCoroutinePlayingList[(int)Cmd.Brush] = true;
-                animator.Play("Brush");
-    
+                animator.SetTrigger(Brush);
+                
                 // Sound
                 PlaySound(PetSounds.Bark3);
                 
@@ -461,9 +475,9 @@ public abstract class PetBase : MonoBehaviour
                     return;
                 }
                 isCoroutinePlayingList[(int)Cmd.Bite] = true;
-                animator.Play("PreBite");
-                Logger.Log("play prebite animation");
+                animator.SetTrigger(Bite);
                 toyObj = frontToy;
+
                 // isCoroutinePlayingList[(int)Cmd.Bite] = false; This part will be executed in the animation part
             }
     
@@ -500,8 +514,8 @@ public abstract class PetBase : MonoBehaviour
                 if (!isBiting) throw new Exception("no toys in pet's mouth");
                 
                 isCoroutinePlayingList[(int)Cmd.Spit] = true;
-                animator.Play("PreSpit");
-    
+                animator.SetTrigger(Spit);
+                
                 // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
             }
     
@@ -510,6 +524,10 @@ public abstract class PetBase : MonoBehaviour
                 Logger.Log("DetachToyFromMouth");
                 isBiting = false;
                 toyObj.transform.SetParent(null);
+                toyObj.GetComponent<Rigidbody>().isKinematic = false;
+                
+                // Enable this object to be grabbed
+                toyObj.GetComponent<XRGrabInteractable>().enabled = true;
                 toyObj.GetComponent<Rigidbody>().isKinematic = false;
                 
                 // Sound

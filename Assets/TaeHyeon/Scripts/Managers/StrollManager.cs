@@ -31,7 +31,8 @@ public class StrollManager : MonoBehaviour
         // Player condition
         if (GameManager.Instance.player.idleTime > strollData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
         {
-            pet.CmdLookPlayer();
+            
+            // pet.CmdLook();
             return;
         }
 
