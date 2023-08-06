@@ -13,7 +13,7 @@ public class StoreManager : MonoBehaviour
     public GameObject viewItem_Inven;
     public int itemindex;
     public int Itemindex_Inven;
-
+    public SFXCon sfx;
 
     public static StoreManager Instance
     {
