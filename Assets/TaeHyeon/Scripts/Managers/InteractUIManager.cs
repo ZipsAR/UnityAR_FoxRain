@@ -38,7 +38,11 @@ public class InteractUIManager : MonoBehaviour
     
     private void Awake()
     {
+        InteractEventManager.OnPetStatInitialized += OnPetStatInitialized;
+        InteractEventManager.OnPetStatChanged += OnPetStatChanged;
+        
         exitBtn.onClick.AddListener(GameManager.Instance.QuitApp);
+        
         if (statRatingSpriteList.Count != Enum.GetNames(typeof(StatUIRating)).Length)
             throw new Exception("Number of statRatingImg and statRating must be the same");
     }
@@ -48,18 +52,6 @@ public class InteractUIManager : MonoBehaviour
         // Canvas Setting
         overlayCanvas.worldCamera = GameManager.Instance.player.gameObject.GetComponent<Camera>();
         overlayCanvas.planeDistance = 0.11f;
-    }
-
-    private void OnEnable()
-    {
-        InteractEventManager.OnPetStatInitialized += OnPetStatInitialized;
-        InteractEventManager.OnPetStatChanged += OnPetStatChanged;
-    }
-
-    private void OnDisable()
-    {
-        InteractEventManager.OnPetStatInitialized -= OnPetStatInitialized;
-        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
     }
 
     private void OnPetStatInitialized(object sender, PetStatInitializedArgs e)

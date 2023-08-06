@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using Logger = ZipsAR.Logger;
 
-public class Toy : MonoBehaviour
+public class Toy : InteractItem
 {
     private XRGrabInteractable xrGrabInteractable;
     public float responseTime; // Pet moves toward the Toy after this time

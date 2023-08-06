@@ -95,10 +95,7 @@ public class InteractManager : MonoBehaviour
         SetInitialCmd();
     }
 
-    private void InitializePetStatByLoadStat()
-    {
-        pet.SetPetStatBase(FileIOSystem.Instance.statdatabase.savedStat);
-    }
+
 
     private void OnEnable()
     {
@@ -178,6 +175,11 @@ public class InteractManager : MonoBehaviour
     
     #region Stat
 
+        private void InitializePetStatByLoadStat()
+        {
+            pet.SetPetStatBase(FileIOSystem.Instance.statdatabase.savedStat);
+        }
+    
         private void SaveStat()
         {
             FileIOSystem.Instance.statdatabase.savedStat = pet.GetStat();
