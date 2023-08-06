@@ -141,6 +141,8 @@ public class InteractManager : MonoBehaviour
     
     private void InitializeInteractData()
     {
+        interactData.floorHeight = -0.5f;
+        
         interactData.playerPetMaxDistance = 2f;
         interactData.playerIdleTimeThreshold = 3f;
         
