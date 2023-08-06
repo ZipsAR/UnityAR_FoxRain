@@ -120,6 +120,12 @@ public class MapInfo : Singleton<MapInfo>
         this.gameObject.SetActive(false);
     }
 
+    public void SetVisiblemode()
+    {
+        this.gameObject.SetActive(true);
+    }
+
+
     public void MapGrabmode(){
         this.GetComponent<XRGrabInteractable>().enabled = true;
     }

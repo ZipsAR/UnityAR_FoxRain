@@ -329,6 +329,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
         //오브젝트 사이즈에 맞게 아래 타일 크기를 수정해요
         currentobjsize = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
+        
+        Vector3 eulerr = gameObject.transform.rotation.eulerAngles;
+        eulerr.x = 90;
+        eulerr.y = 0;
+
+        //cellIndicator.transform.rotation = 
 
         cellIndicator.SetActive(true);
         catchmode = true;
@@ -412,7 +418,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
                         tempsize.x = size.y;
                         tempsize.y = size.x;
 
-                        gameObject.transform.rotation = rot;
+                        gameObject.transform.localRotation = rot;
                         gameObject.transform.localPosition = PlacePosition(currentpos, size);
                         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
                 }
@@ -471,6 +477,9 @@ public class PlacementSystem : Singleton<PlacementSystem>
         
         y = Mathf.Abs(y);
 
+        //print("c: "+CatchObject.transform.rotation.eulerAngles);
+        //print("i: "+cellIndicator.transform.rotation.eulerAngles);
+
 
 
         if (y % 360 >= 315 || y % 360 < 45)
@@ -498,7 +507,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         }
 
 
-        cellIndicator.transform.rotation = Quaternion.Euler(new Vector3(90, 0, tempy));
+        cellIndicator.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, tempy));
         //cellIndicator.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, tempy)); 
         return y;
     }
@@ -564,7 +573,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         if (id >= 0)
         {
             newObject.transform.SetParent(ObjectLocation.transform);
-            newObject.transform.rotation = rot;
+            newObject.transform.localRotation = rot;
 
             newObject.transform.localPosition = PlacePosition(loc, size);    
             newObject.layer = LayerMask.NameToLayer(layer);
@@ -572,7 +581,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
             placedGameObjects.Add(newObject);
 
             //GridData selectedData = database.objectsData[i].ID == 0 ? floorData : funitureData; 
-            //Ȥ�� �ε��� �ʿ䰡 ���� ������ �����ϴ� ��� �� �ڵ带 Ȱ���ؾ���.
 
             GridData selectedData = funitureData;
             selectedData.AddObjectAt(loc, size, id, placedGameObjects.Count - 1);

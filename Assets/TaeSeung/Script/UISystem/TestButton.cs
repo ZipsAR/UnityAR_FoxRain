@@ -9,4 +9,14 @@ public class TestButton : MonoBehaviour
     {
         GameManager.Instance.LoadScene("HousingMode");
     }
+
+    public void A()
+    {
+        GameManager.Instance.LoadScene("InteractMode");
+    }
+
+    public void B()
+    {
+        GameManager.Instance.LoadScene("StoreScene");
+    }
 }
