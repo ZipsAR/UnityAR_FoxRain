@@ -9,24 +9,26 @@ public class CursorCollisionSystem : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    GameObject Parent;
-    MeshRenderer thismaterial;
-    Color Initializecolor;
+    private MeshRenderer[] childmaterial;
+    private MeshRenderer thismaterial;
+
+    Color childInitializecolor;
+    Color thisInitializecolor;
+
     bool iscollision;
 
 
     private void Start()
     {
-        Parent = this.transform.parent.gameObject;
         thismaterial = this.GetComponent<MeshRenderer>();
-        Initializecolor = thismaterial.material.color;
-        
+        childmaterial = this.GetComponentsInChildren<MeshRenderer>();
+
     }
 
     private void Update()
     {
-        int mask = LayerMask.GetMask("ObjectCursorCollision");
-        //print(mask);
+        print(thisInitializecolor);
+        print(childInitializecolor);
     }
 
     private void OnTriggerStay(Collider other)
@@ -38,9 +40,8 @@ public class CursorCollisionSystem : MonoBehaviour
             if (other.gameObject.layer == mask && PlacementSystem.Instance.CatchObject.transform.GetInstanceID() != other.gameObject.transform.parent.GetInstanceID())
             {
                 iscollision = true;
-
-                Parent.GetComponent<MeshRenderer>().material.color = Color.red;
-                thismaterial.material.color = Color.red;
+                thismaterial.material.SetColor("_Color", new Vector4(1,0,0,0.5f));
+                childmaterial[1].material.SetColor("_Color", new Vector4(1,0,0,0.5f));
             }
         }
     }
@@ -48,7 +49,9 @@ public class CursorCollisionSystem : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         iscollision = false;
-        thismaterial.material.color = Initializecolor;
+        thismaterial.material.SetColor("_Color", new Vector4(1,1,1,1));
+        childmaterial[1].material.SetColor("_Color", new Vector4(0, 1, 0, 0.5f));
+
     }
 
 
