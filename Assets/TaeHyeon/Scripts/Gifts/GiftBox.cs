@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Logger = ZipsAR.Logger;
 
 public class GiftBox : MonoBehaviour
 {
     private bool isOpened;
     private GameObject gift;
+    [SerializeField] private GameObject lidObj;
+    private Lid lid;
     [SerializeField] private Transform giftTransform;
-    [SerializeField] private Animator lidAnimator;
 
     // Effects
     private GameObject curEffect;
@@ -17,22 +19,19 @@ public class GiftBox : MonoBehaviour
     [SerializeField] private GameObject openEffect;
     [SerializeField] private GameObject afterEffect;
     [SerializeField] private GameObject giftEffect;
-
+    
     private static readonly int Open = Animator.StringToHash("Open");
-
-    private float roatationTime;
-    private float rotationSpeed; // Rotation angle per second
+    
     private float risingTime;
-    private float risingDistance;
 
     private void Start()
     {
-        roatationTime = 4f;
-        rotationSpeed = 180f;
         risingTime = 2f;
-        risingDistance = 0.05f;
 
         curEffect = Instantiate(idleEffect, transform);
+        lid = lidObj.GetComponent<Lid>();
+        lid.SetCloseAfterSecond(risingTime);
+
     }
 
     private void OnCollisionEnter(Collision other)
@@ -46,14 +45,20 @@ public class GiftBox : MonoBehaviour
             
             Destroy(curEffect);
             curEffect = Instantiate(openEffect, transform);
-            lidAnimator.SetTrigger(Open);
+            lid.GetComponent<Animator>().SetTrigger(Open);
             GetComponent<Collider>().enabled = false;
-            
-            // Effect
-            Instantiate(giftEffect, gift.transform);
-            
-            StartCoroutine(StartRotation());
-            StartCoroutine(StartRising());
+
+            GameObject parentOfGift = new GameObject();
+            parentOfGift.transform.position = giftTransform.position;
+            gift.transform.SetParent(parentOfGift.transform);
+
+            GiftMovement giftMovement = parentOfGift.AddComponent<GiftMovement>();
+            giftMovement.gameObject.name = "parentOfGift";
+            giftMovement.setGift(gift);
+            giftMovement.StartRotating();
+            giftMovement.StartRising(risingTime);
+            Instantiate(giftEffect, parentOfGift.transform);
+
         }    
     }
 
@@ -63,29 +68,27 @@ public class GiftBox : MonoBehaviour
         gift.transform.position = giftTransform.position;
         if (gift.TryGetComponent(out Rigidbody component)) component.isKinematic = true;
     }
+    
 
-    private IEnumerator StartRotation()
+    public void Vanish()
     {
-        while (roatationTime > 0)
-        {
-            gift.transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
-            roatationTime -= Time.deltaTime;
-            yield return null;
-        }
+        Logger.Log("vanish call");
+        StartCoroutine(VanishAfterSec(1f));
     }
 
-    private IEnumerator StartRising()
+    private IEnumerator VanishAfterSec(float sec)
     {
-        float elapsedTime = 0f;
-        Vector3 initialPosition = gift.transform.position;
-        Vector3 targetPosition = initialPosition + Vector3.up * risingDistance;
-        
-        while (elapsedTime < risingTime)
-        {
-            float t = elapsedTime / risingTime;
-            gift.transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
+        float timer = 0;
 
-            elapsedTime += Time.deltaTime;
+        while (true)
+        {
+            timer += Time.deltaTime;
+            if (timer > sec)
+            {
+                Logger.Log("destroy gift box");
+                
+                Destroy(gameObject);
+            }
 
             yield return null;
         }
