@@ -548,7 +548,7 @@ public abstract class PetBase : MonoBehaviour
                 Logger.Log("SpitEnd is activate");
             }
 
-            private void SetIsKinematicFalse(GameObject obj) => obj.GetComponent<Rigidbody>().isKinematic = false;
+            private void SetIsKinematicFalse() => toyObj.GetComponent<Rigidbody>().isKinematic = false;
 
         #endregion
 
