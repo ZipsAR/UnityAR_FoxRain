@@ -1296,6 +1296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 371aef3240288424c880c39eba96d46c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  headToChestDistance: 0
 --- !u!81 &116555819
 AudioListener:
   m_ObjectHideFlags: 0
@@ -4955,6 +4956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   giftBoxObj: {fileID: 7666505219977495868, guid: 17d084a56e53846bf81d6a657b512945,
     type: 3}
+  coinObj: {fileID: 2351085735759361992, guid: 6cac2613b21cd4d01979111cb99dcb90, type: 3}
   itemDatabase: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
 --- !u!4 &1331841093
 Transform:

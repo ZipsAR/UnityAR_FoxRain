@@ -14,7 +14,7 @@ public class GiftMovement : MonoBehaviour
 
     private void Awake()
     {
-        rotationSpeed = 180f;
+        rotationSpeed = 540f;
         risingDistance = 0.08f;
         itemApproachSpeed = 1f;
         approachThreshold = 0.02f;

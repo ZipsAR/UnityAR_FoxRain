@@ -7,8 +7,7 @@ using Random = UnityEngine.Random;
 public class GiftBoxSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject giftBoxObj;
-    // [SerializeField] private GameObject sampleGift;
-
+    [SerializeField] private GameObject coinObj;
     [SerializeField] private ItemDatabase itemDatabase;
     
     private void Awake()
@@ -33,7 +32,7 @@ public class GiftBoxSpawner : MonoBehaviour
         GameObject spawnedObj = Instantiate(giftBoxObj, spawnPos, spawnRotation);
         GiftBox giftBox = spawnedObj.GetComponent<GiftBox>();
         
-        giftBox.SpawnGift(GetRandomItem());
+        giftBox.SpawnGift(GetCoinObj());
     }
     
     
@@ -60,4 +59,7 @@ public class GiftBoxSpawner : MonoBehaviour
         
         return data.Prefab;
     }
+
+    private GameObject GetCoinObj() => coinObj;
+
 }
