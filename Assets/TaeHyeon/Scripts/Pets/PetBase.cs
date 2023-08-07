@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 using Logger = ZipsAR.Logger;
 
@@ -96,13 +97,18 @@ public abstract class PetBase : MonoBehaviour
     // Effects
     [SerializeField] private Transform levelEffectAttachPoint;
 
+    private GameObject curEmotionObj;
+    [SerializeField] private Transform emotionMarkPosition;
+    [SerializeField] private GameObject exclamationMark;
+    
     private void Start()
     {
         rotationSpeed = 10f;
         petStates = PetStates.Idle;
         animator = GetComponent<Animator>();
         isBiting = false;
-
+        curEmotionObj = null;
+        
         // Audio validation check
         if (petSoundList.Count != Enum.GetNames(typeof(PetSounds)).Length)
             throw new Exception("Number of petSoundList and number of PetSounds do not match");
@@ -241,7 +247,13 @@ public abstract class PetBase : MonoBehaviour
         
         #region Move
         
-            public void CmdMoveTo(Vector3 destination)
+            /// <summary>
+            /// if purpose is true, it means pet is move to snack or toy
+            /// so, exclamationMark will appear, until pet bite object
+            /// </summary>
+            /// <param name="destination">Pet's Destination</param>
+            /// <param name="purpose">Whether the pet is directed to an object or not</param>
+            public void CmdMoveTo(Vector3 destination, bool purpose = default)
             {
                 Logger.Log("[Cmd] Move To " + destination);
     
@@ -250,6 +262,12 @@ public abstract class PetBase : MonoBehaviour
                 {
                     return;
                 }
+
+                if (purpose && curEmotionObj == null)
+                {
+                    curEmotionObj = Instantiate(exclamationMark, emotionMarkPosition);
+                }
+                
                 StartCoroutine(MoveSequence(destination));
             }
     
@@ -413,6 +431,13 @@ public abstract class PetBase : MonoBehaviour
                 // Sound
                 PlaySound(PetSounds.Eat);
                 
+                // EmotionMark
+                if (curEmotionObj != null)
+                {
+                    Destroy(curEmotionObj);
+                    curEmotionObj = null;
+                }
+
                 snackObj = frontSnack;
                 // isCoroutinePlayingList[(int)Cmd.Eat] = false; This part will be executed in the animation part
             }
@@ -476,6 +501,13 @@ public abstract class PetBase : MonoBehaviour
                 {
                     return;
                 }
+
+                if (curEmotionObj != null)
+                {
+                    Destroy(curEmotionObj);
+                    curEmotionObj = null;
+                }
+
                 isCoroutinePlayingList[(int)Cmd.Bite] = true;
                 animator.SetTrigger(Bite);
                 toyObj = frontToy;
@@ -628,7 +660,7 @@ public abstract class PetBase : MonoBehaviour
             // ShowCurPetStat();
         }
 
-         public abstract void InitializeStatByDefault();
+        public abstract void InitializeStatByDefault();
         
         private void ShowCurPetStat()
         {

@@ -272,7 +272,7 @@ public class InteractManager : MonoBehaviour
             
             // Move to snack position
             ClearCmdQueue();
-            EnqueueCmd(Cmd.Move, GetPointBeforeDistance(transform.position, snackTransform.position, interactData.bitingDistance));
+            EnqueueCmd(Cmd.Move, GetPointBeforeDistance(transform.position, snackTransform.position, interactData.bitingDistance), targetObj: snackTransform.gameObject);
             EnqueueCmd(Cmd.Look, snackTransform.position);
             EnqueueCmd(Cmd.Eat, targetObj: snackTransform.gameObject);
         }
@@ -307,7 +307,7 @@ public class InteractManager : MonoBehaviour
             // Move to toy position
             ClearCmdQueue();
             
-            EnqueueCmd(Cmd.Move, pos: GetPointBeforeDistance(transform.position, toyTransform.position, interactData.bitingDistance));
+            EnqueueCmd(Cmd.Move, pos: GetPointBeforeDistance(transform.position, toyTransform.position, interactData.bitingDistance), targetObj: toyTransform.gameObject);
             EnqueueCmd(Cmd.Look, pos: toyTransform.position);
             EnqueueCmd(Cmd.Bite, targetObj: toyTransform.gameObject);
             EnqueueCmd(Cmd.Look);
@@ -349,11 +349,18 @@ public class InteractManager : MonoBehaviour
                             pet.gameObject.transform.position, 
                             GameManager.Instance.player.transform.position, 
                             interactData.playerFrontDistance));
-                        
                     }
                     else
                     {
-                        pet.CmdMoveTo(nextCmd.targetDir);
+                        if (nextCmd.targetObj == default)
+                        {
+                            pet.CmdMoveTo(nextCmd.targetDir);
+                        }
+                        else
+                        {
+                            // purpose true means pet move to snack or toy
+                            pet.CmdMoveTo(nextCmd.targetDir, true);   
+                        }
                     }
                     break;
                 
