@@ -15,10 +15,11 @@ public class EffectSystem : Singleton<EffectSystem>
     private GameObject spawneffectobj;
 
 
-    void Start()
+    private void Start()
     {
-        
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -46,8 +47,8 @@ public class EffectSystem : Singleton<EffectSystem>
     {
         if (!placedeffectobj)
         {
-            placedeffectobj = Instantiate(placedeffect.transform.gameObject, Parentposition);
-            placedeffectobj.transform.localPosition = position;
+            placedeffectobj = Instantiate(placedeffect.transform.gameObject);
+            placedeffectobj.transform.position = position;
             placedeffectobj.GetComponent<ParticleSystem>().Play();
         }
     }

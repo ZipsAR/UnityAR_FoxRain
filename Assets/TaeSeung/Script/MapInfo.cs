@@ -63,16 +63,10 @@ public class MapInfo : Singleton<MapInfo>
         }
     }
 
+    
     public void SetTileScale(Vector3 scale)
     {
         Tile.transform.localScale = scale;
-
-        /*
-        Vector3 last = cellIndicator.transform.GetChild(0).localPosition;
-        last.y = 0.5f;
-        cellIndicator.transform.GetChild(0).localPosition = last;
-        */
-
         Vector3 effectscale = TileEffectScale;
         effectscale.x = effectscale.x / scale.x;
         effectscale.y = effectscale.y / scale.y;

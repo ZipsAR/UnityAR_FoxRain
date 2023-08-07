@@ -15,7 +15,7 @@ public class CursorCollisionSystem : MonoBehaviour
     Color childInitializecolor;
     Color thisInitializecolor;
 
-    bool iscollision;
+    bool iscollision = true;
 
 
     private void Start()
@@ -27,7 +27,7 @@ public class CursorCollisionSystem : MonoBehaviour
 
     private void Update()
     {
-        print(iscollision);
+        //print(iscollision);
     }
 
     private void OnTriggerStay(Collider other)
