@@ -74,7 +74,8 @@ public abstract class PetBase : MonoBehaviour
     private static readonly int Bite = Animator.StringToHash("Bite");
     private static readonly int Eat = Animator.StringToHash("Eat");
     private static readonly int Brush = Animator.StringToHash("Brush");
-    
+    private static readonly int Interact = Animator.StringToHash("Interact");
+
     // Sounds
     [SerializeField] private List<Sound> petSoundList;
 
@@ -92,7 +93,6 @@ public abstract class PetBase : MonoBehaviour
     private GameObject toyObj;
     private bool isBiting;
     public Transform toyAttachPoint;
-    private static readonly int Interact = Animator.StringToHash("Interact");
 
     // Effects
     [SerializeField] private Transform levelEffectAttachPoint;
@@ -101,7 +101,7 @@ public abstract class PetBase : MonoBehaviour
     [SerializeField] private Transform emotionMarkPosition;
     [SerializeField] private GameObject exclamationMark;
     
-    private void Start()
+    private void Awake()
     {
         rotationSpeed = 10f;
         petStates = PetStates.Idle;
@@ -120,7 +120,10 @@ public abstract class PetBase : MonoBehaviour
         
         // The position y value of the pet is fixed to the initial y value
         fixedPosY = transform.position.y;
-        
+    }
+
+    private void Start()
+    {
         StartCoroutine(Init());
     }
 

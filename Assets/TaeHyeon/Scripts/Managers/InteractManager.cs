@@ -69,24 +69,28 @@ public class InteractManager : MonoBehaviour
     private StatChangeCriteria tirednessCreteria;
     private StatChangeCriteria cleanlinessCreteria;
     
-    private void Start()
+    private void Awake()
     {
-        pet.SetPetAnimationMode(PlayMode.InteractMode);
         cmdQueue = new Queue<CmdDetail>();
 
-        // Stat for distance
-        prevPetPos = pet.gameObject.transform.position;
-
-        // Stat UI Init
-        InteractEventManager.NotifyStatInitialized(pet.GetStat());
-        Logger.Log("pet stat UI initialized");
         fullnessCreteria = new StatChangeCriteria(2, 5, 0f, 0f, 1f, 1f);
         tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
         cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
-
+        
         InitializeInteractData();
-
+        
         SetInitialCmd();
+    }
+
+    private void Start()
+    {
+        pet.SetPetAnimationMode(PlayMode.InteractMode);
+     
+        // Stat for distance
+        prevPetPos = pet.gameObject.transform.position;
+        
+        // Stat UI Init
+        InteractEventManager.NotifyStatInitialized(pet.GetStat());
     }
 
     private void OnEnable()
