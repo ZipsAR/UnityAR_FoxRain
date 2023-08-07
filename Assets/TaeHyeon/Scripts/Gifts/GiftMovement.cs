@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class GiftMovement : MonoBehaviour
 {
-    private bool isTopPosition;
-
     private GameObject gift;
     
     private float rotationSpeed; // Rotation angle per second
     private float risingDistance;
-    
+    [SerializeField] private float itemApproachSpeed;
+    [SerializeField] private float approachThreshold;
+
     private void Awake()
     {
-        isTopPosition = false;
-
         rotationSpeed = 180f;
         risingDistance = 0.08f;
+        itemApproachSpeed = 1f;
+        approachThreshold = 0.02f;
     }
     
     public void setGift(GameObject g) => gift = g;
@@ -46,8 +46,29 @@ public class GiftMovement : MonoBehaviour
 
             yield return null;
         }
+        
+        StartCoroutine(MoveToPlayerChest());
+    }
 
-        isTopPosition = true;
+    private IEnumerator MoveToPlayerChest()
+    {
+        while (Vector3.Distance(transform.position, GameManager.Instance.player.GetChestPosition()) > approachThreshold)
+        {
+            Vector3 chestPos = GameManager.Instance.player.GetChestPosition();
+            
+            Vector3 direction = (chestPos - transform.position).normalized;
+            transform.position += direction * (itemApproachSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        AddToInventory();
+    }
+
+    private void AddToInventory()
+    {
+        // add to inventory
+        Destroy(gameObject);
     }
 
     public void StartRotating()

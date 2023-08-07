@@ -12,7 +12,6 @@ public class GiftBox : MonoBehaviour
     [SerializeField] private GameObject lidObj;
     private Lid lid;
     [SerializeField] private Transform giftTransform;
-    // [SerializeField] private Animator lidAnimator;
 
     // Effects
     private GameObject curEffect;
