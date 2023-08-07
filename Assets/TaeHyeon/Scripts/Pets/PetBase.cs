@@ -93,6 +93,8 @@ public abstract class PetBase : MonoBehaviour
     public Transform toyAttachPoint;
     private static readonly int Interact = Animator.StringToHash("Interact");
 
+    // Effects
+    [SerializeField] private Transform levelEffectAttachPoint;
 
     private void Start()
     {
@@ -529,6 +531,7 @@ public abstract class PetBase : MonoBehaviour
                 // Enable this object to be grabbed
                 toyObj.GetComponent<XRGrabInteractable>().enabled = true;
                 toyObj.GetComponent<Rigidbody>().isKinematic = false;
+                Invoke(nameof(SetIsKinematicFalse), 1f);
                 
                 // Sound
                 PlaySound(PetSounds.Bark2);
@@ -544,7 +547,9 @@ public abstract class PetBase : MonoBehaviour
                 isCoroutinePlayingList[(int)Cmd.Spit] = false;
                 Logger.Log("SpitEnd is activate");
             }
-    
+
+            private void SetIsKinematicFalse() => toyObj.GetComponent<Rigidbody>().isKinematic = false;
+
         #endregion
 
     #endregion
@@ -638,5 +643,12 @@ public abstract class PetBase : MonoBehaviour
         }
 
     #endregion
-    
+
+    #region Effects
+
+        public Transform GetEffectPosition() => levelEffectAttachPoint;
+        
+        
+
+    #endregion
 }

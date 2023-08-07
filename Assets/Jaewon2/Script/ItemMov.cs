@@ -93,4 +93,24 @@ public class ItemMov : MonoBehaviour
             StoreManager.Instance.viewItem_Inven.SetActive(false);
         }
     }
+    public void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(this.gameObject.name);
+        if(this.gameObject.name == "ItemButton(Clone)")
+        {
+            GetButton();
+            this.GetComponent<GetData>().GetInfo();
+            this.GetComponent<GetData>().ItemInfo();
+            this.GetComponent<ParticleManager>().PlayParticle();
+            this.GetComponent<SFXCon>().GetButton();
+        }
+        if(this.gameObject.name == "ItemButton_Inven(Clone)")
+        {
+            GetButton();
+            this.GetComponent<GetData>().GetInfo_Inven();
+            this.GetComponent<GetData>().ItemInfo_Inven();
+            this.GetComponent<ParticleManager>().PlayParticle();
+            this.GetComponent<SFXCon>().GetButton();
+        }
+    }
 }

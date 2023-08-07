@@ -62,11 +62,12 @@ public class GetData : MonoBehaviour
     public void ItemInfo_Inven()
     {
         Debug.Log("인벤토리 오브젝트 = " + StoreManager.Instance.viewItem_Inven.name);
+        Debug.Log(StoreManager.Instance.viewItem_Inven.name);
         if (StoreManager.Instance.viewItem_Inven != null)
         {
-            Debug.Log("StoreManager.Instance.viewItem_Inven 감지");
+            Debug.Log("StoreManager.Instance.viewItem_Inven 감지" + FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.Itemindex_Inven].count.ToString());
             itemDetail_Inven.text = itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].DetailInfo;
-            itemDetail2_Inven.text = "현재 갯수 = " + FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count.ToString();
+            itemDetail2_Inven.text = "현재 갯수 = " + FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.Itemindex_Inven].count.ToString();
         }
     }
 }
