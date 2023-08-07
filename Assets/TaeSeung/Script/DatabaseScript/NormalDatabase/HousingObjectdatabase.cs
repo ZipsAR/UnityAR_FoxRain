@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class InventoryDatabase
 {
-    int money = 0;
+    public int money = 0;
     public List<MyData> mydata = new();
 }
 
@@ -23,7 +23,6 @@ public class HousingObjectdatabase
 [Serializable]
 public class StatDatabase
 {
-      //������ ���� �����ε�, ������ �����̰� ��������Ű����� ���߿� ��Ծ
       public PetStatBase savedStat = new();
 }
 
@@ -44,13 +43,9 @@ public class MyData
 public class ObjectLocation
 {
     public int InstanceId;
-
     public Vector3Int location;
     public Quaternion rotation;
-
     public Vector2Int size;
-
     public int id;
-
     public bool placementstatus = false;
 }

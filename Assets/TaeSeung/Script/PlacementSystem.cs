@@ -112,12 +112,9 @@ public class PlacementSystem : Singleton<PlacementSystem>
         {
             PlaceCheck(CatchObject);
             RotateRealTimebyHand();
-            inputManager.GetSelectedMapPositionbyObjectForward(CatchObject.transform);
-        }
-
-        //if (!InputManager.Instance.ishit()) cellIndicator.SetActive(false);
-        //else cellIndicator.SetActive(true);
-           
+            if (!inputManager.ishit()) cellIndicator.SetActive(false);
+            else cellIndicator.SetActive(true);
+        }  
     }
 
 
@@ -162,7 +159,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         SelectExitEventArgs exitargs = makeExitEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
         interact.selectExited.AddListener((a)=>PlaceEvent(exitargs));
-
     }
 
 
@@ -290,7 +286,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject",gameObject);
         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
-        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
+        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.position);
         SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
 
         FileIOSystem.Instance.housingdatabase.objectsLocation.Add(newlocation);
@@ -327,16 +323,14 @@ public class PlacementSystem : Singleton<PlacementSystem>
         if (index < 0) return;
 
         //오브젝트 사이즈에 맞게 아래 타일 크기를 수정해요
-        currentobjsize = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
+
+        int dataindex = itemdatabase.ItemData.FindIndex(data => data.ID == FileIOSystem.Instance.housingdatabase.objectsLocation[index].id);
+        currentobjsize = itemdatabase.ItemData[dataindex].Housingsize;
+        currentpos = FileIOSystem.Instance.housingdatabase.objectsLocation[index].location;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
-        
-        Vector3 eulerr = gameObject.transform.rotation.eulerAngles;
-        eulerr.x = 90;
-        eulerr.y = 0;
 
         cellIndicator.SetActive(true);
         catchmode = true;
-        currentpos = FileIOSystem.Instance.housingdatabase.objectsLocation[index].location;
     }
 
     private void InsertionStructure(GameObject gameObject) {
@@ -401,7 +395,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
                         gameObject.transform.rotation = currentrotation;
                         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
-                        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
+
+                        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.position);
                         SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
                         FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase , FileIOSystem.HousingFilename);
                 }
@@ -413,7 +408,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
                         gameObject.transform.localRotation = rot;
                         gameObject.transform.localPosition = PlacePosition(currentpos, size);
-                        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.localPosition);
+
+                        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.position);
                 }
                     catchmode = false;
                     cellIndicator.SetActive(false);
@@ -487,8 +483,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         }
 
 
-        cellIndicator.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, tempy));
-        //cellIndicator.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, tempy)); 
+        cellIndicator.transform.rotation = Quaternion.Euler(new Vector3(90, 0, tempy));
         return y;
     }
 
