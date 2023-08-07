@@ -14,7 +14,6 @@ public class ParticleManager : MonoBehaviour
 
     public void PlayParticle()
     {
-        Debug.Log("플레이중");
         this.particle.Play();
     }
 }
