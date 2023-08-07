@@ -2,14 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Logger = ZipsAR.Logger;
 
 public class GiftBox : MonoBehaviour
 {
     private bool isOpened;
     private GameObject gift;
+    [SerializeField] private GameObject lidObj;
+    private Lid lid;
     [SerializeField] private Transform giftTransform;
-    [SerializeField] private Animator lidAnimator;
+    // [SerializeField] private Animator lidAnimator;
 
     // Effects
     private GameObject curEffect;
@@ -17,7 +20,8 @@ public class GiftBox : MonoBehaviour
     [SerializeField] private GameObject openEffect;
     [SerializeField] private GameObject afterEffect;
     [SerializeField] private GameObject giftEffect;
-
+    [SerializeField] private Transform giftEffectPos;
+    
     private static readonly int Open = Animator.StringToHash("Open");
 
     private float roatationTime;
@@ -27,12 +31,15 @@ public class GiftBox : MonoBehaviour
 
     private void Start()
     {
-        roatationTime = 4f;
-        rotationSpeed = 180f;
+        roatationTime = 10f;
+        rotationSpeed = 270f;
         risingTime = 2f;
-        risingDistance = 0.05f;
+        risingDistance = 0.08f;
 
         curEffect = Instantiate(idleEffect, transform);
+        lid = lidObj.GetComponent<Lid>();
+        lid.SetCloseAfterSecond(risingTime);
+
     }
 
     private void OnCollisionEnter(Collision other)
@@ -46,11 +53,11 @@ public class GiftBox : MonoBehaviour
             
             Destroy(curEffect);
             curEffect = Instantiate(openEffect, transform);
-            lidAnimator.SetTrigger(Open);
+            lid.GetComponent<Animator>().SetTrigger(Open);
             GetComponent<Collider>().enabled = false;
             
             // Effect
-            Instantiate(giftEffect, gift.transform);
+            Instantiate(giftEffect, giftEffectPos);
             
             StartCoroutine(StartRotation());
             StartCoroutine(StartRising());
@@ -86,6 +93,31 @@ public class GiftBox : MonoBehaviour
             gift.transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
 
             elapsedTime += Time.deltaTime;
+
+            yield return null;
+        }
+    }
+
+    public void Vanish()
+    {
+        Logger.Log("vanish call");
+        StartCoroutine(VanishAfterSec(2f));
+    }
+
+    private IEnumerator VanishAfterSec(float sec)
+    {
+        float timer = 0;
+
+        while (true)
+        {
+            timer += Time.deltaTime;
+            if (timer > sec)
+            {
+                Logger.Log("destroy");
+                
+                Destroy(gift);
+                Destroy(gameObject);
+            }
 
             yield return null;
         }

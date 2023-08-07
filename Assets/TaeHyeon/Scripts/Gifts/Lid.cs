@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using Logger = ZipsAR.Logger;
 
 public class Lid : MonoBehaviour
 {
+    public GiftBox giftBox;
+    
     private Animator animator;
     private float closeAfterSecond;
     private static readonly int Stay = Animator.StringToHash("Stay");
@@ -14,9 +17,9 @@ public class Lid : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        closeAfterSecond = 3f;
     }
-    
+
+    public void SetCloseAfterSecond(float sec) => closeAfterSecond = sec;
     
     public void FullyOpened()
     {
@@ -39,5 +42,11 @@ public class Lid : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    public void FullyClosed()
+    {
+        Logger.Log("FullyClosed");
+        giftBox.Vanish();
     }
 }
