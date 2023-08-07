@@ -531,6 +531,7 @@ public abstract class PetBase : MonoBehaviour
                 // Enable this object to be grabbed
                 toyObj.GetComponent<XRGrabInteractable>().enabled = true;
                 toyObj.GetComponent<Rigidbody>().isKinematic = false;
+                Invoke(nameof(SetIsKinematicFalse), 1f);
                 
                 // Sound
                 PlaySound(PetSounds.Bark2);
@@ -546,7 +547,9 @@ public abstract class PetBase : MonoBehaviour
                 isCoroutinePlayingList[(int)Cmd.Spit] = false;
                 Logger.Log("SpitEnd is activate");
             }
-    
+
+            private void SetIsKinematicFalse() => toyObj.GetComponent<Rigidbody>().isKinematic = false;
+
         #endregion
 
     #endregion

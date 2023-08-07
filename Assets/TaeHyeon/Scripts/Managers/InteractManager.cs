@@ -80,22 +80,14 @@ public class InteractManager : MonoBehaviour
         // Stat UI Init
         InteractEventManager.NotifyStatInitialized(pet.GetStat());
         Logger.Log("pet stat UI initialized");
-
-        // Fullness
         fullnessCreteria = new StatChangeCriteria(2, 5, 0f, 0f, 1f, 1f);
-        
-        // Tiredness
         tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
-
-        // Cleanliness
         cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
 
         InitializeInteractData();
 
         SetInitialCmd();
     }
-
-
 
     private void OnEnable()
     {
@@ -149,6 +141,8 @@ public class InteractManager : MonoBehaviour
     
     private void InitializeInteractData()
     {
+        interactData.floorHeight = -0.5f;
+        
         interactData.playerPetMaxDistance = 2f;
         interactData.playerIdleTimeThreshold = 3f;
         
