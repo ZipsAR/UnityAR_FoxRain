@@ -5,7 +5,7 @@ using UnityEngine;
 public class StoreManager : MonoBehaviour
 {
     public GameObject[] objList;
-    private static StoreManager instance;
+    public static StoreManager Instance;
     public UICon uImanager;
     public ItemMov itemMov;
     public GetData getData;
@@ -15,7 +15,7 @@ public class StoreManager : MonoBehaviour
     public int Itemindex_Inven;
     public SFXCon sfx;
 
-    public static StoreManager Instance
+    /*public static StoreManager Instance
     {
         get
         {
@@ -31,9 +31,10 @@ public class StoreManager : MonoBehaviour
             }
             return instance;
         }
-    }
+    }*/
     private void OnEnable()
     {
+        Instance = this;
         Debug.Log("√ ±‚»≠");
         itemindex = -1;
     }

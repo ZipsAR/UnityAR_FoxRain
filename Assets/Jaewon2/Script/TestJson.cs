@@ -6,12 +6,9 @@ public class TestJson : MonoBehaviour
 {
     void Start()
     {
-
         FileIOSystem.Instance.AllLoad();
         Debug.Log(FileIOSystem.Instance.invendatabase.mydata.Count);
-        /*RebootData();
-        FileIOSystem.Instance.AllSave();
-        FileIOSystem.Instance.AllLoad();*/
+        RebootData();FileIOSystem.Instance.AllSave();FileIOSystem.Instance.AllLoad();
         string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
         Debug.Log(c);
     }
@@ -19,10 +16,10 @@ public class TestJson : MonoBehaviour
     public void RebootData()
     {
         FileIOSystem.Instance.invendatabase.mydata.Clear();   
-        for (int i = 0; i < 17; i++)
+        for (int i = 0; i < 28; i++)
         {
             MyData a = new();
-            if (FileIOSystem.Instance.invendatabase.mydata.Count < 17)
+            if (FileIOSystem.Instance.invendatabase.mydata.Count < 28)
             {
                 FileIOSystem.Instance.invendatabase.mydata.Add(a);
             }
@@ -31,11 +28,11 @@ public class TestJson : MonoBehaviour
             {
                 FileIOSystem.Instance.invendatabase.mydata[i].id = 1001 + i;
             }
-            if (13 < i && 16 > i)
+            if (14 <= i && 19 > i)
             {
                 FileIOSystem.Instance.invendatabase.mydata[i].id = 2001 + i - 14;
             }
-            if (15 < i)
+            if (19 < i)
             {
                 FileIOSystem.Instance.invendatabase.mydata[i].id = 3001 + i - 16;
             }
