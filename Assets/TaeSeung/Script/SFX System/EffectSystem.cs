@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectSystem : MonoBehaviour
+public class EffectSystem : Singleton<EffectSystem>
 {
     // Start is called before the first frame update
 
@@ -14,11 +14,9 @@ public class EffectSystem : MonoBehaviour
     private GameObject placedeffectobj;
     private GameObject spawneffectobj;
 
-    public static EffectSystem Instance { get; private set; }
 
     private void Start()
     {
-        Instance = this;
     }
 
 
