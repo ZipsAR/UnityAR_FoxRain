@@ -13,7 +13,7 @@ public class UICon : MonoBehaviour
     {
         isSelected = false;
         money = 10000;
-        T_money.text = money.ToString();
+        T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
         FileIOSystem.Instance.AllLoad();
     }
     public void BuyItem()
@@ -23,8 +23,8 @@ public class UICon : MonoBehaviour
     }
     public void Pay()
     {
-        money -= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
-        T_money.text = money.ToString();
+        FileIOSystem.Instance.invendatabase.money -= (int)itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
+        T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
         Debug.Log("BuyPrice = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice);
         FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count++;
         FileIOSystem.Instance.AllSave();
@@ -36,8 +36,8 @@ public class UICon : MonoBehaviour
     }
     public void Sell()
     {
-        money += itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice;
-        T_money.text = money.ToString();
+        FileIOSystem.Instance.invendatabase.money += (int)itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice;
+        T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
         Debug.Log("SellPrice = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice);
         FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count--;
         FileIOSystem.Instance.AllSave();
