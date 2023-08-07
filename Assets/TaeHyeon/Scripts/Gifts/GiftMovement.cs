@@ -6,6 +6,7 @@ using UnityEngine;
 public class GiftMovement : MonoBehaviour
 {
     private GameObject gift;
+    private int coinEarnedValue;
     
     private float rotationSpeed; // Rotation angle per second
     private float risingDistance;
@@ -68,6 +69,14 @@ public class GiftMovement : MonoBehaviour
     private void AddToInventory()
     {
         // add to inventory
+        FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+        int existMoney = FileIOSystem.Instance.invendatabase.money;
+        int moneyAfterEarned = existMoney + coinEarnedValue;
+
+        FileIOSystem.Instance.invendatabase.money = moneyAfterEarned;
+        
+        FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+        
         Destroy(gameObject);
     }
 
@@ -80,4 +89,6 @@ public class GiftMovement : MonoBehaviour
     {
         StartCoroutine(RisingCoroutine(f));
     }
+
+    public void SetCoinEarnedValue(int value) => coinEarnedValue = value;
 }
