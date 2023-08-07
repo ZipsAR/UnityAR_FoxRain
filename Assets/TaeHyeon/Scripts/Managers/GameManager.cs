@@ -74,6 +74,8 @@ public class GameManager : Singleton<GameManager>
 
         if (sceneName == "InteractMode")
         {
+            MapInfo.Instance.SetMapNormalmode();
+            MapInfo.Instance.MapGrabmode();
             interactManager = 
                 GameObject.Find("Interact Manager").GetComponent<InteractManager>();
             interactAudioManager =
@@ -81,7 +83,9 @@ public class GameManager : Singleton<GameManager>
             ChangeMode(PlayMode.InteractMode);
         }
         if(sceneName == "HousingMode"){
-            PlacementSystem.Instance.ReleaseGrib();
+            MapInfo.Instance.SetMapHousingmode();
+            MapInfo.Instance.SetOrigin();
+            MapInfo.Instance.MapUnGrabmode();
         }
     }
 }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 9187876058716079196}
   - component: {fileID: -7072794211288691184}
   - component: {fileID: 954030670498550308}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 02_furniture_bed table
   m_TagString: Untagged
   m_Icon: {fileID: 0}

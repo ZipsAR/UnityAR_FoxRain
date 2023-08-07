@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -7038698001376142611}
   - component: {fileID: 7200045491685111876}
   - component: {fileID: -5651636130303026847}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 09_furniture_table
   m_TagString: Untagged
   m_Icon: {fileID: 0}

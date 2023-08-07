@@ -97,9 +97,8 @@ public class MapInfo : Singleton<MapInfo>
 
     public void SetMapHousingmode()
     {
-
         PlacementSystem.Instance.ReleaseGrib();
-        HousingUISystem.Instance.gameObject.SetActive(true);
+        HousingUISystem.Instance.transform.gameObject.SetActive(true);
         EffectSystem.Instance.gameObject.SetActive(true);
         SoundSystem.Instance.gameObject.SetActive(true);
         this.gameObject.SetActive(true);
@@ -108,7 +107,7 @@ public class MapInfo : Singleton<MapInfo>
     public void SetMapNormalmode()
     {
         PlacementSystem.Instance.ProtectGrib();
-        HousingUISystem.Instance.gameObject.SetActive(false);
+        HousingUISystem.Instance.transform.gameObject.SetActive(false);
         EffectSystem.Instance.gameObject.SetActive(false);
         SoundSystem.Instance.gameObject.SetActive(false);
         this.gameObject.SetActive(true);
@@ -138,6 +137,7 @@ public class MapInfo : Singleton<MapInfo>
     {
         Vector3 rotate = this.gameObject.transform.rotation.eulerAngles;
         rotate.x = 0;
+        rotate.y = 0;
         rotate.z = 0;
         this.transform.eulerAngles = rotate;
     }

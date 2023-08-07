@@ -161,7 +161,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     public void ProtectGrib()
     {
-
         foreach(XRGrabInteractable obj in ObjGrabcomponents) {
             obj.enabled = false;
         }
@@ -341,10 +340,13 @@ public class PlacementSystem : Singleton<PlacementSystem>
                 {
                     int id = FileIOSystem.Instance.housingdatabase.objectsLocation[index].id;
                     Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
-
-                   
-
                     int myindex= FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == id);
+
+
+                    int grapindex = ObjGrabcomponents.FindIndex(data => data == gameObject.GetComponent<XRGrabInteractable>());
+                    ObjGrabcomponents.RemoveAt(grapindex);
+
+
                     if (myindex != -1)
                     {
                     FileIOSystem.Instance.invendatabase.mydata[myindex].count++;
@@ -363,6 +365,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
                     FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
                     FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase, FileIOSystem.HousingFilename);
+
                 }
                 //Destroy(gameObject);
             }

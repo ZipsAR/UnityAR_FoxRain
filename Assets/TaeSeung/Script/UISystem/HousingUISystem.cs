@@ -17,7 +17,6 @@ public class HousingUISystem : Singleton<HousingUISystem>
     private void Start()
     {
         InitializeUI();
-        MapInfo.Instance.SetMapHousingmode();
        
     }
 
