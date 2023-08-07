@@ -5,9 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
-
-//��ġ�� ���õ� ��� �Լ��� ���.
-
 public class PlacementSystem : Singleton<PlacementSystem>
 {
 
@@ -185,16 +182,13 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         StopPlacement(false);
         gridVisualization.SetActive(true);
-     
-        //inputManager.OnClicked += InsertionStructure;
-        //inputManager.OnExit += StopPlacement;
-
     }
 
     public void StopPlacement(bool indexinitialize)
     {
         if(indexinitialize)
             selectedObjectIndex = -1;
+
 
         gridVisualization.SetActive(false);
         cellIndicator.SetActive(false);
@@ -364,7 +358,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
                         gameObject.GetComponent<Rigidbody>().isKinematic = false;
                     }
 
-                    print(Vector3.Distance(gameObject.transform.position, ObjectLocation.transform.position));
                     CreateObject = null;
                     StartCoroutine(throwdelete(gameObject));
 
@@ -604,7 +597,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceEnterEvent(SelectEnterEventArgs p)
     {
         CatchObject = p.interactableObject.transform.gameObject;
-        print(CatchObject);
+        HousingUISystem.Instance.EnalbleButton(false);
         PlaceStartStructure();
     }
 
@@ -615,6 +608,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceEvent(SelectExitEventArgs p)
     {
         PlaceStructure(p.interactableObject.transform.gameObject);
+        HousingUISystem.Instance.EnalbleButton(true);
         MapInfo.Instance.ResetTileScale();
     }
 
@@ -627,6 +621,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         CatchObject = p.interactableObject.transform.gameObject;
         Startinsertion();
+        HousingUISystem.Instance.EnalbleButton(false);
         InsertionStartStructure(p.interactableObject.transform.gameObject);
     }
 
@@ -639,6 +634,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         RotatePlacementByHand(RotateRealTimebyHand());
         InsertionStructure(p.interactableObject.transform.gameObject);
         StopPlacement(false);
+        HousingUISystem.Instance.EnalbleButton(true);
         MapInfo.Instance.ResetTileScale();
     }
 

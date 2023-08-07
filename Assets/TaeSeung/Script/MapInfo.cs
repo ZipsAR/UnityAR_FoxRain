@@ -31,8 +31,6 @@ public class MapInfo : Singleton<MapInfo>
     {
         this.transform.position = new Vector3(0, -0.6f, 1);
         this.transform.eulerAngles = new Vector3(0, 0, 0);
-        //SetReScale(FirstScale);
-        
     }
 
     public void SetAnotherPosition(Vector3 newposition)
@@ -99,13 +97,20 @@ public class MapInfo : Singleton<MapInfo>
 
     public void SetMapHousingmode()
     {
+
         PlacementSystem.Instance.ReleaseGrib();
+        HousingUISystem.Instance.gameObject.SetActive(true);
+        EffectSystem.Instance.gameObject.SetActive(true);
+        SoundSystem.Instance.gameObject.SetActive(true);
         this.gameObject.SetActive(true);
     }
 
     public void SetMapNormalmode()
     {
         PlacementSystem.Instance.ProtectGrib();
+        HousingUISystem.Instance.gameObject.SetActive(false);
+        EffectSystem.Instance.gameObject.SetActive(false);
+        SoundSystem.Instance.gameObject.SetActive(false);
         this.gameObject.SetActive(true);
     }
 

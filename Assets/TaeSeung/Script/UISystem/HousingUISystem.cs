@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class HousingUISystem : MonoBehaviour
+public class HousingUISystem : Singleton<HousingUISystem>
 {
     [SerializeField]
     private GameObject menuPanel, HousingButtonPrefab;
@@ -13,12 +13,9 @@ public class HousingUISystem : MonoBehaviour
     private ItemDatabase itemdatabase;
     public List<GameObject> countlist;
 
-    public static HousingUISystem Instance { get; private set; }
-
 
     private void Start()
     {
-        Instance = this;
         InitializeUI();
         MapInfo.Instance.SetMapHousingmode();
        
@@ -31,7 +28,7 @@ public class HousingUISystem : MonoBehaviour
 
             GameObject newobj = Instantiate(HousingButtonPrefab, menuPanel.transform);
             newobj.GetComponent<Button>().onClick.AddListener(() => PlacementSystem.Instance.StartPlacement(objdata.id));
-
+            
 
             int idindex = itemdatabase.ItemData.FindIndex(data => data.ID == objdata.id);
             GameObject previewobj = Instantiate(itemdatabase.ItemData[idindex].Prefab, newobj.transform.Find("GameObject"));
@@ -45,6 +42,15 @@ public class HousingUISystem : MonoBehaviour
         }   
     }
 
+    public void EnalbleButton(bool flag)
+    {
+        for(int i=0; i<countlist.Count; i++)
+            countlist[i].GetComponent<Button>().interactable = flag;
+
+    }
+
+
+
     public void ObjCountupdate(int id)
     {
         GameObject obj = countlist[id];
@@ -52,7 +58,6 @@ public class HousingUISystem : MonoBehaviour
     
 
     }
-
 
     public void DebuggingText(object newtext)
     {
