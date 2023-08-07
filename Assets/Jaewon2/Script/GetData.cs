@@ -11,7 +11,7 @@ public class GetData : MonoBehaviour
     Text itemDetail2;
     Text itemDetail2_Inven;
 
-    private void Start()
+    private void Awake()
     {
         itemDetail = GameObject.Find("Des1").GetComponent<Text>();
         itemDetail2 = GameObject.Find("Des2").GetComponent<Text>();
@@ -29,6 +29,7 @@ public class GetData : MonoBehaviour
                 if (this.CompareTag("Store"))
                 {
                     StoreManager.Instance.itemindex = i;
+                    Debug.Log("인덱스 추출 = " + StoreManager.Instance.itemindex);
                 }
             }
             Destroy(c);
@@ -56,7 +57,7 @@ public class GetData : MonoBehaviour
         if (StoreManager.Instance.viewItem_store != null)
         {
             itemDetail.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
-            itemDetail2.text = "현재 갯수 = " + FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count.ToString();
+            itemDetail2.text = "현재 보유 수 " + FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count.ToString();
         }
     }
     public void ItemInfo_Inven()
@@ -67,7 +68,7 @@ public class GetData : MonoBehaviour
         {
             Debug.Log("StoreManager.Instance.viewItem_Inven 감지" + FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.Itemindex_Inven].count.ToString());
             itemDetail_Inven.text = itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].DetailInfo;
-            itemDetail2_Inven.text = "현재 갯수 = " + FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.Itemindex_Inven].count.ToString();
+            itemDetail2_Inven.text = "현재 보유 수 " + FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.Itemindex_Inven].count.ToString();
         }
     }
 }

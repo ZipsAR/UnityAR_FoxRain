@@ -29,6 +29,8 @@ public class UICon : MonoBehaviour
         FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count++;
         FileIOSystem.Instance.AllSave();
         FileIOSystem.Instance.AllLoad();
+        GetComponent<GetData>().ItemInfo_Inven();
+        GetComponent<GetData>().ItemInfo();
         string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
         Debug.Log("구매 = "+ StoreManager.Instance.itemindex + c);
     }
@@ -40,6 +42,8 @@ public class UICon : MonoBehaviour
         FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count--;
         FileIOSystem.Instance.AllSave();
         FileIOSystem.Instance.AllLoad();
+        GetComponent<GetData>().ItemInfo_Inven();
+        GetComponent<GetData>().ItemInfo();
         string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
         Debug.Log("판매 = "+ StoreManager.Instance.itemindex+c);
     }
