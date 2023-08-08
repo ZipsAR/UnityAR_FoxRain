@@ -23,7 +23,7 @@ public class HousingObjectdatabase
 [Serializable]
 public class StatDatabase
 {
-      public PetStatBase savedStat = new();
+      public List<PetStatBase> savedStats = new();
 }
 
 
