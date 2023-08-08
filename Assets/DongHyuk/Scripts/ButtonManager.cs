@@ -649,13 +649,16 @@ public class ButtonManager : MonoBehaviour
                     {
                         buttonItSelf.transform.GetChild(0).gameObject.SetActive(false);
                         buttonItSelf.transform.GetChild(1).gameObject.SetActive(true);
-                        MapInfo.Instance.SetMapNormalmode(); // 이건 하우징을 수정모드가 아니라 보기모드로 바꾸는 것임. SetVisible 머지되면 가져와야함.
+                        MapInfo.Instance.SetVisiblemode();
+                        MapInfo.Instance.SetReScale(6.4f);
+                        Debug.Log("맵이 현실과 유사한 사이즈로 생성되었습니다.");
                     }
                     else
                     {
                         buttonItSelf.transform.GetChild(0).gameObject.SetActive(true);
                         buttonItSelf.transform.GetChild(1).gameObject.SetActive(false);
                         MapInfo.Instance.SetInvisiblemode();
+                        Debug.Log("맵이 꺼졌습니다. 꺼져.");
                     }
                 }
                 break;
