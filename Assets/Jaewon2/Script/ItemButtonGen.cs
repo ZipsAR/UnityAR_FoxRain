@@ -50,6 +50,19 @@ public class ItemButtonGen : MonoBehaviour
                 ButtonGened[i] = GameObject.Instantiate(itemDBObjs[i], GenedPanel.transform);
                 ButtonGened[i].transform.localPosition = new Vector3(0, -30, -0);
                 ButtonGened[i].transform.localScale = new Vector3(60, 60, 60);
+                if (i == 27)
+                {
+                    ButtonGened[i].GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    ButtonGened[i].GetComponent<Transform>().localScale = new Vector3(1000, 1000, 1000);
+                    Debug.Log("¿Œµ¶Ω∫ == 27");
+                }
+                if (i == 25)
+                {
+                    ButtonGened[i].GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    ButtonGened[i].GetComponent<Transform>().localScale = new Vector3(60000, 60000, 60000);
+                    Debug.Log("¿Œµ¶Ω∫ == 25");
+                }
+
                 GenedPanel.GetComponent<ItemMov>().childitem = ButtonGened[i];
             }
         }
@@ -80,6 +93,16 @@ public class ItemButtonGen : MonoBehaviour
                 ButtonGened_Inven[i] = GameObject.Instantiate(itemDBObjs[i], GenedPanel.transform);
                 ButtonGened_Inven[i].transform.localPosition = new Vector3(0, -30, -0);
                 ButtonGened_Inven[i].transform.localScale = new Vector3(60, 60, 60);
+                if (i == 27)
+                {
+                    ButtonGened_Inven[i].GetComponent<Transform>().localScale = new Vector3(1000, 1000, 1000);
+                    Debug.Log("¿Œµ¶Ω∫ == 27");
+                }
+                if (i == 25)
+                {
+                    ButtonGened_Inven[i].GetComponent<Transform>().localScale = new Vector3(60000, 60000, 60000);
+                    Debug.Log("¿Œµ¶Ω∫ == 25");
+                }
                 GenedPanel.GetComponent<ItemMov>().childitem_Inven = ButtonGened_Inven[i];
             }
         }

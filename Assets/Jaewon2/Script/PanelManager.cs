@@ -55,11 +55,12 @@ public class PanelManager : MonoBehaviour
             case 1:
                 tagName.text = "Store-Toy";
                 break;
-            case 2:
+            case -1:
+                Debug.Log("Çªµå_Store ÁøÀÔ");
                 tagName.text = "Store-Food";
                 break;
-
         }
+        Debug.Log(panelNum);
     }
     public void PanelCon_Right_Inven()
     {
@@ -70,7 +71,7 @@ public class PanelManager : MonoBehaviour
         }
         currentPanel_Inven = Panels_Inven[panelNum_Inven];
         currentPanel_Inven.SetActive(true);
-        if (panelNum_Inven == Panels_Inven.Length - 1)
+        if (panelNum_Inven == Panels_Inven.Length-1)
         {
             panelNum_Inven = -1;
         }
@@ -82,10 +83,9 @@ public class PanelManager : MonoBehaviour
             case 1:
                 tagName_Inven.text = "Inventory-Toy";
                 break;
-            case 2:
+            case -1:
                 tagName_Inven.text = "Inventory-Food";
                 break;
-
         }
     }
 

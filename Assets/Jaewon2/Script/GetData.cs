@@ -29,7 +29,7 @@ public class GetData : MonoBehaviour
                 if (this.CompareTag("Store"))
                 {
                     StoreManager.Instance.itemindex = i;
-                    Debug.Log("¿Œµ¶Ω∫ √ﬂ√‚ = " + StoreManager.Instance.itemindex);
+                    //Debug.Log("¿Œµ¶Ω∫ √ﬂ√‚ = " + StoreManager.Instance.itemindex);
                 }
             }
             Destroy(c);
