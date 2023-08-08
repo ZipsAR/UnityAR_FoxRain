@@ -40,7 +40,9 @@ public class InteractUIManager : MonoBehaviour
     
     private void Awake()
     {
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
         InteractEventManager.OnPetInitializedToAll += OnPetInitialized;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
         InteractEventManager.OnPetStatChanged += OnPetStatChanged;
         
         exitBtn.onClick.AddListener(GameManager.Instance.QuitApp);
@@ -71,7 +73,13 @@ public class InteractUIManager : MonoBehaviour
             statUIRef.stateImg.color = new Color(goodColor.r, goodColor.g, goodColor.b, 1f);
         }
     }
-    
+
+    private void OnDisable()
+    {
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
+    }
+
     private void OnPetInitialized(object sender, PetArgs e)
     {
         uiCanvas.SetActive(true);

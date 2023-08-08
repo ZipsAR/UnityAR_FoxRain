@@ -46,6 +46,7 @@ public enum PetSounds
 
 public enum PetType
 {
+    None,
     Cat,
     Dog,
 }
@@ -118,12 +119,21 @@ public abstract class PetBase : MonoBehaviour
             throw new Exception("Number of petSoundList and number of PetSounds do not match");
 
         // The position y value of the pet is fixed to the initial y value
-        fixedPosY = GameManager.Instance.interactManager.GetInteractData().floorHeight;
+        fixedPosY = transform.position.y;
     }
 
     private void Start()
     {
-        StartCoroutine(Init());
+        isCoroutinePlayingList = new List<bool>();
+        for (int i = 0; i < Enum.GetValues(typeof(Cmd)).Length; i++)
+        {
+            isCoroutinePlayingList.Add(false);
+        }
+                    
+        // Check Initialization Completed
+        isInitDone = true;
+                
+        InteractEventManager.NotifyPetInitializedToManager(gameObject);
     }
 
     private void Update()
@@ -151,33 +161,6 @@ public abstract class PetBase : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// What to initialize using other script references
-    /// Update portion runs after this initialization is complete
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator Init()
-    {
-        while (true)
-        {
-            if (GameManager.Instance.player != null)
-            {
-                isCoroutinePlayingList = new List<bool>();
-                for (int i = 0; i < Enum.GetValues(typeof(Cmd)).Length; i++)
-                {
-                    isCoroutinePlayingList.Add(false);
-                }
-                    
-                // Check Initialization Completed
-                isInitDone = true;
-                
-                InteractEventManager.NotifyPetInitializedToManager(gameObject);
-                break;
-            }
-            yield return null;
-        }
-    }
-    
     public void SetPetAnimationMode(PlayMode playMode)
     {
         animator = GetComponent<Animator>();

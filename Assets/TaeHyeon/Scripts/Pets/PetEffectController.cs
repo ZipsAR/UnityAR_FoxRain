@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Logger = ZipsAR.Logger;
 
 public class PetEffectController : MonoBehaviour
 {
@@ -12,8 +13,16 @@ public class PetEffectController : MonoBehaviour
     
     private void Awake()
     {
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
         InteractEventManager.OnPetInitializedToAll += OnPetInitialized;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
         InteractEventManager.OnPetStatChanged += OnPetStatChanged;
+    }
+
+    private void OnDisable()
+    {
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
     }
 
     private void OnPetInitialized(object sender, PetArgs e)

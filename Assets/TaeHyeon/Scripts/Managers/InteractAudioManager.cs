@@ -12,9 +12,14 @@ public class InteractAudioManager : MonoBehaviour
 
     private void Awake()
     {
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
         InteractEventManager.OnPetInitializedToAll += OnPetInitialized;
     }
-
+    
+    private void OnDisable()
+    {
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
+    }
     private void OnPetInitialized(object sender, PetArgs e)
     {
         petAudioSource = e.petObj.GetComponent<AudioSource>();

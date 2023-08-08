@@ -61,7 +61,7 @@ public class InteractManager : MonoBehaviour
     private bool isPetInitialized;
     [SerializeField] private InteractData interactData;
     [SerializeField] private Transform selectedPetSpawnTransform;
-
+    
     private Queue<CmdDetail> cmdQueue;
     private CmdDetail nextCmd;
 
@@ -73,7 +73,9 @@ public class InteractManager : MonoBehaviour
     
     private void Awake()
     {
+        InteractEventManager.OnPetSelected -= OnPetSelected;
         InteractEventManager.OnPetSelected += OnPetSelected;
+        InteractEventManager.OnPetInitializedToManager -= OnPetInitializedToManager;
         InteractEventManager.OnPetInitializedToManager += OnPetInitializedToManager; 
         isPetInitialized = false;
         
@@ -90,6 +92,9 @@ public class InteractManager : MonoBehaviour
 
     private void OnDisable()
     {
+        InteractEventManager.OnPetSelected -= OnPetSelected;
+        InteractEventManager.OnPetInitializedToManager -= OnPetInitializedToManager;
+
         SaveStat();
     }
 
@@ -150,9 +155,9 @@ public class InteractManager : MonoBehaviour
         pet.SetPetAnimationMode(PlayMode.InteractMode);
      
         // Stat for distance
-        prevPetPos = e.petObj.transform.position;
+        prevPetPos = pet.gameObject.transform.position;
         
-        InteractEventManager.NotifyPetInitializedToAll(e.petObj);
+        InteractEventManager.NotifyPetInitializedToAll(pet.gameObject);
 
         isPetInitialized = true;
     }
