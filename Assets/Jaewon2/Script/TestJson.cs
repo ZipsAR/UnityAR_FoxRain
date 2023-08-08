@@ -8,7 +8,7 @@ public class TestJson : MonoBehaviour
     {
         FileIOSystem.Instance.AllLoad();
         Debug.Log(FileIOSystem.Instance.invendatabase.mydata.Count);
-        RebootData();FileIOSystem.Instance.AllSave();FileIOSystem.Instance.AllLoad();
+        //RebootData();FileIOSystem.Instance.AllSave();FileIOSystem.Instance.AllLoad();
         string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
         Debug.Log(c);
     }
