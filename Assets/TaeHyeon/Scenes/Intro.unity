@@ -3141,7 +3141,7 @@ GameObject:
   - component: {fileID: 1855138423}
   - component: {fileID: 1855138422}
   - component: {fileID: 1855138421}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BuildingSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3220,7 +3220,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 4294967295
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_CustomReticle: {fileID: 0}
@@ -3926,7 +3926,12 @@ PrefabInstance:
     - target: {fileID: 1775393519799895718, guid: 4f2399a5c09ca80418ae45068bbb8500,
         type: 3}
       propertyPath: m_RaycastMask.m_Bits
-      value: 63
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 1775393519799895718, guid: 4f2399a5c09ca80418ae45068bbb8500,
+        type: 3}
+      propertyPath: m_StartingSelectFilters.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4366633165426482418, guid: 4f2399a5c09ca80418ae45068bbb8500,
         type: 3}

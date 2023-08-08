@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7863847877587648162}
   - component: {fileID: 5419647860368652484}
   - component: {fileID: 6976619455814725018}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 06_furniture_drawer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

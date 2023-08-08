@@ -7,13 +7,19 @@ using UnityEngine;
 
 public class FileIOSystem : Singleton<FileIOSystem>
 {
+    [HideInInspector]
     public InventoryDatabase invendatabase;
+    [HideInInspector]
     public HousingObjectdatabase housingdatabase;
+    [HideInInspector]
     public StatDatabase statdatabase;
     public string path;
 
+    [HideInInspector]
     public const string InvenFilename = "Invendatabase";
+    [HideInInspector]
     public const string HousingFilename = "Housingdatabase";
+    [HideInInspector]
     public const string StatFilename = "Statdatabase";
 
     private void Start()

@@ -161,7 +161,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     public void ProtectGrib()
     {
-
         foreach(XRGrabInteractable obj in ObjGrabcomponents) {
             obj.enabled = false;
         }
@@ -341,10 +340,13 @@ public class PlacementSystem : Singleton<PlacementSystem>
                 {
                     int id = FileIOSystem.Instance.housingdatabase.objectsLocation[index].id;
                     Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
-
-                   
-
                     int myindex= FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == id);
+
+
+                    int grapindex = ObjGrabcomponents.FindIndex(data => data == gameObject.GetComponent<XRGrabInteractable>());
+                    ObjGrabcomponents.RemoveAt(grapindex);
+
+
                     if (myindex != -1)
                     {
                     FileIOSystem.Instance.invendatabase.mydata[myindex].count++;
@@ -363,6 +365,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
                     FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
                     FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase, FileIOSystem.HousingFilename);
+
                 }
                 //Destroy(gameObject);
             }
@@ -597,7 +600,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceEnterEvent(SelectEnterEventArgs p)
     {
         CatchObject = p.interactableObject.transform.gameObject;
-        HousingUISystem.Instance.EnalbleButton(false);
+        HousingUISystem.Instance.EnableButton(false);
         PlaceStartStructure();
     }
 
@@ -608,7 +611,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private void PlaceEvent(SelectExitEventArgs p)
     {
         PlaceStructure(p.interactableObject.transform.gameObject);
-        HousingUISystem.Instance.EnalbleButton(true);
+        HousingUISystem.Instance.EnableButton(true);
         MapInfo.Instance.ResetTileScale();
     }
 
@@ -621,12 +624,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         CatchObject = p.interactableObject.transform.gameObject;
         Startinsertion();
-        HousingUISystem.Instance.EnalbleButton(false);
+        HousingUISystem.Instance.EnableButton(false);
         InsertionStartStructure(p.interactableObject.transform.gameObject);
     }
 
     /// <summary>
-    /// ��ġ ���� �Ϸ� �̺�Ʈ
+    /// 
     /// </summary>
     /// <param name="p"></param>
     private void InsertCompleteEvent(SelectExitEventArgs p)
@@ -634,7 +637,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         RotatePlacementByHand(RotateRealTimebyHand());
         InsertionStructure(p.interactableObject.transform.gameObject);
         StopPlacement(false);
-        HousingUISystem.Instance.EnalbleButton(true);
+        HousingUISystem.Instance.EnableButton(true);
         MapInfo.Instance.ResetTileScale();
     }
 
@@ -642,7 +645,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     /*
     /// <summary>
-    /// ������ �ƿ� �Ⱦ� �Լ����� �ƴѵ�, ���� AR ȯ��ȿ����� �Ⱦ� �Լ�����.Ȥ�� ���� deprecated��Ű��, �׳� �ŵ鶰 ���� �ʴ� �� ��õ 
+    ///
     /// </summary>
     [Obsolete]
     private void PlaceStructure()
