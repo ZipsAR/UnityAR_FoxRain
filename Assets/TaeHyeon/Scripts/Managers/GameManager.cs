@@ -74,8 +74,6 @@ public class GameManager : Singleton<GameManager>
 
         if (sceneName == "InteractMode")
         {
-            MapInfo.Instance.SetMapNormalmode();
-            MapInfo.Instance.MapGrabmode();
             interactManager = 
                 GameObject.Find("Interact Manager").GetComponent<InteractManager>();
             interactAudioManager =
