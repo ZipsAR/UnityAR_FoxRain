@@ -3568,7 +3568,7 @@ GameObject:
   - component: {fileID: 8015971729395138327}
   - component: {fileID: 2464918632857289245}
   m_Layer: 0
-  m_Name: LeftHandUI_Logo
+  m_Name: LeftHandUI_Legacy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
