@@ -9,9 +9,11 @@ public class GiftBoxSpawner : MonoBehaviour
     [SerializeField] private GameObject giftBoxObj;
     [SerializeField] private GameObject coinObj;
     [SerializeField] private ItemDatabase itemDatabase;
+    private int coinEarnedValue;
     
     private void Awake()
     {
+        coinEarnedValue = 1500;
         InteractEventManager.OnPetStatChanged += SpawnGiftBox;
     }
 
@@ -31,6 +33,7 @@ public class GiftBoxSpawner : MonoBehaviour
         Quaternion spawnRotation = Quaternion.LookRotation(-(playerPos - spawnPos));
         GameObject spawnedObj = Instantiate(giftBoxObj, spawnPos, spawnRotation);
         GiftBox giftBox = spawnedObj.GetComponent<GiftBox>();
+        giftBox.SetCoinEarnedValue(coinEarnedValue);
         
         giftBox.SpawnGift(GetCoinObj());
     }

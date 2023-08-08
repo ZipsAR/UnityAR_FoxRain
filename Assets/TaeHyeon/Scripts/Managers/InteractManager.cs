@@ -69,24 +69,28 @@ public class InteractManager : MonoBehaviour
     private StatChangeCriteria tirednessCreteria;
     private StatChangeCriteria cleanlinessCreteria;
     
-    private void Start()
+    private void Awake()
     {
-        pet.SetPetAnimationMode(PlayMode.InteractMode);
         cmdQueue = new Queue<CmdDetail>();
 
-        // Stat for distance
-        prevPetPos = pet.gameObject.transform.position;
-
-        // Stat UI Init
-        InteractEventManager.NotifyStatInitialized(pet.GetStat());
-        Logger.Log("pet stat UI initialized");
         fullnessCreteria = new StatChangeCriteria(2, 5, 0f, 0f, 1f, 1f);
         tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
         cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
-
+        
         InitializeInteractData();
-
+        
         SetInitialCmd();
+    }
+
+    private void Start()
+    {
+        pet.SetPetAnimationMode(PlayMode.InteractMode);
+     
+        // Stat for distance
+        prevPetPos = pet.gameObject.transform.position;
+        
+        // Stat UI Init
+        InteractEventManager.NotifyStatInitialized(pet.GetStat());
     }
 
     private void OnEnable()
@@ -272,7 +276,7 @@ public class InteractManager : MonoBehaviour
             
             // Move to snack position
             ClearCmdQueue();
-            EnqueueCmd(Cmd.Move, GetPointBeforeDistance(transform.position, snackTransform.position, interactData.bitingDistance));
+            EnqueueCmd(Cmd.Move, GetPointBeforeDistance(transform.position, snackTransform.position, interactData.bitingDistance), targetObj: snackTransform.gameObject);
             EnqueueCmd(Cmd.Look, snackTransform.position);
             EnqueueCmd(Cmd.Eat, targetObj: snackTransform.gameObject);
         }
@@ -307,7 +311,7 @@ public class InteractManager : MonoBehaviour
             // Move to toy position
             ClearCmdQueue();
             
-            EnqueueCmd(Cmd.Move, pos: GetPointBeforeDistance(transform.position, toyTransform.position, interactData.bitingDistance));
+            EnqueueCmd(Cmd.Move, pos: GetPointBeforeDistance(transform.position, toyTransform.position, interactData.bitingDistance), targetObj: toyTransform.gameObject);
             EnqueueCmd(Cmd.Look, pos: toyTransform.position);
             EnqueueCmd(Cmd.Bite, targetObj: toyTransform.gameObject);
             EnqueueCmd(Cmd.Look);
@@ -349,11 +353,18 @@ public class InteractManager : MonoBehaviour
                             pet.gameObject.transform.position, 
                             GameManager.Instance.player.transform.position, 
                             interactData.playerFrontDistance));
-                        
                     }
                     else
                     {
-                        pet.CmdMoveTo(nextCmd.targetDir);
+                        if (nextCmd.targetObj == default)
+                        {
+                            pet.CmdMoveTo(nextCmd.targetDir);
+                        }
+                        else
+                        {
+                            // purpose true means pet move to snack or toy
+                            pet.CmdMoveTo(nextCmd.targetDir, true);   
+                        }
                     }
                     break;
                 
