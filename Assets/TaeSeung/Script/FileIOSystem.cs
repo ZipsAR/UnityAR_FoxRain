@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class FileIOSystem : Singleton<FileIOSystem>
 {
-    [HideInInspector]
     public InventoryDatabase invendatabase;
     [HideInInspector]
     public HousingObjectdatabase housingdatabase;
