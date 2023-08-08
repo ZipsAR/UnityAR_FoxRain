@@ -42,29 +42,63 @@ public class ItemMov : MonoBehaviour
     {
         if (this.gameObject.name == "ItemButton(Clone)")
         {
+            this.GetComponent<GetData>().GetInfo();
+            Debug.Log("¿Œµ¶Ω∫ √ﬂ√‚, «ˆ¿Á ¿Œµ¶Ω∫ = " + StoreManager.Instance.itemindex);
             if (childitem.CompareTag("furniture"))
             {
-                Debug.Log("Store");
                 StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
                 StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = viewScale;
             }
-            else
+            if (childitem.CompareTag("toy"))
             {
                 StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
-                StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(800,800,800);
+                StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(800, 800, 800);
+            }
+            if (childitem.CompareTag("food"))
+            {
+                StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
+                StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(100,100,100);
+                if (StoreManager.Instance.itemindex == 27)
+                {
+                    StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(100000, 100000, 100000);
+                }
+                if (StoreManager.Instance.itemindex == 23)
+                {
+                    StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(2500, 2500, 2500);
+                }
             }
         }
         if (this.gameObject.name == "ItemButton_Inven(Clone)")
         {
+            this.GetComponent<GetData>().GetInfo_Inven();
             if (childitem_Inven.CompareTag("furniture"))
             {
                 StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
                 StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = viewScale;
             }
-            else
+            if (childitem_Inven.CompareTag("toy"))
             {
                 StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
                 StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(800, 800, 800);
+            }
+            if (childitem_Inven.CompareTag("food"))
+            {
+                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
+                StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(100, 100, 100);
+                if (StoreManager.Instance.Itemindex_Inven == 27)
+                {
+                    StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(100000, 100000, 100000);
+                    Debug.Log("¿Œµ¶Ω∫ == 27");
+                }
+                if (StoreManager.Instance.Itemindex_Inven == 23)
+                {
+                    StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(2500, 2500, 2500);
+                    Debug.Log("¿Œµ¶Ω∫ == 23");
+                }
             }
         }
     }
