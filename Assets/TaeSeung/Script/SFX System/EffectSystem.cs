@@ -2,21 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectSystem : Singleton<EffectSystem>
+public class EffectSystem : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     public Transform Parentposition;
-
     public ParticleSystem placedeffect;
     public ParticleSystem spawneffect;
-    
     private GameObject placedeffectobj;
     private GameObject spawneffectobj;
+
+    public static EffectSystem Instance;
 
 
     private void Start()
     {
+        if (EffectSystem.Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
     }
 
 
