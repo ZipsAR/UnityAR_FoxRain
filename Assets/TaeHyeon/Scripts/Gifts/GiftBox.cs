@@ -23,7 +23,8 @@ public class GiftBox : MonoBehaviour
     private static readonly int Open = Animator.StringToHash("Open");
     
     private float risingTime;
-
+    private int coinEarnedValue;
+    
     private void Start()
     {
         risingTime = 2f;
@@ -57,6 +58,8 @@ public class GiftBox : MonoBehaviour
             giftMovement.setGift(gift);
             giftMovement.StartRotating();
             giftMovement.StartRising(risingTime);
+            giftMovement.SetCoinEarnedValue(coinEarnedValue);
+            
             Instantiate(giftEffect, parentOfGift.transform);
 
         }    
@@ -93,4 +96,7 @@ public class GiftBox : MonoBehaviour
             yield return null;
         }
     }
+    
+    public void SetCoinEarnedValue(int value) => coinEarnedValue = value;
+
 }
