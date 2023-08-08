@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HandUIController : MonoBehaviour
 {
-    public GameObject handCanvasObj1,handCanvasObj2,handCanvasObj3;
+    public GameObject handCanvasObj1,handCanvasObj2,handCanvasObj3,handCanvasObj4;
     private GameObject arCam;
     private Vector3 handForward, handRight, handVertical;
     private RaycastHit handUIRay;
@@ -15,9 +15,11 @@ public class HandUIController : MonoBehaviour
         handCanvasObj1.GetComponent<RectTransform>().localScale = new Vector3(0.001f, 0.001f, 0.001f);
         handCanvasObj2.GetComponent<RectTransform>().localScale = new Vector3(0.001f, 0.001f, 0.001f);
         handCanvasObj3.GetComponent<RectTransform>().localScale = new Vector3(0.001f, 0.001f, 0.001f);
+        handCanvasObj4.GetComponent<RectTransform>().localScale = new Vector3(0.001f, 0.001f, 0.001f);
         handCanvasObj1.SetActive(false);
         handCanvasObj2.SetActive(false);
         handCanvasObj3.SetActive(false);
+        handCanvasObj4.SetActive(false);
         arCam = GameManager.Instance.player.gameObject;
     }
 
@@ -57,6 +59,7 @@ public class HandUIController : MonoBehaviour
                     handCanvasObj1.SetActive(true);
                     handCanvasObj2.SetActive(false);
                     handCanvasObj3.SetActive(false);
+                    handCanvasObj4.SetActive(false);
                 }
                 break;
                 case 4:
@@ -64,6 +67,7 @@ public class HandUIController : MonoBehaviour
                     handCanvasObj1.SetActive(false);
                     handCanvasObj2.SetActive(true);
                     handCanvasObj3.SetActive(false);
+                    handCanvasObj4.SetActive(false);
                 }
                 break;
                 case 5:
@@ -71,6 +75,7 @@ public class HandUIController : MonoBehaviour
                     handCanvasObj1.SetActive(false);
                     handCanvasObj2.SetActive(false);
                     handCanvasObj3.SetActive(true);
+                    handCanvasObj4.SetActive(false);
                 }
                 break;
                 default:
@@ -78,6 +83,7 @@ public class HandUIController : MonoBehaviour
                     handCanvasObj1.SetActive(false);
                     handCanvasObj2.SetActive(false);
                     handCanvasObj3.SetActive(false);
+                    handCanvasObj4.SetActive(true);
                 }
                 break;
             }
