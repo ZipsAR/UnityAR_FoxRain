@@ -45,7 +45,7 @@ public class HousingUISystem : MonoBehaviour
         foreach (MyData objdata in FileIOSystem.Instance.invendatabase.mydata) {
                 int idindex = itemdatabase.ItemData.FindIndex(data => data.ID == objdata.id);
 
-            if (idindex >= 0)
+            if (idindex >= 0 && itemdatabase.ItemData[idindex].itemCategory == ItemData.ItemCategory.Funiture)
             {
                 GameObject newobj = Instantiate(HousingButtonPrefab, menuPanel.transform);
                 newobj.GetComponent<Button>().onClick.AddListener(() => PlacementSystem.Instance.StartPlacement(objdata.id));
