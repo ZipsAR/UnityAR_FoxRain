@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: -8177550825744274005}
   - component: {fileID: -292830957954680267}
   - component: {fileID: 1657599120679582462}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 01_furniture_bed
   m_TagString: Untagged
   m_Icon: {fileID: 0}

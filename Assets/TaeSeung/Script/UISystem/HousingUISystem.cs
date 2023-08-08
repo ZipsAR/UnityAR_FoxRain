@@ -5,44 +5,66 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class HousingUISystem : Singleton<HousingUISystem>
+public class HousingUISystem : MonoBehaviour
 {
+    public static HousingUISystem Instance;
+
+
     [SerializeField]
     private GameObject menuPanel, HousingButtonPrefab;
     [SerializeField]
     private ItemDatabase itemdatabase;
     public List<GameObject> countlist;
 
+    [SerializeField]
+    private GameObject prefab;
+
+    [SerializeField]
+    private int length;
 
     private void Start()
     {
-        InitializeUI();
-        MapInfo.Instance.SetMapHousingmode();
-       
+        if (HousingUISystem.Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+            InitializeUI();
+        }
+    }
+
+    private void Update()
+    {
+        if (length != FileIOSystem.Instance.invendatabase.mydata.Count)
+        {
+            
+        }
     }
 
 
     public void InitializeUI()
     {
+        length = FileIOSystem.Instance.invendatabase.mydata.Count;
+
         foreach (MyData objdata in FileIOSystem.Instance.invendatabase.mydata) {
-
-            GameObject newobj = Instantiate(HousingButtonPrefab, menuPanel.transform);
-            newobj.GetComponent<Button>().onClick.AddListener(() => PlacementSystem.Instance.StartPlacement(objdata.id));
-            
-
             int idindex = itemdatabase.ItemData.FindIndex(data => data.ID == objdata.id);
-            GameObject previewobj = Instantiate(itemdatabase.ItemData[idindex].Prefab, newobj.transform.Find("GameObject"));
-            previewobj.GetComponent<XRGrabInteractable>().enabled = false;
-            previewobj.transform.localScale *= 32;
-            
-            newobj.GetComponentInChildren<TMP_Text>().text = objdata.count.ToString();
-            if (objdata.count <= 0) newobj.GetComponent<Button>().interactable = false;
-            countlist.Add(newobj);
-    
+
+            if (itemdatabase.ItemData[idindex].itemCategory == ItemData.ItemCategory.Funiture)
+            {
+                GameObject newobj = Instantiate(HousingButtonPrefab, menuPanel.transform);
+                newobj.GetComponent<Button>().onClick.AddListener(() => PlacementSystem.Instance.StartPlacement(objdata.id));
+
+                GameObject previewobj = Instantiate(itemdatabase.ItemData[idindex].Prefab, newobj.transform.Find("GameObject"));
+                previewobj.GetComponent<XRGrabInteractable>().enabled = false;
+                previewobj.transform.localScale *= 32;
+
+                newobj.GetComponentInChildren<TMP_Text>().text = objdata.count.ToString();
+                if (objdata.count <= 0) newobj.GetComponent<Button>().interactable = false;
+                countlist.Add(newobj);
+            }
         }   
     }
 
-    public void EnalbleButton(bool flag)
+    public void EnableButton(bool flag)
     {
         for(int i=0; i<countlist.Count; i++)
             countlist[i].GetComponent<Button>().interactable = flag;

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -3994302284545392559}
   - component: {fileID: 4252386267609975989}
   - component: {fileID: 5221986761814971568}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 07_furniture_desk
   m_TagString: Untagged
   m_Icon: {fileID: 0}

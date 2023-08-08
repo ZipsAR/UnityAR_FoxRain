@@ -81,7 +81,9 @@ public class GameManager : Singleton<GameManager>
             ChangeMode(PlayMode.InteractMode);
         }
         if(sceneName == "HousingMode"){
-            PlacementSystem.Instance.ReleaseGrib();
+            MapInfo.Instance.SetMapHousingmode();
+            MapInfo.Instance.SetOrigin();
+            MapInfo.Instance.MapUnGrabmode();
         }
     }
 }
