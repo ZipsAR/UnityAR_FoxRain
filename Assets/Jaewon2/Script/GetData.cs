@@ -57,7 +57,13 @@ public class GetData : MonoBehaviour
         if (StoreManager.Instance.viewItem_store != null)
         {
             itemDetail.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
-            itemDetail2.text = "현재 보유 수 " + FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count.ToString();
+
+            //TaeSeung CODING
+            int invenindex = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
+            if(invenindex == -1) itemDetail2.text = "현재 보유 수 " + 0;
+            else itemDetail2.text = "현재 보유 수 " + FileIOSystem.Instance.invendatabase.mydata[invenindex].count.ToString();
+            //
+
         }
     }
     public void ItemInfo_Inven()

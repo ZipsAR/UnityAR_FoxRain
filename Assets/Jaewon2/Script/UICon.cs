@@ -26,7 +26,23 @@ public class UICon : MonoBehaviour
         FileIOSystem.Instance.invendatabase.money -= (int)itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
         T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
         Debug.Log("BuyPrice = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice);
-        FileIOSystem.Instance.invendatabase.mydata[StoreManager.Instance.itemindex].count++;
+
+        //TaeSeung CODING
+        int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
+        if (idx == -1)
+        {
+            MyData data = new();
+            data.id = itemdata.ItemData[StoreManager.Instance.itemindex].ID;
+            data.count = 0;
+            FileIOSystem.Instance.invendatabase.mydata.Add(data);
+            FileIOSystem.Instance.invendatabase.mydata[FileIOSystem.Instance.invendatabase.mydata.Count-1].count++;
+        }
+        else
+        {
+            FileIOSystem.Instance.invendatabase.mydata[idx].count++;
+        }
+        //
+
         FileIOSystem.Instance.AllSave();
         FileIOSystem.Instance.AllLoad();
         GetComponent<GetData>().ItemInfo_Inven();
