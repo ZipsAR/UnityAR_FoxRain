@@ -74,6 +74,7 @@ public class GameManager : Singleton<GameManager>
 
         if (sceneName == "InteractMode")
         {
+            MapInfo.Instance.SetInvisiblemode();
             interactManager = 
                 GameObject.Find("Interact Manager").GetComponent<InteractManager>();
             interactAudioManager =
