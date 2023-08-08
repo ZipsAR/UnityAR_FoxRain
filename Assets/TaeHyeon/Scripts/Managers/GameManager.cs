@@ -29,11 +29,14 @@ public class GameManager : Singleton<GameManager>
 
     public HandController leftHand;
     public HandController rightHand;
+
+    public PetType curPetType;
     
     private void Start()
     {
         player = GameObject.Find("AR Camera").GetComponent<Player>();
         DontDestroyOnLoad(ARSessions);
+        curPetType = PetType.None;
     }
 
     public void QuitApp()

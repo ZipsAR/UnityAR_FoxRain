@@ -57,9 +57,11 @@ public class InteractManager : MonoBehaviour
         }
     }
 
+    private PetBase pet;
+    private bool isPetInitialized;
     [SerializeField] private InteractData interactData;
-    [SerializeField] private PetBase pet;
-
+    [SerializeField] private Transform selectedPetSpawnTransform;
+    
     private Queue<CmdDetail> cmdQueue;
     private CmdDetail nextCmd;
 
@@ -71,6 +73,12 @@ public class InteractManager : MonoBehaviour
     
     private void Awake()
     {
+        InteractEventManager.OnPetSelected -= OnPetSelected;
+        InteractEventManager.OnPetSelected += OnPetSelected;
+        InteractEventManager.OnPetInitializedToManager -= OnPetInitializedToManager;
+        InteractEventManager.OnPetInitializedToManager += OnPetInitializedToManager; 
+        isPetInitialized = false;
+        
         cmdQueue = new Queue<CmdDetail>();
 
         fullnessCreteria = new StatChangeCriteria(2, 5, 0f, 0f, 1f, 1f);
@@ -82,41 +90,18 @@ public class InteractManager : MonoBehaviour
         SetInitialCmd();
     }
 
-    private void Start()
-    {
-        pet.SetPetAnimationMode(PlayMode.InteractMode);
-     
-        // Stat for distance
-        prevPetPos = pet.gameObject.transform.position;
-        
-        // Stat UI Init
-        InteractEventManager.NotifyStatInitialized(pet.GetStat());
-    }
-
-    private void OnEnable()
-    {
-        // Load Stat form local file
-        if (FileIOSystem.Instance.IsFileExist(FileIOSystem.StatFilename))
-        {
-            LoadStat();
-            InitializePetStatByLoadStat();
-            Logger.Log("Load Saved stat file");
-        }
-        else
-        {
-            pet.InitializeStatByDefault();
-            SaveStat();
-            Logger.Log("there is no saved stat file");
-        }
-    }
-
     private void OnDisable()
     {
+        InteractEventManager.OnPetSelected -= OnPetSelected;
+        InteractEventManager.OnPetInitializedToManager -= OnPetInitializedToManager;
+
         SaveStat();
     }
 
     private void Update()
     {
+        if(!isPetInitialized) return;
+        
         if(cmdQueue.Count != 0) ShowCurQueue();
         
         // Do not run other commands if the pet is running a command
@@ -141,6 +126,40 @@ public class InteractManager : MonoBehaviour
                 interactData.brushingTime = 0f;
             }
         }
+    }
+    
+    
+    private void OnPetSelected(object sender, PetArgs e)
+    {
+        Instantiate(e.petObj, selectedPetSpawnTransform.position, selectedPetSpawnTransform.rotation);
+    }
+    
+    private void OnPetInitializedToManager(object sender, PetArgs e)
+    {
+        pet = e.petObj.GetComponent<PetBase>();
+        
+        // Load Stat form local file
+        if (FileIOSystem.Instance.IsFileExist(FileIOSystem.StatFilename))
+        {
+            LoadStat();
+            InitializePetStatByLoadStat();
+            Logger.Log("Load Saved stat file");
+        }
+        else
+        {
+            pet.InitializeStatByDefault();
+            SaveStat();
+            Logger.Log("there is no saved stat file");
+        }
+        
+        pet.SetPetAnimationMode(PlayMode.InteractMode);
+     
+        // Stat for distance
+        prevPetPos = pet.gameObject.transform.position;
+        
+        InteractEventManager.NotifyPetInitializedToAll(pet.gameObject);
+
+        isPetInitialized = true;
     }
     
     private void InitializeInteractData()

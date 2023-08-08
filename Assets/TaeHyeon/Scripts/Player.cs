@@ -50,6 +50,10 @@ public class Player : MonoBehaviour
                 break;
             case PlayMode.AgilityMode:
                 break;
+            case PlayMode.StoreMode:
+                break;
+            case PlayMode.HousingMode:
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 using Logger = ZipsAR.Logger;
 
@@ -43,6 +42,13 @@ public enum PetSounds
     Sniff,
     Whines,
     Eat,
+}
+
+public enum PetType
+{
+    None,
+    Cat,
+    Dog,
 }
 
 /// <summary>
@@ -105,7 +111,6 @@ public abstract class PetBase : MonoBehaviour
     {
         rotationSpeed = 10f;
         petStates = PetStates.Idle;
-        animator = GetComponent<Animator>();
         isBiting = false;
         curEmotionObj = null;
         
@@ -113,18 +118,22 @@ public abstract class PetBase : MonoBehaviour
         if (petSoundList.Count != Enum.GetNames(typeof(PetSounds)).Length)
             throw new Exception("Number of petSoundList and number of PetSounds do not match");
 
-        // Init pet stat individually
-        // PetStatInitialize();
-        ShowCurPetStat();
-        Logger.Log("pet stat initialized");
-        
         // The position y value of the pet is fixed to the initial y value
         fixedPosY = transform.position.y;
     }
 
     private void Start()
     {
-        StartCoroutine(Init());
+        isCoroutinePlayingList = new List<bool>();
+        for (int i = 0; i < Enum.GetValues(typeof(Cmd)).Length; i++)
+        {
+            isCoroutinePlayingList.Add(false);
+        }
+                    
+        // Check Initialization Completed
+        isInitDone = true;
+                
+        InteractEventManager.NotifyPetInitializedToManager(gameObject);
     }
 
     private void Update()
@@ -152,33 +161,9 @@ public abstract class PetBase : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// What to initialize using other script references
-    /// Update portion runs after this initialization is complete
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator Init()
-    {
-        while (true)
-        {
-            if (GameManager.Instance.player != null)
-            {
-                isCoroutinePlayingList = new List<bool>();
-                for (int i = 0; i < Enum.GetValues(typeof(Cmd)).Length; i++)
-                {
-                    isCoroutinePlayingList.Add(false);
-                }
-                    
-                // Check Initialization Completed
-                isInitDone = true;
-                break;
-            }
-            yield return null;
-        }
-    }
-    
     public void SetPetAnimationMode(PlayMode playMode)
     {
+        animator = GetComponent<Animator>();
         animator.SetInteger(Mode, (int)playMode);
         animator.SetInteger(Interact, (int)PetParts.None);
     }
@@ -632,7 +617,7 @@ public abstract class PetBase : MonoBehaviour
                         int expGain = combinedExp % stat.expMax;
                         int postLevel = Mathf.Clamp(stat.level + levelGain, 1, stat.levelMax);
                         stat.level = postLevel;
-                        InteractEventManager.RaisePetStatChanged(stat, PetStatNames.Level, preLevel, postLevel);
+                        InteractEventManager.NotifyPetStatChanged(PetStatNames.Level, preLevel, postLevel);
 
                         postStatValue = expGain;
                         stat.exp = postStatValue;
@@ -658,7 +643,7 @@ public abstract class PetBase : MonoBehaviour
             }
 
             // Notify to InteractUIManager
-            InteractEventManager.RaisePetStatChanged(stat, statName, preStatValue, postStatValue);
+            InteractEventManager.NotifyPetStatChanged(statName, preStatValue, postStatValue);
             
             // ShowCurPetStat();
         }

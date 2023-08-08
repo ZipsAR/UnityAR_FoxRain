@@ -2,30 +2,38 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Logger = ZipsAR.Logger;
 
 public class PetEffectController : MonoBehaviour
 {
     [SerializeField] private List<GameObject> levelEffects;
     [SerializeField] private GameObject levelUpEffect;
     
-    [SerializeField] PetBase pet;
     private Transform effectTransform;
     
     private void Awake()
     {
-        InteractEventManager.OnPetStatInitialized += OnPetStatInitialized;
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
+        InteractEventManager.OnPetInitializedToAll += OnPetInitialized;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
         InteractEventManager.OnPetStatChanged += OnPetStatChanged;
-        
-        if (levelEffects.Count != pet.GetStat().levelMax)
-            throw new Exception("level effects number must be equal with max level");
-
-        effectTransform = pet.GetEffectPosition();
     }
 
-    private void OnPetStatInitialized(object sender, PetStatInitializedArgs e)
+    private void OnDisable()
     {
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
+    }
+
+    private void OnPetInitialized(object sender, PetArgs e)
+    {
+        if (levelEffects.Count != e.petObj.GetComponent<PetBase>().GetStat().levelMax)
+            throw new Exception("level effects number must be equal with max level");
+
+        effectTransform = e.petObj.GetComponent<PetBase>().GetEffectPosition();
+        
         ClearLevelEffects();
-        AddLevelEffect(levelEffects[e.petStatBase.level - 1]);
+        AddLevelEffect(levelEffects[e.petObj.GetComponent<PetBase>().GetStat().level - 1]);
     }
 
     private void OnPetStatChanged(object sender, PetStatChangedEventArgs e)

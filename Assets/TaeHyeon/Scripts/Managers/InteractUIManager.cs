@@ -17,13 +17,15 @@ public class InteractUIManager : MonoBehaviour
 {
     [SerializeField] private Button exitBtn;
     
+    // UI Canvas
+    [SerializeField] private GameObject uiCanvas;
+    
     // Stats
     [SerializeField] private Canvas overlayCanvas;
-    [SerializeField] private PetStatBase trackingStat;
-
     [SerializeField] private List<StatUIRef> statUIList;
     [SerializeField] private List<Sprite> statRatingSpriteList;
     
+    // Color
     public Color badColor;
     public Color normalColor;
     public Color goodColor;
@@ -38,13 +40,17 @@ public class InteractUIManager : MonoBehaviour
     
     private void Awake()
     {
-        InteractEventManager.OnPetStatInitialized += OnPetStatInitialized;
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
+        InteractEventManager.OnPetInitializedToAll += OnPetInitialized;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
         InteractEventManager.OnPetStatChanged += OnPetStatChanged;
         
         exitBtn.onClick.AddListener(GameManager.Instance.QuitApp);
         
         if (statRatingSpriteList.Count != Enum.GetNames(typeof(StatUIRating)).Length)
             throw new Exception("Number of statRatingImg and statRating must be the same");
+
+        SetUIDefault();
     }
 
     private void Start()
@@ -54,9 +60,31 @@ public class InteractUIManager : MonoBehaviour
         overlayCanvas.planeDistance = 0.11f;
     }
 
-    private void OnPetStatInitialized(object sender, PetStatInitializedArgs e)
+    private void SetUIDefault()
     {
-        PetStatBase initializedPetStat = e.petStatBase;
+        uiCanvas.SetActive(false);
+        
+        ClearStars();
+        expSlider.value = 0;
+        foreach (StatUIRef statUIRef in statUIList)
+        {
+            statUIRef.slider.value = 0;
+            statUIRef.stateImg.sprite = statRatingSpriteList[2];
+            statUIRef.stateImg.color = new Color(goodColor.r, goodColor.g, goodColor.b, 1f);
+        }
+    }
+
+    private void OnDisable()
+    {
+        InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
+    }
+
+    private void OnPetInitialized(object sender, PetArgs e)
+    {
+        uiCanvas.SetActive(true);
+        
+        PetStatBase initializedPetStat = e.petObj.GetComponent<PetBase>().GetStat();
 
         // Level
         ClearStars();
@@ -86,8 +114,6 @@ public class InteractUIManager : MonoBehaviour
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
-        
     }
     
     private void OnPetStatChanged(object sender, PetStatChangedEventArgs e)
@@ -153,6 +179,7 @@ public class InteractUIManager : MonoBehaviour
     {
         if (isReversed)
         {
+            // Tiredness
             switch (statUIRef.slider.value * 100f)
             {
                 case < (int)StatUIRating.Bad:
@@ -171,6 +198,7 @@ public class InteractUIManager : MonoBehaviour
         }
         else
         {
+            // Cleanliness, Fullness
             switch (statUIRef.slider.value * 100f)
             {
                 case < (int)StatUIRating.Bad:
