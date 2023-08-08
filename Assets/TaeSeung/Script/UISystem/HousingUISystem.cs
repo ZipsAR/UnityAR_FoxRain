@@ -34,10 +34,7 @@ public class HousingUISystem : MonoBehaviour
 
     private void Update()
     {
-        if (length != FileIOSystem.Instance.invendatabase.mydata.Count)
-        {
-            
-        }
+
     }
 
 
@@ -46,9 +43,9 @@ public class HousingUISystem : MonoBehaviour
         length = FileIOSystem.Instance.invendatabase.mydata.Count;
 
         foreach (MyData objdata in FileIOSystem.Instance.invendatabase.mydata) {
-            int idindex = itemdatabase.ItemData.FindIndex(data => data.ID == objdata.id);
+                int idindex = itemdatabase.ItemData.FindIndex(data => data.ID == objdata.id);
 
-            if (itemdatabase.ItemData[idindex].itemCategory == ItemData.ItemCategory.Funiture)
+            if (idindex >= 0)
             {
                 GameObject newobj = Instantiate(HousingButtonPrefab, menuPanel.transform);
                 newobj.GetComponent<Button>().onClick.AddListener(() => PlacementSystem.Instance.StartPlacement(objdata.id));
@@ -61,6 +58,7 @@ public class HousingUISystem : MonoBehaviour
                 if (objdata.count <= 0) newobj.GetComponent<Button>().interactable = false;
                 countlist.Add(newobj);
             }
+ 
         }   
     }
 
