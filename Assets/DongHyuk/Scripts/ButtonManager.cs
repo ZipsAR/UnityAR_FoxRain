@@ -58,7 +58,7 @@ public class ButtonManager : MonoBehaviour
     // 오늘은 내가 스파게티 요리사~ (제출 이후 코드 리팩토링 할게요)
     private void ChangeRadial(int curPage, GameObject calledBtn)
     {
-        int idx;
+        int idx, invenIdx;
         switch(curPage)
         {
             case 0:
@@ -67,61 +67,85 @@ public class ButtonManager : MonoBehaviour
                 CheckAndDestroy(2);
                 // 아이템 갯수가 1개 이상이면 ItemDB속 ID가 일치하는 prefab을 찾아 Radial에 생성합니다.
                 idx = database.ItemData.FindIndex(data => data.ID == 2000);
-                if(FileIOSystem.Instance.invendatabase.mydata[idx].count > 0)
+                try
                 {
-                    // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
-                    if(calledBtn.name == "ButtonBackpack")
+                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2000);
+                    Debug.Log(invenIdx+" line 73");
+                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
                     {
-                        RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
+                        // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
+                        if(calledBtn.name == "ButtonBackpack")
+                        {
+                            RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
+                        }
+                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        {
+                            RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
+                        }
+                        /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                        else
+                        {
+                            RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
+                        }*/
                     }
-                    // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                    else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
-                    {
-                        RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
-                    }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
-                    else
-                    {
-                        RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    // 중력속성, 크기, 위치 등 조정
+                    RadialObj1.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj1.transform.localScale *= 1000f;
+                    RadialObj1.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    Debug.Log(RadialObj1.name);
                 }
-                // 중력속성, 크기, 위치 등 조정
-                RadialObj1.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj1.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                Debug.Log(RadialObj1.name);
+                catch
+                {
+                    Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
+                }
+                
+                
+                
                 
                 // 3번 버튼
                 CheckAndDestroy(3);
                 // 아이템 갯수가 1개 이상이면 ItemDB속 ID가 일치하는 prefab을 찾아 Radial에 생성합니다.
                 idx = database.ItemData.FindIndex(data => data.ID == 2001);
-                if(FileIOSystem.Instance.invendatabase.mydata[idx].count > 0)
+                try
                 {
-                    // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                    if(calledBtn.name == "ButtonBackpack")
+                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2001);
+                    Debug.Log(invenIdx);
+                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
                     {
-                        RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
+                        // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
+                        if(calledBtn.name == "ButtonBackpack")
+                        {
+                            RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
+                        }
+                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        {
+                            RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
+                        }
+                        /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                        else
+                        {
+                            RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
+                        }*/
                     }
-                    // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                    else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
-                    {
-                        RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
-                    }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
-                    else
-                    {
-                        RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    // 중력속성, 크기, 위치 등 조정
+                    RadialObj2.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj2.transform.localScale *= 1000f;
+                    RadialObj2.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    Debug.Log(RadialObj2.name);
                 }
-                // 중력속성, 크기, 위치 등 조정
-                RadialObj2.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj2.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                Debug.Log(RadialObj2.name);
+                catch
+                {
+                    Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
+                }
 
                 // 4번 버튼
                 CheckAndDestroy(4);
                 // 아이템 갯수가 1개 이상이면 ItemDB속 ID가 일치하는 prefab을 찾아 Radial에 생성합니다.
                 idx = database.ItemData.FindIndex(data => data.ID == 2002);
-                if(FileIOSystem.Instance.invendatabase.mydata[idx].count > 0)
+                invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2002);
+                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
                 {
                     // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                     if(calledBtn.name == "ButtonBackpack")
@@ -133,22 +157,23 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj3.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj3.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj3.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj3.name);
 
                 // 5번 버튼
                 CheckAndDestroy(5);
                 // 아이템 갯수가 1개 이상이면 ItemDB속 ID가 일치하는 prefab을 찾아 Radial에 생성합니다.
                 idx = database.ItemData.FindIndex(data => data.ID == 2003);
-                if(FileIOSystem.Instance.invendatabase.mydata[idx].count > 0)
+                invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2003);
+                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
                 {
                     // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                     if(calledBtn.name == "ButtonBackpack")
@@ -160,22 +185,23 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj4.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj4.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj4.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj4.name);
 
                 // 6번 버튼
                 CheckAndDestroy(6);
                 // 아이템 갯수가 1개 이상이면 ItemDB속 ID가 일치하는 prefab을 찾아 Radial에 생성합니다.
                 idx = database.ItemData.FindIndex(data => data.ID == 2004);
-                if(FileIOSystem.Instance.invendatabase.mydata[idx].count > 0)
+                invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2004);
+                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
                 {
                     // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                     if(calledBtn.name == "ButtonBackpack")
@@ -187,15 +213,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton6"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj5.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj5.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj5.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj5.name);
             }
             break;
@@ -217,15 +243,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj1.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj1.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj1.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj1.name);
                 
                 // 3번 버튼
@@ -244,15 +270,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj2.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj2.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj2.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj2.name);
 
                 // 4번 버튼
@@ -271,15 +297,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj3.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj3.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj3.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj3.name);
 
                 // 5번 버튼
@@ -298,15 +324,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj4.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj4.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj4.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj4.name);
 
                 /*
@@ -342,7 +368,7 @@ public class ButtonManager : MonoBehaviour
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj5.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj5.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj5.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj5.name);
                 */
             }
@@ -365,15 +391,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj1.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj1.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj1.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj1.name);
                 
                 // 3번 버튼
@@ -392,15 +418,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj2.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj2.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj2.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj2.name);
 
                 // 4번 버튼
@@ -419,15 +445,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj3.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj3.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj3.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj3.name);
 
                 // 5번 버튼
@@ -446,15 +472,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj4.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj4.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj4.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj4.name);
 
                 // 6번 버튼
@@ -473,15 +499,15 @@ public class ButtonManager : MonoBehaviour
                     {
                         RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton6"));
                     }
-                    // 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
+                    /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                     else
                     {
                         RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform);
-                    }
+                    }*/
                 }
                 // 중력속성, 크기, 위치 등 조정
                 RadialObj5.GetComponent<Rigidbody>().useGravity = false;  
-                RadialObj5.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                RadialObj5.transform.localScale *= 0.1f;
                 Debug.Log(RadialObj5.name);
             }
             break;

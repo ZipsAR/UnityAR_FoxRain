@@ -1774,7 +1774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 493eaa6eb2a884449a8a68081acc9ab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handUIObject: {fileID: 4901065561455395309, guid: 58cf83d0d71c37540a5e77040b76e533,
+  handUIObject: {fileID: 3490569807621147684, guid: 110a97b5a93332d4bbd2fc758a7028b6,
     type: 3}
   targetPos: {x: 0, y: 0, z: 0}
   targetRot: {x: 0, y: 0, z: 0, w: 0}
