@@ -9,15 +9,19 @@ using Logger = ZipsAR.Logger;
 public class InteractAudioManager : MonoBehaviour
 {
     private AudioSource petAudioSource;
-    
-    private IEnumerator Start()
+
+    private void Awake()
     {
-        yield return null;
-        petAudioSource = GameManager.Instance.interactManager.GetCurPet().gameObject.GetComponent<AudioSource>();
+        InteractEventManager.OnPetInitializedToAll += OnPetInitialized;
+    }
+
+    private void OnPetInitialized(object sender, PetArgs e)
+    {
+        petAudioSource = e.petObj.GetComponent<AudioSource>();
         petAudioSource.playOnAwake = false;
         Logger.Log("petAudioSource init clear");
     }
-
+    
     public void PlayPetSound(AudioClip clip)
     {
         petAudioSource.clip = clip;
