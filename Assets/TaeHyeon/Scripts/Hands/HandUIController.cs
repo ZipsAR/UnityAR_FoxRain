@@ -40,13 +40,13 @@ public class HandUIController : MonoBehaviour
     }
     private bool isCollidingCam()
     {
-        bool isHit = Physics.Raycast(transform.position + transform.forward.normalized * 0.15f, transform.forward * (-1.0f), out handUIRay, 2.0f);
-        if(isHit)
+        bool collisionChk = false;
+        RaycastHit[] isHit = Physics.RaycastAll(transform.position + transform.forward.normalized * 0.15f, transform.forward * (-1.0f), 2.0f);
+        foreach(RaycastHit rayhit in isHit)
         {
-            if(handUIRay.collider.name == "AR Camera") return true;
-            else return false;
-        }        
-        else return false;
+            if(rayhit.collider.name == "AR Camera") collisionChk = true;
+        }
+        return collisionChk;
     }
     private void handUIVisible()
     {
@@ -95,6 +95,9 @@ public class HandUIController : MonoBehaviour
         else
         {
             handCanvasObj1.SetActive(false);
+            handCanvasObj2.SetActive(false);
+            handCanvasObj3.SetActive(false);
+            handCanvasObj4.SetActive(false);
         }
     }
 }

@@ -72,7 +72,7 @@ public class ButtonManager : MonoBehaviour
                 try
                 {
                     invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2000);
-                    Debug.Log(invenIdx+" line 73");
+                    Debug.Log(invenIdx);
                     if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
@@ -80,8 +80,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
                         }
@@ -122,8 +122,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
                         }
@@ -161,8 +161,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton4")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
                         }
@@ -200,8 +200,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton5")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
                         }
@@ -239,8 +239,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton6")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton6"));
                         }
@@ -281,8 +281,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
                         }
@@ -323,8 +323,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
                         }
@@ -362,8 +362,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton4")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
                         }
@@ -401,8 +401,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton5")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
                         }
@@ -424,6 +424,10 @@ public class ButtonManager : MonoBehaviour
                 {
                     Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                 }
+
+                // 6번 버튼
+                CheckAndDestroy(6);
+                
             }
             break;
             case 2:
@@ -443,8 +447,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
                         }
@@ -485,8 +489,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
                         }
@@ -524,8 +528,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton4")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
                         }
@@ -563,8 +567,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton5")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
                         }
@@ -602,8 +606,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton6")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton6"));
                         }
@@ -663,12 +667,22 @@ public class ButtonManager : MonoBehaviour
                 break;
                 case "ButtonEdit":
                 {
+                    //하우징 이동시 하우징적용 invisible
+                    MapInfo.Instance.SetInvisiblemode();
+                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(0).gameObject.SetActive(true);
+                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(1).gameObject.SetActive(false);
+
                     GameManager.Instance.ChangeMode(PlayMode.HousingMode);
                     GameManager.Instance.LoadScene("HousingMode");
                 }
                 break;
                 case "ButtonBasket":
                 {
+                    //상점이동시 하우징적용 invisible
+                    MapInfo.Instance.SetInvisiblemode();
+                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(0).gameObject.SetActive(true);
+                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(1).gameObject.SetActive(false);
+
                     GameManager.Instance.ChangeMode(PlayMode.StoreMode);
                     GameManager.Instance.LoadScene("StoreScene");
                 }
@@ -752,31 +766,85 @@ public class ButtonManager : MonoBehaviour
                     {
                         case 0:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[2000].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 2000);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 2000)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[2000].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2000);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
                         case 1:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[2005].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 2005);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 2005)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[2005].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2005);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
                         case 2:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[3000].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 3000);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 3000)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[3000].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3000);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
@@ -794,31 +862,85 @@ public class ButtonManager : MonoBehaviour
                     {
                         case 0:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[2001].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 2001);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 2001)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[2001].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2001);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
                         case 1:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[2006].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 2006);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 2006)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[2006].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2006);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
                         case 2:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[3001].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 3001);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 3001)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[3001].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3001);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
@@ -836,36 +958,89 @@ public class ButtonManager : MonoBehaviour
                     {
                         case 0:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[2002].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 2002);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 2002)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[2002].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2002);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
                         case 1:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[2007].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 2007);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 2007)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[2007].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2007);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
                         case 2:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[3002].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 3002);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 3002)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[3002].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3002);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
-                        default:
-                        break;
+                        default:{}break;
                     }
                     //ChangeRadial(CurrentPage(), buttonItSelf);
                 }
@@ -879,36 +1054,89 @@ public class ButtonManager : MonoBehaviour
                     {
                         case 0:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[2003].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 2003);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 2003)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[2003].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2003);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
                         case 1:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[2008].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 2008);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 2008)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[2008].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2008);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
                         case 2:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[3003].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 3003);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 3003)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[3003].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3003);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
-                        default:
-                        break;
+                        default:{}break;
                     }
                     //ChangeRadial(CurrentPage(), buttonItSelf);
                 }
@@ -922,11 +1150,29 @@ public class ButtonManager : MonoBehaviour
                     {
                         case 0:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[2004].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 2004);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 2004)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[2004].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2004);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
@@ -934,16 +1180,33 @@ public class ButtonManager : MonoBehaviour
                         break;
                         case 2:
                         {
-                            if(FileIOSystem.Instance.invendatabase.mydata[3004].count > 0)
+                            int idx = database.ItemData.FindIndex(data => data.ID == 3004);
+                            try
                             {
-                                GameObject unPackedItem = Instantiate(database.ItemData[database.ItemData.FindIndex(data => data.ID == 3004)].Prefab);
-                                unPackedItem.transform.localPosition = GameManager.Instance.leftHand.transform.position + new Vector3(0.0f,-0.5f, 0.0f);
-                                FileIOSystem.Instance.invendatabase.mydata[3004].count --;
+                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3004);
+                                Debug.Log(invenIdx);
+                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                {
+                                    GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
+                                    // 중력속성, 크기, 위치 등 조정
+                                    consumedItem.GetComponent<Rigidbody>().useGravity = false;
+                                    Debug.Log(consumedItem.name + "생성");
+                                    // 갯수 1개 줄이기
+                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
+                                }
+                                else
+                                {
+                                    Debug.Log("인벤토리에 아이템이 없습니다. 아마 아이콘으로도 아무것도 안 보일걸요?");
+                                }
+                            }
+                            catch
+                            {
+                                Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                             }
                         }
                         break;
-                        default:
-                        break;
+                        default:{}break;
                     }
                     //ChangeRadial(CurrentPage(), buttonItSelf);
                 }
