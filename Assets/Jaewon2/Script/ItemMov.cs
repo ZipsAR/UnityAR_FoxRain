@@ -106,11 +106,11 @@ public class ItemMov : MonoBehaviour
     {
         if (StoreManager.Instance.viewItem_store != null)
         {
-            StoreManager.Instance.viewItem_store.transform.Rotate(new Vector3(0, 10, 0) * Time.deltaTime);
+            StoreManager.Instance.viewItem_store.transform.Rotate(new Vector3(0, 5, 0) * Time.deltaTime);
         }
         if (StoreManager.Instance.viewItem_Inven != null)
         {
-            StoreManager.Instance.viewItem_Inven.transform.Rotate(new Vector3(0, 10, 0) * Time.deltaTime);
+            StoreManager.Instance.viewItem_Inven.transform.Rotate(new Vector3(0, 5, 0) * Time.deltaTime);
         }
     }
     public void DeleteAllChild()
