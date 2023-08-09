@@ -19,8 +19,6 @@ public class HousingUISystem : MonoBehaviour
     [SerializeField]
     private GameObject prefab;
 
-    [SerializeField]
-    private int length;
 
     private void Start()
     {
@@ -40,8 +38,6 @@ public class HousingUISystem : MonoBehaviour
 
     public void InitializeUI()
     {
-        length = FileIOSystem.Instance.invendatabase.mydata.Count;
-
         foreach (MyData objdata in FileIOSystem.Instance.invendatabase.mydata) {
                 int idindex = itemdatabase.ItemData.FindIndex(data => data.ID == objdata.id);
 
