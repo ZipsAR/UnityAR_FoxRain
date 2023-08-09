@@ -205,12 +205,31 @@ public abstract class PetBase : MonoBehaviour
     
     #region InteractPart
 
-        public void InteractHead() => animator.SetInteger(Interact, (int)PetParts.Head);
-        public void InteractJaw() => animator.SetInteger(Interact, (int)PetParts.Jaw);
-        public void InteractBody() => animator.SetInteger(Interact, (int)PetParts.Body);
-        public void InteractHandDetection() => animator.SetInteger(Interact, (int)PetParts.HandDetection);
+    public void InteractHead()
+    {
+        PlaySound(PetSounds.Bark3);
+        animator.SetInteger(Interact, (int)PetParts.Head);
+    }
 
-        public void InteractTerminated()
+    public void InteractJaw()
+    {
+        PlaySound(PetSounds.Bark3);
+        animator.SetInteger(Interact, (int)PetParts.Jaw);
+    }
+
+    public void InteractBody()
+    {
+        PlaySound(PetSounds.Sniff);
+        animator.SetInteger(Interact, (int)PetParts.Body);
+    }
+
+    public void InteractHandDetection()
+    {
+        PlaySound(PetSounds.Whines);
+        animator.SetInteger(Interact, (int)PetParts.HandDetection);
+    }
+
+    public void InteractTerminated()
         {
             animator.SetInteger(Interact, (int)PetParts.None);
         }
