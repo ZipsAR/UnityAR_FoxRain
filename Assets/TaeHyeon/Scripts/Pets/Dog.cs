@@ -8,9 +8,9 @@ public class Dog : PetBase
 {
     public override void InitializeStatByDefault()
     {
-        stat.fullness = 40;
+        stat.fullness = 65;
         stat.tiredness = 40;
-        stat.cleanliness = 50;
+        stat.cleanliness = 70;
         stat.exp = 0;
         stat.level = 1;
 

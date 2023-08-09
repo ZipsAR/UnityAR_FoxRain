@@ -68,9 +68,9 @@ public class InteractManager : MonoBehaviour
         
         cmdQueue = new Queue<CmdDetail>();
 
-        fullnessCreteria = new StatChangeCriteria(2, 5, 0f, 0f, 1f, 1f);
-        tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
-        cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
+        fullnessCreteria = new StatChangeCriteria(2, 3, 0f, 0f, 3f, 2f);
+        tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
+        cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
         
         InitializeInteractData();
         
