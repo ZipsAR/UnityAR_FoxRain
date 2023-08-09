@@ -97,7 +97,6 @@ public abstract class PetBase : MonoBehaviour
     private Vector3 moveDir;
     private float rotationSpeed;
     private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
-    private float fixedPosY; // Pet always moves at the height of this value
     public bool inProcess { private set; get; } // If the pet is executing a command, it's false
     private GameObject snackObj;
     private GameObject toyObj;
@@ -121,9 +120,6 @@ public abstract class PetBase : MonoBehaviour
         // Audio validation check
         if (petSoundList.Count != Enum.GetNames(typeof(PetSounds)).Length)
             throw new Exception("Number of petSoundList and number of PetSounds do not match");
-
-        // The position y value of the pet is fixed to the initial y value
-        fixedPosY = transform.position.y;
     }
 
     private void Start()
@@ -202,7 +198,8 @@ public abstract class PetBase : MonoBehaviour
     // Sound
     public void PlaySound(PetSounds sound)
     {
-        GameManager.Instance.interactAudioManager.PlayPetSound(petSoundList[(int)sound].clip);
+        if(GameManager.Instance.currentPlayMode == PlayMode.InteractMode)
+            GameManager.Instance.interactAudioManager.PlayPetSound(petSoundList[(int)sound].clip);
     }
 
     
@@ -271,7 +268,7 @@ public abstract class PetBase : MonoBehaviour
                 PlaySound(PetSounds.Gasps);
                 
                 // Pets must move only on the xz plane
-                destination = new Vector3(destination.x, fixedPosY, destination.z);
+                destination = new Vector3(destination.x, GameData.floorHeight, destination.z);
                 
                 Vector3 startPoint = transform.position;
                 moveDir = (destination - startPoint).normalized;
@@ -576,6 +573,8 @@ public abstract class PetBase : MonoBehaviour
 
         #endregion
 
+        
+        
     #endregion
 
     

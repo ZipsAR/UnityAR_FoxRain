@@ -25,10 +25,10 @@ public class GiftBoxSpawner : MonoBehaviour
         Vector3 playerPos = GameManager.Instance.player.transform.position;
         InteractData data = GameManager.Instance.interactManager.GetInteractData();
 
-        curPetPos = new Vector3(curPetPos.x, data.floorHeight, curPetPos.z);
-        playerPos = new Vector3(playerPos.x, data.floorHeight, playerPos.z);
+        curPetPos = new Vector3(curPetPos.x, GameData.floorHeight, curPetPos.z);
+        playerPos = new Vector3(playerPos.x, GameData.floorHeight, playerPos.z);
         
-        Vector3 spawnPos = GetPointBeforeDistance(curPetPos, playerPos, data.playerFrontDistance);
+        Vector3 spawnPos = GetPointBeforeDistance(curPetPos, playerPos, GameData.playerFrontDistance);
 
         Quaternion spawnRotation = Quaternion.LookRotation(-(playerPos - spawnPos));
         GameObject spawnedObj = Instantiate(giftBoxObj, spawnPos, spawnRotation);
