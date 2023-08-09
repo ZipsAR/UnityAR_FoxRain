@@ -93,7 +93,7 @@ public abstract class PetBase : MonoBehaviour
     public PetStates petStates { private set; get; }
     
     [SerializeField] private AnimationCurve curve; // Curve indicating where the pet is moving
-    private const float SPEED_COEFFICIENT = 0.02f;
+    private const float SPEED_COEFFICIENT = 0.05f;
     private Vector3 moveDir;
     private float rotationSpeed;
     private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
@@ -289,13 +289,16 @@ public abstract class PetBase : MonoBehaviour
                         break;
                     }
                     
-                    // Set position
-                    t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
-                    Transform trans;
-                    (trans = transform).position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
+                    // // Set position
+                    // t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
+                    // Transform trans;
+                    // (trans = transform).position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
+                    
+                    Vector3 velocity = moveDir.normalized * (stat.speed * SPEED_COEFFICIENT);
+                    transform.position += velocity * Time.deltaTime;
                     
                     // Set Rotation
-                    transform.rotation = Quaternion.Lerp(trans.rotation, 
+                    transform.rotation = Quaternion.Lerp(transform.rotation, 
                         Quaternion.LookRotation(moveDir), 
                         Time.deltaTime * rotationSpeed);
     
