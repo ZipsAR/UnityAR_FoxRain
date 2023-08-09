@@ -67,7 +67,7 @@ public class GetData : MonoBehaviour
         {
             MyData data = new();
             data.id = itemdata.ItemData[StoreManager.Instance.itemindex].ID;
-            data.count = 1;
+            data.count = 0;
             FileIOSystem.Instance.invendatabase.mydata.Add(data);
         }
         //GetInfo();
