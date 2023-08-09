@@ -12,7 +12,8 @@ public class UICon : MonoBehaviour
     {
         isSelected = false;
         T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
-        FileIOSystem.Instance.AllLoad();
+        FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+
     }
     public void BuyItem()
     {
@@ -56,8 +57,8 @@ public class UICon : MonoBehaviour
             }
         //
 
-        FileIOSystem.Instance.AllSave();
-        FileIOSystem.Instance.AllLoad();
+        FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase,FileIOSystem.InvenFilename);
+        FileIOSystem.Instance.Load(FileIOSystem.Instance, FileIOSystem.InvenFilename);
         GetComponent<GetData>().ItemInfo_Inven();
         GetComponent<GetData>().ItemInfo();
         //GetComponent<GetData>().GetInfo();
@@ -87,8 +88,8 @@ public class UICon : MonoBehaviour
 
             }
         }
-        FileIOSystem.Instance.AllSave();
-        FileIOSystem.Instance.AllLoad();
+        FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+        FileIOSystem.Instance.Load(FileIOSystem.Instance, FileIOSystem.InvenFilename);
         GetComponent<GetData>().ItemInfo_Inven();
         GetComponent<GetData>().ItemInfo();
         //GetComponent<GetData>().GetInfo();
