@@ -138,16 +138,30 @@ public class InteractManager : MonoBehaviour
     {
         pet = e.petObj.GetComponent<PetBase>();
         
-        // Load Stat form local file
+        // File exist
         if (FileIOSystem.Instance.IsFileExist(FileIOSystem.StatFilename))
         {
-            LoadStat();
-            InitializePetStatByLoadStat();
-            Logger.Log("Load Saved stat file");
+            PetStatBase localStat = LoadStat((int)GameManager.Instance.curPetType);
+            
+            // File exists but no stat information corresponding to the current pet
+            if (CheckStatIsNull(localStat))
+            {
+                pet.InitializeStatByDefault();
+                SaveStat();
+                Logger.Log("file exist, but no this pet stat");   
+            }
+            // Saved file has current pet information
+            else
+            {
+                pet.SetPetStatBase(localStat);
+                Logger.Log("Load Saved stat file");    
+            }
         }
+        // No File
         else
         {
             pet.InitializeStatByDefault();
+            SetEmptyListToDatabase();
             SaveStat();
             Logger.Log("there is no saved stat file");
         }
@@ -164,7 +178,7 @@ public class InteractManager : MonoBehaviour
     
     private void InitializeInteractData()
     {
-        interactData.floorHeight = -0.5f;
+        interactData.floorHeight = -0.595f;
         
         interactData.playerPetMaxDistance = 2f;
         interactData.playerIdleTimeThreshold = 3f;
@@ -191,21 +205,48 @@ public class InteractManager : MonoBehaviour
     public InteractData GetInteractData() => interactData;
     
     #region Stat
-
-        private void InitializePetStatByLoadStat()
+    
+        private bool CheckStatIsNull(PetStatBase localStat)
         {
-            pet.SetPetStatBase(FileIOSystem.Instance.statdatabase.savedStat);
+            if (localStat.fullness == 0
+                && localStat.tiredness == 0
+                && localStat.cleanliness == 0
+                && localStat.exp == 0
+                && localStat.level == 1
+               )
+            {
+                return true;
+            }
+
+            return false;
         }
     
+        private void SetEmptyListToDatabase()
+        {
+            List<PetStatBase> emptyList = new List<PetStatBase>();
+
+            for (int i = 0; i < Enum.GetValues(typeof(PetType)).Length; i++)
+            {
+                emptyList.Add(new PetStatBase());
+            }
+
+            FileIOSystem.Instance.statdatabase.savedStats = emptyList;
+        }
+
         private void SaveStat()
         {
-            FileIOSystem.Instance.statdatabase.savedStat = pet.GetStat();
+            PetType curPetType = GameManager.Instance.curPetType;
+            
+            List<PetStatBase> existingStatList = FileIOSystem.Instance.statdatabase.savedStats;
+            existingStatList[(int)curPetType] =  pet.GetStat();
+            FileIOSystem.Instance.statdatabase.savedStats = existingStatList;
             FileIOSystem.Instance.Save(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
         }
 
-        private void LoadStat()
+        private PetStatBase LoadStat(int idx)
         {
             FileIOSystem.Instance.Load(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
+            return FileIOSystem.Instance.statdatabase.savedStats[idx];
         }
     
         private void StatUpdateByDistance()
