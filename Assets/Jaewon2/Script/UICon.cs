@@ -58,7 +58,7 @@ public class UICon : MonoBehaviour
         //
 
         FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase,FileIOSystem.InvenFilename);
-        FileIOSystem.Instance.Load(FileIOSystem.Instance, FileIOSystem.InvenFilename);
+        FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
         GetComponent<GetData>().ItemInfo_Inven();
         GetComponent<GetData>().ItemInfo();
         //GetComponent<GetData>().GetInfo();
@@ -89,7 +89,7 @@ public class UICon : MonoBehaviour
             }
         }
         FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
-        FileIOSystem.Instance.Load(FileIOSystem.Instance, FileIOSystem.InvenFilename);
+        FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
         GetComponent<GetData>().ItemInfo_Inven();
         GetComponent<GetData>().ItemInfo();
         //GetComponent<GetData>().GetInfo();
