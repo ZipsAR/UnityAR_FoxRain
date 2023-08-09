@@ -35,7 +35,7 @@ public class ItemButtonGen : MonoBehaviour
                 GameObject GenedPanel = GameObject.Instantiate(buttonPanel, parentPanel[0].transform);
                 ButtonGened[i] = GameObject.Instantiate(itemDBObjs[i], GenedPanel.transform);
                 ButtonGened[i].transform.localPosition = new Vector3(0, -30, -0);
-                ButtonGened[i].transform.localScale = new Vector3(60, 60, 60);
+                ButtonGened[i].transform.localScale = new Vector3(80, 80, 80);
                 GenedPanel.GetComponent<ItemMov>().childitem = ButtonGened[i];
             }
             if (itemDBObjs[i].CompareTag("toy"))
@@ -78,7 +78,7 @@ public class ItemButtonGen : MonoBehaviour
                 GameObject GenedPanel = GameObject.Instantiate(buttonPanel_Inven, parentPanel_Inven[0].transform);
                 ButtonGened_Inven[i] = GameObject.Instantiate(itemDBObjs[i], GenedPanel.transform);
                 ButtonGened_Inven[i].transform.localPosition = new Vector3(0, -30, -0);
-                ButtonGened_Inven[i].transform.localScale = new Vector3(60, 60, 60);
+                ButtonGened_Inven[i].transform.localScale = new Vector3(80, 80, 80);
                 GenedPanel.GetComponent<ItemMov>().childitem_Inven = ButtonGened_Inven[i];
             }
             if (itemDBObjs[i].CompareTag("toy"))
