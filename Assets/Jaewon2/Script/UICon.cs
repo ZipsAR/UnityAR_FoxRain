@@ -26,7 +26,7 @@ public class UICon : MonoBehaviour
         Debug.Log("BuyPrice = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice);
 
         //TaeSeung CODING
-        int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
+        /*int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
         if (idx == -1)
         {
             MyData data = new();
@@ -43,9 +43,7 @@ public class UICon : MonoBehaviour
                     }
                 }
             }
-        }
-        else
-        {
+        }*/
             if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
             {
                 for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
@@ -58,7 +56,6 @@ public class UICon : MonoBehaviour
                 }
                 FileIOSystem.Instance.invendatabase.money -= (int)itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
             }
-        }
         //
 
         FileIOSystem.Instance.AllSave();
