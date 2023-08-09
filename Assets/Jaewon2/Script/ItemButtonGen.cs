@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemButtonGen : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class ItemButtonGen : MonoBehaviour
     public GameObject buttonPanel_Inven;
     public GameObject[] parentPanel = new GameObject[3];
     public GameObject[] parentPanel_Inven = new GameObject[3];
+    public Sprite buttonUI;
     private void Start()
     {
         ButtonGened = new GameObject[itemDBObjs.Length];
