@@ -32,8 +32,10 @@ public class CursorCollisionSystem : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        //ObjectCursorcollision
         int mask = 7;
 
+        
         if (PlacementSystem.Instance.CatchObject != null)
         { 
             if (other.gameObject.layer == mask && PlacementSystem.Instance.CatchObject.transform.GetInstanceID() != other.gameObject.transform.parent.GetInstanceID())

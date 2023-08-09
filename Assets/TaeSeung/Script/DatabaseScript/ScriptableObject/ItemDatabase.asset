@@ -103,7 +103,7 @@ MonoBehaviour:
       throwSound: {fileID: 0}
   - Name: funiture_Closet
     ID: 1008
-    Housingsize: {x: 1, y: 1}
+    Housingsize: {x: 4, y: 1}
     BuyPrice: 500
     SellPrice: 500
     Prefab: {fileID: 1552773891800394, guid: 3ca3bb4b682d6f149926e977ee2cfa44, type: 3}
@@ -149,7 +149,7 @@ MonoBehaviour:
       throwSound: {fileID: 0}
   - Name: funiture_box
     ID: 1012
-    Housingsize: {x: 4, y: 4}
+    Housingsize: {x: 3, y: 3}
     BuyPrice: 1100
     SellPrice: 1100
     Prefab: {fileID: 1214118423761400, guid: 1a7a4446e92057041855881d5056fc9e, type: 3}
@@ -335,6 +335,28 @@ MonoBehaviour:
       type: 3}
     DetailInfo: "\uC0DD\uAC01\uBCF4\uB2E4 \uC0C8\uCF64\uD55C \uBC18\uCABD \uC624\uB79C\uC9C0"
     itemCategory: 3000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_sofa3
+    ID: 1014
+    Housingsize: {x: 2, y: 2}
+    BuyPrice: 300
+    SellPrice: 240
+    Prefab: {fileID: 1063040462370530, guid: cbf65f5d2882d924d8b2dbe62ecceafb, type: 3}
+    DetailInfo: "\uB354 \uD479\uC2E0\uD479\uC2E0\uD55C \uC18C\uD30C\uC785\uB2C8\uB2E4."
+    itemCategory: 1000
+    itemSound:
+      eatSound: {fileID: 0}
+      throwSound: {fileID: 0}
+  - Name: funiture_sofa2
+    ID: 1014
+    Housingsize: {x: 2, y: 2}
+    BuyPrice: 300
+    SellPrice: 240
+    Prefab: {fileID: 1842691868646622, guid: fab56fbc525a1cb499b56ac5f8d56869, type: 3}
+    DetailInfo: "\uC5B4\uB514\uAE4C\uC9C0 \uD479\uC2E0\uD574\uC9C8 \uC0DD\uAC01\uC778\uAC70\uC57C?"
+    itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
       throwSound: {fileID: 0}

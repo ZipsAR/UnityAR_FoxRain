@@ -31,7 +31,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     private GameObject ObjectLocation;
 
     //private GridData floorData, funitureData;
-
     //private List<GameObject> placedGameObjects = new();
 
 
@@ -90,6 +89,11 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
 
+    private void OnDisable()
+    {
+ 
+
+    }
 
     private void Update()
     {
@@ -341,16 +345,16 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     int id = FileIOSystem.Instance.housingdatabase.objectsLocation[index].id;
                     Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
                     int myindex= FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == id);
-
-
                     int grapindex = ObjGrabcomponents.FindIndex(data => data == gameObject.GetComponent<XRGrabInteractable>());
+                    
                     ObjGrabcomponents.RemoveAt(grapindex);
-
+                    
 
                     if (myindex != -1)
                     {
                     FileIOSystem.Instance.invendatabase.mydata[myindex].count++;
                     FileIOSystem.Instance.housingdatabase.objectsLocation.RemoveAt(index);
+                    HousingUISystem.Instance.ObjCountupdate(myindex);
                     catchmode = false;
                     cellIndicator.SetActive(false);
 
@@ -358,6 +362,9 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     {
                         gameObject.GetComponent<Rigidbody>().useGravity = true;
                         gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                        gameObject.GetComponent<XRGrabInteractable>().throwOnDetach = true;
+                       // gameObject.GetComponent<XRGrabInteractable>().throwSmoothingCurve
+
                     }
 
                     CreateObject = null;
@@ -640,6 +647,9 @@ public class PlacementSystem : Singleton<PlacementSystem>
         HousingUISystem.Instance.EnableButton(true);
         MapInfo.Instance.ResetTileScale();
     }
+
+
+
 
 
 
