@@ -8,8 +8,6 @@ using UnityEngine.Serialization;
 [ CreateAssetMenu( fileName = "InteractData", menuName = "Scriptable Object Asset/InteractData" )]
 public class InteractData : ScriptableObject
 {
-    [Header("Map Info")] public float floorHeight;
-    
     [Header("Player Info")]
     [Range(0,10)] public float playerPetMaxDistance; // 유저와 펫 사이의 최대 거리
     public float playerIdleTimeThreshold; // 이 시간이상 플레이어가 이동하지 않는 경우 펫이 않음
@@ -17,7 +15,6 @@ public class InteractData : ScriptableObject
     // Stop Distance
     [Header("Stop Distance")] 
     public float bitingDistance;
-    public float playerFrontDistance;
     
     // Brushing
     [Header("Brushing")]
