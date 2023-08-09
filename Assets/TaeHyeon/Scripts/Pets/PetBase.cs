@@ -93,7 +93,7 @@ public abstract class PetBase : MonoBehaviour
     public PetStates petStates { private set; get; }
     
     [SerializeField] private AnimationCurve curve; // Curve indicating where the pet is moving
-    private const float SPEED_COEFFICIENT = 0.02f;
+    private const float SPEED_COEFFICIENT = 0.05f;
     private Vector3 moveDir;
     private float rotationSpeed;
     private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
@@ -205,12 +205,31 @@ public abstract class PetBase : MonoBehaviour
     
     #region InteractPart
 
-        public void InteractHead() => animator.SetInteger(Interact, (int)PetParts.Head);
-        public void InteractJaw() => animator.SetInteger(Interact, (int)PetParts.Jaw);
-        public void InteractBody() => animator.SetInteger(Interact, (int)PetParts.Body);
-        public void InteractHandDetection() => animator.SetInteger(Interact, (int)PetParts.HandDetection);
+    public void InteractHead()
+    {
+        PlaySound(PetSounds.Bark3);
+        animator.SetInteger(Interact, (int)PetParts.Head);
+    }
 
-        public void InteractTerminated()
+    public void InteractJaw()
+    {
+        PlaySound(PetSounds.Bark3);
+        animator.SetInteger(Interact, (int)PetParts.Jaw);
+    }
+
+    public void InteractBody()
+    {
+        PlaySound(PetSounds.Sniff);
+        animator.SetInteger(Interact, (int)PetParts.Body);
+    }
+
+    public void InteractHandDetection()
+    {
+        PlaySound(PetSounds.Whines);
+        animator.SetInteger(Interact, (int)PetParts.HandDetection);
+    }
+
+    public void InteractTerminated()
         {
             animator.SetInteger(Interact, (int)PetParts.None);
         }
@@ -289,13 +308,16 @@ public abstract class PetBase : MonoBehaviour
                         break;
                     }
                     
-                    // Set position
-                    t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
-                    Transform trans;
-                    (trans = transform).position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
+                    // // Set position
+                    // t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
+                    // Transform trans;
+                    // (trans = transform).position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
+                    
+                    Vector3 velocity = moveDir.normalized * (stat.speed * SPEED_COEFFICIENT);
+                    transform.position += velocity * Time.deltaTime;
                     
                     // Set Rotation
-                    transform.rotation = Quaternion.Lerp(trans.rotation, 
+                    transform.rotation = Quaternion.Lerp(transform.rotation, 
                         Quaternion.LookRotation(moveDir), 
                         Time.deltaTime * rotationSpeed);
     
