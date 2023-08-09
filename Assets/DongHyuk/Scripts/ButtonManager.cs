@@ -667,12 +667,22 @@ public class ButtonManager : MonoBehaviour
                 break;
                 case "ButtonEdit":
                 {
+                    //하우징 이동시 하우징적용 invisible
+                    MapInfo.Instance.SetInvisiblemode();
+                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(0).gameObject.SetActive(true);
+                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(1).gameObject.SetActive(false);
+
                     GameManager.Instance.ChangeMode(PlayMode.HousingMode);
                     GameManager.Instance.LoadScene("HousingMode");
                 }
                 break;
                 case "ButtonBasket":
                 {
+                    //상점이동시 하우징적용 invisible
+                    MapInfo.Instance.SetInvisiblemode();
+                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(0).gameObject.SetActive(true);
+                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(1).gameObject.SetActive(false);
+
                     GameManager.Instance.ChangeMode(PlayMode.StoreMode);
                     GameManager.Instance.LoadScene("StoreScene");
                 }
