@@ -394,7 +394,7 @@ GameObject:
   - component: {fileID: 80193625}
   - component: {fileID: 80193624}
   m_Layer: 5
-  m_Name: Purchase
+  m_Name: purchase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -531,7 +531,7 @@ GameObject:
   - component: {fileID: 199716629}
   - component: {fileID: 199716628}
   m_Layer: 5
-  m_Name: T_Pay
+  m_Name: sellButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1439,7 +1439,7 @@ GameObject:
   - component: {fileID: 377180686}
   - component: {fileID: 377180685}
   m_Layer: 5
-  m_Name: T_Pay
+  m_Name: buyButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1595,7 +1595,7 @@ GameObject:
   - component: {fileID: 415438607}
   - component: {fileID: 415438606}
   m_Layer: 5
-  m_Name: Purchase
+  m_Name: I_Purchase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3298,7 +3298,7 @@ GameObject:
   - component: {fileID: 1437850415}
   - component: {fileID: 1437850414}
   m_Layer: 5
-  m_Name: ButtonBack
+  m_Name: buyButtonSprite
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3337,7 +3337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8584906, g: 0.8350936, b: 0.5075353, a: 0.39215687}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4110,7 +4110,7 @@ GameObject:
   - component: {fileID: 1541551900}
   - component: {fileID: 1541551899}
   m_Layer: 5
-  m_Name: ButtonBack (1)
+  m_Name: sellButtonSprite
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4149,7 +4149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.85882354, g: 0.8352941, b: 0.5058824, a: 0.6745098}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4870,7 +4870,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   T_BuyText: {fileID: 0}
   T_money: {fileID: 1420591998}
-  money: 0
   isSelected: 0
   itemdata: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
 --- !u!114 &1816239741
@@ -5086,7 +5085,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   T_BuyText: {fileID: 377180685}
   T_money: {fileID: 709346618}
-  money: 0
   isSelected: 0
   itemdata: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
 --- !u!114 &1825565655
@@ -5218,7 +5216,7 @@ GameObject:
   - component: {fileID: 1845985238}
   - component: {fileID: 1845985237}
   m_Layer: 5
-  m_Name: B_Buy (1)
+  m_Name: B_Sell
   m_TagString: Store
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5379,18 +5377,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1825565653}
-        m_TargetAssemblyTypeName: UICon, Assembly-CSharp
-        m_MethodName: Sell
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 100
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1845985239}
         m_TargetAssemblyTypeName: SFXCon, Assembly-CSharp
         m_MethodName: GetButton
@@ -5399,6 +5385,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1825565653}
+        m_TargetAssemblyTypeName: UICon, Assembly-CSharp
+        m_MethodName: Sell
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 100
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

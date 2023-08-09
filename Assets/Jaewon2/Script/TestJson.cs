@@ -6,9 +6,10 @@ public class TestJson : MonoBehaviour
 {
     void Start()
     {
-        FileIOSystem.Instance.AllLoad();
+        FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
         Debug.Log(FileIOSystem.Instance.invendatabase.mydata.Count);
         //RebootData();FileIOSystem.Instance.AllSave();FileIOSystem.Instance.AllLoad();
+        Debug.Log("Json money°ª = " + FileIOSystem.Instance.invendatabase.money);
         string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
         Debug.Log(c);
     }
