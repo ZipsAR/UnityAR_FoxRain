@@ -24,18 +24,22 @@ public class PanelManager : MonoBehaviour
             Panels[i].SetActive(false);
         }
         currentPanel.SetActive(true);
-        tagName.text = "Store-Furniture";
+        tagName.text = "상점";
 
         for (int i = 0; i < Panels_Inven.Length; i++)
         {
             Panels_Inven[i].SetActive(false);
         }
         currentPanel_Inven.SetActive(true);
-        tagName_Inven.text = "Inventory-Furniture";
+        tagName_Inven.text = "인벤토리";
 
     }
     public void PanelCon_Right()
     {
+        if (panelNum == Panels.Length-1 || panelNum < 0)
+        {
+            panelNum = -1;
+        }
         panelNum++;
         for (int i = 0; i < Panels.Length; i++)
         {
@@ -43,27 +47,57 @@ public class PanelManager : MonoBehaviour
         }
         currentPanel = Panels[panelNum];
         currentPanel.SetActive(true);
-        if (panelNum == Panels.Length-1)
-        {
-            panelNum = -1;
-        }
         switch (panelNum)
         {
             case 0:
-                tagName.text = "Store-Furniture";
+                tagName.text = "상점";
                 break;
             case 1:
-                tagName.text = "Store-Toy";
+                tagName.text = "상점";
                 break;
             case -1:
                 Debug.Log("푸드_Store 진입");
-                tagName.text = "Store-Food";
+                tagName.text = "상점";
                 break;
         }
-        Debug.Log(panelNum);
+        Debug.Log("판넬 = " + panelNum);
     }
+    public void PanelCon_Left()
+    {
+        if (panelNum == 1-Panels.Length || panelNum > 0)
+        {
+            panelNum = 1;
+        }
+
+        panelNum--;
+        for (int i = 0; i < Panels.Length; i++)
+        {
+            Panels[i].SetActive(false);
+        }
+        currentPanel = Panels[-panelNum];
+        currentPanel.SetActive(true);
+        switch (panelNum)
+        {
+            case 0:
+                tagName.text = "상점";
+                break;
+            case 1:
+                tagName.text = "상점";
+                break;
+            case -1:
+                Debug.Log("푸드_Store 진입");
+                tagName.text = "상점";
+                break;
+        }
+        Debug.Log("판넬 = " + panelNum);
+    }
+
     public void PanelCon_Right_Inven()
     {
+        if (panelNum_Inven == Panels_Inven.Length-1 || panelNum_Inven < 0)
+        {
+            panelNum_Inven = -1;
+        }
         panelNum_Inven++;
         for (int i = 0; i < Panels_Inven.Length; i++)
         {
@@ -71,20 +105,43 @@ public class PanelManager : MonoBehaviour
         }
         currentPanel_Inven = Panels_Inven[panelNum_Inven];
         currentPanel_Inven.SetActive(true);
-        if (panelNum_Inven == Panels_Inven.Length-1)
-        {
-            panelNum_Inven = -1;
-        }
         switch (panelNum_Inven)
         {
             case 0:
-                tagName_Inven.text = "Inventory-Furniture";
+                tagName_Inven.text = "인벤토리";
                 break;
             case 1:
-                tagName_Inven.text = "Inventory-Toy";
+                tagName_Inven.text = "인벤토리";
                 break;
             case -1:
-                tagName_Inven.text = "Inventory-Food";
+                tagName_Inven.text = "인벤토리";
+                break;
+        }
+    }
+    public void PanelCon_Left_Inven()
+    {
+        if (panelNum_Inven == 1-Panels_Inven.Length || panelNum_Inven > 0)
+        {
+            panelNum_Inven = 1;
+        }
+
+        panelNum_Inven--;
+        for (int i = 0; i < Panels_Inven.Length; i++)
+        {
+            Panels_Inven[i].SetActive(false);
+        }
+        currentPanel_Inven = Panels_Inven[-panelNum_Inven];
+        currentPanel_Inven.SetActive(true);
+        switch (panelNum_Inven)
+        {
+            case 0:
+                tagName_Inven.text = "인벤토리";
+                break;
+            case 1:
+                tagName_Inven.text = "인벤토리";
+                break;
+            case -1:
+                tagName_Inven.text = "인벤토리";
                 break;
         }
     }
