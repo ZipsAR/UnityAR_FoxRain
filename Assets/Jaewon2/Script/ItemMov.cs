@@ -42,8 +42,7 @@ public class ItemMov : MonoBehaviour
     {
         if (this.gameObject.name == "ItemButton(Clone)")
         {
-            this.GetComponent<GetData>().GetInfo();
-            Debug.Log("인덱스 추출, 현재 인덱스 = " + StoreManager.Instance.itemindex);
+            //this.GetComponent<GetData>().GetInfo();
             if (childitem.CompareTag("furniture"))
             {
                 StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
