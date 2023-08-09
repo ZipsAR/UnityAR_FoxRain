@@ -80,8 +80,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
                         }
@@ -122,8 +122,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
                         }
@@ -161,8 +161,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton4")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
                         }
@@ -200,8 +200,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton5")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
                         }
@@ -239,8 +239,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton6")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton6"));
                         }
@@ -281,8 +281,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
                         }
@@ -323,8 +323,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
                         }
@@ -362,8 +362,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton4")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
                         }
@@ -401,8 +401,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton5")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
                         }
@@ -424,6 +424,10 @@ public class ButtonManager : MonoBehaviour
                 {
                     Debug.Log("인벤토리에 해당 아이템이 추가된 적이 없습니다.");
                 }
+
+                // 6번 버튼
+                CheckAndDestroy(6);
+                
             }
             break;
             case 2:
@@ -443,8 +447,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
                         }
@@ -485,8 +489,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
                         }
@@ -524,8 +528,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton4")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
                         }
@@ -563,8 +567,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton5")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
                         }
@@ -602,8 +606,8 @@ public class ButtonManager : MonoBehaviour
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton6")); 
                         }
-                        // ButtonPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
-                        else if(calledBtn.name == "ButtonPrev" || calledBtn.name == "ButtonNext")
+                        // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
+                        else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton6"));
                         }
