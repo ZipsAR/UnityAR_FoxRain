@@ -15,8 +15,6 @@ public enum StatUIRating
 
 public class InteractUIManager : MonoBehaviour
 {
-    [SerializeField] private Button exitBtn;
-    
     // UI Canvas
     [SerializeField] private GameObject uiCanvas;
     
@@ -44,8 +42,6 @@ public class InteractUIManager : MonoBehaviour
         InteractEventManager.OnPetInitializedToAll += OnPetInitialized;
         InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
         InteractEventManager.OnPetStatChanged += OnPetStatChanged;
-        
-        exitBtn.onClick.AddListener(GameManager.Instance.QuitApp);
         
         if (statRatingSpriteList.Count != Enum.GetNames(typeof(StatUIRating)).Length)
             throw new Exception("Number of statRatingImg and statRating must be the same");
