@@ -37,7 +37,6 @@ public class GetData : MonoBehaviour
                 if (this.CompareTag("Store"))
                 {
                     StoreManager.Instance.itemindex = i;
-                    Debug.Log("¿Œµ¶Ω∫ √ﬂ√‚ = " + StoreManager.Instance.itemindex);
                 }
             }
             Destroy(c);
@@ -54,7 +53,6 @@ public class GetData : MonoBehaviour
                 if (this.CompareTag("Inven"))
                 {
                     StoreManager.Instance.Itemindex_Inven = i;
-                    Debug.Log("¿Œµ¶Ω∫ √ﬂ√‚ = " + StoreManager.Instance.Itemindex_Inven);
                 }
             }
             Destroy(c);
@@ -75,8 +73,7 @@ public class GetData : MonoBehaviour
         {
             if (FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
             {
-                Debug.Log("¿Œµ¶Ω∫ , ∞πºˆ = " + FileIOSystem.Instance.invendatabase.mydata[i].id +"/"+ FileIOSystem.Instance.invendatabase.mydata[i].count);
-                if (FileIOSystem.Instance.invendatabase.mydata[i].count <= 0)
+               if (FileIOSystem.Instance.invendatabase.mydata[i].count <= 0)
                 {
                     sellButtonSprite.color = new Color32(85,85,85,255);
                     sellButtonText.color = new Color32(255, 255, 255, 255);
@@ -132,9 +129,7 @@ public class GetData : MonoBehaviour
         {
             if (FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].ID)
             {
-                Debug.Log("¿Œµ¶Ω∫ √ﬂ√‚");
                 itemDetail_Inven.text = itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].DetailInfo;
-                Debug.Log("¿Œ∫•_∞πºˆ = " + FileIOSystem.Instance.invendatabase.mydata[i].count);
                 itemDetail2_Inven.text = "«ˆ¿Á ∫∏¿Ø ºˆ " + FileIOSystem.Instance.invendatabase.mydata[i].count.ToString();
             }
         }

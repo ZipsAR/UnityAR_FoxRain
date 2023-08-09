@@ -23,10 +23,9 @@ public class UICon : MonoBehaviour
     {
         //GetComponent<GetData>().ItemInfo();
         T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
-        Debug.Log("BuyPrice = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice);
 
         //TaeSeung CODING
-        /*int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
+        int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
         if (idx == -1)
         {
             MyData data = new();
@@ -43,14 +42,13 @@ public class UICon : MonoBehaviour
                     }
                 }
             }
-        }*/
+        }
             if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
             {
                 for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
                 {
                     if(FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
                     {
-                        Debug.Log("구매");
                         FileIOSystem.Instance.invendatabase.mydata[i].count++;
                     }
                 }
