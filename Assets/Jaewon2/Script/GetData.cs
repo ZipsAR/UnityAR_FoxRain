@@ -72,9 +72,9 @@ public class GetData : MonoBehaviour
         {
             if (FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
             {
-               if (FileIOSystem.Instance.invendatabase.mydata[i].count <= 0)
+                if (FileIOSystem.Instance.invendatabase.mydata[i].count <= 0)
                 {
-                    sellButtonSprite.color = new Color32(85,85,85,255);
+                    sellButtonSprite.color = new Color32(85, 85, 85, 255);
                     sellButtonText.color = new Color32(255, 255, 255, 255);
                     sellButtonText.fontSize = 30;
                     sellButtonText.text = "갯수가 부족합니다";

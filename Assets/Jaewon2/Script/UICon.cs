@@ -33,28 +33,28 @@ public class UICon : MonoBehaviour
             data.count = 0;
             FileIOSystem.Instance.invendatabase.mydata.Add(data);
         }
+        for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
+        {
+            if (FileIOSystem.Instance.invendatabase.mydata[i].id == StoreManager.Instance.itemindex)
+            {
+                if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
+                {
+                    FileIOSystem.Instance.invendatabase.mydata[i].count++;
+                }
+            }
+        }
+
+        if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
+        {
             for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
             {
-                if (FileIOSystem.Instance.invendatabase.mydata[i].id == StoreManager.Instance.itemindex)
+                if (FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
                 {
-                    if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
-                    {
-                        FileIOSystem.Instance.invendatabase.mydata[i].count++;
-                    }
+                    FileIOSystem.Instance.invendatabase.mydata[i].count++;
                 }
             }
-        
-            if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
-            {
-                for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
-                {
-                    if(FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
-                    {
-                        FileIOSystem.Instance.invendatabase.mydata[i].count++;
-                    }
-                }
-                FileIOSystem.Instance.invendatabase.money -= (int)itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
-            }
+            FileIOSystem.Instance.invendatabase.money -= (int)itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
+        }
         //
 
         FileIOSystem.Instance.AllSave();
@@ -71,7 +71,7 @@ public class UICon : MonoBehaviour
         int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
         for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
         {
-            if(FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
+            if (FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
             {
                 Debug.Log("갯수 추출 = " + FileIOSystem.Instance.invendatabase.mydata[i].count);
                 if (FileIOSystem.Instance.invendatabase.mydata[i].count <= 0)
