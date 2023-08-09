@@ -1,15 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PetSelectController : MonoBehaviour
 {
     [SerializeField] private GameObject petSelectCanvas;
-    
+
+    [SerializeField] private GameObject corgiObj;
+    [SerializeField] private GameObject huskyObj;
+    [SerializeField] private GameObject shibaObj;
+    [SerializeField] private GameObject whiteObj;
     [SerializeField] private GameObject catObj;
-    [SerializeField] private GameObject dogObj;
-    
+    [SerializeField] private GameObject bellCatObj;
+
     private void Start()
     {
         switch (GameManager.Instance.curPetType)
@@ -17,35 +22,65 @@ public class PetSelectController : MonoBehaviour
             case PetType.None:
                 petSelectCanvas.SetActive(true);
                 break;
+            case PetType.Corgi:
+                InteractEventManager.NotifyPetSelected(corgiObj);
+                break;
+            case PetType.Husky:
+                InteractEventManager.NotifyPetSelected(huskyObj);
+                break;
+            case PetType.Shiba:
+                InteractEventManager.NotifyPetSelected(shibaObj);
+                break;
+            case PetType.White:
+                InteractEventManager.NotifyPetSelected(whiteObj);
+                break;
             case PetType.Cat:
-                petSelectCanvas.SetActive(false);
                 InteractEventManager.NotifyPetSelected(catObj);
                 break;
-            case PetType.Dog:
-                petSelectCanvas.SetActive(false);
-                InteractEventManager.NotifyPetSelected(dogObj);
+            case PetType.BellCat:
+                InteractEventManager.NotifyPetSelected(bellCatObj);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        if (GameManager.Instance.curPetType != PetType.None)
+        {
+            petSelectCanvas.SetActive(false);
+        }
     }
 
-    public void SelectPet(int petType)
+    public void SelectPet(int petTypeInt)
     {
         petSelectCanvas.SetActive(false);
         
-        switch (petType)
+        switch (petTypeInt)
         {
+            case (int)PetType.None:
+                throw new Exception("selected pet can't be None");
+            case (int)PetType.Corgi:
+                InteractEventManager.NotifyPetSelected(corgiObj);
+                break;
+            case (int)PetType.Husky:
+                InteractEventManager.NotifyPetSelected(huskyObj);
+                break;
+            case (int)PetType.Shiba:
+                InteractEventManager.NotifyPetSelected(shibaObj);
+                break;
+            case (int)PetType.White:
+                InteractEventManager.NotifyPetSelected(whiteObj);
+                break;
             case (int)PetType.Cat:
                 InteractEventManager.NotifyPetSelected(catObj);
-                GameManager.Instance.curPetType = PetType.Cat;
                 break;
-            case (int)PetType.Dog:
-                InteractEventManager.NotifyPetSelected(dogObj);
-                GameManager.Instance.curPetType = PetType.Dog;
+            case (int)PetType.BellCat:
+                InteractEventManager.NotifyPetSelected(bellCatObj);
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(petType), petType, null);
+                throw new ArgumentOutOfRangeException(nameof(petTypeInt), petTypeInt, null);
         }
+
+        GameManager.Instance.curPetType = (PetType)Enum.ToObject(typeof(PetType), petTypeInt);
+
     }
 }

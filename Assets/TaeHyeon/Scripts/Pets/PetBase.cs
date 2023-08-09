@@ -47,8 +47,12 @@ public enum PetSounds
 public enum PetType
 {
     None,
+    Corgi,
+    Husky,
+    Shiba,
+    White,
     Cat,
-    Dog,
+    BellCat,
 }
 
 /// <summary>
