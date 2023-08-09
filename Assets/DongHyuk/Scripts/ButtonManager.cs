@@ -46,12 +46,14 @@ public class ButtonManager : MonoBehaviour
     {
         if(ButtonMng.transform.parent.GetChild(radialNum - 1).transform.childCount == 0)
                 {
+                    Debug.Log(ButtonMng.transform.parent.GetChild(radialNum - 1).name);
                     Debug.Log("기존 Radial에 존재하던 오브젝트가 없어 새로 생성합니다.");
                 }
                 else
                 {
+                    Debug.Log(ButtonMng.transform.parent.GetChild(radialNum - 1).name);
                     Debug.Log("기존 Radial에 존재하던 오브젝트를 파괴하고 새 오브젝트로 대체합니다.");
-                    Destroy(ButtonMng.transform.parent.GetChild(radialNum + 1).transform.GetChild(0));
+                    Destroy(ButtonMng.transform.parent.GetChild(radialNum - 1).transform.GetChild(0).gameObject);
                 }
     } 
 
@@ -91,8 +93,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj1.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj1.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj1.transform.localScale *= 1000f;
-                    RadialObj1.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj1.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj1.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj1.name);
                 }
                 catch
@@ -131,8 +135,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj2.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj2.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj2.transform.localScale *= 1000f;
-                    RadialObj2.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj2.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj2.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj2.name);
                 }
                 catch
@@ -167,9 +173,11 @@ public class ButtonManager : MonoBehaviour
                         }*/
                     }
                     // 중력속성, 크기, 위치 등 조정
-                    RadialObj3.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj3.GetComponent<Rigidbody>().useGravity = false;
+                    RadialObj3.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj3.transform.localScale *= 1000f;
-                    RadialObj3.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj3.transform.localPosition += new Vector3(55.0f, 40.0f, -20.0f); 
+                    RadialObj3.transform.eulerAngles += new Vector3(180.0f, 0.0f, 90.0f);
                     Debug.Log(RadialObj3.name);
                 }
                 catch
@@ -205,8 +213,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj4.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj4.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj4.transform.localScale *= 1000f;
-                    RadialObj4.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj4.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj4.transform.eulerAngles += new Vector3(0.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj4.name);
                 }
                 catch
@@ -242,8 +252,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj5.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj5.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj5.transform.localScale *= 1000f;
-                    RadialObj5.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj5.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj5.transform.eulerAngles += new Vector3(-90.0f, 0.0f, -90.0f);
                     Debug.Log(RadialObj5.name);
                 }
                 catch
@@ -282,8 +294,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj1.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj1.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj1.transform.localScale *= 1000f;
-                    RadialObj1.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj1.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj1.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj1.name);
                 }
                 catch
@@ -322,8 +336,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj2.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj2.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj2.transform.localScale *= 1000f;
-                    RadialObj2.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj2.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj2.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj2.name);
                 }
                 catch
@@ -359,8 +375,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj3.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj3.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj3.transform.localScale *= 1000f;
-                    RadialObj3.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj3.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj3.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj3.name);
                 }
                 catch
@@ -396,8 +414,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj4.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj4.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj4.transform.localScale *= 1000f;
-                    RadialObj4.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj4.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj4.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj4.name);
                 }
                 catch
@@ -435,9 +455,11 @@ public class ButtonManager : MonoBehaviour
                         }*/
                     }
                     // 중력속성, 크기, 위치 등 조정
-                    RadialObj1.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj1.GetComponent<Rigidbody>().useGravity = false; 
+                    RadialObj1.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj1.transform.localScale *= 1000f;
-                    RadialObj1.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj1.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj1.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj1.name);
                 }
                 catch
@@ -476,8 +498,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj2.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj2.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj2.transform.localScale *= 1000f;
-                    RadialObj2.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj2.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj2.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj2.name);
                 }
                 catch
@@ -513,8 +537,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj3.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj3.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj3.transform.localScale *= 1000f;
-                    RadialObj3.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj3.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj3.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj3.name);
                 }
                 catch
@@ -550,8 +576,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj4.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj4.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj4.transform.localScale *= 1000f;
-                    RadialObj4.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj4.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj4.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj4.name);
                 }
                 catch
@@ -587,8 +615,10 @@ public class ButtonManager : MonoBehaviour
                     }
                     // 중력속성, 크기, 위치 등 조정
                     RadialObj5.GetComponent<Rigidbody>().useGravity = false;  
+                    RadialObj5.GetComponent<Rigidbody>().isKinematic = true;
                     RadialObj5.transform.localScale *= 1000f;
-                    RadialObj5.transform.localPosition += new Vector3(0.0f, 0.0f, -20.0f); 
+                    RadialObj5.transform.localPosition += new Vector3(0.0f, 40.0f, -20.0f); 
+                    RadialObj5.transform.eulerAngles += new Vector3(-90.0f, 0.0f, 0.0f);
                     Debug.Log(RadialObj5.name);
                 }
                 catch
