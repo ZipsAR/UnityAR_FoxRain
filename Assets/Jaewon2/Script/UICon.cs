@@ -32,6 +32,7 @@ public class UICon : MonoBehaviour
             data.id = itemdata.ItemData[StoreManager.Instance.itemindex].ID;
             data.count = 0;
             FileIOSystem.Instance.invendatabase.mydata.Add(data);
+        }
             for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
             {
                 if (FileIOSystem.Instance.invendatabase.mydata[i].id == StoreManager.Instance.itemindex)
@@ -42,7 +43,7 @@ public class UICon : MonoBehaviour
                     }
                 }
             }
-        }
+        
             if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
             {
                 for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
@@ -60,7 +61,6 @@ public class UICon : MonoBehaviour
         FileIOSystem.Instance.AllLoad();
         GetComponent<GetData>().ItemInfo_Inven();
         GetComponent<GetData>().ItemInfo();
-        //GetComponent<GetData>().GetInfo();
         string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
         Debug.Log("구매 완료 = " + c);
         T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
@@ -91,7 +91,6 @@ public class UICon : MonoBehaviour
         FileIOSystem.Instance.AllLoad();
         GetComponent<GetData>().ItemInfo_Inven();
         GetComponent<GetData>().ItemInfo();
-        //GetComponent<GetData>().GetInfo();
         string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
         Debug.Log("판매 완료 = " + c);
         T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
