@@ -670,10 +670,13 @@ public class ButtonManager : MonoBehaviour
                 break;
                 case "ButtonEdit":
                 {
-                    //하우징 이동시 하우징적용 invisible
-                    MapInfo.Instance.SetInvisiblemode();
-                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(0).gameObject.SetActive(true);
-                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(1).gameObject.SetActive(false);
+                    //인터랙션에서 하우징 이동시 하우징적용 invisible
+                    if(CurrentPage()==1)
+                    {
+                        MapInfo.Instance.SetInvisiblemode();
+                        buttonItSelf.transform.parent.Find("ButtonHome").GetChild(0).gameObject.SetActive(true);
+                        buttonItSelf.transform.parent.Find("ButtonHome").GetChild(1).gameObject.SetActive(false);
+                    }
 
                     GameManager.Instance.ChangeMode(PlayMode.HousingMode);
                     GameManager.Instance.LoadScene("HousingMode");
@@ -681,10 +684,13 @@ public class ButtonManager : MonoBehaviour
                 break;
                 case "ButtonBasket":
                 {
-                    //상점이동시 하우징적용 invisible
-                    MapInfo.Instance.SetInvisiblemode();
-                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(0).gameObject.SetActive(true);
-                    buttonItSelf.transform.parent.Find("ButtonHome").GetChild(1).gameObject.SetActive(false);
+                    //인터랙션에서 상점이동시 하우징적용 invisible
+                    if(CurrentPage()==1)
+                    {
+                        MapInfo.Instance.SetInvisiblemode();
+                        buttonItSelf.transform.parent.Find("ButtonHome").GetChild(0).gameObject.SetActive(true);
+                        buttonItSelf.transform.parent.Find("ButtonHome").GetChild(1).gameObject.SetActive(false);
+                    }
 
                     GameManager.Instance.ChangeMode(PlayMode.StoreMode);
                     GameManager.Instance.LoadScene("StoreScene");
@@ -697,8 +703,8 @@ public class ButtonManager : MonoBehaviour
                         buttonItSelf.transform.GetChild(0).gameObject.SetActive(false);
                         buttonItSelf.transform.GetChild(1).gameObject.SetActive(true);
                         MapInfo.Instance.SetVisiblemode();
-                        MapInfo.Instance.SetReScale(6.4f);
-                        Debug.Log("맵이 현실과 유사한 사이즈로 생성되었습니다.");
+                        //MapInfo.Instance.SetReScale(6.4f);
+                        Debug.Log("맵이 생성되었습니다.");
                     }
                     else
                     {
