@@ -108,8 +108,7 @@ public class MapInfo : Singleton<MapInfo>
     public void SetMapNormalmode()
     {
        PlacementSystem.Instance.ProtectGrib();
-
-       if(HousingUISystem.Instance != null)  HousingUISystem.Instance.transform.gameObject.SetActive(false);
+        if (HousingUISystem.Instance != null)  HousingUISystem.Instance.transform.gameObject.SetActive(false);
        if (EffectSystem.Instance != null) EffectSystem.Instance.gameObject.SetActive(false);
        if (SoundSystem.Instance != null)SoundSystem.Instance.gameObject.SetActive(false);
        this.gameObject.SetActive(true);
@@ -132,6 +131,27 @@ public class MapInfo : Singleton<MapInfo>
 
     public void MapUnGrabmode() {
         this.GetComponent<XRGrabInteractable>().enabled = false;
+    }
+
+    public void CatchObjectInitialize()
+    {
+
+            if (PlacementSystem.Instance.InsertObject != null)
+            {
+                SelectEnterEventArgs p = PlacementSystem.Instance.InsertManager;
+                p.manager.CancelInteractableSelection(p.interactableObject);
+                p.manager.CancelInvoke();
+            }
+            if(PlacementSystem.Instance.CreateObject != null)
+            {
+                SelectEnterEventArgs p = PlacementSystem.Instance.CreateManager;
+                GameObject a = PlacementSystem.Instance.CreateObject;
+                PlacementSystem.Instance.CreateObject = null;
+                PlacementSystem.Instance.SetCatchmode(false);    
+                Destroy(a);
+                p.manager.CancelInteractableSelection(p.interactableObject);
+               
+            }
     }
 
 

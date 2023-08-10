@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -36,13 +37,17 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
     private bool Initilaize = true;
 
-    private GameObject CreateObject; 
-    public GameObject CatchObject;  
+    public GameObject CreateObject;
+    public GameObject InsertObject;
+    public GameObject CatchObject;
+    public SelectEnterEventArgs CreateManager;
+    public SelectEnterEventArgs InsertManager;
     private Vector2Int currentobjsize;  
     private Quaternion currentrotation; 
     private Vector3Int currentpos;  
     private bool catchmode = false;
     private XRGrabInteractable interact;
+
     public List<XRGrabInteractable> ObjGrabcomponents;
 
 
@@ -88,13 +93,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
-
-    private void OnDisable()
-    {
- 
-
-    }
-
     private void Update()
     {
        if (!mouseIndicator)
@@ -119,11 +117,18 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
+    public void SetCatchmode(bool mode)
+    {
+        catchmode = mode;
+    }
+
     public void StartPlacement(int ID)
     {
         if (CreateObject)
+        {
             Destroy(CreateObject);
-        
+            CreateObject = null;
+        }
         StopPlacement(true);
         selectedObjectIndex = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == ID);
         int infoindex = itemdatabase.ItemData.FindIndex(data => data.ID == ID);
@@ -144,7 +149,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
         currentrotation = new();
 
-        GameObject newObject = Instantiate(itemdatabase.ItemData[infoindex].Prefab);
+        GameObject newObject = Instantiate(itemdatabase.ItemData[infoindex].Prefab, spawnpoint.transform.parent);
         CreateObject = newObject;
         newObject.transform.position = spawnpoint.transform.position;
         newObject.transform.localScale = newObject.transform.localScale * (1 / MapInfo.Instance.MapScale);
@@ -258,7 +263,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         ObjectLocation newlocation = new ObjectLocation();
-
         bool placementValidity = Cursorsystem.Iscollision();
         if (placementValidity == false)
         {
@@ -268,7 +272,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
             StopPlacement(false);
             return;
         }
-
 
         int id = FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].id;
         newlocation.location = gridPosition;
@@ -330,6 +333,15 @@ public class PlacementSystem : Singleton<PlacementSystem>
         catchmode = true;
     }
 
+
+    public void ResetCatchObjectPosition()
+    {
+        CreateObject.transform.position = spawnpoint.transform.position;
+        CreateObject.transform.rotation = spawnpoint.transform.rotation;
+        EffectSystem.Instance.playspawneffect(spawnpoint.transform.position);
+        StopPlacement(false);
+    }
+
     private void InsertionStructure(GameObject gameObject) {
 
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
@@ -346,35 +358,32 @@ public class PlacementSystem : Singleton<PlacementSystem>
                     Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
                     int myindex= FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == id);
                     int grapindex = ObjGrabcomponents.FindIndex(data => data == gameObject.GetComponent<XRGrabInteractable>());
-                    
                     ObjGrabcomponents.RemoveAt(grapindex);
                     
-
                     if (myindex != -1)
                     {
                     FileIOSystem.Instance.invendatabase.mydata[myindex].count++;
                     FileIOSystem.Instance.housingdatabase.objectsLocation.RemoveAt(index);
-                    HousingUISystem.Instance.ObjCountupdate(myindex);
+                    if(HousingUISystem.Instance != null) HousingUISystem.Instance.ObjCountupdate(myindex);
+
                     catchmode = false;
                     cellIndicator.SetActive(false);
-
                     if (gameObject.GetComponent<Rigidbody>())
                     {
                         gameObject.GetComponent<Rigidbody>().useGravity = true;
                         gameObject.GetComponent<Rigidbody>().isKinematic = false;
                         gameObject.GetComponent<XRGrabInteractable>().throwOnDetach = true;
                        // gameObject.GetComponent<XRGrabInteractable>().throwSmoothingCurve
-
                     }
 
-                    CreateObject = null;
+                    InsertObject = null;
                     StartCoroutine(throwdelete(gameObject));
 
                     FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
                     FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase, FileIOSystem.HousingFilename);
 
                 }
-                //Destroy(gameObject);
+       
             }
             }
 
@@ -399,8 +408,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
                         gameObject.transform.rotation = currentrotation;
                         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
 
+
                         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.position);
                         SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
+
                         FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase , FileIOSystem.HousingFilename);
                 }
                     else
@@ -412,13 +423,14 @@ public class PlacementSystem : Singleton<PlacementSystem>
                         gameObject.transform.localRotation = rot;
                         gameObject.transform.localPosition = PlacePosition(currentpos, size);
 
-                        EffectSystem.Instance.playplaceeffect(cellIndicator.transform.position);
+                    EffectSystem.Instance.playplaceeffect(cellIndicator.transform.position);
+
                 }
                     catchmode = false;
                     cellIndicator.SetActive(false);
                  }
-            CreateObject = null;
-        }
+            InsertObject = null;
+            }
     }
 
 
@@ -455,11 +467,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
         float tempy = 0;
         
         y = Mathf.Abs(y);
-
-        //print("c: "+CatchObject.transform.rotation.eulerAngles);
-        //print("i: "+cellIndicator.transform.rotation.eulerAngles);
-
-
 
         if (y % 360 >= 315 || y % 360 < 45)
         {
@@ -527,7 +534,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
 
         Vector3 euler = new Vector3(0, z, 0);
-        //CatchObject.transform.rotation = Quaternion.Euler(euler);
         currentrotation = Quaternion.Euler(euler);
 
     }
@@ -606,7 +612,10 @@ public class PlacementSystem : Singleton<PlacementSystem>
     /// <param name="p"></param>
     private void PlaceEnterEvent(SelectEnterEventArgs p)
     {
-        CatchObject = p.interactableObject.transform.gameObject;
+        CreateObject = p.interactableObject.transform.gameObject;
+        CatchObject = CreateObject;
+        CreateManager = p;
+
         HousingUISystem.Instance.EnableButton(false);
         PlaceStartStructure();
     }
@@ -617,9 +626,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
     /// <param name="p"></param>
     private void PlaceEvent(SelectExitEventArgs p)
     {
-        PlaceStructure(p.interactableObject.transform.gameObject);
-        HousingUISystem.Instance.EnableButton(true);
-        MapInfo.Instance.ResetTileScale();
+        if (CreateObject != null)
+        {
+            PlaceStructure(p.interactableObject.transform.gameObject);
+            if (HousingUISystem.Instance != null) HousingUISystem.Instance.EnableButton(true);
+            MapInfo.Instance.ResetTileScale();
+        }
     }
 
 
@@ -629,10 +641,15 @@ public class PlacementSystem : Singleton<PlacementSystem>
     /// <param name="p"></param>
     private void InsertEnterEvent(SelectEnterEventArgs p)
     {
-        CatchObject = p.interactableObject.transform.gameObject;
+        InsertObject = p.interactableObject.transform.gameObject;
+        CatchObject = InsertObject;
+        InsertManager = p;
+
         Startinsertion();
         HousingUISystem.Instance.EnableButton(false);
         InsertionStartStructure(p.interactableObject.transform.gameObject);
+
+        
     }
 
     /// <summary>
@@ -641,13 +658,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
     /// <param name="p"></param>
     private void InsertCompleteEvent(SelectExitEventArgs p)
     {
-        RotatePlacementByHand(RotateRealTimebyHand());
-        InsertionStructure(p.interactableObject.transform.gameObject);
-        StopPlacement(false);
-        HousingUISystem.Instance.EnableButton(true);
-        MapInfo.Instance.ResetTileScale();
+            RotatePlacementByHand(RotateRealTimebyHand());
+            InsertionStructure(p.interactableObject.transform.gameObject);
+            StopPlacement(false);
+            if(HousingUISystem.Instance != null) HousingUISystem.Instance.EnableButton(true);
+            MapInfo.Instance.ResetTileScale();
     }
-
 
 
 

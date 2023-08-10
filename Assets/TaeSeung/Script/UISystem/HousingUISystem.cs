@@ -30,11 +30,6 @@ public class HousingUISystem : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-
-    }
-
 
     public void InitializeUI()
     {
