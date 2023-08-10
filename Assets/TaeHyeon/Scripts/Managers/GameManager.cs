@@ -91,6 +91,10 @@ public class GameManager : Singleton<GameManager>
             MapInfo.Instance.SetReScale(16);
             MapInfo.Instance.MapUnGrabmode();
         }
+        if(sceneName == "StoreScene")
+        {
+            MapInfo.Instance.CatchObjectInitialize();
+        }
         
     }
 }
