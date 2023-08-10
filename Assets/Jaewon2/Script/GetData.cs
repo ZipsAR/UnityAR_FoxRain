@@ -14,6 +14,9 @@ public class GetData : MonoBehaviour
     Text itemDetail_Inven;
     Text itemDetail2;
     Text itemDetail2_Inven;
+    Text itemDetail3;
+    Text itemDetail4;
+
 
     private void Awake()
     {
@@ -21,6 +24,9 @@ public class GetData : MonoBehaviour
         itemDetail2 = GameObject.Find("Des2").GetComponent<Text>();
         itemDetail_Inven = GameObject.Find("Des1_Inven").GetComponent<Text>();
         itemDetail2_Inven = GameObject.Find("Des2_Inven").GetComponent<Text>();
+        itemDetail3 = GameObject.Find("Des3").GetComponent<Text>();
+        itemDetail4 = GameObject.Find("Des4").GetComponent<Text>();
+
         sellButtonSprite = GameObject.Find("sellButtonSprite").GetComponent<Image>();
         sellButtonText = GameObject.Find("sellButtonText").GetComponent<Text>();
         buyButtonSprite = GameObject.Find("buyButtonSprite").GetComponent<Image>();
@@ -88,7 +94,11 @@ public class GetData : MonoBehaviour
                     sellButtonText.text = "되팔기";
                 }
                 itemDetail.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
-                itemDetail2.text = "현재 보유 수 " + FileIOSystem.Instance.invendatabase.mydata[i].count.ToString();
+                Debug.Log("\n 판매2 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice.ToString());
+                itemDetail2.text = "현재 보유 수 " + FileIOSystem.Instance.invendatabase.mydata[i].count.ToString() + "\n 판매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice.ToString() + "\n 구매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice.ToString();
+                itemDetail3.text = "판매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice.ToString();
+                itemDetail4.text = "구매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice.ToString();
+
             }
         }
         for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
