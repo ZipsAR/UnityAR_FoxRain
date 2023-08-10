@@ -7,19 +7,6 @@ using Random = UnityEngine.Random;
 
 public class InteractManager : MonoBehaviour
 {
-    private struct CmdDetail
-    {
-        public int cmdIdx;
-        public Vector3 targetDir; // Position the pet will move to
-        public GameObject targetObj; // Snack or Toy
-    
-        public CmdDetail(int cmdIdx, Vector3 targetDir, GameObject targetObj)
-        {
-            this.cmdIdx = cmdIdx;
-            this.targetDir = targetDir;
-            this.targetObj = targetObj;
-        }
-    }
 
     private struct StatChangeCriteria
     {
@@ -81,9 +68,9 @@ public class InteractManager : MonoBehaviour
         
         cmdQueue = new Queue<CmdDetail>();
 
-        fullnessCreteria = new StatChangeCriteria(2, 5, 0f, 0f, 1f, 1f);
-        tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
-        cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 1f, 1f);
+        fullnessCreteria = new StatChangeCriteria(2, 3, 0f, 0f, 3f, 2f);
+        tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
+        cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
         
         InitializeInteractData();
         
@@ -102,12 +89,12 @@ public class InteractManager : MonoBehaviour
     {
         if(!isPetInitialized) return;
         
-        if(cmdQueue.Count != 0) ShowCurQueue();
+        if(cmdQueue.Count != 0) CmdQueueManager.ShowCurQueue(cmdQueue);
         
         // Do not run other commands if the pet is running a command
         if(pet.inProcess) return;
         
-        if (DequeCmd(out nextCmd)) ExecuteCmd(nextCmd); // if queue is not empty, execute cmd
+        if (CmdQueueManager.DequeCmd(cmdQueue, out nextCmd)) CmdQueueManager.ExecuteCmd(pet, nextCmd); // if queue is not empty, execute cmd
         else AddMatchingConditionCmd(); // if queue is empty, Add commands that meet the current conditions
         
         // Track stat
@@ -120,8 +107,8 @@ public class InteractManager : MonoBehaviour
             interactData.brushingTime += Time.deltaTime;
             if (interactData.brushingTime > interactData.brushingTimeThreshold)
             {
-                ClearCmdQueue();
-                EnqueueCmd(Cmd.Brush);
+                CmdQueueManager.ClearCmdQueue(cmdQueue);
+                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Brush);
                 interactData.isBrushing = false;
                 interactData.brushingTime = 0f;
             }
@@ -178,13 +165,13 @@ public class InteractManager : MonoBehaviour
     
     private void InitializeInteractData()
     {
-        interactData.floorHeight = -0.595f;
+        // interactData.floorHeight = -0.595f;
         
         interactData.playerPetMaxDistance = 2f;
         interactData.playerIdleTimeThreshold = 3f;
         
         interactData.bitingDistance = 0.1f;
-        interactData.playerFrontDistance = 0.5f;
+        // interactData.playerFrontDistance = 0.5f;
 
         interactData.isBrushing = false;
         interactData.brushingTime = 0f;
@@ -335,10 +322,10 @@ public class InteractManager : MonoBehaviour
             pet.AbortAllCmd();
             
             // Move to snack position
-            ClearCmdQueue();
-            EnqueueCmd(Cmd.Move, GetPointBeforeDistance(transform.position, snackTransform.position, interactData.bitingDistance), targetObj: snackTransform.gameObject);
-            EnqueueCmd(Cmd.Look, snackTransform.position);
-            EnqueueCmd(Cmd.Eat, targetObj: snackTransform.gameObject);
+            CmdQueueManager.ClearCmdQueue(cmdQueue);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Move, Utils.GetPointBeforeDistance(transform.position, snackTransform.position, interactData.bitingDistance), targetObj: snackTransform.gameObject);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look, snackTransform.position);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Eat, targetObj: snackTransform.gameObject);
         }
     
     #endregion
@@ -369,28 +356,18 @@ public class InteractManager : MonoBehaviour
             pet.AbortAllCmd();
 
             // Move to toy position
-            ClearCmdQueue();
+            CmdQueueManager.ClearCmdQueue(cmdQueue);
             
-            EnqueueCmd(Cmd.Move, pos: GetPointBeforeDistance(transform.position, toyTransform.position, interactData.bitingDistance), targetObj: toyTransform.gameObject);
-            EnqueueCmd(Cmd.Look, pos: toyTransform.position);
-            EnqueueCmd(Cmd.Bite, targetObj: toyTransform.gameObject);
-            EnqueueCmd(Cmd.Look);
-            EnqueueCmd(Cmd.Move);
-            EnqueueCmd(Cmd.Look);
-            EnqueueCmd(Cmd.Spit);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Move, pos: Utils.GetPointBeforeDistance(transform.position, toyTransform.position, interactData.bitingDistance), targetObj: toyTransform.gameObject);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look, pos: toyTransform.position);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Bite, targetObj: toyTransform.gameObject);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Move);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look);
+            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Spit);
         }
 
-        private Vector3 GetPointBeforeDistance(Vector3 startPoint, Vector3 endPoint, float beforeDistance)
-        {
-            float distance = Vector3.Distance(startPoint, endPoint);
-            float x = endPoint.x - (beforeDistance / distance) * (endPoint.x - startPoint.x);
-            float y = startPoint.y;
-            float z = endPoint.z - (beforeDistance / distance) * (endPoint.z - startPoint.z);
-
-            return new Vector3(x, y, z);
-        }
-    
-    #endregion
+        #endregion
 
     
     #region Cmd
@@ -399,69 +376,14 @@ public class InteractManager : MonoBehaviour
         {
             // EnqueueCmd(Cmd.Move);
         }
-        
-        private void ExecuteCmd(CmdDetail cmdDetail)
-        {
-            switch (cmdDetail.cmdIdx)
-            {
-                case (int)Cmd.Move:
-                    // Go to current player position
-                    if (nextCmd.targetDir == default)
-                    {
-                        // pet.CmdMoveTo(GameManager.Instance.player.transform.position);
-                        pet.CmdMoveTo(GetPointBeforeDistance(
-                            pet.gameObject.transform.position, 
-                            GameManager.Instance.player.transform.position, 
-                            interactData.playerFrontDistance));
-                    }
-                    else
-                    {
-                        if (nextCmd.targetObj == default)
-                        {
-                            pet.CmdMoveTo(nextCmd.targetDir);
-                        }
-                        else
-                        {
-                            // purpose true means pet move to snack or toy
-                            pet.CmdMoveTo(nextCmd.targetDir, true);   
-                        }
-                    }
-                    break;
-                
-                case (int)Cmd.Look:
-                    if(nextCmd.targetDir == default)
-                        pet.CmdLook(GameManager.Instance.player.gameObject.transform.position);
-                    else
-                        pet.CmdLook(nextCmd.targetDir);
-                    break;
-                case (int)Cmd.Sit:
-                    pet.CmdSit();
-                    break;
-                case (int)Cmd.Eat:
-                    pet.CmdEat(nextCmd.targetObj);
-                    break;
-                case (int)Cmd.Brush:
-                    pet.CmdBrush();
-                    break;
-                case (int)Cmd.Bite:
-                    Logger.Log("bite obj name : " + nextCmd.targetObj);
-                    pet.CmdBite(nextCmd.targetObj);
-                    break;
-                case (int)Cmd.Spit:
-                    pet.CmdSpit();
-                    break;
-                default:
-                    throw new Exception("Unimplemented command");
-            }
-        }
-
+    
         private void AddMatchingConditionCmd()
         {
             // if player stay for a while
             if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
             {
-                EnqueueCmd(Cmd.Look, GameManager.Instance.player.gameObject.transform.position);
-                EnqueueCmd(Cmd.Sit);
+                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look, GameManager.Instance.player.gameObject.transform.position);
+                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Sit);
             }
             // if player-pet distance increase
             else if(Vector3.Distance(GameManager.Instance.player.gameObject.transform.position, pet.transform.position) >
@@ -471,65 +393,12 @@ public class InteractManager : MonoBehaviour
                 Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
                             new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
                 
-                EnqueueCmd(Cmd.Move, nextCoord);
+                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Move, nextCoord);
             }
         }
         
     #endregion
-    
-    #region ManageCmdQueue
 
-        private void EnqueueCmd(Cmd cmd, Vector3 pos = default, GameObject targetObj = default)
-        {
-            if (cmd == Cmd.Eat && targetObj == default) throw new Exception("eat cmd must include targetObj");
-            if (cmd == Cmd.Bite && targetObj == default) throw new Exception("bite cmd must include targetObj");
-            
-            // if (cmd == Cmd.Look && pos == default) means look current player position
-            // if (cmd == Cmd.Move && pos == default) means goto current player position
-            
-            cmdQueue.Enqueue(new CmdDetail((int)cmd, pos, targetObj));
-        }
-    
-        /// <summary>
-        /// Get top of cmd
-        /// </summary>
-        /// <param name="result">dequeue command value</param>
-        /// <returns>Whether deqeue is successful</returns>
-        private bool DequeCmd(out CmdDetail result)
-        {
-            // if cmdQueue is empty
-            if (cmdQueue.Count == 0)
-            {
-                // Meaningless data
-                result = new CmdDetail((int)Cmd.Move, Vector3.zero, null);
-                return false;
-            }
-    
-            result = cmdQueue.Dequeue();
-            return true;
-        }
-    
-        public void ClearCmdQueue()
-        {
-            cmdQueue.Clear();
-            Logger.Log("cmdQueue clear");
-        }
-
-        private void ShowCurQueue()
-        {
-            string str = "";
-            foreach (CmdDetail val in cmdQueue)
-            {
-                str += $"{val}\n";
-            }
-
-            str += "\n";
-            Logger.Log(str);
-        }
-        
-    #endregion
-    
-    
     #region InteractWithPet
 
         /// <summary>

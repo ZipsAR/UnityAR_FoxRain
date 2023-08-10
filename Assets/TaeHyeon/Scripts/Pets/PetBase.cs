@@ -93,11 +93,10 @@ public abstract class PetBase : MonoBehaviour
     public PetStates petStates { private set; get; }
     
     [SerializeField] private AnimationCurve curve; // Curve indicating where the pet is moving
-    private const float SPEED_COEFFICIENT = 0.02f;
+    private const float SPEED_COEFFICIENT = 0.05f;
     private Vector3 moveDir;
     private float rotationSpeed;
     private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
-    private float fixedPosY; // Pet always moves at the height of this value
     public bool inProcess { private set; get; } // If the pet is executing a command, it's false
     private GameObject snackObj;
     private GameObject toyObj;
@@ -121,9 +120,6 @@ public abstract class PetBase : MonoBehaviour
         // Audio validation check
         if (petSoundList.Count != Enum.GetNames(typeof(PetSounds)).Length)
             throw new Exception("Number of petSoundList and number of PetSounds do not match");
-
-        // The position y value of the pet is fixed to the initial y value
-        fixedPosY = transform.position.y;
     }
 
     private void Start()
@@ -202,18 +198,38 @@ public abstract class PetBase : MonoBehaviour
     // Sound
     public void PlaySound(PetSounds sound)
     {
-        GameManager.Instance.interactAudioManager.PlayPetSound(petSoundList[(int)sound].clip);
+        if(GameManager.Instance.currentPlayMode == PlayMode.InteractMode)
+            GameManager.Instance.interactAudioManager.PlayPetSound(petSoundList[(int)sound].clip);
     }
 
     
     #region InteractPart
 
-        public void InteractHead() => animator.SetInteger(Interact, (int)PetParts.Head);
-        public void InteractJaw() => animator.SetInteger(Interact, (int)PetParts.Jaw);
-        public void InteractBody() => animator.SetInteger(Interact, (int)PetParts.Body);
-        public void InteractHandDetection() => animator.SetInteger(Interact, (int)PetParts.HandDetection);
+    public void InteractHead()
+    {
+        PlaySound(PetSounds.Bark3);
+        animator.SetInteger(Interact, (int)PetParts.Head);
+    }
 
-        public void InteractTerminated()
+    public void InteractJaw()
+    {
+        PlaySound(PetSounds.Bark3);
+        animator.SetInteger(Interact, (int)PetParts.Jaw);
+    }
+
+    public void InteractBody()
+    {
+        PlaySound(PetSounds.Sniff);
+        animator.SetInteger(Interact, (int)PetParts.Body);
+    }
+
+    public void InteractHandDetection()
+    {
+        PlaySound(PetSounds.Whines);
+        animator.SetInteger(Interact, (int)PetParts.HandDetection);
+    }
+
+    public void InteractTerminated()
         {
             animator.SetInteger(Interact, (int)PetParts.None);
         }
@@ -271,7 +287,7 @@ public abstract class PetBase : MonoBehaviour
                 PlaySound(PetSounds.Gasps);
                 
                 // Pets must move only on the xz plane
-                destination = new Vector3(destination.x, fixedPosY, destination.z);
+                destination = new Vector3(destination.x, GameData.floorHeight, destination.z);
                 
                 Vector3 startPoint = transform.position;
                 moveDir = (destination - startPoint).normalized;
@@ -292,13 +308,16 @@ public abstract class PetBase : MonoBehaviour
                         break;
                     }
                     
-                    // Set position
-                    t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
-                    Transform trans;
-                    (trans = transform).position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
+                    // // Set position
+                    // t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
+                    // Transform trans;
+                    // (trans = transform).position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
+                    
+                    Vector3 velocity = moveDir.normalized * (stat.speed * SPEED_COEFFICIENT);
+                    transform.position += velocity * Time.deltaTime;
                     
                     // Set Rotation
-                    transform.rotation = Quaternion.Lerp(trans.rotation, 
+                    transform.rotation = Quaternion.Lerp(transform.rotation, 
                         Quaternion.LookRotation(moveDir), 
                         Time.deltaTime * rotationSpeed);
     
@@ -576,6 +595,8 @@ public abstract class PetBase : MonoBehaviour
 
         #endregion
 
+        
+        
     #endregion
 
     
