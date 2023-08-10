@@ -15,25 +15,31 @@ public class HandController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PetCollisionHandler handler;
-        if ((handler = other.gameObject.GetComponent<PetCollisionHandler>()) != null)
+        if (GameManager.Instance.curPetType != PetType.None)
         {
-            GameManager.Instance.interactManager.PetPartCollisionEnter(handler.petParts);
+            PetCollisionHandler handler;
+            if ((handler = other.gameObject.GetComponent<PetCollisionHandler>()) != null)
+            {
+                GameManager.Instance.interactManager.PetPartCollisionEnter(handler.petParts);
 
-            Logger.Log(handler.petParts + " start colliding");
-            other.gameObject.GetComponent<MeshRenderer>().material = handler.onCollisionMat;
+                Logger.Log(handler.petParts + " start colliding");
+                other.gameObject.GetComponent<MeshRenderer>().material = handler.onCollisionMat;
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        PetCollisionHandler handler;
-        if ((handler = other.gameObject.GetComponent<PetCollisionHandler>()) != null)
+        if (GameManager.Instance.curPetType != PetType.None)
         {
-            GameManager.Instance.interactManager.PetPartCollisionExit(handler.petParts);
+            PetCollisionHandler handler;
+            if ((handler = other.gameObject.GetComponent<PetCollisionHandler>()) != null)
+            {
+                GameManager.Instance.interactManager.PetPartCollisionExit(handler.petParts);
 
-            Logger.Log(handler.petParts + " end colliding");
-            other.gameObject.GetComponent<MeshRenderer>().material = handler.defaultMat;
+                Logger.Log(handler.petParts + " end colliding");
+                other.gameObject.GetComponent<MeshRenderer>().material = handler.defaultMat;
+            }
         }
     }
 }
