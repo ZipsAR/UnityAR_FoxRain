@@ -77,6 +77,7 @@ public class GameManager : Singleton<GameManager>
 
         if (sceneName == "InteractMode")
         {
+            MapInfo.Instance.CatchObjectInitialize();
             MapInfo.Instance.SetInvisiblemode();
             interactManager = 
                 GameObject.Find("Interact Manager").GetComponent<InteractManager>();
@@ -87,7 +88,9 @@ public class GameManager : Singleton<GameManager>
         if(sceneName == "HousingMode"){
             MapInfo.Instance.SetMapHousingmode();
             MapInfo.Instance.SetOrigin();
+            MapInfo.Instance.SetReScale(16);
             MapInfo.Instance.MapUnGrabmode();
         }
+        
     }
 }
