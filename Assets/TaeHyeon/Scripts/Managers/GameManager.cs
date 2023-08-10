@@ -94,6 +94,7 @@ public class GameManager : Singleton<GameManager>
         if(sceneName == "StoreScene")
         {
             MapInfo.Instance.CatchObjectInitialize();
+            MapInfo.Instance.SetInvisiblemode();
         }
         
     }
