@@ -61,7 +61,7 @@ public class IntroPetController : MonoBehaviour
     private void SetNextCmd(Queue<CmdDetail> cmdQueue)
     {
         int randomValue = Random.Range(0, 2);
-
+        
         switch (randomValue)
         {
             case 0:
