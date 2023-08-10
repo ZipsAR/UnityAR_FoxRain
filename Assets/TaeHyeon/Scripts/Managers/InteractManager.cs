@@ -82,7 +82,10 @@ public class InteractManager : MonoBehaviour
         InteractEventManager.OnPetSelected -= OnPetSelected;
         InteractEventManager.OnPetInitializedToManager -= OnPetInitializedToManager;
 
-        SaveStat();
+        if (GameManager.Instance.curPetType != PetType.None)
+        {
+            SaveStat();
+        }
     }
 
     private void Update()
