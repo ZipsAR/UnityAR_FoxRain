@@ -17,7 +17,7 @@ public class TestJson : MonoBehaviour
     public void RebootData()
     {
         FileIOSystem.Instance.invendatabase.mydata.Clear();
-        FileIOSystem.Instance.invendatabase.money = 12500;
+        FileIOSystem.Instance.invendatabase.money = 30000;
         for (int i = 0; i < 28; i++)
         {
             MyData a = new();
