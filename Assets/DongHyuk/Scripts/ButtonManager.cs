@@ -11,6 +11,7 @@ public class ButtonManager : MonoBehaviour
 
     [SerializeField]
     private ItemDatabase database;
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,7 @@ public class ButtonManager : MonoBehaviour
         {
             ChangeRadial(CurrentPage(), buttonItSelf);
         }
+        audioSource = buttonItSelf.gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -645,6 +647,7 @@ public class ButtonManager : MonoBehaviour
         if(other.gameObject.name == "index003.Col")
         {
            Debug.Log("button pushed by Second finger's tip");
+           audioSource.Play();
            switch(buttonItSelf.name)
            {
                 case "ButtonInteract":
