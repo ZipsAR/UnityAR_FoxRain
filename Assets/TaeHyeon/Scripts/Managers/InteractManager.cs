@@ -1,54 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EnumTypes;
+using Structs;
 using UnityEngine;
 using Logger = ZipsAR.Logger;
 using Random = UnityEngine.Random;
 
 public class InteractManager : MonoBehaviour
 {
-
-    private struct StatChangeCriteria
-    {
-        // Stat values that vary every unitTime
-        public int fluctuatingValuePerTime; 
-        // Stat value that changes each time the pet moves a certain distance
-        public int fluctuatingValuePerDistance;
-        
-        // Time elapsed and distance traveled since stat value was updated
-        public float curTime;
-        public float curDistance;
-        
-        // Stat changes at this time and distance
-        public float unitTime;
-        public float unitDistance;
-        
-        public StatChangeCriteria(
-            int fluctuatingValuePerTime,
-            int fluctuatingValuePerDistance,
-            
-            float curTime,
-            float curDistance,
-            
-            float unitTime,
-            float unitDistance)
-        {
-            this.fluctuatingValuePerTime = fluctuatingValuePerTime;
-            this.fluctuatingValuePerDistance = fluctuatingValuePerDistance;
-
-            this.curTime = curTime;
-            this.curDistance = curDistance;
-            
-            this.unitTime = unitTime;
-            this.unitDistance = unitDistance;
-        }
-    }
-
+    // Pet
     private PetBase pet;
     private bool isPetInitialized;
+    
+    // Manager
     [SerializeField] private InteractData interactData;
     [SerializeField] private Transform selectedPetSpawnTransform;
     
+    // Cmd
     private Queue<CmdDetail> cmdQueue;
     private CmdDetail nextCmd;
 
@@ -168,13 +137,10 @@ public class InteractManager : MonoBehaviour
     
     private void InitializeInteractData()
     {
-        // interactData.floorHeight = -0.595f;
-        
         interactData.playerPetMaxDistance = 2f;
         interactData.playerIdleTimeThreshold = 3f;
         
         interactData.bitingDistance = 0.1f;
-        // interactData.playerFrontDistance = 0.5f;
 
         interactData.isBrushing = false;
         interactData.brushingTime = 0f;
@@ -402,7 +368,7 @@ public class InteractManager : MonoBehaviour
         
     #endregion
 
-    #region InteractWithPet
+    #region Interact
 
         /// <summary>
         /// Called when the comb touches or falls on the pet
@@ -418,56 +384,7 @@ public class InteractManager : MonoBehaviour
                 interactData.brushingTime = 0f;
             }
         }
-        
-        private void InteractWithHead()
-        {
-            pet.InteractHead();
             
-            // Stat
-            pet.UpdateStat(PetStatNames.Tiredness, -5);
-            pet.UpdateStat(PetStatNames.Exp, 5);
-            
-            // Sound
-            pet.PlaySound(PetSounds.Gasps);
-            
-            Logger.Log("interact head in interactManager");
-        }
-        
-        private void InteractWithJaw()
-        {
-            pet.InteractJaw();
-            
-            // Stat
-            pet.UpdateStat(PetStatNames.Tiredness, 4);
-            pet.UpdateStat(PetStatNames.Exp, 3);
-            
-            Logger.Log("interact body in interactManager");
-        }
-        
-        private void InteractWithBody()
-        {
-            pet.InteractBody();
-            
-            // Stat
-            pet.UpdateStat(PetStatNames.Tiredness, -7);
-            pet.UpdateStat(PetStatNames.Exp, 7);
-            Logger.Log("interact jaw in interactManager");
-        }
-        
-        private void InteractWithHandDetection()
-        {
-            pet.InteractHandDetection();
-            
-            // Stat
-            pet.UpdateStat(PetStatNames.Tiredness, -10);
-            pet.UpdateStat(PetStatNames.Exp, 10);
-            Logger.Log("interact HandDetection in interactManager");
-        }
-
-    #endregion
-
-    #region InteractInfoFromHand
-
         /// <summary>
         /// Called when player start touching the interaction part of the pet in player's hand
         /// </summary>
@@ -556,16 +473,16 @@ public class InteractManager : MonoBehaviour
                 case PetParts.None:
                     break;
                 case PetParts.Head:
-                    InteractWithHead();
+                    pet.InteractHead();
                     break;
                 case PetParts.Jaw:
-                    InteractWithJaw();
+                    pet.InteractJaw();
                     break;
                 case PetParts.Body:
-                    InteractWithBody();
+                    pet.InteractBody();
                     break;
                 case PetParts.HandDetection:
-                    InteractWithHandDetection();
+                    pet.InteractHandDetection();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(petPart), petPart, null);

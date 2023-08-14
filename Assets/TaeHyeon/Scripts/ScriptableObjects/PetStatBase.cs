@@ -3,15 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PetStatNames
-{
-    Fullness,
-    Tiredness,
-    Cleanliness,
-    Exp,
-    Level,
-}
-
 [System.Serializable]
 public class PetStatBase
 {

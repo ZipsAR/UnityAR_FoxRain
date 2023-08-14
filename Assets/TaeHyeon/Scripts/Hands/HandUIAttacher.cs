@@ -10,7 +10,6 @@ public class HandUIAttacher : MonoBehaviour
 
     public Vector3 targetPos;
     public Quaternion targetRot;
-    public GameObject testVertical;
     
     private void Awake()
     {
@@ -25,11 +24,5 @@ public class HandUIAttacher : MonoBehaviour
             Instantiate(handUIObject, targetPos, targetRot, GameManager.Instance.leftHand.gameObject.transform);
             Destroy(gameObject);
         }
-        /*if (GameManager.Instance.leftHand != null)
-        {
-            Instantiate(testVertical, targetPos, GameManager.Instance.leftHand.transform.rotation, GameManager.Instance.leftHand.gameObject.transform);
-            Destroy(gameObject);
-        }*/
-
     }
 }
