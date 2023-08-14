@@ -10,6 +10,16 @@ namespace EnumTypes
 
     #endregion
 
+    public enum PlayMode
+    {
+        None = 0,
+        InteractMode = 1,
+        StrollMode = 2,
+        AgilityMode = 3,
+        StoreMode = 4,
+        HousingMode = 5
+    }
+    
     public enum Cmd
     {
         Move = 0,

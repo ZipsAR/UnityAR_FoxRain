@@ -5,6 +5,7 @@ using EnumTypes;
 using Structs;
 using UnityEngine;
 using Logger = ZipsAR.Logger;
+using PlayMode = EnumTypes.PlayMode;
 using Random = UnityEngine.Random;
 
 public class InteractManager : MonoBehaviour

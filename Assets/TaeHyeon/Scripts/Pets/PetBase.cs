@@ -5,6 +5,7 @@ using EnumTypes;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using Logger = ZipsAR.Logger;
+using PlayMode = EnumTypes.PlayMode;
 
 
 /// <summary>
@@ -23,11 +24,35 @@ using Logger = ZipsAR.Logger;
 /// </summary>
 
 public abstract class PetBase : MonoBehaviour
-{
+{    
+    public PetStates petStates { private set; get; }
+    public bool inProcess { private set; get; } // If the pet is executing a command, it's false
     [SerializeField] protected PetStatBase stat;
     private Animator animator;
     private bool isInitDone;
+    private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
+    
+    // Move
+    private const float SPEED_COEFFICIENT = 0.05f;
+    private Vector3 moveDir;
+    private float rotationSpeed;
 
+    // Interact Object
+    private GameObject snackObj;
+    private GameObject toyObj;
+    private bool isBiting;
+    public Transform toyAttachPoint;
+
+    // Effects
+    [SerializeField] private Transform levelEffectAttachPoint;
+    private GameObject curEmotionObj;
+    [SerializeField] private Transform emotionMarkPosition;
+    [SerializeField] private GameObject exclamationMark;
+    
+    // Sounds
+    [SerializeField] private List<Sound> petSoundList;
+    
+    
     // Animation Parameter
     private static readonly int Mode = Animator.StringToHash("Mode");
     private static readonly int Running = Animator.StringToHash("Running");
@@ -37,29 +62,6 @@ public abstract class PetBase : MonoBehaviour
     private static readonly int Eat = Animator.StringToHash("Eat");
     private static readonly int Brush = Animator.StringToHash("Brush");
     private static readonly int Interact = Animator.StringToHash("Interact");
-
-    // Sounds
-    [SerializeField] private List<Sound> petSoundList;
-
-    // Stroll Mode
-    public PetStates petStates { private set; get; }
-    
-    private const float SPEED_COEFFICIENT = 0.05f;
-    private Vector3 moveDir;
-    private float rotationSpeed;
-    private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
-    public bool inProcess { private set; get; } // If the pet is executing a command, it's false
-    private GameObject snackObj;
-    private GameObject toyObj;
-    private bool isBiting;
-    public Transform toyAttachPoint;
-
-    // Effects
-    [SerializeField] private Transform levelEffectAttachPoint;
-
-    private GameObject curEmotionObj;
-    [SerializeField] private Transform emotionMarkPosition;
-    [SerializeField] private GameObject exclamationMark;
     
     private void Awake()
     {

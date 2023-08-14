@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayMode = EnumTypes.PlayMode;
 
 public class ButtonManager : MonoBehaviour
 {

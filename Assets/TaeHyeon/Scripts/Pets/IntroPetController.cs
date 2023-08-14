@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Logger = ZipsAR.Logger;
+using PlayMode = EnumTypes.PlayMode;
 using Random = UnityEngine.Random;
 
 public class IntroPetController : MonoBehaviour
