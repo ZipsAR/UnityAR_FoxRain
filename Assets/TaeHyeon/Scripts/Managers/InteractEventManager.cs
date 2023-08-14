@@ -24,6 +24,10 @@ public static class InteractEventManager
 
     public static event EventHandler<PetArgs> OnPetInitializedToAll;
 
+    public static event EventHandler<DialogArgs> OnDialogCall;
+
+    public static event EventHandler OnClearDialog; 
+
     public static void NotifyPetStatChanged(PetStatNames changedStatName, int preStatAmount, int postStatAmount)
     {
         OnPetStatChanged?.Invoke(null, new PetStatChangedEventArgs(changedStatName, preStatAmount, postStatAmount));
@@ -42,6 +46,16 @@ public static class InteractEventManager
     public static void NotifyPetInitializedToAll(GameObject petObj)
     {
         OnPetInitializedToAll?.Invoke(null, new PetArgs(petObj));
+    }
+
+    public static void NotifyDialogShow(string content)
+    {
+        OnDialogCall?.Invoke(null, new DialogArgs(content));
+    }
+
+    public static void NotifyClearDialog()
+    {
+        OnClearDialog?.Invoke(null, new DialogArgs(default));
     }
 }
 
@@ -66,5 +80,15 @@ public class PetArgs : EventArgs
     public PetArgs(GameObject petObj)
     {
         this.petObj = petObj;
+    }
+}
+
+public class DialogArgs : EventArgs
+{
+    public string content;
+
+    public DialogArgs(string content)
+    {
+        this.content = content;
     }
 }

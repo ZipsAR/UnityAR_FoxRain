@@ -22,6 +22,7 @@ public class PetSelectController : MonoBehaviour
         {
             case PetType.None:
                 petSelectCanvas.SetActive(true);
+                InteractEventManager.NotifyDialogShow("오늘 함께할 펫을 골라주세요!");
                 break;
             case PetType.Corgi:
                 InteractEventManager.NotifyPetSelected(corgiObj);
@@ -82,6 +83,6 @@ public class PetSelectController : MonoBehaviour
         }
 
         GameManager.Instance.curPetType = (PetType)Enum.ToObject(typeof(PetType), petTypeInt);
-
+        InteractEventManager.NotifyClearDialog();
     }
 }

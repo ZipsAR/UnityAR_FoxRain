@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class DialogFrame : MonoBehaviour
 {
     private DialogController controller;
+    private int dialogId; 
     [SerializeField] private Text content;
     [SerializeField] private Button nextBtn;
 
@@ -15,11 +16,18 @@ public class DialogFrame : MonoBehaviour
     {
         controller = transform.parent.GetComponent<DialogController>();
         
-        nextBtn.onClick.AddListener(controller.OnNextBtnClicked);
+        nextBtn.onClick.AddListener(() => controller.OnNextBtnClicked(dialogId));
     }
 
-    public void SetText(string inputContent)
+    private void Update()
     {
+        transform.LookAt(GameManager.Instance.player.transform);
+        transform.Rotate(0,180f,0);
+    }
+
+    public void InitDialog(int id, string inputContent)
+    {
+        dialogId = id;
         content.text = inputContent;
     }
 }
