@@ -1,59 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EnumTypes;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using Logger = ZipsAR.Logger;
+using PlayMode = EnumTypes.PlayMode;
 
-public enum PetStates
-{
-    Idle,
-    Walk,
-    Sit,
-}
-
-public enum Cmd
-{
-    Move = 0,
-    Look = 1,
-    Sit = 2,
-    Eat = 3,
-    Brush = 4,
-    Bite = 5,
-    Spit = 6,
-}
-
-public enum PetParts
-{
-    None,
-    Head,
-    Jaw,
-    Body,
-    HandDetection,
-}
-
-// If this order is changed, the order of sound in the inspector window must be changed accordingly
-public enum PetSounds
-{
-    Bark1,
-    Bark2,
-    Bark3,
-    Gasps,
-    Sniff,
-    Whines,
-    Eat,
-}
-
-public enum PetType
-{
-    None,
-    Corgi,
-    Husky,
-    Shiba,
-    White,
-    Cat,
-    BellCat,
-}
 
 /// <summary>
 /// How to add a pet
@@ -71,11 +24,35 @@ public enum PetType
 /// </summary>
 
 public abstract class PetBase : MonoBehaviour
-{
+{    
+    public PetStates petStates { private set; get; }
+    public bool inProcess { private set; get; } // If the pet is executing a command, it's false
     [SerializeField] protected PetStatBase stat;
-    protected Animator animator;
+    private Animator animator;
     private bool isInitDone;
+    private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
+    
+    // Move
+    private const float SPEED_COEFFICIENT = 0.05f;
+    private Vector3 moveDir;
+    private float rotationSpeed;
 
+    // Interact Object
+    private GameObject snackObj;
+    private GameObject toyObj;
+    private bool isBiting;
+    public Transform toyAttachPoint;
+
+    // Effects
+    [SerializeField] private Transform levelEffectAttachPoint;
+    private GameObject curEmotionObj;
+    [SerializeField] private Transform emotionMarkPosition;
+    [SerializeField] private GameObject exclamationMark;
+    
+    // Sounds
+    [SerializeField] private List<Sound> petSoundList;
+    
+    
     // Animation Parameter
     private static readonly int Mode = Animator.StringToHash("Mode");
     private static readonly int Running = Animator.StringToHash("Running");
@@ -85,30 +62,6 @@ public abstract class PetBase : MonoBehaviour
     private static readonly int Eat = Animator.StringToHash("Eat");
     private static readonly int Brush = Animator.StringToHash("Brush");
     private static readonly int Interact = Animator.StringToHash("Interact");
-
-    // Sounds
-    [SerializeField] private List<Sound> petSoundList;
-
-    // Stroll Mode
-    public PetStates petStates { private set; get; }
-    
-    [SerializeField] private AnimationCurve curve; // Curve indicating where the pet is moving
-    private const float SPEED_COEFFICIENT = 0.05f;
-    private Vector3 moveDir;
-    private float rotationSpeed;
-    private List<bool> isCoroutinePlayingList; // list index is Cmd enum 
-    public bool inProcess { private set; get; } // If the pet is executing a command, it's false
-    private GameObject snackObj;
-    private GameObject toyObj;
-    private bool isBiting;
-    public Transform toyAttachPoint;
-
-    // Effects
-    [SerializeField] private Transform levelEffectAttachPoint;
-
-    private GameObject curEmotionObj;
-    [SerializeField] private Transform emotionMarkPosition;
-    [SerializeField] private GameObject exclamationMark;
     
     private void Awake()
     {
@@ -196,7 +149,7 @@ public abstract class PetBase : MonoBehaviour
     }
     
     // Sound
-    public void PlaySound(PetSounds sound)
+    private void PlaySound(PetSounds sound)
     {
         if(GameManager.Instance.currentPlayMode == PlayMode.InteractMode)
             GameManager.Instance.interactAudioManager.PlayPetSound(petSoundList[(int)sound].clip);
@@ -205,31 +158,50 @@ public abstract class PetBase : MonoBehaviour
     
     #region InteractPart
 
-    public void InteractHead()
-    {
-        PlaySound(PetSounds.Bark3);
-        animator.SetInteger(Interact, (int)PetParts.Head);
-    }
+        public void InteractHead()
+        {
+            PlaySound(PetSounds.Bark3);
+            animator.SetInteger(Interact, (int)PetParts.Head);
+            
+            // Stat
+            UpdateStat(PetStatNames.Tiredness, -5);
+            UpdateStat(PetStatNames.Exp, 5);
+                
+            // Sound
+            PlaySound(PetSounds.Gasps);
+        }
 
-    public void InteractJaw()
-    {
-        PlaySound(PetSounds.Bark3);
-        animator.SetInteger(Interact, (int)PetParts.Jaw);
-    }
+        public void InteractJaw()
+        {
+            PlaySound(PetSounds.Bark3);
+            animator.SetInteger(Interact, (int)PetParts.Jaw);
+            
+            // Stat
+            UpdateStat(PetStatNames.Tiredness, 4);
+            UpdateStat(PetStatNames.Exp, 3);
+        }
 
-    public void InteractBody()
-    {
-        PlaySound(PetSounds.Sniff);
-        animator.SetInteger(Interact, (int)PetParts.Body);
-    }
+        public void InteractBody()
+        {
+            PlaySound(PetSounds.Sniff);
+            animator.SetInteger(Interact, (int)PetParts.Body);
+            
+            // Stat
+            UpdateStat(PetStatNames.Tiredness, -7);
+            UpdateStat(PetStatNames.Exp, 7);
 
-    public void InteractHandDetection()
-    {
-        PlaySound(PetSounds.Whines);
-        animator.SetInteger(Interact, (int)PetParts.HandDetection);
-    }
+        }
 
-    public void InteractTerminated()
+        public void InteractHandDetection()
+        {
+            PlaySound(PetSounds.Whines);
+            animator.SetInteger(Interact, (int)PetParts.HandDetection);
+            
+            UpdateStat(PetStatNames.Tiredness, -10);
+            UpdateStat(PetStatNames.Exp, 10);
+        }
+
+        public void InteractTerminated()
         {
             animator.SetInteger(Interact, (int)PetParts.None);
         }
@@ -307,11 +279,6 @@ public abstract class PetBase : MonoBehaviour
                         Logger.Log("force stop");
                         break;
                     }
-                    
-                    // // Set position
-                    // t = Mathf.MoveTowards(t, 1, stat.speed * Time.deltaTime * SPEED_COEFFICIENT);
-                    // Transform trans;
-                    // (trans = transform).position = Vector3.Lerp(startPoint, destination, curve.Evaluate(t));
                     
                     Vector3 velocity = moveDir.normalized * (stat.speed * SPEED_COEFFICIENT);
                     transform.position += velocity * Time.deltaTime;
@@ -689,11 +656,10 @@ public abstract class PetBase : MonoBehaviour
 
     #endregion
 
+    
     #region Effects
 
         public Transform GetEffectPosition() => levelEffectAttachPoint;
-        
-        
 
-    #endregion
+        #endregion
 }

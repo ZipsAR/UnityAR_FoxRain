@@ -1,14 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EnumTypes;
 using UnityEngine;
 using Logger = ZipsAR.Logger;
 
-public enum HandSide
-{
-    Left,
-    Right,
-}
 public class HandAttacher : MonoBehaviour
 {
     private GameObject leftHandObj;
