@@ -14,24 +14,7 @@ public class StoreManager : MonoBehaviour
     public int itemindex;
     public int Itemindex_Inven;
     public SFXCon sfx;
-
-    /*public static StoreManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<StoreManager>();
-                if (instance == null)
-                {
-                    GameObject singletonObject = new GameObject(typeof(StoreManager).Name);
-                    instance = singletonObject.AddComponent<StoreManager>();
-                }
-                DontDestroyOnLoad(instance.gameObject);
-            }
-            return instance;
-        }
-    }*/
+    public PanelManager panelManager;
     private void OnEnable()
     {
         Instance = this;
