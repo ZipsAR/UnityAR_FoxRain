@@ -26,8 +26,10 @@ public static class InteractEventManager
 
     public static event EventHandler<DialogArgs> OnDialogCall;
 
-    public static event EventHandler OnClearDialog; 
+    public static event EventHandler OnClearDialog;
 
+    public static event EventHandler<TutorialItemArgs> OnGetTutorialInfo;
+    
     public static void NotifyPetStatChanged(PetStatNames changedStatName, int preStatAmount, int postStatAmount)
     {
         OnPetStatChanged?.Invoke(null, new PetStatChangedEventArgs(changedStatName, preStatAmount, postStatAmount));
@@ -56,6 +58,11 @@ public static class InteractEventManager
     public static void NotifyClearDialog()
     {
         OnClearDialog?.Invoke(null, new DialogArgs(default));
+    }
+
+    public static void NotifyTutorialItemInfo(bool isTutorialEnd, bool isGrabbed, ItemType itemType)
+    {
+        OnGetTutorialInfo?.Invoke(null, new TutorialItemArgs(isTutorialEnd, isGrabbed, itemType));
     }
 }
 
@@ -90,5 +97,19 @@ public class DialogArgs : EventArgs
     public DialogArgs(string content)
     {
         this.content = content;
+    }
+}
+
+public class TutorialItemArgs : EventArgs
+{
+    public bool isTutorialEnd;
+    public bool isGrabbed;
+    public ItemType itemType;
+    
+    public TutorialItemArgs(bool isTutorialEnd, bool isGrabbed, ItemType itemType)
+    {
+        this.isTutorialEnd = isTutorialEnd;
+        this.isGrabbed = isGrabbed;
+        this.itemType = itemType;
     }
 }
