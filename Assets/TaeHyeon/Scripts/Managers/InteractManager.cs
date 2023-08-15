@@ -47,6 +47,11 @@ public class InteractManager : MonoBehaviour
         SetInitialCmd();
     }
 
+    private void OnEnable()
+    {
+        LoadMoney();
+    }
+
     private void OnDisable()
     {
         InteractEventManager.OnPetSelected -= OnPetSelected;
@@ -55,6 +60,7 @@ public class InteractManager : MonoBehaviour
         if (GameManager.Instance.curPetType != PetType.None)
         {
             SaveStat();
+            SaveMoney();
         }
     }
 
@@ -205,6 +211,19 @@ public class InteractManager : MonoBehaviour
             FileIOSystem.Instance.Load(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
             return FileIOSystem.Instance.statdatabase.savedStats[idx];
         }
+
+        private void SaveMoney()
+        {
+            FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+            Logger.Log("Save Money call");
+        }
+
+        private void LoadMoney()
+        {
+            FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+            Logger.Log("Load Money call");            
+        }
+        
     
         private void StatUpdateByDistance()
         {

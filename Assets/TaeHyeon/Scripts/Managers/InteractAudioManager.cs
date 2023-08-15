@@ -9,7 +9,8 @@ using Logger = ZipsAR.Logger;
 public class InteractAudioManager : MonoBehaviour
 {
     private AudioSource petAudioSource;
-
+    [SerializeField] private AudioSource effectSource;
+    
     private void Awake()
     {
         InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
@@ -31,5 +32,11 @@ public class InteractAudioManager : MonoBehaviour
     {
         petAudioSource.clip = clip;
         petAudioSource.Play();
+    }
+
+    public void PlayEffectSound(AudioClip clip)
+    {
+        effectSource.clip = clip;
+        effectSource.Play();
     }
 }
