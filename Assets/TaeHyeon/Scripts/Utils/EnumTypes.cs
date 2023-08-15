@@ -79,6 +79,7 @@ namespace EnumTypes
             Cleanliness,
             Exp,
             Level,
+            Money,
         }
         
     #endregion
