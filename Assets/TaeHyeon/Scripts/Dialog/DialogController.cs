@@ -15,7 +15,7 @@ public class DialogController : MonoBehaviour
     
     private void Awake()
     {
-        forward = 2f;
+        forward = 3f;
         up = 1f;
         id = 0;
         curDialogList = new List<Tuple<int, GameObject>>();
