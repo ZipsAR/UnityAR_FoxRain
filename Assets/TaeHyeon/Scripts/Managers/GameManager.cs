@@ -71,6 +71,7 @@ public class GameManager : Singleton<GameManager>
         if (sceneName == "InteractMode")
         {
             PlacementSystem.Instance.ProtectGrib();
+            MapInfo.Instance.SetReScale(6.33f);
             MapInfo.Instance.CatchObjectInitialize();
             MapInfo.Instance.SetInvisiblemode();
            
