@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EnumTypes;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Logger = ZipsAR.Logger;
@@ -71,6 +72,9 @@ public class GiftBox : MonoBehaviour
 
             // Sound
             GameManager.Instance.interactAudioManager.PlayEffectSound(openingBoxClip);
+            
+            // Notify to InteractTutorial
+            InteractEventManager.NotifyTutorialItemInfo(true, false, TutorialType.Money);
         }    
     }
 

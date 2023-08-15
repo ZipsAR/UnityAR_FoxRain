@@ -31,10 +31,11 @@ namespace EnumTypes
         Spit = 6,
     }
 
-    public enum ItemType
+    public enum TutorialType
     {
         Toy,
         Snack,
+        Money,
     }
     
     #region Pet

@@ -19,26 +19,26 @@ public class TutorialItem : MonoBehaviour
     {
         if (transform.TryGetComponent(out Toy toy))
         {
-            InteractEventManager.NotifyTutorialItemInfo(false, true, ItemType.Toy);
+            InteractEventManager.NotifyTutorialItemInfo(false, true, TutorialType.Toy);
         }
         else if (transform.TryGetComponent(out Snack snack))
         {
-            InteractEventManager.NotifyTutorialItemInfo(false, true, ItemType.Snack);
+            InteractEventManager.NotifyTutorialItemInfo(false, true, TutorialType.Snack);
         }
     }
 
-    public void EndItemTutorial(ItemType itemType)
+    public void EndItemTutorial(TutorialType tutorialType)
     {
-        switch (itemType)
+        switch (tutorialType)
         {
-            case ItemType.Toy:
-                InteractEventManager.NotifyTutorialItemInfo(true, false, ItemType.Toy);
+            case TutorialType.Toy:
+                InteractEventManager.NotifyTutorialItemInfo(true, false, TutorialType.Toy);
                 break;
-            case ItemType.Snack:
-                InteractEventManager.NotifyTutorialItemInfo(true, false, ItemType.Snack);
+            case TutorialType.Snack:
+                InteractEventManager.NotifyTutorialItemInfo(true, false, TutorialType.Snack);
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(itemType), itemType, null);
+                throw new ArgumentOutOfRangeException(nameof(tutorialType), tutorialType, null);
         }
     }
 }

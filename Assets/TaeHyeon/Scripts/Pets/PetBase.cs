@@ -425,7 +425,7 @@ public abstract class PetBase : MonoBehaviour
                 // Tutorial
                 if (snackObj != null && snackObj.TryGetComponent(out TutorialItem tutorialItem))
                 {
-                    tutorialItem.EndItemTutorial(ItemType.Snack);
+                    tutorialItem.EndItemTutorial(TutorialType.Snack);
                 }
                 
                 isCoroutinePlayingList[(int)Cmd.Eat] = false;
@@ -561,7 +561,7 @@ public abstract class PetBase : MonoBehaviour
                 // Tutorial
                 if (toyObj.TryGetComponent(out TutorialItem tutorialItem))
                 {
-                    tutorialItem.EndItemTutorial(ItemType.Toy);
+                    tutorialItem.EndItemTutorial(TutorialType.Toy);
                 }
             }
     
