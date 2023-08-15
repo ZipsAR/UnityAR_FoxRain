@@ -109,6 +109,7 @@ public class MapInfo : Singleton<MapInfo>
     public void SetMapNormalmode()
     {
        PlacementSystem.Instance.ProtectGrib();
+        Tile.SetActive(false);
         if (HousingUISystem.Instance != null)  HousingUISystem.Instance.transform.gameObject.SetActive(false);
        if (EffectSystem.Instance != null) EffectSystem.Instance.gameObject.SetActive(false);
        if (SoundSystem.Instance != null)SoundSystem.Instance.gameObject.SetActive(false);
@@ -117,6 +118,7 @@ public class MapInfo : Singleton<MapInfo>
 
     public void SetInvisiblemode()
     {
+        Tile.SetActive(false);
         this.gameObject.SetActive(false);
     }
 
@@ -150,8 +152,11 @@ public class MapInfo : Singleton<MapInfo>
                 PlacementSystem.Instance.CreateObject = null;
                 PlacementSystem.Instance.SetCatchmode(false);    
                 Destroy(a);
+
+            if (p != null)
+            {
                 p.manager.CancelInteractableSelection(p.interactableObject);
-               
+            }
             }
     }
 

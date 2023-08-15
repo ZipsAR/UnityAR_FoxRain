@@ -91,6 +91,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         cursororigin = mouseIndicator;
         cursorparent = cursororigin.transform.parent.gameObject;
+
+        //
     }
 
 
@@ -114,7 +116,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
             RotateRealTimebyHand();
             if (!inputManager.ishit()) cellIndicator.SetActive(false);
             else cellIndicator.SetActive(true);
-        }  
+        }
+
     }
 
 
@@ -401,6 +404,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
                     InsertObject = null;
                     StartCoroutine(throwdelete(gameObject));
+                    StartCoroutine(throwdelete2(gameObject));
 
                     if (MapInfo.Instance.housingtutorial[2])
                     {
@@ -489,15 +493,31 @@ public class PlacementSystem : Singleton<PlacementSystem>
          while (Vector3.Distance(obj.transform.position, ObjectLocation.transform.position) < 30)
         {
             float distance = Vector3.Distance(obj.transform.position, ObjectLocation.transform.position);
-            if(distance> 25  && obj)
+            if(distance> 25  && obj!=null)
             {
+                
                 Destroy(obj);
                 yield break;
             }
+            if (obj)
+                yield break;
             
             yield return null;
         }
-
+    }
+    private IEnumerator throwdelete2(GameObject obj)
+    {
+        float nowtime = Time.time;
+        float latertime = Time.time;
+        while (Mathf.Abs(nowtime - latertime) <= 3)
+        {
+            latertime = Time.time;
+            yield return null;
+        }
+        if (obj != null)
+        {
+            Destroy(obj);
+        }
     }
 
     private IEnumerator EndTutorial()
