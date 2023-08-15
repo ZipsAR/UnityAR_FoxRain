@@ -328,7 +328,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         if (FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].count <= 0)
         {
             Debug.Log($"No Object");
-            HousingUISystem.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
+            HousingUISystem.Instance.countlist[id].GetComponent<Button>().interactable = false;
         }
         HousingUISystem.Instance.ObjCountupdate(id ,selectedObjectIndex);
 
