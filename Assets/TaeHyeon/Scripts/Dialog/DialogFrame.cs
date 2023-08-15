@@ -18,6 +18,7 @@ public class DialogFrame : MonoBehaviour
         controller = transform.parent.GetComponent<DialogController>();
         
         nextBtn.onClick.AddListener(() => controller.OnNextBtnClicked(dialogId));
+        nextBtn.onClick.AddListener(InteractEventManager.NotifyDialogExitClicked);
     }
 
     private void Update()

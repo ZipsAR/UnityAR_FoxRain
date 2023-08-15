@@ -29,6 +29,8 @@ public static class InteractEventManager
     public static event EventHandler OnClearDialog;
 
     public static event EventHandler<TutorialItemArgs> OnGetTutorialInfo;
+
+    public static event EventHandler OnClickedDialogExitBtn;
     
     public static void NotifyPetStatChanged(PetStatNames changedStatName, int preStatAmount, int postStatAmount)
     {
@@ -63,6 +65,11 @@ public static class InteractEventManager
     public static void NotifyTutorialItemInfo(bool isTutorialEnd, bool isGrabbed, ItemType itemType)
     {
         OnGetTutorialInfo?.Invoke(null, new TutorialItemArgs(isTutorialEnd, isGrabbed, itemType));
+    }
+
+    public static void NotifyDialogExitClicked()
+    {
+        OnClickedDialogExitBtn?.Invoke(null, null);
     }
 }
 
