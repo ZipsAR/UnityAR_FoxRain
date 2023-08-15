@@ -118,12 +118,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
             else cellIndicator.SetActive(true);
         }
 
-
-        if (ObjGrabcomponents.Count != 0 )
-        {
-            print(ObjGrabcomponents[0].interactionLayers);
-            ObjGrabcomponents[0].interactionLayers = 1;
-        }
     }
 
 
