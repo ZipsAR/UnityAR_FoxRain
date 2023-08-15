@@ -14,11 +14,12 @@ public class HousingUISystem : MonoBehaviour
     private GameObject menuPanel, HousingButtonPrefab;
     [SerializeField]
     private ItemDatabase itemdatabase;
-    public List<GameObject> countlist;
+    public Dictionary<int, GameObject> countlist = new();
 
     [SerializeField]
     private GameObject prefab;
 
+    public DialogController dialog;
 
     private void Start()
     {
@@ -28,13 +29,20 @@ public class HousingUISystem : MonoBehaviour
             DontDestroyOnLoad(this);
             InitializeUI();
         }
-    }
+        if (MapInfo.Instance.housingtutorial[0])
+        {
+            InteractEventManager.NotifyDialogShow("배치하고 싶은 가구버튼을 누르세요!");
+            MapInfo.Instance.housingtutorial[0] = false;
+        }
+
+     }
 
 
     public void InitializeUI()
     {
         foreach (MyData objdata in FileIOSystem.Instance.invendatabase.mydata) {
-                int idindex = itemdatabase.ItemData.FindIndex(data => data.ID == objdata.id);
+       
+            int idindex = itemdatabase.ItemData.FindIndex(data => data.ID == objdata.id);
 
             if (idindex >= 0 && itemdatabase.ItemData[idindex].itemCategory == ItemData.ItemCategory.Funiture)
             {
@@ -47,7 +55,7 @@ public class HousingUISystem : MonoBehaviour
 
                 newobj.GetComponentInChildren<TMP_Text>().text = objdata.count.ToString();
                 if (objdata.count <= 0) newobj.GetComponent<Button>().interactable = false;
-                countlist.Add(newobj);
+                countlist.Add(objdata.id,newobj);
             }
  
         }   
@@ -55,18 +63,30 @@ public class HousingUISystem : MonoBehaviour
 
     public void EnableButton(bool flag)
     {
-        for(int i=0; i<countlist.Count; i++)
-            countlist[i].GetComponent<Button>().interactable = flag;
+        foreach(var item in countlist)
+        {
+            int key = item.Key;
+            int index = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == key);
 
+            if (FileIOSystem.Instance.invendatabase.mydata[index].count != 0)
+            {
+                item.Value.GetComponent<Button>().interactable = flag;
+            }
+
+        }
     }
 
 
 
-    public void ObjCountupdate(int id)
+    public void ObjCountupdate(int id, int myindex)
     {
         GameObject obj = countlist[id];
-        obj.GetComponentInChildren<TMP_Text>().text = FileIOSystem.Instance.invendatabase.mydata[id].count.ToString();
-    
+
+        obj.GetComponentInChildren<TMP_Text>().text = FileIOSystem.Instance.invendatabase.mydata[myindex].count.ToString();
+        if(FileIOSystem.Instance.invendatabase.mydata[myindex].count == 1)
+        {
+            obj.GetComponent<Button>().interactable = true;
+        }
 
     }
 

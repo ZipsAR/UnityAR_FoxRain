@@ -19,6 +19,7 @@ public class MapInfo : Singleton<MapInfo>
     private Vector3 TileMapscale, TileScale, CursorScale, TileEffectScale;
 
 
+    public List<bool> housingtutorial;
 
     private void Start()
     {
