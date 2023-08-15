@@ -1211,6 +1211,7 @@ MonoBehaviour:
   toys: {fileID: 7967728594984312512, guid: 85461e802dec14fbbb229cbccd2e5067, type: 3}
   snacks: {fileID: 6979252650077922001, guid: 69b55ce14b80a4f44952c3db63fbead0, type: 3}
   tableSpawnPos: {fileID: 2074557646}
+  grabSprite: {fileID: 21300000, guid: 027aec240573d46a29fc01bbfcb15643, type: 3}
 --- !u!4 &150585690
 Transform:
   m_ObjectHideFlags: 0
