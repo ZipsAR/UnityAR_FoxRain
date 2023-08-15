@@ -20,8 +20,6 @@ public class Snack : InteractItem
     {
         Logger.Log("selected Exited");
         GetComponent<Rigidbody>().useGravity = true;
-
-        GetComponent<XRGrabInteractable>().enabled = false;
         
         // Event occurs after a certain period of time as soon as the user places the Grab snack
         StartCoroutine(NotifyToInteractManagerAfterTSeconds(responseTime));
@@ -30,7 +28,8 @@ public class Snack : InteractItem
     private IEnumerator NotifyToInteractManagerAfterTSeconds(float waitSeconds)
     {
         yield return new WaitForSeconds(waitSeconds);
-        
+
+        GetComponent<XRGrabInteractable>().enabled = false;
         GetComponent<Rigidbody>().isKinematic = true;
         
         Logger.Log("Notify SnackDrop snack to InteractManager");

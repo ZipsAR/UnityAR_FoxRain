@@ -21,6 +21,18 @@ public class InteractTutorial : MonoBehaviour
         curTutorialItemType = ItemType.Toy;
     }
 
+    private void Start()
+    {
+        if (GameManager.Instance.curPetType == PetType.None)
+        {
+            StartTutorial();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void OnEnable()
     {
         InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
@@ -56,6 +68,7 @@ public class InteractTutorial : MonoBehaviour
             if (activeItems != null)
             {
                 Destroy(activeItems);
+                Destroy(spawnedTable);
             }
             return;
         }
@@ -65,17 +78,22 @@ public class InteractTutorial : MonoBehaviour
         {
             InteractEventManager.NotifyClearDialog();
             InteractEventManager.NotifyDialogShow("맛있는 음식을 펫에게 제공하세요!");
-            
+
+            Vector3 absoluteTablePos =
+                new Vector3(tableSpawnPos.position.x, GameData.floorHeight, tableSpawnPos.position.z);
+            spawnedTable = Instantiate(table, absoluteTablePos, tableSpawnPos.rotation);
+            itemSpawnPos = spawnedTable.GetComponent<TutorialDesk>().itemSpawnPosition;
             activeItems = Instantiate(snacks, itemSpawnPos.position, itemSpawnPos.rotation);
             return;
         }
         
-        // Start snack tutorial
+        // Grab snack
         if (!e.isTutorialEnd && e.isGrabbed && e.itemType == ItemType.Snack)
         {
             if (activeItems != null)
             {
                 Destroy(activeItems);
+                Destroy(spawnedTable);
             }
             return;
         }
@@ -92,7 +110,7 @@ public class InteractTutorial : MonoBehaviour
     }
     
     
-    public void StartTutorial()
+    private void StartTutorial()
     {
         // if player select pet, then "OnPetInitialized" is called
         InteractEventManager.NotifyDialogShow("함께할 펫을 선택해주세요!");

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6570278039296908385}
   - component: {fileID: 4607670496995881677}
   - component: {fileID: -5868059811731573339}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HalfOrange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,8 +113,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2273176550276457144}
   serializedVersion: 2
-  m_Mass: 8
-  m_Drag: 4
+  m_Mass: 1
+  m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -258,11 +258,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -315,7 +324,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 590131999577074372}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Attach Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5447155397531682589}
   - component: {fileID: 5447155397531682591}
   - component: {fileID: 321157096}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BoneToy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5447155396818893162}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Attach Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}

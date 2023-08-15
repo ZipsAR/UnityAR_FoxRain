@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 323658960481507235}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Attach Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 323658961194117590}
   - component: {fileID: 4538208810421709439}
   - component: {fileID: 7964863090012460504}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BallToy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,8 +129,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 629580141820727744}
   serializedVersion: 2
-  m_Mass: 8
-  m_Drag: 4
+  m_Mass: 1
+  m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -287,7 +287,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_ThrowVelocityScale: 10
+  m_ThrowVelocityScale: 1.5
   m_ThrowAngularVelocityScale: 1
   m_ForceGravityOnDetach: 0
   m_RetainTransformParent: 1

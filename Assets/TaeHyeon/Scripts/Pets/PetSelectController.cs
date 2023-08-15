@@ -16,15 +16,12 @@ public class PetSelectController : MonoBehaviour
     [SerializeField] private GameObject catObj;
     [SerializeField] private GameObject bellCatObj;
 
-    [SerializeField] private InteractTutorial tutorial;
-    
     private void Start()
     {
         switch (GameManager.Instance.curPetType)
         {
             case PetType.None:
                 petSelectCanvas.SetActive(true);
-                tutorial.StartTutorial();
                 break;
             case PetType.Corgi:
                 InteractEventManager.NotifyPetSelected(corgiObj);
@@ -85,6 +82,5 @@ public class PetSelectController : MonoBehaviour
         }
 
         GameManager.Instance.curPetType = (PetType)Enum.ToObject(typeof(PetType), petTypeInt);
-        // InteractEventManager.NotifyClearDialog();
     }
 }

@@ -61,6 +61,8 @@ public class DialogController : MonoBehaviour
         newDialog.transform.Rotate(0,180f,0);
         newDialog.GetComponent<DialogFrame>().InitDialog(id, e.content);
         
+        newDialog.GetComponent<DialogFrame>().SetImg(e.infoSprite);
+        
         curDialogList.Add(new Tuple<int, GameObject>(id, newDialog));
         
         id++;

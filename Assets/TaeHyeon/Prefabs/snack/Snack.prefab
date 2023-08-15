@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4217386589302752165}
   - component: {fileID: 4217386589302752167}
   - component: {fileID: 845068260}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Snack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4217386590015897042}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Attach Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
