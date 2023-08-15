@@ -14,6 +14,8 @@ public class GiftMovement : MonoBehaviour
     [SerializeField] private float itemApproachSpeed;
     [SerializeField] private float approachThreshold;
 
+    private AudioClip earnedClip;
+    
     private void Awake()
     {
         rotationSpeed = 540f;
@@ -22,8 +24,10 @@ public class GiftMovement : MonoBehaviour
         approachThreshold = 0.02f;
     }
     
-    public void setGift(GameObject g) => gift = g;
+    public void SetGift(GameObject g) => gift = g;
 
+    public void SetSound(AudioClip clip) => earnedClip = clip;
+    
     private IEnumerator RotationCoroutine()
     {
         while (true)
@@ -65,6 +69,8 @@ public class GiftMovement : MonoBehaviour
         }
 
         AddToInventory();
+        
+        GameManager.Instance.interactAudioManager.PlayEffectSound(earnedClip);
     }
 
     private void AddToInventory()
