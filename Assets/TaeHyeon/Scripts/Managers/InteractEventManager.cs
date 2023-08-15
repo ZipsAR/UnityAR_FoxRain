@@ -50,14 +50,14 @@ public static class InteractEventManager
         OnPetInitializedToAll?.Invoke(null, new PetArgs(petObj));
     }
 
-    public static void NotifyDialogShow(string content)
+    public static void NotifyDialogShow(string content, Sprite infoSprite = default)
     {
-        OnDialogCall?.Invoke(null, new DialogArgs(content));
+        OnDialogCall?.Invoke(null, new DialogArgs(content, infoSprite));
     }
 
     public static void NotifyClearDialog()
     {
-        OnClearDialog?.Invoke(null, new DialogArgs(default));
+        OnClearDialog?.Invoke(null, null);
     }
 
     public static void NotifyTutorialItemInfo(bool isTutorialEnd, bool isGrabbed, ItemType itemType)
@@ -93,10 +93,12 @@ public class PetArgs : EventArgs
 public class DialogArgs : EventArgs
 {
     public string content;
-
-    public DialogArgs(string content)
+    public Sprite infoSprite;
+    
+    public DialogArgs(string content, Sprite infoSprite)
     {
         this.content = content;
+        this.infoSprite = infoSprite;
     }
 }
 

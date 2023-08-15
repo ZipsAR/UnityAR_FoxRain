@@ -542,7 +542,6 @@ public abstract class PetBase : MonoBehaviour
                 Logger.Log("DetachToyFromMouth");
                 isBiting = false;
                 toyObj.transform.SetParent(null);
-                toyObj.GetComponent<Rigidbody>().isKinematic = false;
                 
                 // Enable this object to be grabbed
                 toyObj.GetComponent<XRGrabInteractable>().enabled = true;

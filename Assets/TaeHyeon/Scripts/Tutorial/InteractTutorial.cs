@@ -19,7 +19,10 @@ public class InteractTutorial : MonoBehaviour
     private void Awake()
     {
         curTutorialItemType = ItemType.Toy;
+    }
 
+    private void Start()
+    {
         if (GameManager.Instance.curPetType == PetType.None)
         {
             StartTutorial();
@@ -107,7 +110,7 @@ public class InteractTutorial : MonoBehaviour
     }
     
     
-    public void StartTutorial()
+    private void StartTutorial()
     {
         // if player select pet, then "OnPetInitialized" is called
         InteractEventManager.NotifyDialogShow("함께할 펫을 선택해주세요!");

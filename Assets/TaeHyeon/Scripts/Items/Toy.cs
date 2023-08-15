@@ -21,8 +21,8 @@ public class Toy : InteractItem
         GetComponent<Rigidbody>().useGravity = true;
 
         // Disable Grabbing of this object
-        GetComponent<XRGrabInteractable>().enabled = false;
-
+        // GetComponent<XRGrabInteractable>().enabled = false;
+        
         // Event occurs after a certain period of time as soon as the user places the Grab snack
         StartCoroutine(NotifyToInteractManagerAfterTSeconds(responseTime));
     }
@@ -30,7 +30,8 @@ public class Toy : InteractItem
     private IEnumerator NotifyToInteractManagerAfterTSeconds(float waitSeconds)
     {
         yield return new WaitForSeconds(waitSeconds);
-
+        
+        GetComponent<XRGrabInteractable>().enabled = false;
         GetComponent<Rigidbody>().isKinematic = true;
         
         Logger.Log("Notify toy Drop to InteractManager");

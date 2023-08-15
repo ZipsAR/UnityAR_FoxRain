@@ -29,6 +29,7 @@ public class GameManager : Singleton<GameManager>
         player = GameObject.Find("AR Camera").GetComponent<Player>();
         DontDestroyOnLoad(ARSessions);
         curPetType = PetType.None;
+        // InteractEventManager.NotifyDialogShow("왼손바닥을 바라보면\n여우비의 메뉴창을 불러올 수 있어요.");
     }
 
     public void QuitApp()

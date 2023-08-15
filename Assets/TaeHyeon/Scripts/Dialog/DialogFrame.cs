@@ -11,7 +11,8 @@ public class DialogFrame : MonoBehaviour
     private int dialogId; 
     [SerializeField] private Text content;
     [SerializeField] private Button nextBtn;
-
+    [SerializeField] private Image infoImg;
+    
     private void Awake()
     {
         controller = transform.parent.GetComponent<DialogController>();
@@ -29,5 +30,17 @@ public class DialogFrame : MonoBehaviour
     {
         dialogId = id;
         content.text = inputContent;
+    }
+
+    public void SetImg(Sprite eInfoSprite)
+    {
+        if (eInfoSprite == default)
+        {
+            infoImg.gameObject.SetActive(false);
+        }
+        else
+        {
+            infoImg.sprite = eInfoSprite;
+        }
     }
 }
