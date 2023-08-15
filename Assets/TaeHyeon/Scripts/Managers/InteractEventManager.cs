@@ -62,9 +62,9 @@ public static class InteractEventManager
         OnClearDialog?.Invoke(null, null);
     }
 
-    public static void NotifyTutorialItemInfo(bool isTutorialEnd, bool isGrabbed, ItemType itemType)
+    public static void NotifyTutorialItemInfo(bool isTutorialEnd, bool isGrabbed, TutorialType tutorialType)
     {
-        OnGetTutorialInfo?.Invoke(null, new TutorialItemArgs(isTutorialEnd, isGrabbed, itemType));
+        OnGetTutorialInfo?.Invoke(null, new TutorialItemArgs(isTutorialEnd, isGrabbed, tutorialType));
     }
 
     public static void NotifyDialogExitClicked()
@@ -113,12 +113,12 @@ public class TutorialItemArgs : EventArgs
 {
     public bool isTutorialEnd;
     public bool isGrabbed;
-    public ItemType itemType;
+    public TutorialType TutorialType;
     
-    public TutorialItemArgs(bool isTutorialEnd, bool isGrabbed, ItemType itemType)
+    public TutorialItemArgs(bool isTutorialEnd, bool isGrabbed, TutorialType tutorialType)
     {
         this.isTutorialEnd = isTutorialEnd;
         this.isGrabbed = isGrabbed;
-        this.itemType = itemType;
+        this.TutorialType = tutorialType;
     }
 }

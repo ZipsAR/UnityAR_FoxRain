@@ -13,10 +13,22 @@ public class DialogFrame : MonoBehaviour
     [SerializeField] private Button nextBtn;
     [SerializeField] private Image infoImg;
     
+    // Effect
+    [SerializeField] private GameObject dialogSpawnEffect; 
+    
+    // Sound
+    [SerializeField] private AudioClip dialogSpawnClip;
+    private AudioSource audioSource;
+    
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = dialogSpawnClip;
+        audioSource.Play();
         controller = transform.parent.GetComponent<DialogController>();
-        
+
+        GameObject spawnedEffect = Instantiate(dialogSpawnEffect, transform);
+        spawnedEffect.transform.localScale = Vector3.one * (5 / transform.localScale.x); 
         nextBtn.onClick.AddListener(() => controller.OnNextBtnClicked(dialogId));
         nextBtn.onClick.AddListener(InteractEventManager.NotifyDialogExitClicked);
     }

@@ -14,11 +14,11 @@ public class InteractTutorial : MonoBehaviour
     private Transform itemSpawnPos;
     private GameObject spawnedTable;
     private GameObject activeItems;
-    private ItemType curTutorialItemType;
+    private TutorialType curTutorialType;
 
     private void Awake()
     {
-        curTutorialItemType = ItemType.Toy;
+        curTutorialType = TutorialType.Toy;
     }
 
     private void Start()
@@ -63,7 +63,7 @@ public class InteractTutorial : MonoBehaviour
     private void GetTutorialInfo(object sender, TutorialItemArgs e)
     {
         // Grab toy
-        if (!e.isTutorialEnd && e.isGrabbed && e.itemType == ItemType.Toy)
+        if (!e.isTutorialEnd && e.isGrabbed && e.TutorialType == TutorialType.Toy)
         {
             if (activeItems != null)
             {
@@ -74,7 +74,7 @@ public class InteractTutorial : MonoBehaviour
         }
         
         // End toy tutorial
-        if (e.isTutorialEnd && !e.isGrabbed && e.itemType == ItemType.Toy)
+        if (e.isTutorialEnd && !e.isGrabbed && e.TutorialType == TutorialType.Toy)
         {
             InteractEventManager.NotifyClearDialog();
             InteractEventManager.NotifyDialogShow("맛있는 음식을 펫에게 제공하세요!");
@@ -88,7 +88,7 @@ public class InteractTutorial : MonoBehaviour
         }
         
         // Grab snack
-        if (!e.isTutorialEnd && e.isGrabbed && e.itemType == ItemType.Snack)
+        if (!e.isTutorialEnd && e.isGrabbed && e.TutorialType == TutorialType.Snack)
         {
             if (activeItems != null)
             {
@@ -99,11 +99,18 @@ public class InteractTutorial : MonoBehaviour
         }
         
         // End snack tutorial
-        if (e.isTutorialEnd && !e.isGrabbed && e.itemType == ItemType.Snack)
+        if (e.isTutorialEnd && !e.isGrabbed && e.TutorialType == TutorialType.Snack)
         {
             InteractEventManager.NotifyClearDialog();
-            InteractEventManager.NotifyDialogShow("펫의 머리를 쓰다듬어 칭찬해주세요!");
+            InteractEventManager.NotifyDialogShow("레벨업에 성공했어요!\n상자를 확인하고,\n펫의 머리를 쓰다듬어 칭찬해주세요!");
             return;
+        }
+
+        // Earned Money
+        if (e.isTutorialEnd && !e.isGrabbed && e.TutorialType == TutorialType.Money)
+        {
+            InteractEventManager.NotifyClearDialog();
+            InteractEventManager.NotifyDialogShow("이제 튜토리얼이 모두 끝났어요!!\n펫 하우스를 꾸미고,\n상점에서 아이템을 사러가요!");
         }
         
         
