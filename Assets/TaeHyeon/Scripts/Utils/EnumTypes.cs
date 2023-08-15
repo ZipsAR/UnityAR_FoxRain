@@ -30,6 +30,12 @@ namespace EnumTypes
         Bite = 5,
         Spit = 6,
     }
+
+    public enum ItemType
+    {
+        Toy,
+        Snack,
+    }
     
     #region Pet
     
@@ -79,6 +85,7 @@ namespace EnumTypes
             Cleanliness,
             Exp,
             Level,
+            Money,
         }
         
     #endregion

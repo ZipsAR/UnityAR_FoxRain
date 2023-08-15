@@ -36,6 +36,8 @@ public class InteractUIManager : MonoBehaviour
     // Exp
     public Slider expSlider;
     
+    // Gold
+    public Text moneyText;
     
     private void Awake()
     {
@@ -90,6 +92,9 @@ public class InteractUIManager : MonoBehaviour
         // Exp
         expSlider.value = initializedPetStat.exp / 100f;
         
+        // Gold
+        moneyText.text = FileIOSystem.Instance.invendatabase.money.ToString();
+        
         // Stat
         foreach (StatUIRef statUIRef in statUIList)
         {
@@ -128,6 +133,10 @@ public class InteractUIManager : MonoBehaviour
             // Exp
             case PetStatNames.Exp:
                 expSlider.value = e.postStatAmount / 100f;
+                return;
+            
+            case PetStatNames.Money:
+                moneyText.text = e.postStatAmount.ToString();
                 return;
             
             default:

@@ -422,6 +422,12 @@ public abstract class PetBase : MonoBehaviour
     
             public void EatEnd()
             {
+                // Tutorial
+                if (snackObj != null && snackObj.TryGetComponent(out TutorialItem tutorialItem))
+                {
+                    tutorialItem.EndItemTutorial(ItemType.Snack);
+                }
+                
                 isCoroutinePlayingList[(int)Cmd.Eat] = false;
                 Destroy(snackObj);
                 snackObj = null;
@@ -550,6 +556,13 @@ public abstract class PetBase : MonoBehaviour
                 UpdateStat(PetStatNames.Tiredness, 5);
                 UpdateStat(PetStatNames.Exp, 40);
                 Logger.Log("exp update plus 40");
+                
+                
+                // Tutorial
+                if (toyObj.TryGetComponent(out TutorialItem tutorialItem))
+                {
+                    tutorialItem.EndItemTutorial(ItemType.Toy);
+                }
             }
     
             public void SpitEnd()

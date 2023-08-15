@@ -20,6 +20,11 @@ public class GiftBox : MonoBehaviour
     [SerializeField] private GameObject afterEffect;
     [SerializeField] private GameObject giftEffect;
     
+    // Sound
+    [SerializeField] private AudioClip spawningBoxClip;
+    [SerializeField] private AudioClip openingBoxClip;
+    [SerializeField] private AudioClip earnedClip;
+
     private static readonly int Open = Animator.StringToHash("Open");
     
     private float risingTime;
@@ -33,6 +38,7 @@ public class GiftBox : MonoBehaviour
         lid = lidObj.GetComponent<Lid>();
         lid.SetCloseAfterSecond(risingTime);
 
+        GameManager.Instance.interactAudioManager.PlayEffectSound(spawningBoxClip);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -55,13 +61,16 @@ public class GiftBox : MonoBehaviour
 
             GiftMovement giftMovement = parentOfGift.AddComponent<GiftMovement>();
             giftMovement.gameObject.name = "parentOfGift";
-            giftMovement.setGift(gift);
+            giftMovement.SetGift(gift);
             giftMovement.StartRotating();
             giftMovement.StartRising(risingTime);
             giftMovement.SetCoinEarnedValue(coinEarnedValue);
-            
+            giftMovement.SetSound(earnedClip);
+                
             Instantiate(giftEffect, parentOfGift.transform);
 
+            // Sound
+            GameManager.Instance.interactAudioManager.PlayEffectSound(openingBoxClip);
         }    
     }
 
