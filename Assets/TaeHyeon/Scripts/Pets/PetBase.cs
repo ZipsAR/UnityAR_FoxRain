@@ -547,8 +547,7 @@ public abstract class PetBase : MonoBehaviour
                 // Enable this object to be grabbed
                 toyObj.GetComponent<XRGrabInteractable>().enabled = true;
                 toyObj.GetComponent<Rigidbody>().isKinematic = false;
-                Invoke(nameof(SetIsKinematicFalse), 1f);
-                
+
                 // Sound
                 PlaySound(PetSounds.Bark2);
                 
@@ -562,6 +561,12 @@ public abstract class PetBase : MonoBehaviour
                 if (toyObj.TryGetComponent(out TutorialItem tutorialItem))
                 {
                     tutorialItem.EndItemTutorial(TutorialType.Toy);
+                    Destroy(toyObj, 2f);
+                    toyObj = null;
+                }
+                else
+                {
+                    Invoke(nameof(SetIsKinematicFalse), 1f);
                 }
             }
     

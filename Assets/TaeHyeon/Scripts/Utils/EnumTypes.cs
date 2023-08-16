@@ -37,6 +37,13 @@ namespace EnumTypes
         Snack,
         Money,
     }
+
+    public enum DialogOrient
+    {
+        Center,
+        Left,
+        Right,
+    }
     
     #region Pet
     

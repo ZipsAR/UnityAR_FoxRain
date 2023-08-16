@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EnumTypes;
 using UnityEngine;
 
 public class DialogController : MonoBehaviour
@@ -10,13 +11,16 @@ public class DialogController : MonoBehaviour
     
     private float forward;
     private float up;
-
+    private float side;
+    
     private int id;
     
     private void Awake()
     {
         forward = 3f;
         up = 1f;
+        side = 3f;
+        
         id = 0;
         curDialogList = new List<Tuple<int, GameObject>>();
         
@@ -49,10 +53,21 @@ public class DialogController : MonoBehaviour
         GameObject newDialog = Instantiate(dialogCanvas, transform);
 
         var playerTransform = GameManager.Instance.player.transform;
+        Vector3 playerPos = playerTransform.position;
+        
         Vector3 playerForward = playerTransform.forward;
         playerForward = new Vector3(playerForward.x, 0f, playerForward.z).normalized;
-        Vector3 playerPos = playerTransform.position;
-        Vector3 moveVector = playerForward * forward + Vector3.up * up;
+
+        Vector3 playerRight = playerTransform.right;
+        playerRight = new Vector3(playerRight.x, 0f, playerRight.z).normalized;
+
+        Vector3 moveVector = e.dialogOrient switch
+        {
+            DialogOrient.Center => playerForward * forward + Vector3.up * up,
+            DialogOrient.Left => -playerRight * side + Vector3.up * up,
+            DialogOrient.Right => playerRight * side + Vector3.up * up,
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
         Vector3 newPosition = playerPos + moveVector;
         
