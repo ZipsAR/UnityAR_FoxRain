@@ -422,21 +422,23 @@ public abstract class PetBase : MonoBehaviour
     
             public void EatEnd()
             {
+                
                 // Tutorial
                 if (snackObj != null && snackObj.TryGetComponent(out TutorialItem tutorialItem))
                 {
                     tutorialItem.EndItemTutorial(TutorialType.Snack);
                 }
                 
-                isCoroutinePlayingList[(int)Cmd.Eat] = false;
-                Destroy(snackObj);
-                snackObj = null;
-                
                 // Stat
                 UpdateStat(PetStatNames.Fullness, 15);
                 UpdateStat(PetStatNames.Exp, 40);
                 UpdateStat(PetStatNames.Tiredness, -10);
 
+                
+                isCoroutinePlayingList[(int)Cmd.Eat] = false;
+                Destroy(snackObj);
+                snackObj = null;
+                
                 Logger.Log("EatEnd is activate");
             }
         
@@ -547,8 +549,7 @@ public abstract class PetBase : MonoBehaviour
                 // Enable this object to be grabbed
                 toyObj.GetComponent<XRGrabInteractable>().enabled = true;
                 toyObj.GetComponent<Rigidbody>().isKinematic = false;
-                Invoke(nameof(SetIsKinematicFalse), 1f);
-                
+
                 // Sound
                 PlaySound(PetSounds.Bark2);
                 
@@ -562,6 +563,12 @@ public abstract class PetBase : MonoBehaviour
                 if (toyObj.TryGetComponent(out TutorialItem tutorialItem))
                 {
                     tutorialItem.EndItemTutorial(TutorialType.Toy);
+                    Destroy(toyObj, 2f);
+                    toyObj = null;
+                }
+                else
+                {
+                    Invoke(nameof(SetIsKinematicFalse), 1f);
                 }
             }
     

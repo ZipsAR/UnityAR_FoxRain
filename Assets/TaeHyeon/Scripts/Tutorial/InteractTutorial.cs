@@ -41,12 +41,15 @@ public class InteractTutorial : MonoBehaviour
         InteractEventManager.OnPetInitializedToAll += OnPetInitialized;
         InteractEventManager.OnGetTutorialInfo -= GetTutorialInfo;
         InteractEventManager.OnGetTutorialInfo += GetTutorialInfo;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
+        InteractEventManager.OnPetStatChanged += OnPetStatChanged;
     }
 
     private void OnDisable()
     {
         InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
         InteractEventManager.OnGetTutorialInfo -= GetTutorialInfo;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
     }
 
     private void OnPetInitialized(object sender, PetArgs e)
@@ -104,20 +107,18 @@ public class InteractTutorial : MonoBehaviour
         if (e.isTutorialEnd && !e.isGrabbed && e.TutorialType == TutorialType.Snack)
         {
             InteractEventManager.NotifyClearDialog();
-            InteractEventManager.NotifyDialogShow("레벨업에 성공했어요!\n상자를 확인하고,\n펫의 머리를 쓰다듬어 칭찬해주세요!");
+            InteractEventManager.NotifyDialogShow("이제 튜토리얼이 모두 끝났어요!!\n펫의 머리를 쓰다듬어 칭찬해주세요!\n나만의 펫 하우스도 꾸며볼까요?");
             return;
         }
-
-        // Earned Money
-        if (e.isTutorialEnd && !e.isGrabbed && e.TutorialType == TutorialType.Money)
-        {
-            InteractEventManager.NotifyClearDialog();
-            InteractEventManager.NotifyDialogShow("이제 튜토리얼이 모두 끝났어요!!\n펫 하우스를 꾸미고,\n상점에서 아이템을 사러가요!");
-        }
-        
-        
     }
     
+    private void OnPetStatChanged(object sender, PetStatChangedEventArgs e)
+    {
+        if (e.changedStatName == PetStatNames.Level && e.postStatAmount == 2)
+        {
+            InteractEventManager.NotifyDialogShow("레벨업에 성공했어요!\n상자를 열어 골드를 획득해요", dialogOrient: DialogOrient.Right);
+        }
+    }
     
     private void StartTutorial()
     {

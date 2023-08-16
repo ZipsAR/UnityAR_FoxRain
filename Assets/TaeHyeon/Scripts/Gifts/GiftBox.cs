@@ -72,9 +72,6 @@ public class GiftBox : MonoBehaviour
 
             // Sound
             GameManager.Instance.interactAudioManager.PlayEffectSound(openingBoxClip);
-            
-            // Notify to InteractTutorial
-            InteractEventManager.NotifyTutorialItemInfo(true, false, TutorialType.Money);
         }    
     }
 

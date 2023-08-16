@@ -52,9 +52,9 @@ public static class InteractEventManager
         OnPetInitializedToAll?.Invoke(null, new PetArgs(petObj));
     }
 
-    public static void NotifyDialogShow(string content, Sprite infoSprite = default)
+    public static void NotifyDialogShow(string content, Sprite infoSprite = default, DialogOrient dialogOrient = DialogOrient.Center)
     {
-        OnDialogCall?.Invoke(null, new DialogArgs(content, infoSprite));
+        OnDialogCall?.Invoke(null, new DialogArgs(content, infoSprite, dialogOrient));
     }
 
     public static void NotifyClearDialog()
@@ -101,11 +101,13 @@ public class DialogArgs : EventArgs
 {
     public string content;
     public Sprite infoSprite;
+    public DialogOrient dialogOrient;
     
-    public DialogArgs(string content, Sprite infoSprite)
+    public DialogArgs(string content, Sprite infoSprite, DialogOrient dialogOrient)
     {
         this.content = content;
         this.infoSprite = infoSprite;
+        this.dialogOrient = dialogOrient;
     }
 }
 
