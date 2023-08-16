@@ -16,6 +16,8 @@ public class InteractTutorial : MonoBehaviour
     private GameObject activeItems;
     private TutorialType curTutorialType;
 
+    [SerializeField] private Sprite grabSprite;
+    
     private void Awake()
     {
         curTutorialType = TutorialType.Toy;
@@ -57,7 +59,7 @@ public class InteractTutorial : MonoBehaviour
         itemSpawnPos = spawnedTable.GetComponent<TutorialDesk>().itemSpawnPosition;
         activeItems = Instantiate(toys, itemSpawnPos.position, itemSpawnPos.rotation);
         
-        InteractEventManager.NotifyDialogShow("귀여운 장난감을 잡아서 펫과 놀아보세요!");
+        InteractEventManager.NotifyDialogShow("귀여운 장난감을\n잡아서 펫과 놀아보세요!\nGrab모션으로 잡을 수 있어요!", grabSprite);
     }
 
     private void GetTutorialInfo(object sender, TutorialItemArgs e)
