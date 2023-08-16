@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class InventoryDatabase
 {
-    int money = 0;
+    public int money = 0;
     public List<MyData> mydata = new();
 }
 
@@ -23,7 +23,7 @@ public class HousingObjectdatabase
 [Serializable]
 public class StatDatabase
 {
-      //ÅÂÇöÀÌ ½ºÅÝ Á¤º¸ÀÎµ¥, ¾îÂ÷ÇÇ ÅÂÇöÀÌ°¡ ¸¸µé¾úÀ»°Å°°À¸´Ï ³ªÁß¿¡ ½á¸Ô¾îº½
+      public List<PetStatBase> savedStats = new();
 }
 
 
@@ -38,18 +38,14 @@ public class MyData
 
 
 
-//³»°¡ ¹èÄ¡½ÃÅ² ÇÏ¿ìÂ¡ °¡±¸¿¡ ´ëÇÑ Á¤º¸
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Å² ï¿½Ï¿ï¿½Â¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 [Serializable]
 public class ObjectLocation
 {
     public int InstanceId;
-
     public Vector3Int location;
     public Quaternion rotation;
-
     public Vector2Int size;
-
     public int id;
-
     public bool placementstatus = false;
 }

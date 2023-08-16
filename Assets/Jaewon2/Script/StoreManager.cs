@@ -5,32 +5,19 @@ using UnityEngine;
 public class StoreManager : MonoBehaviour
 {
     public GameObject[] objList;
-    private static StoreManager instance;
+    public static StoreManager Instance;
     public UICon uImanager;
     public ItemMov itemMov;
+    public GetData getData;
     public GameObject viewItem_store;
     public GameObject viewItem_Inven;
     public int itemindex;
-
-    public static StoreManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<StoreManager>();
-                if (instance == null)
-                {
-                    GameObject singletonObject = new GameObject(typeof(StoreManager).Name);
-                    instance = singletonObject.AddComponent<StoreManager>();
-                }
-                DontDestroyOnLoad(instance.gameObject);
-            }
-            return instance;
-        }
-    }
+    public int Itemindex_Inven;
+    public SFXCon sfx;
+    public PanelManager panelManager;
     private void OnEnable()
     {
+        Instance = this;
         Debug.Log("√ ±‚»≠");
         itemindex = -1;
     }

@@ -2,23 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectSystem : Singleton<EffectSystem>
+public class EffectSystem : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     public Transform Parentposition;
-
     public ParticleSystem placedeffect;
     public ParticleSystem spawneffect;
-    
     private GameObject placedeffectobj;
     private GameObject spawneffectobj;
 
+    public static EffectSystem Instance;
 
-    void Start()
+
+    private void Start()
     {
-        
+        if (EffectSystem.Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -46,8 +50,8 @@ public class EffectSystem : Singleton<EffectSystem>
     {
         if (!placedeffectobj)
         {
-            placedeffectobj = Instantiate(placedeffect.transform.gameObject, Parentposition);
-            placedeffectobj.transform.localPosition = position;
+            placedeffectobj = Instantiate(placedeffect.transform.gameObject);
+            placedeffectobj.transform.position = position;
             placedeffectobj.GetComponent<ParticleSystem>().Play();
         }
     }

@@ -28,11 +28,11 @@ public class ItemMov : MonoBehaviour
     public void GetButton()
     {
         isSelected = !isSelected;
-        if (StoreManager.Instance.viewItem_store != null)
+        if (StoreManager.Instance.viewItem_store.activeSelf)
         {
             DeleteAllChild();
         }
-        if (StoreManager.Instance.viewItem_Inven != null)
+        if (StoreManager.Instance.viewItem_Inven.activeSelf)
         {
             DeleteAllChild();
         }
@@ -40,31 +40,64 @@ public class ItemMov : MonoBehaviour
     }
     public void ViewObj()
     {
-        Debug.Log(this.gameObject.name);
         if (this.gameObject.name == "ItemButton(Clone)")
         {
+            //this.GetComponent<GetData>().GetInfo();
             if (childitem.CompareTag("furniture"))
             {
                 StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
                 StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = viewScale;
             }
-            else
+            if (childitem.CompareTag("toy"))
             {
                 StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
-                StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(800,800,800);
+                StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(800, 800, 800);
+            }
+            if (childitem.CompareTag("food"))
+            {
+                StoreManager.Instance.viewItem_store = GameObject.Instantiate(childitem, viewObj.transform);
+                StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(100,100,100);
+                if (StoreManager.Instance.itemindex == 27)
+                {
+                    StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(100000, 100000, 100000);
+                }
+                if (StoreManager.Instance.itemindex == 23)
+                {
+                    StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    StoreManager.Instance.viewItem_store.gameObject.GetComponent<Transform>().localScale = new Vector3(2500, 2500, 2500);
+                }
             }
         }
         if (this.gameObject.name == "ItemButton_Inven(Clone)")
         {
-            if (childitem.CompareTag("furniture"))
+            this.GetComponent<GetData>().GetInfo_Inven();
+            if (childitem_Inven.CompareTag("furniture"))
             {
-                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem, viewObj_Inven.transform);
+                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
                 StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = viewScale;
             }
-            else
+            if (childitem_Inven.CompareTag("toy"))
             {
-                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem, viewObj_Inven.transform);
+                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
                 StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(800, 800, 800);
+            }
+            if (childitem_Inven.CompareTag("food"))
+            {
+                StoreManager.Instance.viewItem_Inven = GameObject.Instantiate(childitem_Inven, viewObj_Inven.transform);
+                StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(100, 100, 100);
+                if (StoreManager.Instance.Itemindex_Inven == 27)
+                {
+                    StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(100000, 100000, 100000);
+                    Debug.Log("¿Œµ¶Ω∫ == 27");
+                }
+                if (StoreManager.Instance.Itemindex_Inven == 23)
+                {
+                    StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localPosition = new Vector3(0, -30, 0);
+                    StoreManager.Instance.viewItem_Inven.gameObject.GetComponent<Transform>().localScale = new Vector3(2500, 2500, 2500);
+                    Debug.Log("¿Œµ¶Ω∫ == 23");
+                }
             }
         }
     }
@@ -73,18 +106,44 @@ public class ItemMov : MonoBehaviour
     {
         if (StoreManager.Instance.viewItem_store != null)
         {
-            StoreManager.Instance.viewItem_store.transform.Rotate(new Vector3(0, 10, 0) * Time.deltaTime);
+            StoreManager.Instance.viewItem_store.transform.Rotate(new Vector3(0, 5, 0) * Time.deltaTime);
         }
         if (StoreManager.Instance.viewItem_Inven != null)
         {
-            StoreManager.Instance.viewItem_Inven.transform.Rotate(new Vector3(0, 10, 0) * Time.deltaTime);
+            StoreManager.Instance.viewItem_Inven.transform.Rotate(new Vector3(0, 5, 0) * Time.deltaTime);
         }
     }
     public void DeleteAllChild()
     {
         if (this.CompareTag("Store"))
-            Destroy(StoreManager.Instance.viewItem_store.gameObject);
+        {
+            //Destroy(StoreManager.Instance.viewItem_store.gameObject);
+            StoreManager.Instance.viewItem_store.SetActive(false);
+        }
         if (this.CompareTag("Inven"))
-            Destroy(StoreManager.Instance.viewItem_Inven.gameObject);
+        {
+            //Destroy(StoreManager.Instance.viewItem_Inven.gameObject);
+            StoreManager.Instance.viewItem_Inven.SetActive(false);
+        }
     }
+    /*public void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(this.gameObject.name);
+        if(this.gameObject.name == "ItemButton(Clone)")
+        {
+            GetButton();
+            this.GetComponent<GetData>().GetInfo();
+            this.GetComponent<GetData>().ItemInfo();
+            this.GetComponent<ParticleManager>().PlayParticle();
+            this.GetComponent<SFXCon>().GetButton();
+        }
+        if(this.gameObject.name == "ItemButton_Inven(Clone)")
+        {
+            GetButton();
+            this.GetComponent<GetData>().GetInfo_Inven();
+            this.GetComponent<GetData>().ItemInfo_Inven();
+            this.GetComponent<ParticleManager>().PlayParticle();
+            this.GetComponent<SFXCon>().GetButton();
+        }
+    }*/
 }

@@ -3,17 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Logger = ZipsAR.Logger;
+using PlayMode = EnumTypes.PlayMode;
 
 public class Player : MonoBehaviour
 {
     private float idleMoveThreshold;
     private Vector3 previousPos;
     public float idleTime { get; private set; }
-
+    public float headToChestDistance;
     private void Start()
     {
         idleMoveThreshold = 0.005f;
         idleTime = 0f;
+        headToChestDistance = 0.4f;
+        
         previousPos = transform.position;
     }
 
@@ -31,7 +34,8 @@ public class Player : MonoBehaviour
         previousPos = transform.position;
     }
 
-
+    public Vector3 GetChestPosition() => transform.position + Vector3.down * headToChestDistance;
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -40,12 +44,16 @@ public class Player : MonoBehaviour
             case PlayMode.None:
                 break;
             case PlayMode.InteractMode:
-                Gizmos.DrawWireSphere(transform.position, GameManager.Instance.interactManager.interactData.playerPetMaxDistance);
+                Gizmos.DrawWireSphere(transform.position, GameManager.Instance.interactManager.GetInteractData().playerPetMaxDistance);
                 break;
             case PlayMode.StrollMode:
                 Gizmos.DrawWireSphere(transform.position, GameManager.Instance.strollManager.strollData.playerPetMaxDistance);
                 break;
             case PlayMode.AgilityMode:
+                break;
+            case PlayMode.StoreMode:
+                break;
+            case PlayMode.HousingMode:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
