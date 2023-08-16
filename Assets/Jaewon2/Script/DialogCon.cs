@@ -10,6 +10,12 @@ public class DialogCon : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.storeGet++;
+        if (GameManager.Instance.storeGet == 1)
+        {
+            InteractEventManager.NotifyClearDialog();
+            InteractEventManager.NotifyDialogShow("펫을 위한 가구를 확인해보세요! \n 상호작용 : Pinch");
+            furniture++;
+        }
     }
     public  void GetPanel()
     {
