@@ -294,6 +294,8 @@ public class InteractManager : MonoBehaviour
         /// <param name="snackTransform">Dropped snack position</param>
         public void NotifySnackDrop(Transform snackTransform)
         {
+            if(pet == null) return;
+            
             StartCoroutine(NotifySnackDropSequence(snackTransform));
             Logger.Log("notify pet to snack is dropped");
         }
@@ -328,6 +330,8 @@ public class InteractManager : MonoBehaviour
         /// <param name="toyTransform">Dropped toy position</param>
         public void NotifyToyDrop(Transform toyTransform)
         {
+            if(pet == null) return;
+            
             StartCoroutine(NotifyToyDropSequence(toyTransform));
             Logger.Log("notify pet to toy is dropped");
         }

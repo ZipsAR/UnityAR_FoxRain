@@ -1091,40 +1091,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invendatabase:
-    money: 50000
+    money: 10000
     mydata:
     - id: 1000
       count: 2
     - id: 1001
-      count: 2
+      count: 1
     - id: 1002
-      count: 2
+      count: 3
     - id: 1003
       count: 2
-    - id: 1005
+    - id: 1004
       count: 2
+    - id: 1005
+      count: 1
+    - id: 1006
+      count: 1
+    - id: 1007
+      count: 1
+    - id: 1008
+      count: 2
+    - id: 1009
+      count: 3
+    - id: 1010
+      count: 3
+    - id: 1011
+      count: 1
+    - id: 1012
+      count: 3
+    - id: 1013
+      count: 2
+    - id: 1014
+      count: 1
+    - id: 1015
+      count: 1
+    - id: 2000
+      count: 3
     - id: 2001
       count: 1
     - id: 2002
       count: 2
-    - id: 3001
-      count: 2
-    - id: 3002
+    - id: 2003
       count: 2
     - id: 2004
-      count: 2
+      count: 1
     - id: 2005
       count: 2
+    - id: 2006
+      count: 1
+    - id: 2007
+      count: 2
+    - id: 2008
+      count: 2
+    - id: 3000
+      count: 1
+    - id: 3001
+      count: 1
+    - id: 3002
+      count: 3
     - id: 3003
       count: 2
     - id: 3004
-      count: 2
-    - id: 3005
-      count: 2
-    - id: 1007
-      count: 2
-    - id: 1010
-      count: 2
+      count: 1
   housingdatabase:
     objectsLocation: []
   statdatabase:
