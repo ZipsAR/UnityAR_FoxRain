@@ -422,21 +422,23 @@ public abstract class PetBase : MonoBehaviour
     
             public void EatEnd()
             {
+                
                 // Tutorial
                 if (snackObj != null && snackObj.TryGetComponent(out TutorialItem tutorialItem))
                 {
                     tutorialItem.EndItemTutorial(TutorialType.Snack);
                 }
                 
-                isCoroutinePlayingList[(int)Cmd.Eat] = false;
-                Destroy(snackObj);
-                snackObj = null;
-                
                 // Stat
                 UpdateStat(PetStatNames.Fullness, 15);
                 UpdateStat(PetStatNames.Exp, 40);
                 UpdateStat(PetStatNames.Tiredness, -10);
 
+                
+                isCoroutinePlayingList[(int)Cmd.Eat] = false;
+                Destroy(snackObj);
+                snackObj = null;
+                
                 Logger.Log("EatEnd is activate");
             }
         

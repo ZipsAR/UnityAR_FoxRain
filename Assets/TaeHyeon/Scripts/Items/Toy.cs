@@ -19,7 +19,8 @@ public class Toy : InteractItem
     {
         Logger.Log("selected Exited");
         GetComponent<Rigidbody>().useGravity = true;
-
+        GetComponent<Rigidbody>().isKinematic = false;
+        
         // Disable Grabbing of this object
         // GetComponent<XRGrabInteractable>().enabled = false;
         
