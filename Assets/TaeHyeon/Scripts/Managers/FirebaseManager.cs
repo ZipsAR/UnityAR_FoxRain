@@ -8,13 +8,14 @@ using UnityEngine;
 public class FirebaseManager : Singleton<FirebaseManager>
 {
     private FirebaseApp _app;
-    private DatabaseReference _reference;
+    private DatabaseReference _rootRef;
     private bool isFirebaseReady;
-    
+
     protected override void Awake()
     {
         base.Awake();
         
+        // Check if firebase is ready
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             var dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available) {
@@ -37,42 +38,68 @@ public class FirebaseManager : Singleton<FirebaseManager>
         AppOptions options = new AppOptions
             { DatabaseUrl = new Uri("https://foxrain-398a4-default-rtdb.firebaseio.com/") };
         _app = FirebaseApp.Create(options);
-        // _reference = FirebaseDatabase.DefaultInstance.GetReference("pet");
-        _reference = FirebaseDatabase.DefaultInstance.RootReference;
+        _rootRef = FirebaseDatabase.DefaultInstance.RootReference;
+        isFirebaseReady = true;
+    }
+    
 
-        // Check for data in child in selected location
-        _reference.GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted)
+    // Method for determining whether or not the input path has data
+    public void IsDataExistInPath(Action<bool, List<string>> callback, List<string> paths)
+    {
+        if (!isFirebaseReady)
+        {
+            Debug.LogError("firebase is not ready");
+        }
+
+        DatabaseReference reference = _rootRef;
+        
+        foreach (string s in paths)
+        {
+            reference = reference.Child(s);
+        }
+
+        reference.GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCompleted)
             {
-                Debug.LogError("Error occurred while fetching data");
-            }
-            else if (task.IsCompleted)
-            {
-                if (task.Result.Exists)
-                {
-                    // Data exists at the specific reference
-                    Debug.Log("File exist");
-                    isFirebaseReady = true;
-                }
-                else
-                {
-                    Debug.LogError("No data exists at the specific reference");
-                }
+                callback(task.Result.Exists, paths);
             }
         });
     }
+
+    public void SetPetStat(PetStatBase stat)
+    {
+        if (!isFirebaseReady) Debug.LogError("firebase is not ready");
+        
+        string json = JsonUtility.ToJson(stat);
+
+        _rootRef.Child("pet").Child("stat").SetRawJsonValueAsync(json);
+    }
+
+    public void GetPetStat(Action<PetStatBase> callback)
+    {
+        if (!isFirebaseReady) Debug.LogError("firebase is not ready");
+
+        _rootRef.Child("pet").Child("stat").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                string json = snapshot.GetRawJsonValue();
+                PetStatBase stat = JsonUtility.FromJson<PetStatBase>(json);
+                callback(stat);
+            }
+        });
+    }
+
 
     public void GetPetName(Action<string> callback)
     {
         Debug.Log("GetPetName called");
 
-        if (!isFirebaseReady)
-        {
-            Debug.LogError("firebase is not ready");
-            return;
-        }
+        if (!isFirebaseReady) Debug.LogError("firebase is not ready");
 
-        _reference.Child("pet").Child("name").GetValueAsync().ContinueWith(task =>
+        _rootRef.Child("pet").Child("name").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsCompleted)
             {
@@ -85,7 +112,9 @@ public class FirebaseManager : Singleton<FirebaseManager>
     {
         Debug.Log("SetPetName called");
 
-        _reference.Child("pet").Child("name").SetValueAsync(petName);
+        if (!isFirebaseReady) Debug.LogError("firebase is not ready");
+
+        _rootRef.Child("pet").Child("name").SetValueAsync(petName);
     }
     
     #region Incompleteness
@@ -102,7 +131,7 @@ public class FirebaseManager : Singleton<FirebaseManager>
         
         var list = new List<T>();
 
-        _reference.GetValueAsync().ContinueWith(task =>
+        _rootRef.GetValueAsync().ContinueWith(task =>
         {
             if (task.IsCompleted)
             {
@@ -147,9 +176,9 @@ public class FirebaseManager : Singleton<FirebaseManager>
         }
         
         string json = JsonUtility.ToJson(stat);
-        string key = _reference.Push().Key;
+        string key = _rootRef.Push().Key;
 
-        _reference.Child(key).SetRawJsonValueAsync(json);
+        _rootRef.Child(key).SetRawJsonValueAsync(json);
 
         return true;
     }
