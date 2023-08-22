@@ -67,20 +67,34 @@ public class FirebaseManager : Singleton<FirebaseManager>
         });
     }
 
-    public void SetPetStat(PetStatBase stat)
+    public void SetPetStatTo(PetStatBase stat, List<string> paths)
     {
         if (!isFirebaseReady) Debug.LogError("firebase is not ready");
         
+        DatabaseReference reference = _rootRef;
+        
+        foreach (string s in paths)
+        {
+            reference = reference.Child(s);
+        }
+        
         string json = JsonUtility.ToJson(stat);
-
-        _rootRef.Child("pet").Child("stat").SetRawJsonValueAsync(json);
+        
+        reference.SetRawJsonValueAsync(json);
     }
 
-    public void GetPetStat(Action<PetStatBase> callback)
+    public void GetPetStatFrom(Action<PetStatBase> callback, List<string> paths)
     {
         if (!isFirebaseReady) Debug.LogError("firebase is not ready");
 
-        _rootRef.Child("pet").Child("stat").GetValueAsync().ContinueWith(task =>
+        DatabaseReference reference = _rootRef;
+
+        foreach (string s in paths)
+        {
+            reference = reference.Child(s);
+        }
+        
+        reference.GetValueAsync().ContinueWith(task =>
         {
             if (task.IsCompleted)
             {
