@@ -31,7 +31,7 @@ public class TestFirebase : MonoBehaviour
             speed = 9
         };
         // FirebaseManager.Instance.SetPetStat(testStat);
-        FirebaseManager.Instance.GetPetStat(GetPetStat);
+        // FirebaseManager.Instance.GetPetStat(GetPetStat);
 
     }
 

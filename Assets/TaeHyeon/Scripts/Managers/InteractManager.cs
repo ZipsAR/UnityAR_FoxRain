@@ -13,6 +13,7 @@ public class InteractManager : MonoBehaviour
     // Pet
     private PetBase pet;
     private bool isPetInitialized;
+    private bool otherManagerInitialized;
     
     // Manager
     [SerializeField] private InteractData interactData;
@@ -59,15 +60,33 @@ public class InteractManager : MonoBehaviour
 
         if (GameManager.Instance.curPetType != PetType.None)
         {
-            SaveStat();
+            // SaveStat();
+            FirebaseManager.Instance.SetPetStat(pet.GetStat());
             SaveMoney();
         }
     }
 
     private void Update()
     {
-        if(!isPetInitialized) return;
-        
+        if (!otherManagerInitialized)
+        {
+            if (isPetInitialized)
+            {
+                InteractEventManager.NotifyPetInitializedToAll(pet.gameObject);
+
+                pet.SetPetAnimationMode(PlayMode.InteractMode);
+
+                // Stat for distance
+                prevPetPos = pet.gameObject.transform.position;
+
+                otherManagerInitialized = true;
+            }
+            else
+            {
+                return;
+            }
+        }
+
         if(cmdQueue.Count != 0) CmdQueueManager.ShowCurQueue(cmdQueue);
         
         // Do not run other commands if the pet is running a command
@@ -103,45 +122,35 @@ public class InteractManager : MonoBehaviour
     private void OnPetInitializedToManager(object sender, PetArgs e)
     {
         pet = e.petObj.GetComponent<PetBase>();
-        
-        // File exist
-        if (FileIOSystem.Instance.IsFileExist(FileIOSystem.StatFilename))
+
+        // Load stat from firebase
+        FirebaseManager.Instance.IsDataExistInPath(CheckPetStatInDB, new List<string>() { "pet", "stat" });
+    }
+
+    private void CheckPetStatInDB(bool isExist, List<string> paths)
+    {
+        if (isExist)
         {
-            PetStatBase localStat = LoadStat((int)GameManager.Instance.curPetType);
-            
-            // File exists but no stat information corresponding to the current pet
-            if (CheckStatIsNull(localStat))
-            {
-                pet.InitializeStatByDefault();
-                SaveStat();
-                Logger.Log("file exist, but no this pet stat");   
-            }
-            // Saved file has current pet information
-            else
-            {
-                pet.SetPetStatBase(localStat);
-                Logger.Log("Load Saved stat file");    
-            }
+            Logger.Log("db is exist");
+            FirebaseManager.Instance.GetPetStat(OnGetPetStat);
         }
-        // No File
         else
         {
             pet.InitializeStatByDefault();
-            SetEmptyListToDatabase();
-            SaveStat();
-            Logger.Log("there is no saved stat file");
+            FirebaseManager.Instance.SetPetStat(pet.GetStat());
+            
+            isPetInitialized = true;
         }
-        
-        pet.SetPetAnimationMode(PlayMode.InteractMode);
-     
-        // Stat for distance
-        prevPetPos = pet.gameObject.transform.position;
-        
-        InteractEventManager.NotifyPetInitializedToAll(pet.gameObject);
+    }
 
+    private void OnGetPetStat(PetStatBase statDB)
+    {
+        Logger.Log("get pet stat from db");
+        pet.SetPetStatBase(statDB);
+       
         isPetInitialized = true;
     }
-    
+
     private void InitializeInteractData()
     {
         interactData.playerPetMaxDistance = 2f;
