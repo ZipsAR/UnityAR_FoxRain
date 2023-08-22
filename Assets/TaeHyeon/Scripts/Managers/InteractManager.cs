@@ -61,7 +61,7 @@ public class InteractManager : MonoBehaviour
         if (GameManager.Instance.curPetType != PetType.None)
         {
             // SaveStat();
-            FirebaseManager.Instance.SetPetStatTo(pet.GetStat(), new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" });
+            FirebaseDBManager.Instance.SetPetStatTo(pet.GetStat(), new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" });
             SaveMoney();
         }
     }
@@ -124,7 +124,7 @@ public class InteractManager : MonoBehaviour
         pet = e.petObj.GetComponent<PetBase>();
 
         // Load stat from firebase
-        FirebaseManager.Instance.IsDataExistInPath(CheckPetStatInDB, new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" });
+        FirebaseDBManager.Instance.IsDataExistInPath(CheckPetStatInDB, new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" });
     }
 
     private void CheckPetStatInDB(bool isExist, List<string> paths)
@@ -132,12 +132,12 @@ public class InteractManager : MonoBehaviour
         if (isExist)
         {
             Logger.Log("user's selected pet stat is exist");
-            FirebaseManager.Instance.GetPetStatFrom(OnGetPetStat, paths);
+            FirebaseDBManager.Instance.GetPetStatFrom(OnGetPetStat, paths);
         }
         else
         {
             pet.InitializeStatByDefault();
-            FirebaseManager.Instance.SetPetStatTo(pet.GetStat(), paths);
+            FirebaseDBManager.Instance.SetPetStatTo(pet.GetStat(), paths);
             
             isPetInitialized = true;
         }

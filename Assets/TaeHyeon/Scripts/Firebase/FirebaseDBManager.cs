@@ -2,54 +2,33 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Firebase;
+using Firebase.Auth;
 using Firebase.Database;
 using UnityEngine;
 
-public class FirebaseManager : Singleton<FirebaseManager>
+public class FirebaseDBManager : Singleton<FirebaseDBManager>
 {
-    private FirebaseApp _app;
     private DatabaseReference _rootRef;
-    private bool isFirebaseReady;
-
-    protected override void Awake()
+    private bool isFBInit;
+    
+    public void Init()
     {
-        base.Awake();
-        
-        // Check if firebase is ready
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
-            var dependencyStatus = task.Result;
-            if (dependencyStatus == DependencyStatus.Available) {
-                // Create and hold a reference to your FirebaseApp,
-                // where app is a Firebase.FirebaseApp property of your application class.
-                _app = FirebaseApp.DefaultInstance;
-                InitializeFirebase();
-                
-                // Set a flag here to indicate whether Firebase is ready to use by your app.
-                
-            } else {
-                Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
-                // Firebase Unity SDK is not safe to use here.
-            }
-        });
-    }
-
-    private void InitializeFirebase()
-    {
-        AppOptions options = new AppOptions
-            { DatabaseUrl = new Uri("https://foxrain-398a4-default-rtdb.firebaseio.com/") };
-        _app = FirebaseApp.Create(options);
         _rootRef = FirebaseDatabase.DefaultInstance.RootReference;
-        isFirebaseReady = true;
+        isFBInit = true;
     }
     
+    private void CheckFirebaseInitialized()
+    {
+        if (!isFBInit)
+        {
+            Debug.LogError("Firebase is not initialized yet.");
+        }
+    }
 
     // Method for determining whether or not the input path has data
     public void IsDataExistInPath(Action<bool, List<string>> callback, List<string> paths)
     {
-        if (!isFirebaseReady)
-        {
-            Debug.LogError("firebase is not ready");
-        }
+        CheckFirebaseInitialized();
 
         DatabaseReference reference = _rootRef;
         
@@ -69,7 +48,7 @@ public class FirebaseManager : Singleton<FirebaseManager>
 
     public void SetPetStatTo(PetStatBase stat, List<string> paths)
     {
-        if (!isFirebaseReady) Debug.LogError("firebase is not ready");
+        CheckFirebaseInitialized();
         
         DatabaseReference reference = _rootRef;
         
@@ -85,7 +64,7 @@ public class FirebaseManager : Singleton<FirebaseManager>
 
     public void GetPetStatFrom(Action<PetStatBase> callback, List<string> paths)
     {
-        if (!isFirebaseReady) Debug.LogError("firebase is not ready");
+        CheckFirebaseInitialized();
 
         DatabaseReference reference = _rootRef;
 
@@ -111,7 +90,7 @@ public class FirebaseManager : Singleton<FirebaseManager>
     {
         Debug.Log("GetPetName called");
 
-        if (!isFirebaseReady) Debug.LogError("firebase is not ready");
+        CheckFirebaseInitialized();
 
         _rootRef.Child("pet").Child("name").GetValueAsync().ContinueWith(task =>
         {
@@ -126,7 +105,7 @@ public class FirebaseManager : Singleton<FirebaseManager>
     {
         Debug.Log("SetPetName called");
 
-        if (!isFirebaseReady) Debug.LogError("firebase is not ready");
+        CheckFirebaseInitialized();
 
         _rootRef.Child("pet").Child("name").SetValueAsync(petName);
     }
@@ -137,11 +116,7 @@ public class FirebaseManager : Singleton<FirebaseManager>
     {
         Debug.Log("GetInformation called");
 
-        if (!isFirebaseReady)
-        {
-            Debug.LogError("firebase is not ready");
-            return false;
-        }
+        CheckFirebaseInitialized();
         
         var list = new List<T>();
 
@@ -183,11 +158,7 @@ public class FirebaseManager : Singleton<FirebaseManager>
     {
         Debug.Log("SetInformation called");
 
-        if (!isFirebaseReady)
-        {
-            Debug.LogError("firebase is not ready");
-            return false;
-        }
+        CheckFirebaseInitialized();
         
         string json = JsonUtility.ToJson(stat);
         string key = _rootRef.Push().Key;
