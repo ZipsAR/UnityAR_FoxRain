@@ -25,9 +25,9 @@ public class InteractManager : MonoBehaviour
 
     // Stat
     private Vector3 prevPetPos;
-    private StatChangeCriteria fullnessCreteria;
-    private StatChangeCriteria tirednessCreteria;
-    private StatChangeCriteria cleanlinessCreteria;
+    private StatChangeCriteria fullnessCriteria;
+    private StatChangeCriteria tirednessCriteria;
+    private StatChangeCriteria cleanlinessCriteria;
     
     private void Awake()
     {
@@ -39,9 +39,9 @@ public class InteractManager : MonoBehaviour
         
         cmdQueue = new Queue<CmdDetail>();
 
-        fullnessCreteria = new StatChangeCriteria(2, 3, 0f, 0f, 3f, 2f);
-        tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
-        cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
+        fullnessCriteria = new StatChangeCriteria(2, 3, 0f, 0f, 3f, 2f);
+        tirednessCriteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
+        cleanlinessCriteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
         
         InitializeInteractData();
         
@@ -125,7 +125,7 @@ public class InteractManager : MonoBehaviour
         pet = e.petObj.GetComponent<PetBase>();
 
         // Load stat from firebase
-        FirebaseDBManager.Instance.IsDataExistInPath(
+        FirebaseDBManager.Instance.IsDataExistInAsync(
             new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" }, 
             CheckPetStatInDB);
     }
@@ -248,27 +248,27 @@ public class InteractManager : MonoBehaviour
             float distanceMoved = Vector3.Distance(pet.transform.position, prevPetPos);
             
             // Decreasing fullness 
-            fullnessCreteria.curDistance += distanceMoved;
-            if (fullnessCreteria.curDistance > fullnessCreteria.unitDistance)
+            fullnessCriteria.curDistance += distanceMoved;
+            if (fullnessCriteria.curDistance > fullnessCriteria.unitDistance)
             {
-                fullnessCreteria.curDistance -= fullnessCreteria.unitDistance;
-                pet.UpdateStat(PetStatNames.Fullness, -fullnessCreteria.fluctuatingValuePerDistance);
+                fullnessCriteria.curDistance -= fullnessCriteria.unitDistance;
+                pet.UpdateStat(PetStatNames.Fullness, -fullnessCriteria.fluctuatingValuePerDistance);
             }
 
             // Decreasing cleanliness
-            cleanlinessCreteria.curDistance += distanceMoved;
-            if (cleanlinessCreteria.curDistance > cleanlinessCreteria.unitDistance)
+            cleanlinessCriteria.curDistance += distanceMoved;
+            if (cleanlinessCriteria.curDistance > cleanlinessCriteria.unitDistance)
             {
-                cleanlinessCreteria.curDistance -= cleanlinessCreteria.unitDistance;
-                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCreteria.fluctuatingValuePerDistance);
+                cleanlinessCriteria.curDistance -= cleanlinessCriteria.unitDistance;
+                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCriteria.fluctuatingValuePerDistance);
             }
             
             // Increasing tiredness 
-            tirednessCreteria.curDistance += distanceMoved;
-            if (tirednessCreteria.curDistance > tirednessCreteria.unitDistance)
+            tirednessCriteria.curDistance += distanceMoved;
+            if (tirednessCriteria.curDistance > tirednessCriteria.unitDistance)
             {
-                tirednessCreteria.curDistance -= tirednessCreteria.unitDistance;
-                pet.UpdateStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerDistance);
+                tirednessCriteria.curDistance -= tirednessCriteria.unitDistance;
+                pet.UpdateStat(PetStatNames.Tiredness, tirednessCriteria.fluctuatingValuePerDistance);
             }
             
             // Save the current pet's location to the previous location variable
@@ -277,26 +277,26 @@ public class InteractManager : MonoBehaviour
         
         private void StatUpdateByTime()
         {
-            fullnessCreteria.curTime += Time.deltaTime;
-            cleanlinessCreteria.curTime += Time.deltaTime;
-            tirednessCreteria.curTime += Time.deltaTime;
+            fullnessCriteria.curTime += Time.deltaTime;
+            cleanlinessCriteria.curTime += Time.deltaTime;
+            tirednessCriteria.curTime += Time.deltaTime;
 
-            if (fullnessCreteria.curTime > fullnessCreteria.unitTime)
+            if (fullnessCriteria.curTime > fullnessCriteria.unitTime)
             {
-                fullnessCreteria.curTime = 0f;
-                pet.UpdateStat(PetStatNames.Fullness, -fullnessCreteria.fluctuatingValuePerTime);
+                fullnessCriteria.curTime = 0f;
+                pet.UpdateStat(PetStatNames.Fullness, -fullnessCriteria.fluctuatingValuePerTime);
             }
             
-            if (cleanlinessCreteria.curTime > cleanlinessCreteria.unitTime)
+            if (cleanlinessCriteria.curTime > cleanlinessCriteria.unitTime)
             {
-                cleanlinessCreteria.curTime = 0f;
-                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCreteria.fluctuatingValuePerTime);
+                cleanlinessCriteria.curTime = 0f;
+                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCriteria.fluctuatingValuePerTime);
             }
 
-            if (tirednessCreteria.curTime > tirednessCreteria.unitTime)
+            if (tirednessCriteria.curTime > tirednessCriteria.unitTime)
             {
-                tirednessCreteria.curTime = 0f;
-                pet.UpdateStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerTime);
+                tirednessCriteria.curTime = 0f;
+                pet.UpdateStat(PetStatNames.Tiredness, tirednessCriteria.fluctuatingValuePerTime);
             }
         }
 

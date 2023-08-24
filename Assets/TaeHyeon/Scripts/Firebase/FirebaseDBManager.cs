@@ -21,8 +21,17 @@ public class FirebaseDBManager : Singleton<FirebaseDBManager>
     }
 
     // Method for determining whether or not the input path has data
-    public void IsDataExistInPath(List<string> paths, Action<bool, List<string>> callback)
+    public async void IsDataExistInAsync(List<string> paths, Action<bool, List<string>> callback)
     {
+        Logger.Log("IsDataExistInAsync start");
+
+        if (!_isFbInit)
+        {
+            Logger.LogError("Firebase is not initialized yet");
+            callback(false, default);
+            return;
+        }
+        
         try
         {
             DatabaseReference reference = _rootRef;
@@ -31,26 +40,30 @@ public class FirebaseDBManager : Singleton<FirebaseDBManager>
             {
                 reference = reference.Child(s);
             }
+            
+            DataSnapshot snapshot = await reference.GetValueAsync();
 
-            reference.GetValueAsync().ContinueWith(task =>
-            {
-                if (task.IsCompleted)
-                {
-                    callback(task.Result.Exists, paths);
-                }
-            });
+            callback(snapshot.Exists, paths);
         }
         catch (Exception ex)
         {
             Logger.LogError($"Error while check data in path: {ex.Message}");
+            callback(false, default);
         }
 
     }
 
-    #region Load
-    
-    private async Task<T> LoadDataFromPrivateAsync<T>(List<string> paths)
+    public async void LoadDataFromAsync<T>(List<string> paths, Action<bool, T> callback)
     {
+        Logger.Log("LoadDataFromAsync start");
+
+        if (!_isFbInit)
+        {
+            Logger.LogError("Firebase is not initialized yet");
+            callback(false, default);
+            return;
+        }
+
         try
         {
             DatabaseReference reference = _rootRef;
@@ -60,44 +73,36 @@ public class FirebaseDBManager : Singleton<FirebaseDBManager>
             }
 
             DataSnapshot snapshot = await reference.GetValueAsync();
-            string json = snapshot.GetRawJsonValue();
-            T data = JsonUtility.FromJson<T>(json);
-            
-            return data;
+
+            if (snapshot.Exists)
+            {
+                string json = snapshot.GetRawJsonValue();
+                T data = JsonUtility.FromJson<T>(json);
+                callback(true, data);
+            }
+            else
+            {
+                // data is not found
+                callback(false, default);
+            }
         }
         catch (Exception ex)
         {
             Logger.LogError($"Error while loading data: {ex.Message}");
-            return default;
-        }
-    }
-    
-    public async void LoadDataFromAsync<T>(List<string> paths, Action<bool, T> callback)
-    {
-        Logger.Log("LoadDataFromAsync start");
-
-        if (!_isFbInit)
-        {
             callback(false, default);
-            return;
         }
-
-        T t = await LoadDataFromPrivateAsync<T>(paths);
-
-        // Check if t is not null and not equal to default value
-        bool isDataFound = !EqualityComparer<T>.Default.Equals(t, default);
-        
-        callback(isDataFound, t);
     }
     
-    #endregion
-
-    #region Save
-
     public async void SaveDataToAsync(List<string> paths, object data)
     {
         Logger.Log("SaveDataToAsync start");
 
+        if (!_isFbInit)
+        {
+            Logger.LogError("Firebase is not initialized yet");
+            return;
+        }
+        
         try
         {
             DatabaseReference reference = _rootRef;
@@ -116,6 +121,4 @@ public class FirebaseDBManager : Singleton<FirebaseDBManager>
             Logger.LogError($"Error while saving data: {ex.Message}");
         }
     }
-    
-    #endregion
 }
