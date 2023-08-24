@@ -2,63 +2,48 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Logger = ZipsAR.Logger;
 
 public class TestFirebase : MonoBehaviour
 {
+    /*
+     
     private IEnumerator Start()
     {
+        Logger.Log("start");
         yield return new WaitForSeconds(2f);
 
-        // Incomplete code
-        // FirebaseManager.Instance.SetInformation(new PetStatBase(99,88,77,66,5,30));
-        // FirebaseManager.Instance.GetInformation<Int64>(ShowReceivedData);
+        // Load
+        FirebaseDBManager.Instance.LoadDataFromAsync<PetStatBase>(
+            new List<string>{ "testUser", "pet", "Cat", "stat" }, 
+            JustCallback);
+        
+        // Save
+        // FirebaseDBManager.Instance.SaveDataToAsync(
+        //     new List<string>{ "testUser", "pet", "testpet", "stat" },
+        //     new PetStatBase());
+    }
 
-        // Get/Set string from firebase
-        // FirebaseManager.Instance.SetPetName("myPetName");
-        // FirebaseManager.Instance.GetPetName(ShowSavedPetName);
-
-        // Check data exist in path
-        // FirebaseManager.Instance.IsDataExistInPath(CheckDataExistInPath, new List<string> { "pet", "stat" });
-
-        // Get/Set pet stat
-        PetStatBase testStat = new PetStatBase
+    private float timer;
+    private int idx;
+    
+    private void Update()
+    {
+        if (timer < 1f)
         {
-            cleanliness = 99,
-            tiredness = 88,
-            fullness = 77,
-            exp = 66,
-            level = 9,
-            speed = 9
-        };
-        // FirebaseManager.Instance.SetPetStat(testStat);
-        // FirebaseManager.Instance.GetPetStat(GetPetStat);
-
-    }
-
-    private void GetPetStat(PetStatBase petStat)
-    {
-        Debug.Log("GetPetStat called");
-        Debug.Log("petStat: " + petStat.exp);
-    }
-    
-    private void CheckDataExistInPath(bool isExist, List<string> paths)
-    {
-        Debug.Log("is data exist in path: " + isExist);
-    }
-    
-    private void ShowSavedPetName(string petName)
-    {
-        Debug.Log("saved pet name : " + petName);
-    }
-    
-    
-    private void ShowReceivedData(List<Int64> list)
-    {
-        Debug.Log("ShowReceivedData called");
-        Debug.Log("received data count : " + list.Count);
-        foreach (var value in list)
+            timer += Time.deltaTime;
+        }
+        else
         {
-            Debug.Log("read data: " + value);
+            Logger.Log(idx++);
+            timer = 0;
         }
     }
+
+    private void JustCallback(bool isDataFound, PetStatBase stat)
+    {
+        Logger.Log(isDataFound ? "data is found" : "data is not found");
+    }
+    
+    */
 }

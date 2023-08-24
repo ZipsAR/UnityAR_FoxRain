@@ -1,172 +1,121 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using UnityEngine;
+using Logger = ZipsAR.Logger;
 
 public class FirebaseDBManager : Singleton<FirebaseDBManager>
 {
     private DatabaseReference _rootRef;
-    private bool isFBInit;
+    private bool _isFbInit;
     
     public void Init()
     {
         _rootRef = FirebaseDatabase.DefaultInstance.RootReference;
-        isFBInit = true;
-    }
-    
-    private void CheckFirebaseInitialized()
-    {
-        if (!isFBInit)
-        {
-            Debug.LogError("Firebase is not initialized yet.");
-        }
+        _isFbInit = true;
     }
 
     // Method for determining whether or not the input path has data
-    public void IsDataExistInPath(Action<bool, List<string>> callback, List<string> paths)
+    public void IsDataExistInPath(List<string> paths, Action<bool, List<string>> callback)
     {
-        CheckFirebaseInitialized();
-
-        DatabaseReference reference = _rootRef;
-        
-        foreach (string s in paths)
+        try
         {
-            reference = reference.Child(s);
+            DatabaseReference reference = _rootRef;
+
+            foreach (string s in paths)
+            {
+                reference = reference.Child(s);
+            }
+
+            reference.GetValueAsync().ContinueWith(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    callback(task.Result.Exists, paths);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Error while check data in path: {ex.Message}");
         }
 
-        reference.GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                callback(task.Result.Exists, paths);
-            }
-        });
     }
 
-    public void SetPetStatTo(PetStatBase stat, List<string> paths)
+    #region Load
+    
+    private async Task<T> LoadDataFromPrivateAsync<T>(List<string> paths)
     {
-        CheckFirebaseInitialized();
-        
-        DatabaseReference reference = _rootRef;
-        
-        foreach (string s in paths)
+        try
         {
-            reference = reference.Child(s);
+            DatabaseReference reference = _rootRef;
+            foreach (string s in paths)
+            {
+                reference = reference.Child(s);
+            }
+
+            DataSnapshot snapshot = await reference.GetValueAsync();
+            string json = snapshot.GetRawJsonValue();
+            T data = JsonUtility.FromJson<T>(json);
+            
+            return data;
         }
-        
-        string json = JsonUtility.ToJson(stat);
-        
-        reference.SetRawJsonValueAsync(json);
-    }
-
-    public void GetPetStatFrom(Action<PetStatBase> callback, List<string> paths)
-    {
-        CheckFirebaseInitialized();
-
-        DatabaseReference reference = _rootRef;
-
-        foreach (string s in paths)
+        catch (Exception ex)
         {
-            reference = reference.Child(s);
+            Logger.LogError($"Error while loading data: {ex.Message}");
+            return default;
         }
-        
-        reference.GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                string json = snapshot.GetRawJsonValue();
-                PetStatBase stat = JsonUtility.FromJson<PetStatBase>(json);
-                callback(stat);
-            }
-        });
-    }
-
-
-    public void GetPetName(Action<string> callback)
-    {
-        Debug.Log("GetPetName called");
-
-        CheckFirebaseInitialized();
-
-        _rootRef.Child("pet").Child("name").GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                callback((string)task.Result.Value);
-            }
-        });
-    }
-
-    public void SetPetName(string petName)
-    {
-        Debug.Log("SetPetName called");
-
-        CheckFirebaseInitialized();
-
-        _rootRef.Child("pet").Child("name").SetValueAsync(petName);
     }
     
-    #region Incompleteness
-    
-    public bool GetInformation<T>(Action<List<T>> callback) where T : new()
+    public async void LoadDataFromAsync<T>(List<string> paths, Action<bool, T> callback)
     {
-        Debug.Log("GetInformation called");
+        Logger.Log("LoadDataFromAsync start");
 
-        CheckFirebaseInitialized();
-        
-        var list = new List<T>();
-
-        _rootRef.GetValueAsync().ContinueWith(task =>
+        if (!_isFbInit)
         {
-            if (task.IsCompleted)
-            {
-                // The column we added together with a corresponds to this one
-                DataSnapshot snapshot = task.Result;
+            callback(false, default);
+            return;
+        }
 
-                foreach (DataSnapshot data in snapshot.Children)
-                {
-                    Debug.Log("snapshot's child value: " + data.Value);
-                    IDictionary info = (IDictionary)data.Value;
-                    foreach (DictionaryEntry elEntry in info)
-                    {
-                        Debug.Log("elEntry type : " + elEntry.Value.GetType().Name);
-                        if (elEntry.Value is T value)
-                        {
-                            Debug.Log("elEntry.Value: " + elEntry.Value);
-                            list.Add(value);
-                        }
-                    }
-                }
-                Debug.Log("here");
-                foreach (var value in list)
-                {
-                    Debug.Log("in get data: " + value);
-                }
-                Debug.Log("before call back");
-                callback(list);
-            }
-        });
+        T t = await LoadDataFromPrivateAsync<T>(paths);
 
-        return true;
-    }
-
-    public bool SetInformation(PetStatBase stat)
-    {
-        Debug.Log("SetInformation called");
-
-        CheckFirebaseInitialized();
+        // Check if t is not null and not equal to default value
+        bool isDataFound = !EqualityComparer<T>.Default.Equals(t, default);
         
-        string json = JsonUtility.ToJson(stat);
-        string key = _rootRef.Push().Key;
-
-        _rootRef.Child(key).SetRawJsonValueAsync(json);
-
-        return true;
+        callback(isDataFound, t);
     }
+    
     #endregion
 
+    #region Save
+
+    public async void SaveDataToAsync(List<string> paths, object data)
+    {
+        Logger.Log("SaveDataToAsync start");
+
+        try
+        {
+            DatabaseReference reference = _rootRef;
+
+            foreach (string s in paths)
+            {
+                reference = reference.Child(s);
+            }
+
+            string json = JsonUtility.ToJson(data);
+
+            await reference.SetRawJsonValueAsync(json);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Error while saving data: {ex.Message}");
+        }
+    }
+    
+    #endregion
 }

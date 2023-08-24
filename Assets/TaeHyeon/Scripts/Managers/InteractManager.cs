@@ -60,8 +60,9 @@ public class InteractManager : MonoBehaviour
 
         if (GameManager.Instance.curPetType != PetType.None)
         {
-            // SaveStat();
-            FirebaseDBManager.Instance.SetPetStatTo(pet.GetStat(), new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" });
+            FirebaseDBManager.Instance.SaveDataToAsync(
+                new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" }, 
+                pet.GetStat());
             SaveMoney();
         }
     }
@@ -124,7 +125,9 @@ public class InteractManager : MonoBehaviour
         pet = e.petObj.GetComponent<PetBase>();
 
         // Load stat from firebase
-        FirebaseDBManager.Instance.IsDataExistInPath(CheckPetStatInDB, new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" });
+        FirebaseDBManager.Instance.IsDataExistInPath(
+            new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" }, 
+            CheckPetStatInDB);
     }
 
     private void CheckPetStatInDB(bool isExist, List<string> paths)
@@ -132,23 +135,29 @@ public class InteractManager : MonoBehaviour
         if (isExist)
         {
             Logger.Log("user's selected pet stat is exist");
-            FirebaseDBManager.Instance.GetPetStatFrom(OnGetPetStat, paths);
+            FirebaseDBManager.Instance.LoadDataFromAsync<PetStatBase>(paths, OnGetPetStat);
         }
         else
         {
             pet.InitializeStatByDefault();
-            FirebaseDBManager.Instance.SetPetStatTo(pet.GetStat(), paths);
+            FirebaseDBManager.Instance.SaveDataToAsync(paths, pet.GetStat());
             
             isPetInitialized = true;
         }
     }
 
-    private void OnGetPetStat(PetStatBase statDB)
+    private void OnGetPetStat(bool isDataFound, PetStatBase statDB)
     {
-        Logger.Log("get pet stat from db");
-        pet.SetPetStatBase(statDB);
-       
-        isPetInitialized = true;
+        if (isDataFound)
+        {
+            Logger.Log("get pet stat from db");
+            pet.SetPetStatBase(statDB);
+            isPetInitialized = true;
+        }
+        else
+        {
+            Logger.LogError("cannot get pet stat from db");
+        }
     }
 
     private void InitializeInteractData()
