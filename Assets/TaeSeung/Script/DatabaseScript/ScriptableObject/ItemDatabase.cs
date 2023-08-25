@@ -26,6 +26,14 @@ public class ItemData
         Snack = 3000
     }
 
+    public enum FunitureCategory
+    {
+        None,
+        Place,
+        Wall,
+        Floor
+    }
+
     [System.Serializable]
     public struct ItemSound
     {
@@ -60,6 +68,8 @@ public class ItemData
 
     //������Ʈ ������ ����
     public string DetailInfo = "No Data";
+
+    public FunitureCategory funitureCategory = FunitureCategory.None;
 
     //������ ī�װ�
     public ItemCategory itemCategory;
