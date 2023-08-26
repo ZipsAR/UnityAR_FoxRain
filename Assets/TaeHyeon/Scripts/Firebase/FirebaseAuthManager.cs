@@ -20,8 +20,6 @@ public class FirebaseAuthManager : Singleton<FirebaseAuthManager>
         isFBInit = true;
         
         Logger.Log("FirebaseAuthManager Init");
-        
-        Create();
     }
     
     private void CheckFirebaseInitialized()
