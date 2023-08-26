@@ -13,10 +13,6 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
-# CUSTOM ADD
-.vsconfig
-/.idea/
-
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
@@ -79,3 +75,13 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # End of https://www.toptal.com/developers/gitignore/api/unity
+
+# CUSTOM ADD
+.vsconfig
+/.idea/
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+google-services.json.meta
+google-services-desktop.json
+google-services-desktop.json.meta
