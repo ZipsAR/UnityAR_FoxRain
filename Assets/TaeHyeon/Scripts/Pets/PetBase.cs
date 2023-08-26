@@ -164,8 +164,8 @@ public abstract class PetBase : MonoBehaviour
             animator.SetInteger(Interact, (int)PetParts.Head);
             
             // Stat
-            UpdateStat(PetStatNames.Tiredness, -5);
-            UpdateStat(PetStatNames.Exp, 5);
+            UpdateStat(PetStatNames.Tiredness, -7);
+            UpdateStat(PetStatNames.Exp, 10);
                 
             // Sound
             PlaySound(PetSounds.Gasps);
@@ -177,8 +177,8 @@ public abstract class PetBase : MonoBehaviour
             animator.SetInteger(Interact, (int)PetParts.Jaw);
             
             // Stat
-            UpdateStat(PetStatNames.Tiredness, 4);
-            UpdateStat(PetStatNames.Exp, 3);
+            UpdateStat(PetStatNames.Tiredness, -7);
+            UpdateStat(PetStatNames.Exp, 7);
         }
 
         public void InteractBody()
@@ -187,8 +187,8 @@ public abstract class PetBase : MonoBehaviour
             animator.SetInteger(Interact, (int)PetParts.Body);
             
             // Stat
-            UpdateStat(PetStatNames.Tiredness, -7);
-            UpdateStat(PetStatNames.Exp, 7);
+            UpdateStat(PetStatNames.Tiredness, -10);
+            UpdateStat(PetStatNames.Exp, 15);
 
         }
 
@@ -197,8 +197,8 @@ public abstract class PetBase : MonoBehaviour
             PlaySound(PetSounds.Whines);
             animator.SetInteger(Interact, (int)PetParts.HandDetection);
             
-            UpdateStat(PetStatNames.Tiredness, -10);
-            UpdateStat(PetStatNames.Exp, 10);
+            UpdateStat(PetStatNames.Tiredness, -15);
+            UpdateStat(PetStatNames.Exp, 20);
         }
 
         public void InteractTerminated()
@@ -422,21 +422,23 @@ public abstract class PetBase : MonoBehaviour
     
             public void EatEnd()
             {
+                
                 // Tutorial
                 if (snackObj != null && snackObj.TryGetComponent(out TutorialItem tutorialItem))
                 {
-                    tutorialItem.EndItemTutorial(ItemType.Snack);
+                    tutorialItem.EndItemTutorial(TutorialType.Snack);
                 }
+                
+                // Stat
+                UpdateStat(PetStatNames.Fullness, 15);
+                UpdateStat(PetStatNames.Exp, 40);
+                UpdateStat(PetStatNames.Tiredness, -10);
+
                 
                 isCoroutinePlayingList[(int)Cmd.Eat] = false;
                 Destroy(snackObj);
                 snackObj = null;
                 
-                // Stat
-                UpdateStat(PetStatNames.Fullness, 10);
-                UpdateStat(PetStatNames.Exp, 10);
-                UpdateStat(PetStatNames.Tiredness, -10);
-
                 Logger.Log("EatEnd is activate");
             }
         
@@ -460,8 +462,9 @@ public abstract class PetBase : MonoBehaviour
                 PlaySound(PetSounds.Bark3);
                 
                 // Stat
-                UpdateStat(PetStatNames.Cleanliness, 10);
-                UpdateStat(PetStatNames.Exp, 7);
+                UpdateStat(PetStatNames.Cleanliness, 15);
+                UpdateStat(PetStatNames.Tiredness, -15);
+                UpdateStat(PetStatNames.Exp, 15);
                 
                 // isCoroutinePlayingList[(int)Cmd.Brush] = false; This part will be executed in the animation part
             }
@@ -546,21 +549,26 @@ public abstract class PetBase : MonoBehaviour
                 // Enable this object to be grabbed
                 toyObj.GetComponent<XRGrabInteractable>().enabled = true;
                 toyObj.GetComponent<Rigidbody>().isKinematic = false;
-                Invoke(nameof(SetIsKinematicFalse), 1f);
-                
+
                 // Sound
                 PlaySound(PetSounds.Bark2);
                 
                 // Stat
                 UpdateStat(PetStatNames.Tiredness, 5);
-                UpdateStat(PetStatNames.Exp, 40);
-                Logger.Log("exp update plus 40");
+                UpdateStat(PetStatNames.Exp, 60);
+                Logger.Log("exp update plus 60");
                 
                 
                 // Tutorial
                 if (toyObj.TryGetComponent(out TutorialItem tutorialItem))
                 {
-                    tutorialItem.EndItemTutorial(ItemType.Toy);
+                    tutorialItem.EndItemTutorial(TutorialType.Toy);
+                    Destroy(toyObj, 2f);
+                    toyObj = null;
+                }
+                else
+                {
+                    Invoke(nameof(SetIsKinematicFalse), 1f);
                 }
             }
     
@@ -581,11 +589,11 @@ public abstract class PetBase : MonoBehaviour
     
     #region Stat
      
-         public PetStatBase GetStat() => stat;
+        public PetStatBase GetStat() => stat;
 
-         public void SetPetStatBase(PetStatBase loadedStat) => stat = loadedStat;
+        public void SetPetStatBase(PetStatBase loadedStat) => stat = loadedStat;
 
-         public void UpdateStat(PetStatNames statName, int amountOfChange)
+        public void UpdateStat(PetStatNames statName, int amountOfChange)
         {
             if (amountOfChange == 0) throw new Exception("Stat change value must not always be zero");
             int preStatValue;

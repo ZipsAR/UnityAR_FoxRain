@@ -13,6 +13,7 @@ public class InteractManager : MonoBehaviour
     // Pet
     private PetBase pet;
     private bool isPetInitialized;
+    private bool otherManagerInitialized;
     
     // Manager
     [SerializeField] private InteractData interactData;
@@ -24,9 +25,9 @@ public class InteractManager : MonoBehaviour
 
     // Stat
     private Vector3 prevPetPos;
-    private StatChangeCriteria fullnessCreteria;
-    private StatChangeCriteria tirednessCreteria;
-    private StatChangeCriteria cleanlinessCreteria;
+    private StatChangeCriteria fullnessCriteria;
+    private StatChangeCriteria tirednessCriteria;
+    private StatChangeCriteria cleanlinessCriteria;
     
     private void Awake()
     {
@@ -38,9 +39,9 @@ public class InteractManager : MonoBehaviour
         
         cmdQueue = new Queue<CmdDetail>();
 
-        fullnessCreteria = new StatChangeCriteria(2, 3, 0f, 0f, 3f, 2f);
-        tirednessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
-        cleanlinessCreteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
+        fullnessCriteria = new StatChangeCriteria(2, 3, 0f, 0f, 3f, 2f);
+        tirednessCriteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
+        cleanlinessCriteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
         
         InitializeInteractData();
         
@@ -59,15 +60,34 @@ public class InteractManager : MonoBehaviour
 
         if (GameManager.Instance.curPetType != PetType.None)
         {
-            SaveStat();
+            FirebaseDBManager.Instance.SaveDataToAsync(
+                new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" }, 
+                pet.GetStat());
             SaveMoney();
         }
     }
 
     private void Update()
     {
-        if(!isPetInitialized) return;
-        
+        if (!otherManagerInitialized)
+        {
+            if (isPetInitialized)
+            {
+                InteractEventManager.NotifyPetInitializedToAll(pet.gameObject);
+
+                pet.SetPetAnimationMode(PlayMode.InteractMode);
+
+                // Stat for distance
+                prevPetPos = pet.gameObject.transform.position;
+
+                otherManagerInitialized = true;
+            }
+            else
+            {
+                return;
+            }
+        }
+
         if(cmdQueue.Count != 0) CmdQueueManager.ShowCurQueue(cmdQueue);
         
         // Do not run other commands if the pet is running a command
@@ -103,45 +123,43 @@ public class InteractManager : MonoBehaviour
     private void OnPetInitializedToManager(object sender, PetArgs e)
     {
         pet = e.petObj.GetComponent<PetBase>();
-        
-        // File exist
-        if (FileIOSystem.Instance.IsFileExist(FileIOSystem.StatFilename))
+
+        // Load stat from firebase
+        FirebaseDBManager.Instance.IsDataExistInAsync(
+            new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" }, 
+            CheckPetStatInDB);
+    }
+
+    private void CheckPetStatInDB(bool isExist, List<string> paths)
+    {
+        if (isExist)
         {
-            PetStatBase localStat = LoadStat((int)GameManager.Instance.curPetType);
-            
-            // File exists but no stat information corresponding to the current pet
-            if (CheckStatIsNull(localStat))
-            {
-                pet.InitializeStatByDefault();
-                SaveStat();
-                Logger.Log("file exist, but no this pet stat");   
-            }
-            // Saved file has current pet information
-            else
-            {
-                pet.SetPetStatBase(localStat);
-                Logger.Log("Load Saved stat file");    
-            }
+            Logger.Log("user's selected pet stat is exist");
+            FirebaseDBManager.Instance.LoadDataFromAsync<PetStatBase>(paths, OnGetPetStat);
         }
-        // No File
         else
         {
             pet.InitializeStatByDefault();
-            SetEmptyListToDatabase();
-            SaveStat();
-            Logger.Log("there is no saved stat file");
+            FirebaseDBManager.Instance.SaveDataToAsync(paths, pet.GetStat());
+            
+            isPetInitialized = true;
         }
-        
-        pet.SetPetAnimationMode(PlayMode.InteractMode);
-     
-        // Stat for distance
-        prevPetPos = pet.gameObject.transform.position;
-        
-        InteractEventManager.NotifyPetInitializedToAll(pet.gameObject);
-
-        isPetInitialized = true;
     }
-    
+
+    private void OnGetPetStat(bool isDataFound, PetStatBase statDB)
+    {
+        if (isDataFound)
+        {
+            Logger.Log("get pet stat from db");
+            pet.SetPetStatBase(statDB);
+            isPetInitialized = true;
+        }
+        else
+        {
+            Logger.LogError("cannot get pet stat from db");
+        }
+    }
+
     private void InitializeInteractData()
     {
         interactData.playerPetMaxDistance = 2f;
@@ -230,27 +248,27 @@ public class InteractManager : MonoBehaviour
             float distanceMoved = Vector3.Distance(pet.transform.position, prevPetPos);
             
             // Decreasing fullness 
-            fullnessCreteria.curDistance += distanceMoved;
-            if (fullnessCreteria.curDistance > fullnessCreteria.unitDistance)
+            fullnessCriteria.curDistance += distanceMoved;
+            if (fullnessCriteria.curDistance > fullnessCriteria.unitDistance)
             {
-                fullnessCreteria.curDistance -= fullnessCreteria.unitDistance;
-                pet.UpdateStat(PetStatNames.Fullness, -fullnessCreteria.fluctuatingValuePerDistance);
+                fullnessCriteria.curDistance -= fullnessCriteria.unitDistance;
+                pet.UpdateStat(PetStatNames.Fullness, -fullnessCriteria.fluctuatingValuePerDistance);
             }
 
             // Decreasing cleanliness
-            cleanlinessCreteria.curDistance += distanceMoved;
-            if (cleanlinessCreteria.curDistance > cleanlinessCreteria.unitDistance)
+            cleanlinessCriteria.curDistance += distanceMoved;
+            if (cleanlinessCriteria.curDistance > cleanlinessCriteria.unitDistance)
             {
-                cleanlinessCreteria.curDistance -= cleanlinessCreteria.unitDistance;
-                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCreteria.fluctuatingValuePerDistance);
+                cleanlinessCriteria.curDistance -= cleanlinessCriteria.unitDistance;
+                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCriteria.fluctuatingValuePerDistance);
             }
             
             // Increasing tiredness 
-            tirednessCreteria.curDistance += distanceMoved;
-            if (tirednessCreteria.curDistance > tirednessCreteria.unitDistance)
+            tirednessCriteria.curDistance += distanceMoved;
+            if (tirednessCriteria.curDistance > tirednessCriteria.unitDistance)
             {
-                tirednessCreteria.curDistance -= tirednessCreteria.unitDistance;
-                pet.UpdateStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerDistance);
+                tirednessCriteria.curDistance -= tirednessCriteria.unitDistance;
+                pet.UpdateStat(PetStatNames.Tiredness, tirednessCriteria.fluctuatingValuePerDistance);
             }
             
             // Save the current pet's location to the previous location variable
@@ -259,26 +277,26 @@ public class InteractManager : MonoBehaviour
         
         private void StatUpdateByTime()
         {
-            fullnessCreteria.curTime += Time.deltaTime;
-            cleanlinessCreteria.curTime += Time.deltaTime;
-            tirednessCreteria.curTime += Time.deltaTime;
+            fullnessCriteria.curTime += Time.deltaTime;
+            cleanlinessCriteria.curTime += Time.deltaTime;
+            tirednessCriteria.curTime += Time.deltaTime;
 
-            if (fullnessCreteria.curTime > fullnessCreteria.unitTime)
+            if (fullnessCriteria.curTime > fullnessCriteria.unitTime)
             {
-                fullnessCreteria.curTime = 0f;
-                pet.UpdateStat(PetStatNames.Fullness, -fullnessCreteria.fluctuatingValuePerTime);
+                fullnessCriteria.curTime = 0f;
+                pet.UpdateStat(PetStatNames.Fullness, -fullnessCriteria.fluctuatingValuePerTime);
             }
             
-            if (cleanlinessCreteria.curTime > cleanlinessCreteria.unitTime)
+            if (cleanlinessCriteria.curTime > cleanlinessCriteria.unitTime)
             {
-                cleanlinessCreteria.curTime = 0f;
-                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCreteria.fluctuatingValuePerTime);
+                cleanlinessCriteria.curTime = 0f;
+                pet.UpdateStat(PetStatNames.Cleanliness, -cleanlinessCriteria.fluctuatingValuePerTime);
             }
 
-            if (tirednessCreteria.curTime > tirednessCreteria.unitTime)
+            if (tirednessCriteria.curTime > tirednessCriteria.unitTime)
             {
-                tirednessCreteria.curTime = 0f;
-                pet.UpdateStat(PetStatNames.Tiredness, tirednessCreteria.fluctuatingValuePerTime);
+                tirednessCriteria.curTime = 0f;
+                pet.UpdateStat(PetStatNames.Tiredness, tirednessCriteria.fluctuatingValuePerTime);
             }
         }
 
@@ -294,6 +312,8 @@ public class InteractManager : MonoBehaviour
         /// <param name="snackTransform">Dropped snack position</param>
         public void NotifySnackDrop(Transform snackTransform)
         {
+            if(pet == null) return;
+            
             StartCoroutine(NotifySnackDropSequence(snackTransform));
             Logger.Log("notify pet to snack is dropped");
         }
@@ -328,6 +348,8 @@ public class InteractManager : MonoBehaviour
         /// <param name="toyTransform">Dropped toy position</param>
         public void NotifyToyDrop(Transform toyTransform)
         {
+            if(pet == null) return;
+            
             StartCoroutine(NotifyToyDropSequence(toyTransform));
             Logger.Log("notify pet to toy is dropped");
         }

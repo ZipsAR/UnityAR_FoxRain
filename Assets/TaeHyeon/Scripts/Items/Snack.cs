@@ -20,6 +20,7 @@ public class Snack : InteractItem
     {
         Logger.Log("selected Exited");
         GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Rigidbody>().isKinematic = false;
         
         // Event occurs after a certain period of time as soon as the user places the Grab snack
         StartCoroutine(NotifyToInteractManagerAfterTSeconds(responseTime));

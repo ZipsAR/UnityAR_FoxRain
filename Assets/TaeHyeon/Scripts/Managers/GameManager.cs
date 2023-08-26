@@ -23,6 +23,7 @@ public class GameManager : Singleton<GameManager>
     public HandController rightHand;
 
     public PetType curPetType;
+    public int storeGet = 0;
     
     private void Start()
     {

@@ -3,9 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using EnumTypes;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Comb : InteractItem
 {
+    private XRGrabInteractable xrGrabInteractable;
+    
+    private void Awake()
+    {
+        xrGrabInteractable = GetComponent<XRGrabInteractable>();
+        xrGrabInteractable.selectExited.AddListener(SelectedExited);
+    }
+
+    private void SelectedExited(SelectExitEventArgs arg0)
+    {
+        GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Rigidbody>().isKinematic = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         PetCollisionHandler handler;

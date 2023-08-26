@@ -14,11 +14,13 @@ public class InteractTutorial : MonoBehaviour
     private Transform itemSpawnPos;
     private GameObject spawnedTable;
     private GameObject activeItems;
-    private ItemType curTutorialItemType;
+    private TutorialType curTutorialType;
 
+    [SerializeField] private Sprite grabSprite;
+    
     private void Awake()
     {
-        curTutorialItemType = ItemType.Toy;
+        curTutorialType = TutorialType.Toy;
     }
 
     private void Start()
@@ -39,12 +41,15 @@ public class InteractTutorial : MonoBehaviour
         InteractEventManager.OnPetInitializedToAll += OnPetInitialized;
         InteractEventManager.OnGetTutorialInfo -= GetTutorialInfo;
         InteractEventManager.OnGetTutorialInfo += GetTutorialInfo;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
+        InteractEventManager.OnPetStatChanged += OnPetStatChanged;
     }
 
     private void OnDisable()
     {
         InteractEventManager.OnPetInitializedToAll -= OnPetInitialized;
         InteractEventManager.OnGetTutorialInfo -= GetTutorialInfo;
+        InteractEventManager.OnPetStatChanged -= OnPetStatChanged;
     }
 
     private void OnPetInitialized(object sender, PetArgs e)
@@ -57,13 +62,13 @@ public class InteractTutorial : MonoBehaviour
         itemSpawnPos = spawnedTable.GetComponent<TutorialDesk>().itemSpawnPosition;
         activeItems = Instantiate(toys, itemSpawnPos.position, itemSpawnPos.rotation);
         
-        InteractEventManager.NotifyDialogShow("귀여운 장난감을 잡아서 펫과 놀아보세요!");
+        InteractEventManager.NotifyDialogShow("귀여운 장난감을\n잡아서 펫과 놀아보세요!\nGrab모션으로 잡을 수 있어요!", grabSprite);
     }
 
     private void GetTutorialInfo(object sender, TutorialItemArgs e)
     {
         // Grab toy
-        if (!e.isTutorialEnd && e.isGrabbed && e.itemType == ItemType.Toy)
+        if (!e.isTutorialEnd && e.isGrabbed && e.TutorialType == TutorialType.Toy)
         {
             if (activeItems != null)
             {
@@ -74,7 +79,7 @@ public class InteractTutorial : MonoBehaviour
         }
         
         // End toy tutorial
-        if (e.isTutorialEnd && !e.isGrabbed && e.itemType == ItemType.Toy)
+        if (e.isTutorialEnd && !e.isGrabbed && e.TutorialType == TutorialType.Toy)
         {
             InteractEventManager.NotifyClearDialog();
             InteractEventManager.NotifyDialogShow("맛있는 음식을 펫에게 제공하세요!");
@@ -88,7 +93,7 @@ public class InteractTutorial : MonoBehaviour
         }
         
         // Grab snack
-        if (!e.isTutorialEnd && e.isGrabbed && e.itemType == ItemType.Snack)
+        if (!e.isTutorialEnd && e.isGrabbed && e.TutorialType == TutorialType.Snack)
         {
             if (activeItems != null)
             {
@@ -99,16 +104,21 @@ public class InteractTutorial : MonoBehaviour
         }
         
         // End snack tutorial
-        if (e.isTutorialEnd && !e.isGrabbed && e.itemType == ItemType.Snack)
+        if (e.isTutorialEnd && !e.isGrabbed && e.TutorialType == TutorialType.Snack)
         {
             InteractEventManager.NotifyClearDialog();
-            InteractEventManager.NotifyDialogShow("펫의 머리를 쓰다듬어 칭찬해주세요!");
+            InteractEventManager.NotifyDialogShow("이제 튜토리얼이 모두 끝났어요!!\n펫의 머리를 쓰다듬어 칭찬해주세요!\n나만의 펫 하우스도 꾸며볼까요?");
             return;
         }
-        
-        
     }
     
+    private void OnPetStatChanged(object sender, PetStatChangedEventArgs e)
+    {
+        if (e.changedStatName == PetStatNames.Level && e.postStatAmount == 2)
+        {
+            InteractEventManager.NotifyDialogShow("레벨업에 성공했어요!\n상자를 열어 골드를 획득해요", dialogOrient: DialogOrient.Right);
+        }
+    }
     
     private void StartTutorial()
     {

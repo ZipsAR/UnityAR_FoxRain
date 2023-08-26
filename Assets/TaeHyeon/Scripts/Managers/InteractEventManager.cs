@@ -52,9 +52,9 @@ public static class InteractEventManager
         OnPetInitializedToAll?.Invoke(null, new PetArgs(petObj));
     }
 
-    public static void NotifyDialogShow(string content, Sprite infoSprite = default)
+    public static void NotifyDialogShow(string content, Sprite infoSprite = default, DialogOrient dialogOrient = DialogOrient.Center)
     {
-        OnDialogCall?.Invoke(null, new DialogArgs(content, infoSprite));
+        OnDialogCall?.Invoke(null, new DialogArgs(content, infoSprite, dialogOrient));
     }
 
     public static void NotifyClearDialog()
@@ -62,9 +62,9 @@ public static class InteractEventManager
         OnClearDialog?.Invoke(null, null);
     }
 
-    public static void NotifyTutorialItemInfo(bool isTutorialEnd, bool isGrabbed, ItemType itemType)
+    public static void NotifyTutorialItemInfo(bool isTutorialEnd, bool isGrabbed, TutorialType tutorialType)
     {
-        OnGetTutorialInfo?.Invoke(null, new TutorialItemArgs(isTutorialEnd, isGrabbed, itemType));
+        OnGetTutorialInfo?.Invoke(null, new TutorialItemArgs(isTutorialEnd, isGrabbed, tutorialType));
     }
 
     public static void NotifyDialogExitClicked()
@@ -101,11 +101,13 @@ public class DialogArgs : EventArgs
 {
     public string content;
     public Sprite infoSprite;
+    public DialogOrient dialogOrient;
     
-    public DialogArgs(string content, Sprite infoSprite)
+    public DialogArgs(string content, Sprite infoSprite, DialogOrient dialogOrient)
     {
         this.content = content;
         this.infoSprite = infoSprite;
+        this.dialogOrient = dialogOrient;
     }
 }
 
@@ -113,12 +115,12 @@ public class TutorialItemArgs : EventArgs
 {
     public bool isTutorialEnd;
     public bool isGrabbed;
-    public ItemType itemType;
+    public TutorialType TutorialType;
     
-    public TutorialItemArgs(bool isTutorialEnd, bool isGrabbed, ItemType itemType)
+    public TutorialItemArgs(bool isTutorialEnd, bool isGrabbed, TutorialType tutorialType)
     {
         this.isTutorialEnd = isTutorialEnd;
         this.isGrabbed = isGrabbed;
-        this.itemType = itemType;
+        this.TutorialType = tutorialType;
     }
 }

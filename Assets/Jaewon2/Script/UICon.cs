@@ -22,6 +22,8 @@ public class UICon : MonoBehaviour
     }
     public void Pay()
     {
+        if(StoreManager.Instance.itemindex == -1) return;
+        
         //GetComponent<GetData>().ItemInfo();
         T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
 
@@ -68,6 +70,8 @@ public class UICon : MonoBehaviour
     }
     public void Sell()
     {
+        if(StoreManager.Instance.itemindex == -1) return;
+
         T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
         int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
         for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
