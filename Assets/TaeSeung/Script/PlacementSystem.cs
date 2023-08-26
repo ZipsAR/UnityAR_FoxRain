@@ -64,35 +64,39 @@ public class PlacementSystem : Singleton<PlacementSystem>
     {
         MapInfo.Instance.MapInitialize();
         MapInfo.Instance.MapUnGrabmode();
+        Dictionary<int, ObjectLocation> newobjectlocation = new();
 
-        for (short i = 0; i < FileIOSystem.Instance.housingdatabase.objectsLocation.Count; i++) {
-            //id는 키값
-            int id = FileIOSystem.Instance.housingdatabase.objectsLocation[i].id;
-            int dataindex = itemdatabase.ItemData.FindIndex(data => data.ID == id);
+        foreach(KeyValuePair<int, ObjectLocation> objectlocation in FileIOSystem.Instance.housingdatabase.objectsLocation)
+        {
+            int id = objectlocation.Value.id;
 
-            GameObject newObject = Instantiate(itemdatabase.ItemData[dataindex].Prefab);
-            newObject.transform.localScale = newObject.transform.localScale / MapInfo.Instance.MapScale;
+            ItemData itemdata = itemdatabase.Itemdictionary[id];
+            GameObject newitemObject = Instantiate(itemdata.Prefab);
+            newitemObject.transform.localScale = newitemObject.transform.localScale / MapInfo.Instance.MapScale;
 
-            Vector3Int loc = FileIOSystem.Instance.housingdatabase.objectsLocation[i].location;
-            Quaternion rot = FileIOSystem.Instance.housingdatabase.objectsLocation[i].rotation;
-            Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[i].size;
-            FileIOSystem.Instance.housingdatabase.objectsLocation[i].InstanceId = newObject.GetInstanceID();
+            Vector3Int loc = objectlocation.Value.location;
+            Quaternion rot = objectlocation.Value.rotation;
+            Vector2Int size = objectlocation.Value.size;
+            objectlocation.Value.InstanceId = newitemObject.GetInstanceID();
 
-            MakeNewObject(id, ObjectLocation.transform, loc, rot, size, "PlaceObject", newObject);
-
-            interact = newObject.GetComponent<XRGrabInteractable>();
+            newobjectlocation.Add(newitemObject.GetInstanceID(), objectlocation.Value);
+            
+            MakeNewObject(id, ObjectLocation.transform, loc, rot, size, "PlaceObject", newitemObject);
+            
+            interact = newitemObject.GetComponent<XRGrabInteractable>();
             ObjGrabcomponents.Add(interact);
             SelectEnterEventArgs enterArgs = makeEnterEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
             SelectExitEventArgs exitargs = makeExitEventArgs(interact, interact.firstInteractorSelecting, interact.interactionManager);
             interact.selectEntered.AddListener((a) => InsertEnterEvent(enterArgs));
             interact.selectExited.AddListener((a) => InsertCompleteEvent(exitargs));
         }
-        StopPlacement(true);
 
+        FileIOSystem.Instance.housingdatabase.objectsLocation = newobjectlocation;
+        StopPlacement(true);
         cursororigin = mouseIndicator;
         cursorparent = cursororigin.transform.parent.gameObject;
 
-        //
+
     }
 
 
@@ -140,7 +144,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         }
         StopPlacement(true);
         selectedObjectIndex = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == ID);
-        int infoindex = itemdatabase.ItemData.FindIndex(data => data.ID == ID);
+        ItemData item = itemdatabase.Itemdictionary[ID];
 
         if (selectedObjectIndex < 0)
         {
@@ -154,11 +158,11 @@ public class PlacementSystem : Singleton<PlacementSystem>
             return;
         }
 
-        currentobjsize = itemdatabase.ItemData[infoindex].Housingsize;
+        currentobjsize = item.Housingsize;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
         currentrotation = new();
 
-        GameObject newObject = Instantiate(itemdatabase.ItemData[infoindex].Prefab, spawnpoint.transform.parent);
+        GameObject newObject = Instantiate(item.Prefab, spawnpoint.transform.parent);
         CreateObject = newObject;
         newObject.transform.position = spawnpoint.transform.position;
         newObject.transform.localScale = newObject.transform.localScale * (1 / MapInfo.Instance.MapScale);
@@ -312,7 +316,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.position);
         SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
 
-        FileIOSystem.Instance.housingdatabase.objectsLocation.Add(newlocation);
+        FileIOSystem.Instance.housingdatabase.objectsLocation.Add(newlocation.InstanceId,newlocation);
         FileIOSystem.Instance.invendatabase.mydata[selectedObjectIndex].count -= 1;
 
         interact = gameObject.GetComponent<XRGrabInteractable>();
@@ -331,7 +335,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
             HousingUISystem.Instance.countlist[id].GetComponent<Button>().interactable = false;
         }
         HousingUISystem.Instance.ObjCountupdate(id ,selectedObjectIndex);
-
         FileIOSystem.Instance.Save(FileIOSystem.Instance.housingdatabase,FileIOSystem.HousingFilename);
         FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
 
@@ -347,14 +350,15 @@ public class PlacementSystem : Singleton<PlacementSystem>
             InteractEventManager.NotifyClearDialog();
             InteractEventManager.NotifyDialogShow("가구를 바깥으로 내보내면 삭제,\n다른 위치에 배치하면 위치를 수정할 수 있어요!");
         }
-        int index = FileIOSystem.Instance.housingdatabase.objectsLocation.FindIndex(data => data.InstanceId == gameObject.GetInstanceID());
-        if (index < 0) return;
+        ObjectLocation currentlocationinfo = FileIOSystem.Instance.housingdatabase.objectsLocation[gameObject.GetInstanceID()];
+        int currentgrabid = currentlocationinfo.id;
+        if (currentgrabid < 0) return;
 
         //오브젝트 사이즈에 맞게 아래 타일 크기를 수정해요
 
-        int dataindex = itemdatabase.ItemData.FindIndex(data => data.ID == FileIOSystem.Instance.housingdatabase.objectsLocation[index].id);
-        currentobjsize = itemdatabase.ItemData[dataindex].Housingsize;
-        currentpos = FileIOSystem.Instance.housingdatabase.objectsLocation[index].location;
+        ItemData currentItemdata = itemdatabase.Itemdictionary[currentgrabid];
+        currentobjsize = currentItemdata.Housingsize;
+        currentpos = currentlocationinfo.location;
         MapInfo.Instance.SetTileScale(new Vector3(currentobjsize.x, currentobjsize.y, 1));
 
         cellIndicator.SetActive(true);
@@ -375,24 +379,25 @@ public class PlacementSystem : Singleton<PlacementSystem>
         Vector3 mousePosition = inputManager.GetSelectedMapPositionbyObject(gameObject.transform);
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
+        //배치 가능한 영역이 아닌 경우
             if (!inputManager.ishit())
             {
                 cursororigin.transform.SetParent(cursorparent.transform);
-                int index = FileIOSystem.Instance.housingdatabase.objectsLocation.FindIndex(data => data.location == currentpos);
-            
-            if (index >= 0)
+                int index = FileIOSystem.Instance.housingdatabase.objectsLocation[gameObject.GetInstanceID()].id;
+
+                if (index >= 0)
                 {
-                    int id = FileIOSystem.Instance.housingdatabase.objectsLocation[index].id;
-                    Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
-                    int myindex= FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == id);
+                    Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[gameObject.GetInstanceID()].size;
+                    int myindex= FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == index);
                     int grapindex = ObjGrabcomponents.FindIndex(data => data == gameObject.GetComponent<XRGrabInteractable>());
-                ObjGrabcomponents.RemoveAt(grapindex);
+                    ObjGrabcomponents.RemoveAt(grapindex);
                     
                     if (myindex != -1)
                     {
                         FileIOSystem.Instance.invendatabase.mydata[myindex].count++;
-                        FileIOSystem.Instance.housingdatabase.objectsLocation.RemoveAt(index);
-                        if(HousingUISystem.Instance != null) HousingUISystem.Instance.ObjCountupdate(id, myindex);
+                        FileIOSystem.Instance.housingdatabase.objectsLocation.Remove(gameObject.GetInstanceID());
+                        
+                        if(HousingUISystem.Instance != null) HousingUISystem.Instance.ObjCountupdate(index, myindex);
 
                     catchmode = false;
                     cellIndicator.SetActive(false);
@@ -420,27 +425,28 @@ public class PlacementSystem : Singleton<PlacementSystem>
             }
             }
 
+            //배치 가능한 영역인 경우
             else
             {
-                int index = FileIOSystem.Instance.housingdatabase.objectsLocation.FindIndex(data => data.InstanceId == gameObject.GetInstanceID());
+
+                ObjectLocation CurrentObjectlocation = FileIOSystem.Instance.housingdatabase.objectsLocation[gameObject.GetInstanceID()];
+                int index = FileIOSystem.Instance.housingdatabase.objectsLocation[gameObject.GetInstanceID()].id;
 
                 if (index >= 0)
                 {
-                    int id = FileIOSystem.Instance.housingdatabase.objectsLocation[index].id;
-                    Vector3Int pos = FileIOSystem.Instance.housingdatabase.objectsLocation[index].location;
-                    Quaternion rot = FileIOSystem.Instance.housingdatabase.objectsLocation[index].rotation;
-                    Vector2Int size = FileIOSystem.Instance.housingdatabase.objectsLocation[index].size;
+                    int id = CurrentObjectlocation.id;
+                    Vector3Int pos = CurrentObjectlocation.location;
+                    Quaternion rot = CurrentObjectlocation.rotation;
+                    Vector2Int size = CurrentObjectlocation.size;
                     
 
                     if (Cursorsystem.Iscollision())
                     {
-                        FileIOSystem.Instance.housingdatabase.objectsLocation[index].location = gridPosition;
-                        FileIOSystem.Instance.housingdatabase.objectsLocation[index].rotation = currentrotation;
-                        FileIOSystem.Instance.housingdatabase.objectsLocation[index].size = currentobjsize;
-
+                        CurrentObjectlocation.location = gridPosition;
+                        CurrentObjectlocation.rotation = currentrotation;
+                        CurrentObjectlocation.size = currentobjsize;
                         gameObject.transform.rotation = currentrotation;
                         gameObject.transform.localPosition = cellIndicator.transform.localPosition;
-
 
                         EffectSystem.Instance.playplaceeffect(cellIndicator.transform.position);
                         SoundSystem.Instance.PlayAudio(cellIndicator.transform.position);
@@ -455,6 +461,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
                         MapInfo.Instance.housingtutorial[2] = false;
                     }
                 }
+
                     else
                     {
                         Vector2Int tempsize = currentobjsize;
@@ -483,11 +490,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
-    /// <summary>
-    /// ��ġ �� ������Ʈ ������ �߷� Ǯ�� �� �ָ��� ��������
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
     private IEnumerator throwdelete(GameObject obj)
     {
          while (Vector3.Distance(obj.transform.position, ObjectLocation.transform.position) < 30)
@@ -503,8 +505,8 @@ public class PlacementSystem : Singleton<PlacementSystem>
                 yield break;
             
             yield return null;
+            }
         }
-    }
     private IEnumerator throwdelete2(GameObject obj)
     {
         float nowtime = Time.time;
@@ -514,17 +516,14 @@ public class PlacementSystem : Singleton<PlacementSystem>
             latertime = Time.time;
             yield return null;
         }
-        if (obj != null)
-        {
-            Destroy(obj);
-        }
+        if (obj != null)  Destroy(obj);
     }
+
 
     private IEnumerator EndTutorial()
     {
         float nowtime = Time.time;
         float latertime = Time.time;
-        print("laterrL: "+latertime);
         while (Mathf.Abs(nowtime-latertime) <= 3)
         {
             latertime = Time.time;
@@ -533,8 +532,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
 
         InteractEventManager.NotifyClearDialog();
         InteractEventManager.NotifyDialogShow("튜토리얼 끝! \n이제 마음껏 펫 하우스를 꾸며봅시다!");
-
-    }
+     }
 
 
     /// <summary>
@@ -684,10 +682,9 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
 
-    //�̺�Ʈ �Լ�
 
     /// <summary>
-    /// ��ġ �غ� �̺�Ʈ
+    /// Place Start Event
     /// </summary>
     /// <param name="p"></param>
     private void PlaceEnterEvent(SelectEnterEventArgs p)
@@ -701,7 +698,7 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
     /// <summary>
-    /// ��ġ �Ϸ� �̺�Ʈ
+    /// Place Complete Event
     /// </summary>
     /// <param name="p"></param>
     private void PlaceEvent(SelectExitEventArgs p)
@@ -712,11 +709,12 @@ public class PlacementSystem : Singleton<PlacementSystem>
             if (HousingUISystem.Instance != null) HousingUISystem.Instance.EnableButton(true);
             MapInfo.Instance.ResetTileScale();
         }
+        Cursorsystem.ColorCursorsetting(new Vector4(1, 1, 1, 1), new Vector4(0, 1, 0, 0.5f));
     }
 
 
     /// <summary>
-    /// ��ġ ���� �غ� �̺�Ʈ
+    /// Insertion Start Event
     /// </summary>
     /// <param name="p"></param>
     private void InsertEnterEvent(SelectEnterEventArgs p)
@@ -726,7 +724,6 @@ public class PlacementSystem : Singleton<PlacementSystem>
         InsertManager = p;
         InsertObject.GetComponent<XRGrabInteractable>().throwOnDetach = true;
         InsertObject.GetComponent<XRGrabInteractable>().throwSmoothingCurve = curve;
-
         Startinsertion();
         HousingUISystem.Instance.EnableButton(false);
         InsertionStartStructure(p.interactableObject.transform.gameObject);
@@ -735,192 +732,18 @@ public class PlacementSystem : Singleton<PlacementSystem>
     }
 
     /// <summary>
-    /// 
+    /// Insertion End Event
     /// </summary>
     /// <param name="p"></param>
     private void InsertCompleteEvent(SelectExitEventArgs p)
     {
             RotatePlacementByHand(RotateRealTimebyHand());
-
             InsertionStructure(p.interactableObject.transform.gameObject);
             StopPlacement(false);
             if(HousingUISystem.Instance != null) HousingUISystem.Instance.EnableButton(true);
             MapInfo.Instance.ResetTileScale();
+            Cursorsystem.ColorCursorsetting(new Vector4(1, 1, 1, 1), new Vector4(0, 1, 0, 0.5f));
     }
-
-
-
-
-
-    /*
-    /// <summary>
-    ///
-    /// </summary>
-    [Obsolete]
-    private void PlaceStructure()
-    {
-        if (inputManager.IsPointerOverUI()) return;
-
-        //���� Ŀ�� ��ġ ������
-        Vector3 mousePosition = inputManager.GetSelectedMapPositionInComputer();
-        //���� �� �ٱ��̸� ��ġ�� �ʿ䰡 �����ϱ� �״�� ��ġ ���� ����
-        if (!inputManager.ishit()) return;
-
-        //���� Ŀ�� ��ġ�� ������� grid.WorldToCell�ϸ� ������ǥ�踦 grid������Ʈ�� �׸���� ��� ��ȯ��������, �̻��ϰ� ��ȯ�Ǽ�(����������) �׳� round��Ű�� ������� �ٲ�
-        mousePosition = mousePosition * MapInfo.Instance.MapScale;
-        Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
-        ObjectLocation newlocation = new ObjectLocation();
-
-        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
-        if (placementValidity == false)
-            return;
-
-        //���� ��ġ�� ��ü�� ��ġ, ȸ�� ������ �����ͺ��̽��� �ִ� ����
-        newlocation.location = gridPosition;
-        newlocation.rotation = currentrotation;
-        newlocation.OBJID = selectedObjectIndex;
-        newlocation.size = currentobjsize;
-        database.objectsLocation.Add(newlocation);
-
-        //������ġ
-        GameObject newobject = MakeNewObject(selectedObjectIndex, ObjectLocation.transform, gridPosition, currentrotation, newlocation.size, "PlaceObject");
-        HousingUISystem.Instance.countlist[selectedObjectIndex].GetComponentInChildren<TMP_Text>().text = "" + database.objectsData[selectedObjectIndex].ObjectCount;
-
-        //������ ���� ��� �ش� ������Ʈ ��Ȱ��ȭ
-        if (database.objectsData[selectedObjectIndex].ObjectCount <= 0)
-        {
-            Debug.Log($"No Object");
-            HousingUISystem.Instance.countlist[selectedObjectIndex].GetComponent<Button>().interactable = false;
-            StopPlacement(true);
-        }
-    }
-
-    /// <summary>
-    /// ������ �ƿ� �Ⱦ� �Լ����� �ƴѵ�, ���� AR ȯ��ȿ����� �Ⱦ� �Լ�����.Ȥ�� ���� deprecated��Ű��, �׳� �ŵ鶰 ���� �ʴ� �� ��õ 
-    /// </summary>
-    //��ġ�� ��ü�� ���� ��ġ���� �Ǵ� ����
-    [Obsolete]
-    public void InsertionStructure()
-    {
-        if (inputManager.IsPointerOverUI()) return;
-
-        GameObject obj = cursorsystem.GetCollisionobject();
-        if (!obj) return;
-
-        Vector3 mousePosition = obj.transform.position * MapInfo.Instance.MapScale;
-        Vector3Int gridPosition = new Vector3Int(Mathf.RoundToInt(mousePosition.x), Mathf.RoundToInt(mousePosition.y), Mathf.RoundToInt(mousePosition.z));
-
-        if (!catchmode)
-        {
-            //���� ���������� ��ü ��ġ ���� (�������� �������� �����)
-            mouseIndicator = obj;
-            currentpos = gridPosition;
-            cursororigin.transform.SetParent(mouseIndicator.transform);
-            catchmode = true;
-            cellIndicator.SetActive(true);
-        }
-
-        else
-        {
-            //�� �ٱ����� Ŀ���� �̵����״ٸ� ����
-            inputManager.GetSelectedMapPositionInComputer();
-            if (!inputManager.ishit())
-            {
-                cursororigin.transform.SetParent(cursorparent.transform);
-                int index = database.objectsLocation.FindIndex(data => data.location == currentpos);
-
-                if (index >= 0)
-                {
-                    int id = database.objectsLocation[index].OBJID;
-                    Vector2Int size = database.objectsLocation[index].size;
-                    funitureData.RemoveObjectAt(currentpos, size);
-                    database.objectsData[id].ObjectCount++;
-                    database.objectsLocation.RemoveAt(index);
-                    Destroy(mouseIndicator);
-                    mouseIndicator = cursororigin;
-                    catchmode = false;
-
-                    cellIndicator.SetActive(false);
-                }
-            }
-
-            //���� Ŀ���� �� �ȿ� �ִٸ� ��ȿ�����̹Ƿ� ��ġ ����
-            else
-            {
-                int index = database.objectsLocation.FindIndex(data => data.location == currentpos);
-                if (index >= 0)
-                {
-                    int id = database.objectsLocation[index].OBJID;
-                    Vector2Int size = database.objectsLocation[index].size;
-                    PlacementData data = funitureData.GetObjectAt(currentpos);
-                    int placeindex = data.PlacedObjectIndex;
-
-                    //��ġ ��ġ ������ ��ġ�� �̹� �ٸ� ������ ��ġ�Ǿ� ������ �� �ſ�.
-                    if (funitureData.CanPlaceObjectAt(gridPosition, size))
-                    {
-                        cursororigin.transform.SetParent(cursorparent.transform);
-                        funitureData.RemoveObjectAt(currentpos, size);
-                        funitureData.AddObjectAt(gridPosition, size, id, placeindex);
-                        database.objectsLocation[index].location = gridPosition;
-
-                        mouseIndicator.transform.position = grid.CellToWorld(gridPosition);
-                        mouseIndicator = cursororigin;
-
-                        catchmode = false;
-                        cellIndicator.SetActive(false);
-
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// ������ �ƿ� �Ⱦ� �Լ����� �ƴѵ�, ���� AR ȯ��ȿ����� �Ⱦ� �Լ�����.Ȥ�� ���� deprecated��Ű��, �׳� �ŵ鶰 ���� �ʴ� �� ��õ 
-    /// </summary>
-    [Obsolete]
-    private GameObject MakeNewObject(int id, Transform parent, Vector3Int loc, Quaternion rot, Vector2Int size, String layer)
-    {
-        if (id >= 0)
-        {
-            GameObject newObject = Instantiate(database.objectsData[id].Prefab);
-            newObject.transform.SetParent(ObjectLocation.transform);
-            newObject.transform.rotation = rot;
-            //newObject.transform.position = grid.CellToWorld(loc);
-            newObject.transform.position = ((Vector3)loc); //  / MapInfo.Instance.MapScale;
-            newObject.transform.localScale = newObject.transform.localScale; // * (1/MapInfo.Instance.MapScale);
-            newObject.layer = LayerMask.NameToLayer(layer);
-
-            placedGameObjects.Add(newObject);
-            //GridData selectedData = database.objectsData[i].ID == 0 ? floorData : funitureData;
-            GridData selectedData = funitureData;
-            selectedData.AddObjectAt(loc, size, id, placedGameObjects.Count - 1);
-            return newObject;
-        }
-        else return null;
-    }
-
-    [Obsolete]
-    /// <summary>
-    ///������ �ƿ� �Ⱦ� �Լ����� �ƴѵ�, ���� AR ȯ��ȿ����� �Ⱦ� �Լ�����.Ȥ�� ���� deprecated��Ű��, �׳� �ŵ鶰 ���� �ʴ� �� ��õ 
-    /// </summary>
-    public void RotateStructure()
-    {
-        if (selectedObjectIndex == -1)
-            return;
-
-        Vector3 objrotation = currentrotation.eulerAngles;
-
-        objrotation.y += 90;
-        int tempx = currentobjsize.x;
-        currentobjsize.x = currentobjsize.y;
-        currentobjsize.y = tempx;
-
-        Vector3 scale = new Vector3(currentobjsize.x, currentobjsize.y, 1);
-        cellIndicator.transform.localScale = scale / MapInfo.Instance.MapScale;
-
-    }
-    */
 }
 
 

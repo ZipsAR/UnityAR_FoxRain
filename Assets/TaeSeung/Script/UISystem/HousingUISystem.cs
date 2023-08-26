@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.ARFoundation;
 
 public class HousingUISystem : MonoBehaviour
 {
     public static HousingUISystem Instance;
-
+    public TutorialManager tutorial;
 
     [SerializeField]
     private GameObject menuPanel, HousingButtonPrefab;
@@ -19,10 +20,9 @@ public class HousingUISystem : MonoBehaviour
     [SerializeField]
     private GameObject prefab;
 
-    public DialogController dialog;
 
     private void Start()
-    {
+    { 
         if (HousingUISystem.Instance == null)
         {
             Instance = this;
@@ -32,10 +32,18 @@ public class HousingUISystem : MonoBehaviour
         if (MapInfo.Instance.housingtutorial[0])
         {
             InteractEventManager.NotifyDialogShow("배치하고 싶은 가구버튼을 누르세요!");
-            MapInfo.Instance.housingtutorial[0] = false;
+           // StartCoroutine(tutorial.CameraRotateToDialog());
         }
-
      }
+
+    private void Update()
+    {
+        if (MapInfo.Instance.housingtutorial[0])
+        {
+            MapInfo.Instance.housingtutorial[0] = false;
+            StartCoroutine( tutorial.CameraRotateToDialog());
+        }
+    }
 
 
     public void InitializeUI()

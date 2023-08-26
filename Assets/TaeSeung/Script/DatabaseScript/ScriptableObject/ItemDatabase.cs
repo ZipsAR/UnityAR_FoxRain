@@ -10,7 +10,20 @@ public class ItemDatabase : ScriptableObject
     // Start is called before the first frame update
     public List<ItemData> ItemData;
 
-
+    private Dictionary<int, ItemData> _itemDictionary;
+    public Dictionary<int, ItemData> Itemdictionary
+    {
+        get
+        {
+            if (_itemDictionary == null)
+            {
+                _itemDictionary = new();
+                for (int i = 0; i < ItemData.Count; i++) _itemDictionary.Add(ItemData[i].ID, ItemData[i]);
+            }
+            return _itemDictionary;
+        }
+        set { _itemDictionary = value; }
+    }
 }
 
 
@@ -47,35 +60,33 @@ public class ItemData
         }
     }
 
-    //������Ʈ ���� ������
-    //������Ʈ �̸�
+    //Name
     public string Name;
 
-    //������Ʈ ���̵�
+    //Primary key
     public int ID;
 
-    //������Ʈ �Ͽ�¡ ũ��
+    //(housing funiture) size
     public Vector2Int Housingsize  = Vector2Int.one;
 
-    //���� ����
+    //(Store) Buying Price 
     public float BuyPrice = 0f;
 
-    //�Ǹ� ����
+    //(Store) Selling Price
     public float SellPrice  = 0f;
 
-    //������Ʈ ���� ������
+    //Actual Object Modeling
     public GameObject Prefab;
 
-    //������Ʈ ������ ����
+    //Text Explain
     public string DetailInfo = "No Data";
 
+    //(housing funiture) Category
     public FunitureCategory funitureCategory = FunitureCategory.None;
 
-    //������ ī�װ�
+    //Item Category
     public ItemCategory itemCategory;
 
-    //������ ���� ���� ����ü
+    //(Interaction) ItemSound
     public ItemSound itemSound;
-    
-
 }

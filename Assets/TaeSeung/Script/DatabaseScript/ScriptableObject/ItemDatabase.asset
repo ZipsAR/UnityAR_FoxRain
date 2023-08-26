@@ -20,6 +20,7 @@ MonoBehaviour:
     SellPrice: 1000
     Prefab: {fileID: 1908861269318448, guid: cfc3cb41de0af974d831fed578f4836a, type: 3}
     DetailInfo: "\uD479\uC2E0\uD55C \uCE68\uB300\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -31,6 +32,7 @@ MonoBehaviour:
     SellPrice: 500
     Prefab: {fileID: 1105668781091346, guid: 9247e2062ada8b242bfd94a2bb63d0a9, type: 3}
     DetailInfo: "\uCE68\uB300\uACC1\uC5D0 \uB450\uB294 \uD0C1\uC0C1\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -42,6 +44,7 @@ MonoBehaviour:
     SellPrice: 750
     Prefab: {fileID: 1413900915861342, guid: a060471ab5ae95843962195a821d0634, type: 3}
     DetailInfo: "\uC9C0\uC2DD\uC758 \uCC3D\uACE0, \uCC45\uC7A5\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -53,6 +56,7 @@ MonoBehaviour:
     SellPrice: 750
     Prefab: {fileID: 1089441187514440, guid: 4521e5bd0943ded4fb55c6b6a9d6983c, type: 3}
     DetailInfo: "\uC18C\uC911\uD55C \uBB3C\uAC74\uC744 \uB2F4\uC744 \uC11C\uB78D\uC7A5\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -64,6 +68,7 @@ MonoBehaviour:
     SellPrice: 1000
     Prefab: {fileID: 1157607663814482, guid: 5db4062648c0afc46aec0c8f57e9a01e, type: 3}
     DetailInfo: "\uD2BC\uD2BC\uD55C \uCC45\uC0C1\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -75,6 +80,7 @@ MonoBehaviour:
     SellPrice: 750
     Prefab: {fileID: 1211506654769874, guid: 93eb4906be308604ea94dd642b30c363, type: 3}
     DetailInfo: "TV\uB97C \uB193\uC744 \uC218 \uC788\uB294 \uBC1B\uCE68\uCC45\uC7A5\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -86,6 +92,7 @@ MonoBehaviour:
     SellPrice: 1400
     Prefab: {fileID: 1524366535568974, guid: dbbc369e3e9a1f240958222be21fad8c, type: 3}
     DetailInfo: "\uAC00\uAD6C\uC758 \uD544\uC218\uD488, \uD14C\uC774\uBE14\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -97,6 +104,7 @@ MonoBehaviour:
     SellPrice: 1200
     Prefab: {fileID: 1764648378786810, guid: 1ee0d96f73917e746a95f8eba001975e, type: 3}
     DetailInfo: "\uD479\uC2E0\uD479\uC2E0\uD55C \uC18C\uD30C\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -109,6 +117,7 @@ MonoBehaviour:
     Prefab: {fileID: 1552773891800394, guid: 3ca3bb4b682d6f149926e977ee2cfa44, type: 3}
     DetailInfo: "\uB9CE\uC740 \uAC83\uC744 \uB2F4\uC744 \uC218 \uC788\uB294 \uD070
       \uC637\uC7A5\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -121,6 +130,7 @@ MonoBehaviour:
     Prefab: {fileID: 1892955332092476, guid: affae5ed27b771e47af1437978ed34f2, type: 3}
     DetailInfo: "\uC11C\uB78D\uC7A5\uC785\uB2C8\uB2E4. \uC870\uAE08 \uB354 \uCEE4\uC84C\uC744
       \uC9C0\uB3C4?"
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -132,6 +142,7 @@ MonoBehaviour:
     SellPrice: 500
     Prefab: {fileID: 1896286203611054, guid: 99712ca56a07dd94aba5c27593f5a022, type: 3}
     DetailInfo: "\uC637\uC744 \uAC78\uCE60 \uC218 \uC788\uB294 \uD589\uAC70\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -143,6 +154,7 @@ MonoBehaviour:
     SellPrice: 500
     Prefab: {fileID: 1615271723323240, guid: 353a8a384bc2dcc4b8b935ca379b8f7a, type: 3}
     DetailInfo: "\uB204\uAD6C\uB4E0 \uC62C\uB77C\uAC00\uC138\uC694! \uC758\uC790\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -155,6 +167,7 @@ MonoBehaviour:
     Prefab: {fileID: 1214118423761400, guid: 1a7a4446e92057041855881d5056fc9e, type: 3}
     DetailInfo: "\uC0C1\uC790 \uB354\uBBF8\uC785\uB2C8\uB2E4. \uC5B4\uB518\uAC00\uC5D0\uC120
       \uC4F0\uACA0\uC8E0?"
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -167,6 +180,7 @@ MonoBehaviour:
     Prefab: {fileID: 1611733839842676, guid: 65e179eb740706140b5f476ae9f1fd86, type: 3}
     DetailInfo: "\uAC04\uC774 \uC758\uC790\uC785\uB2C8\uB2E4. \uC870\uAE08 \uBD88\uD3B8\uD558\uC9C0\uB9CC
       \uAF64 \uC4F8\uB9CC\uD569\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
@@ -178,6 +192,7 @@ MonoBehaviour:
     SellPrice: 240
     Prefab: {fileID: 203621444003351315, guid: 163998f8056714b99b93561a3b01255b, type: 3}
     DetailInfo: "\uD3AB\uC774 \uC88B\uC544\uD558\uB294 \uBE57!"
+    funitureCategory: 0
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
@@ -189,6 +204,7 @@ MonoBehaviour:
     SellPrice: 320
     Prefab: {fileID: 629580141820727744, guid: 8d7451146c30a40368f2a7bef7b00999, type: 3}
     DetailInfo: "\uAC15\uC544\uC9C0\uAC00 \uC81C\uC77C \uC88B\uC544\uD558\uB294 \uACF5"
+    funitureCategory: 0
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
@@ -201,6 +217,7 @@ MonoBehaviour:
     Prefab: {fileID: 2640600744100432755, guid: 2ab551f906f09441ab63b353cd03f0d8,
       type: 3}
     DetailInfo: "\uADC0\uC5EC\uC6B4 \uC624\uB9AC"
+    funitureCategory: 0
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
@@ -213,6 +230,7 @@ MonoBehaviour:
     Prefab: {fileID: 5141218689676214025, guid: 35b889ffce7984b1ab71b534d63e8e49,
       type: 3}
     DetailInfo: "\uD074\uB798\uC2DD\uD55C \uBF08\uB2E4\uADC0"
+    funitureCategory: 0
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
@@ -225,6 +243,7 @@ MonoBehaviour:
     Prefab: {fileID: 6955864280951840591, guid: 2191e707e67ba41c6885ff31e78a1fc4,
       type: 3}
     DetailInfo: "\uD558\uB098\uB3C4 \uC548 \uBB34\uC11C\uC6B4 \uC545\uC5B4"
+    funitureCategory: 0
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
@@ -237,6 +256,7 @@ MonoBehaviour:
     Prefab: {fileID: 3452373452339690997, guid: a409ebd91322e46b899f4c916ad2eb55,
       type: 3}
     DetailInfo: "\uACE0\uC591\uC774\uAC00 \uC88B\uC544\uD558\uAC8C \uC0DD\uAE34 \uC0DD\uC120"
+    funitureCategory: 0
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
@@ -250,6 +270,7 @@ MonoBehaviour:
       type: 3}
     DetailInfo: "\uB9DB\uC788\uC5B4 \uBCF4\uC774\uC9C0\uB9CC \uBABB \uBA39\uB294
       \uB78D\uC2A4\uD130"
+    funitureCategory: 0
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
@@ -262,6 +283,7 @@ MonoBehaviour:
     Prefab: {fileID: 1932061168482324926, guid: d56d21284fb704f7886ad76faea28ad4,
       type: 3}
     DetailInfo: "\uC791\uACE0 \uADC0\uC5EC\uC6B4 \uC0DD\uC950"
+    funitureCategory: 0
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
@@ -274,6 +296,7 @@ MonoBehaviour:
     Prefab: {fileID: 3852132196151276542, guid: 5ec6d282ad24c4c90a870e7b71788154,
       type: 3}
     DetailInfo: "\uC2DC\uB044\uB7EC\uC6CC \uBCF4\uC774\uB294 \uACE0\uBB34\uACF5"
+    funitureCategory: 0
     itemCategory: 2000
     itemSound:
       eatSound: {fileID: 0}
@@ -286,6 +309,7 @@ MonoBehaviour:
     Prefab: {fileID: 3910887079519108017, guid: 4c0489d7f80774ecca786880e7b02f3e,
       type: 3}
     DetailInfo: "\uBF08\uB2E4\uADC0 \uBAA8\uC591 \uAC04\uC2DD\uC785\uB2C8\uB2E4. "
+    funitureCategory: 0
     itemCategory: 3000
     itemSound:
       eatSound: {fileID: 0}
@@ -298,6 +322,7 @@ MonoBehaviour:
     Prefab: {fileID: 3426476143141822275, guid: c6b85e0423c074669b92c5c071bce37b,
       type: 3}
     DetailInfo: "\uB9DB\uC788\uB294 \uC0AC\uACFC!"
+    funitureCategory: 0
     itemCategory: 3000
     itemSound:
       eatSound: {fileID: 0}
@@ -310,6 +335,7 @@ MonoBehaviour:
     Prefab: {fileID: 1318835593607769837, guid: 46f051e1a55f94195bc6c8a9b73ce9d4,
       type: 3}
     DetailInfo: "\uC544\uC8FC \uB2EC\uB2EC\uD55C \uBC14\uB098\uB098"
+    funitureCategory: 0
     itemCategory: 3000
     itemSound:
       eatSound: {fileID: 0}
@@ -322,6 +348,7 @@ MonoBehaviour:
     Prefab: {fileID: 3121923051155183410, guid: ce3e4d1d2262f4ae4b9611ff369ae9d6,
       type: 3}
     DetailInfo: "\uC0C8\uCF64 \uB2EC\uCF64\uD55C \uC624\uB79C\uC9C0"
+    funitureCategory: 0
     itemCategory: 3000
     itemSound:
       eatSound: {fileID: 0}
@@ -334,6 +361,7 @@ MonoBehaviour:
     Prefab: {fileID: 2273176550276457144, guid: b97a0d4b033fb4a118064f22496d792a,
       type: 3}
     DetailInfo: "\uC0DD\uAC01\uBCF4\uB2E4 \uC0C8\uCF64\uD55C \uBC18\uCABD \uC624\uB79C\uC9C0"
+    funitureCategory: 0
     itemCategory: 3000
     itemSound:
       eatSound: {fileID: 0}
@@ -345,17 +373,19 @@ MonoBehaviour:
     SellPrice: 240
     Prefab: {fileID: 1063040462370530, guid: cbf65f5d2882d924d8b2dbe62ecceafb, type: 3}
     DetailInfo: "\uB354 \uD479\uC2E0\uD479\uC2E0\uD55C \uC18C\uD30C\uC785\uB2C8\uB2E4."
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}
       throwSound: {fileID: 0}
   - Name: funiture_sofa2
-    ID: 1014
+    ID: 1015
     Housingsize: {x: 2, y: 2}
     BuyPrice: 300
     SellPrice: 240
     Prefab: {fileID: 1842691868646622, guid: fab56fbc525a1cb499b56ac5f8d56869, type: 3}
     DetailInfo: "\uC5B4\uB514\uAE4C\uC9C0 \uD479\uC2E0\uD574\uC9C8 \uC0DD\uAC01\uC778\uAC70\uC57C?"
+    funitureCategory: 1
     itemCategory: 1000
     itemSound:
       eatSound: {fileID: 0}

@@ -17,7 +17,6 @@ public class CursorCollisionSystem : MonoBehaviour
 
     bool iscollision = true;
 
-
     private void Start()
     {
         thismaterial = this.GetComponent<MeshRenderer>();
@@ -25,17 +24,11 @@ public class CursorCollisionSystem : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        //print(iscollision);
-    }
-
     private void OnTriggerStay(Collider other)
     {
         //ObjectCursorcollision
         int mask = 7;
 
-        
         if (PlacementSystem.Instance.CatchObject != null)
         { 
             if (other.gameObject.layer == mask && PlacementSystem.Instance.CatchObject.transform.GetInstanceID() != other.gameObject.transform.parent.GetInstanceID())
@@ -53,6 +46,13 @@ public class CursorCollisionSystem : MonoBehaviour
         thismaterial.material.SetColor("_Color", new Vector4(1,1,1,1));
         childmaterial[1].material.SetColor("_Color", new Vector4(0, 1, 0, 0.5f));
 
+    }
+
+
+    public void ColorCursorsetting(Vector4 Color1, Vector4 Color2)
+    {
+        thismaterial.material.SetColor("_Color", Color1);
+        childmaterial[1].material.SetColor("_Color", Color2);
     }
 
 

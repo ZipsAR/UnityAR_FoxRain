@@ -24,8 +24,8 @@ public class Cursor : MonoBehaviour
 
     bool oncecheck = true;
 
-    float min = 999;
-    float max = -999;
+    //float min = 999;
+    //float max = -999;
 
 
     void Start()
