@@ -27,25 +27,9 @@ public class Singleton<T> : MonoBehaviour where T:Component
             }
             return instance;
         }
-        
-        // get
-        // {
-        //     if (instance == null)
-        //     {
-        //         instance = FindObjectOfType<T>();
-        //
-        //         if (instance == null)
-        //         {
-        //             GameObject gameObject = new GameObject("Controller");
-        //             instance = gameObject.AddComponent<T>();
-        //         }
-        //     }
-        //
-        //     return instance;
-        // }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (instance == null)
         {
