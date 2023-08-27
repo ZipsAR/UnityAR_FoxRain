@@ -1,0 +1,128 @@
+{
+    "name": "ZipsarHandAction",
+    "maps": [
+        {
+            "name": "PlayerGesture",
+            "id": "ed407994-8af7-45eb-85db-b18af2aeb848",
+            "actions": [
+                {
+                    "name": "HandMotion",
+                    "type": "Value",
+                    "id": "76f6ed30-a7aa-435c-967a-590c4d4733eb",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Grab",
+                    "type": "Button",
+                    "id": "892fe823-31aa-4dfa-bdab-3326a85f4ebd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pinch",
+                    "type": "Button",
+                    "id": "f019f73b-a536-4050-aee9-08bd25ace5b9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DevicePositionTracking",
+                    "type": "Value",
+                    "id": "538ef577-ac8e-42b8-8fee-b0ad75c88a1c",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "Gesture",
+                    "id": "49afb09c-95d5-41e3-9f8a-77a271199c4f",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HandMotion",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Negative",
+                    "id": "38a0cd05-5c6d-43d5-a3ad-821d9fb89c64",
+                    "path": "<HandTrackingDevice>/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HandMotion",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Positive",
+                    "id": "35395e71-7303-4ecd-be67-089723856116",
+                    "path": "<HandTrackingDevice>/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HandMotion",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "1ccef163-93a9-4201-861b-0f46808c0ed8",
+                    "path": "<HandTrackingDevice>/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "03d7e296-b47a-464d-85c4-3f6436f41c59",
+                    "path": "<HandTrackingDevice>/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pinch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1832f19c-7eb8-4b47-9834-c13e67d2f61c",
+                    "path": "<HandTrackingDevice>/devicePosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DevicePositionTracking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Hand",
+            "bindingGroup": "Hand",
+            "devices": [
+                {
+                    "devicePath": "<HandheldARInputDevice>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
