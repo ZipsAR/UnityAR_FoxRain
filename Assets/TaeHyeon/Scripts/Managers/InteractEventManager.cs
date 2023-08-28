@@ -16,61 +16,50 @@ using UnityEngine;
 /// </summary>
 public static class InteractEventManager
 {
+    // Stat change event
     public static event EventHandler<PetStatChangedEventArgs> OnPetStatChanged;
-
+    
+    // Pet select event
     public static event EventHandler<PetArgs> OnPetSelected;
     
+    // Pet initialization event
     public static event EventHandler<PetArgs> OnPetInitializedToManager;
-
     public static event EventHandler<PetArgs> OnPetInitializedToAll;
 
+    // Dialog event
     public static event EventHandler<DialogArgs> OnDialogCall;
-
     public static event EventHandler OnClearDialog;
-
-    public static event EventHandler<TutorialItemArgs> OnGetTutorialInfo;
-
     public static event EventHandler OnClickedDialogExitBtn;
+
+    // Tutorial event
+    public static event EventHandler<TutorialItemArgs> OnGetTutorialInfo;
     
+    
+    // Stat changed event notifier
     public static void NotifyPetStatChanged(PetStatNames changedStatName, int preStatAmount, int postStatAmount)
-    {
-        OnPetStatChanged?.Invoke(null, new PetStatChangedEventArgs(changedStatName, preStatAmount, postStatAmount));
-    }
+        => OnPetStatChanged?.Invoke(null, new PetStatChangedEventArgs(changedStatName, preStatAmount, postStatAmount));
 
+    // Pet selected event notifier
     public static void NotifyPetSelected(GameObject petObj)
-    {
-        OnPetSelected?.Invoke(null, new PetArgs(petObj));
-    }
+        => OnPetSelected?.Invoke(null, new PetArgs(petObj));
 
+    // Pet initialized event notifier
     public static void NotifyPetInitializedToManager(GameObject petObj)
-    {
-        OnPetInitializedToManager?.Invoke(null, new PetArgs(petObj));
-    }
-    
+        => OnPetInitializedToManager?.Invoke(null, new PetArgs(petObj));
     public static void NotifyPetInitializedToAll(GameObject petObj)
-    {
-        OnPetInitializedToAll?.Invoke(null, new PetArgs(petObj));
-    }
-
+        => OnPetInitializedToAll?.Invoke(null, new PetArgs(petObj));
+    
+    // Dialog event notifier
     public static void NotifyDialogShow(string content, Sprite infoSprite = default, DialogOrient dialogOrient = DialogOrient.Center)
-    {
-        OnDialogCall?.Invoke(null, new DialogArgs(content, infoSprite, dialogOrient));
-    }
-
+        => OnDialogCall?.Invoke(null, new DialogArgs(content, infoSprite, dialogOrient));
     public static void NotifyClearDialog()
-    {
-        OnClearDialog?.Invoke(null, null);
-    }
-
-    public static void NotifyTutorialItemInfo(bool isTutorialEnd, bool isGrabbed, TutorialType tutorialType)
-    {
-        OnGetTutorialInfo?.Invoke(null, new TutorialItemArgs(isTutorialEnd, isGrabbed, tutorialType));
-    }
-
+        => OnClearDialog?.Invoke(null, null);
     public static void NotifyDialogExitClicked()
-    {
-        OnClickedDialogExitBtn?.Invoke(null, null);
-    }
+        => OnClickedDialogExitBtn?.Invoke(null, null);
+
+    // Tutorial event notifier
+    public static void NotifyTutorialItemInfo(bool isTutorialEnd, bool isGrabbed, TutorialType tutorialType)
+        => OnGetTutorialInfo?.Invoke(null, new TutorialItemArgs(isTutorialEnd, isGrabbed, tutorialType));
 }
 
 public class PetStatChangedEventArgs : EventArgs

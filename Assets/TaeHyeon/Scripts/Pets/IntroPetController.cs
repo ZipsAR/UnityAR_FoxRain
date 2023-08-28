@@ -50,9 +50,9 @@ public class IntroPetController : MonoBehaviour
         if(introPets[i].instanceObj.GetComponent<PetBase>().inProcess) return;
         
         CmdDetail nextCmd;
-        if(CmdQueueManager.DequeCmd(introPets[i].cmdQueue, out nextCmd))
+        if(CmdQueueController.DequeCmd(introPets[i].cmdQueue, out nextCmd))
         {
-            CmdQueueManager.ExecuteCmd(introPets[i].instanceObj.GetComponent<PetBase>(), nextCmd);
+            CmdQueueController.ExecuteCmd(introPets[i].instanceObj.GetComponent<PetBase>(), nextCmd);
         }
         else
         {
@@ -69,10 +69,10 @@ public class IntroPetController : MonoBehaviour
             case 0:
                 Vector2 randomPointOnCircle = Random.insideUnitCircle.normalized * 2f;
                 Vector3 targetPos = new Vector3(randomPointOnCircle.x, GameData.floorHeight, randomPointOnCircle.y);
-                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Move, targetPos);
+                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Move, targetPos);
                 break;
             case 1:
-                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Brush);
+                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Brush);
                 break;
             default:
                 break;

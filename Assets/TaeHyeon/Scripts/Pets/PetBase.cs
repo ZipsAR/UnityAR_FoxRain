@@ -270,7 +270,6 @@ public abstract class PetBase : MonoBehaviour
                 // Set animation
                 animator.SetBool(Running, true);
                 
-                float t = 0;
                 while (transform.position != destination && petStates == PetStates.Walk)
                 {
                     // If it reaches as close as the distance x, it is considered to have arrived

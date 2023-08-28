@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class CmdDetail
 {
-    public int cmdIdx;
+    public int cmdIdx; // Cmd enum index
     public Vector3 targetDir; // Position the pet will move to
     public GameObject targetObj; // Snack or Toy
     

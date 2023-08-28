@@ -13,7 +13,6 @@ public class InteractManager : MonoBehaviour
     // Pet
     private PetBase pet;
     private bool isPetInitialized;
-    private bool otherManagerInitialized;
     
     // Manager
     [SerializeField] private InteractData interactData;
@@ -35,7 +34,6 @@ public class InteractManager : MonoBehaviour
         InteractEventManager.OnPetSelected += OnPetSelected;
         InteractEventManager.OnPetInitializedToManager -= OnPetInitializedToManager;
         InteractEventManager.OnPetInitializedToManager += OnPetInitializedToManager; 
-        isPetInitialized = false;
         
         cmdQueue = new Queue<CmdDetail>();
 
@@ -69,31 +67,11 @@ public class InteractManager : MonoBehaviour
 
     private void Update()
     {
-        if (!otherManagerInitialized)
-        {
-            if (isPetInitialized)
-            {
-                InteractEventManager.NotifyPetInitializedToAll(pet.gameObject);
-
-                pet.SetPetAnimationMode(PlayMode.InteractMode);
-
-                // Stat for distance
-                prevPetPos = pet.gameObject.transform.position;
-
-                otherManagerInitialized = true;
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        if(cmdQueue.Count != 0) CmdQueueManager.ShowCurQueue(cmdQueue);
-        
         // Do not run other commands if the pet is running a command
-        if(pet.inProcess) return;
+        // or if the pet is not initialized
+        if(pet.inProcess || !isPetInitialized) return;
         
-        if (CmdQueueManager.DequeCmd(cmdQueue, out nextCmd)) CmdQueueManager.ExecuteCmd(pet, nextCmd); // if queue is not empty, execute cmd
+        if (CmdQueueController.DequeCmd(cmdQueue, out nextCmd)) CmdQueueController.ExecuteCmd(pet, nextCmd); // if queue is not empty, execute cmd
         else AddMatchingConditionCmd(); // if queue is empty, Add commands that meet the current conditions
         
         // Track stat
@@ -106,60 +84,14 @@ public class InteractManager : MonoBehaviour
             interactData.brushingTime += Time.deltaTime;
             if (interactData.brushingTime > interactData.brushingTimeThreshold)
             {
-                CmdQueueManager.ClearCmdQueue(cmdQueue);
-                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Brush);
+                CmdQueueController.ClearCmdQueue(cmdQueue);
+                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Brush);
                 interactData.isBrushing = false;
                 interactData.brushingTime = 0f;
             }
         }
     }
     
-    
-    private void OnPetSelected(object sender, PetArgs e)
-    {
-        Instantiate(e.petObj, selectedPetSpawnTransform.position, selectedPetSpawnTransform.rotation);
-    }
-    
-    private void OnPetInitializedToManager(object sender, PetArgs e)
-    {
-        pet = e.petObj.GetComponent<PetBase>();
-
-        // Load stat from firebase
-        FirebaseDBManager.Instance.IsDataExistInAsync(
-            new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" }, 
-            CheckPetStatInDB);
-    }
-
-    private void CheckPetStatInDB(bool isExist, List<string> paths)
-    {
-        if (isExist)
-        {
-            Logger.Log("user's selected pet stat is exist");
-            FirebaseDBManager.Instance.LoadDataFromAsync<PetStatBase>(paths, OnGetPetStat);
-        }
-        else
-        {
-            pet.InitializeStatByDefault();
-            FirebaseDBManager.Instance.SaveDataToAsync(paths, pet.GetStat());
-            
-            isPetInitialized = true;
-        }
-    }
-
-    private void OnGetPetStat(bool isDataFound, PetStatBase statDB)
-    {
-        if (isDataFound)
-        {
-            Logger.Log("get pet stat from db");
-            pet.SetPetStatBase(statDB);
-            isPetInitialized = true;
-        }
-        else
-        {
-            Logger.LogError("cannot get pet stat from db");
-        }
-    }
-
     private void InitializeInteractData()
     {
         interactData.playerPetMaxDistance = 2f;
@@ -185,49 +117,61 @@ public class InteractManager : MonoBehaviour
 
     public InteractData GetInteractData() => interactData;
     
+    #region Event
+    
+    private void OnPetSelected(object sender, PetArgs e)
+    {
+        Instantiate(e.petObj, selectedPetSpawnTransform.position, selectedPetSpawnTransform.rotation);
+    }
+        
+    private void OnPetInitializedToManager(object sender, PetArgs e)
+    {
+        pet = e.petObj.GetComponent<PetBase>();
+
+        // Stat for distance
+        prevPetPos = pet.gameObject.transform.position;
+        pet.SetPetAnimationMode(PlayMode.InteractMode);
+
+        // Load stat from firebase
+        FirebaseDBManager.Instance.IsDataExistInAsync(
+            new List<string>{ UserData.UserId, "pet", GameManager.Instance.curPetType.ToString(), "stat" }, 
+            CheckPetStatInDB);
+    }
+
+    #endregion
+
     #region Stat
     
-        private bool CheckStatIsNull(PetStatBase localStat)
+        private void CheckPetStatInDB(bool isExist, List<string> paths)
         {
-            if (localStat.fullness == 0
-                && localStat.tiredness == 0
-                && localStat.cleanliness == 0
-                && localStat.exp == 0
-                && localStat.level == 1
-               )
+            if (isExist)
             {
-                return true;
+                Logger.Log("user's selected pet stat is exist");
+                FirebaseDBManager.Instance.LoadDataFromAsync<PetStatBase>(paths, OnGetPetStat);
             }
-
-            return false;
+            else
+            {
+                pet.InitializeStatByDefault();
+                FirebaseDBManager.Instance.SaveDataToAsync(paths, pet.GetStat());
+                
+                isPetInitialized = true;
+                InteractEventManager.NotifyPetInitializedToAll(pet.gameObject);
+            }
         }
     
-        private void SetEmptyListToDatabase()
+        private void OnGetPetStat(bool isDataFound, PetStatBase statDB)
         {
-            List<PetStatBase> emptyList = new List<PetStatBase>();
-
-            for (int i = 0; i < Enum.GetValues(typeof(PetType)).Length; i++)
+            if (isDataFound)
             {
-                emptyList.Add(new PetStatBase());
+                Logger.Log("get pet stat from db");
+                pet.SetPetStatBase(statDB);
+                isPetInitialized = true;
+                InteractEventManager.NotifyPetInitializedToAll(pet.gameObject);
             }
-
-            FileIOSystem.Instance.statdatabase.savedStats = emptyList;
-        }
-
-        private void SaveStat()
-        {
-            PetType curPetType = GameManager.Instance.curPetType;
-            
-            List<PetStatBase> existingStatList = FileIOSystem.Instance.statdatabase.savedStats;
-            existingStatList[(int)curPetType] =  pet.GetStat();
-            FileIOSystem.Instance.statdatabase.savedStats = existingStatList;
-            FileIOSystem.Instance.Save(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
-        }
-
-        private PetStatBase LoadStat(int idx)
-        {
-            FileIOSystem.Instance.Load(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
-            return FileIOSystem.Instance.statdatabase.savedStats[idx];
+            else
+            {
+                Logger.LogError("cannot get pet stat from db");
+            }
         }
 
         private void SaveMoney()
@@ -331,10 +275,10 @@ public class InteractManager : MonoBehaviour
             pet.AbortAllCmd();
             
             // Move to snack position
-            CmdQueueManager.ClearCmdQueue(cmdQueue);
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Move, Utils.GetPointBeforeDistance(transform.position, snackTransform.position, interactData.bitingDistance), targetObj: snackTransform.gameObject);
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look, snackTransform.position);
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Eat, targetObj: snackTransform.gameObject);
+            CmdQueueController.ClearCmdQueue(cmdQueue);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Move, Utils.GetPointBeforeDistance(transform.position, snackTransform.position, interactData.bitingDistance), targetObj: snackTransform.gameObject);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Look, snackTransform.position);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Eat, targetObj: snackTransform.gameObject);
         }
     
     #endregion
@@ -367,18 +311,18 @@ public class InteractManager : MonoBehaviour
             pet.AbortAllCmd();
 
             // Move to toy position
-            CmdQueueManager.ClearCmdQueue(cmdQueue);
+            CmdQueueController.ClearCmdQueue(cmdQueue);
             
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Move, pos: Utils.GetPointBeforeDistance(transform.position, toyTransform.position, interactData.bitingDistance), targetObj: toyTransform.gameObject);
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look, pos: toyTransform.position);
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Bite, targetObj: toyTransform.gameObject);
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look);
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Move);
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look);
-            CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Spit);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Move, pos: Utils.GetPointBeforeDistance(transform.position, toyTransform.position, interactData.bitingDistance), targetObj: toyTransform.gameObject);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Look, pos: toyTransform.position);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Bite, targetObj: toyTransform.gameObject);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Look);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Move);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Look);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Spit);
         }
 
-        #endregion
+    #endregion
 
     
     #region Cmd
@@ -393,8 +337,8 @@ public class InteractManager : MonoBehaviour
             // if player stay for a while
             if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
             {
-                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Look, GameManager.Instance.player.gameObject.transform.position);
-                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Sit);
+                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Look, GameManager.Instance.player.gameObject.transform.position);
+                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Sit);
             }
             // if player-pet distance increase
             else if(Vector3.Distance(GameManager.Instance.player.gameObject.transform.position, pet.transform.position) >
@@ -404,7 +348,7 @@ public class InteractManager : MonoBehaviour
                 Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
                             new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
                 
-                CmdQueueManager.EnqueueCmd(cmdQueue, Cmd.Move, nextCoord);
+                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Move, nextCoord);
             }
         }
         
