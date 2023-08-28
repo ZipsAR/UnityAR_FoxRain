@@ -33,10 +33,28 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "MiddleUp",
+                    "type": "Button",
+                    "id": "582d9019-fee7-4ff4-9568-820ebbe16221",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "DevicePositionTracking",
                     "type": "Value",
                     "id": "538ef577-ac8e-42b8-8fee-b0ad75c88a1c",
                     "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "DeviceRotationTracking",
+                    "type": "Value",
+                    "id": "60410ead-6396-49c3-91f5-9d4743382bd4",
+                    "expectedControlType": "Quaternion",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -106,6 +124,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "DevicePositionTracking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "620aaa01-88e3-4c7a-b584-28a1a986be6c",
+                    "path": "<HandFingerUp>/MiddlefingerUp",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MiddleUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "14422c33-8c06-4cfc-a7a8-0be31fa2b13c",
+                    "path": "<HandFingerUp>/deviceRotation",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DeviceRotationTracking",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
