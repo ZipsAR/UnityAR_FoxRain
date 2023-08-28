@@ -42,8 +42,6 @@ public class InteractManager : MonoBehaviour
         cleanlinessCriteria = new StatChangeCriteria(1, 2, 0f, 0f, 3f, 2f);
         
         InitializeInteractData();
-        
-        SetInitialCmd();
     }
 
     private void OnEnable()
@@ -69,27 +67,14 @@ public class InteractManager : MonoBehaviour
     {
         // Do not run other commands if the pet is running a command
         // or if the pet is not initialized
-        if(pet.inProcess || !isPetInitialized) return;
+        if(!isPetInitialized || pet.inProcess) return;
         
         if (CmdQueueController.DequeCmd(cmdQueue, out nextCmd)) CmdQueueController.ExecuteCmd(pet, nextCmd); // if queue is not empty, execute cmd
         else AddMatchingConditionCmd(); // if queue is empty, Add commands that meet the current conditions
         
         // Track stat
-        StatUpdateByDistance();
-        StatUpdateByTime();
-        
-        // Check the time player brushing pet
-        if (interactData.isBrushing)
-        {
-            interactData.brushingTime += Time.deltaTime;
-            if (interactData.brushingTime > interactData.brushingTimeThreshold)
-            {
-                CmdQueueController.ClearCmdQueue(cmdQueue);
-                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Brush);
-                interactData.isBrushing = false;
-                interactData.brushingTime = 0f;
-            }
-        }
+        DecreaseStatByDistance();
+        DecreaseStatByTime();
     }
     
     private void InitializeInteractData()
@@ -187,7 +172,7 @@ public class InteractManager : MonoBehaviour
         }
         
     
-        private void StatUpdateByDistance()
+        private void DecreaseStatByDistance()
         {
             float distanceMoved = Vector3.Distance(pet.transform.position, prevPetPos);
             
@@ -219,7 +204,7 @@ public class InteractManager : MonoBehaviour
             prevPetPos = pet.gameObject.transform.position;
         }
         
-        private void StatUpdateByTime()
+        private void DecreaseStatByTime()
         {
             fullnessCriteria.curTime += Time.deltaTime;
             cleanlinessCriteria.curTime += Time.deltaTime;
@@ -327,30 +312,26 @@ public class InteractManager : MonoBehaviour
     
     #region Cmd
 
-        private void SetInitialCmd()
+    private void AddMatchingConditionCmd()
+    {
+        // if player stay for a while
+        if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
         {
-            // EnqueueCmd(Cmd.Move);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Look, GameManager.Instance.player.gameObject.transform.position);
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Sit);
         }
-    
-        private void AddMatchingConditionCmd()
+        
+        // if player-pet distance increase
+        else if(Vector3.Distance(GameManager.Instance.player.gameObject.transform.position, pet.transform.position) >
+                interactData.playerPetMaxDistance)
         {
-            // if player stay for a while
-            if (GameManager.Instance.player.idleTime > interactData.playerIdleTimeThreshold && pet.petStates != PetStates.Sit)
-            {
-                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Look, GameManager.Instance.player.gameObject.transform.position);
-                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Sit);
-            }
-            // if player-pet distance increase
-            else if(Vector3.Distance(GameManager.Instance.player.gameObject.transform.position, pet.transform.position) >
-                    interactData.playerPetMaxDistance)
-            {
-                Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
-                Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
-                            new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
-                
-                CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Move, nextCoord);
-            }
+            Vector2 randomCoord = Random.insideUnitCircle * interactData.playerPetMaxDistance;
+            Vector3 nextCoord = GameManager.Instance.player.gameObject.transform.position +
+                        new Vector3(randomCoord.x, transform.position.y, randomCoord.y);
+            
+            CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Move, nextCoord);
         }
+    }
         
     #endregion
 
@@ -363,14 +344,39 @@ public class InteractManager : MonoBehaviour
         public void CombCollision(bool collisionState)
         {
             interactData.isBrushing = collisionState;
-
-            if (!collisionState)
+            
+            // If the comb is touching the pet, check the brushing time
+            if (collisionState)
             {
-                interactData.isBrushing = false;
+                StartCoroutine(CheckCombCollisionTime());
+            }
+            else
+            {
                 interactData.brushingTime = 0f;
             }
         }
-            
+        
+        private IEnumerator CheckCombCollisionTime()
+        {
+            // Stop time measurement if comb and pet fall off
+            while (interactData.isBrushing)
+            {
+                interactData.brushingTime += Time.deltaTime;
+                
+                // If the comb is touching the pet for a certain period of time,
+                // add a brushing command to the queue and reset the brushing time
+                if (interactData.brushingTime > interactData.brushingTimeThreshold)
+                {
+                    CmdQueueController.ClearCmdQueue(cmdQueue);
+                    CmdQueueController.EnqueueCmd(cmdQueue, Cmd.Brush);
+                    interactData.isBrushing = false;
+                    interactData.brushingTime = 0f;
+                    break;
+                }
+                yield return null;
+            }
+        }
+
         /// <summary>
         /// Called when player start touching the interaction part of the pet in player's hand
         /// </summary>
