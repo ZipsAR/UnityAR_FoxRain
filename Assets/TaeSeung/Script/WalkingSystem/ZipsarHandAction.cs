@@ -80,6 +80,24 @@ public partial class @ZipsarHandAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointerPositionTracking"",
+                    ""type"": ""Value"",
+                    ""id"": ""377b6233-d17e-48d0-a22c-cb8ca14df525"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PokePositionTracking"",
+                    ""type"": ""Value"",
+                    ""id"": ""e2cf7d57-1ade-45be-8579-e75caf33adef"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -170,6 +188,28 @@ public partial class @ZipsarHandAction : IInputActionCollection2, IDisposable
                     ""action"": ""DeviceRotationTracking"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""775c3577-6107-4cc9-98b8-dd650f3c6f1d"",
+                    ""path"": ""<HandTrackingDevice>/pointerPosition"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPositionTracking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b3167c09-f698-41da-a558-5274026c5060"",
+                    ""path"": ""<HandTrackingDevice>/pokePosition"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PokePositionTracking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -196,6 +236,8 @@ public partial class @ZipsarHandAction : IInputActionCollection2, IDisposable
         m_PlayerGesture_MiddleUp = m_PlayerGesture.FindAction("MiddleUp", throwIfNotFound: true);
         m_PlayerGesture_DevicePositionTracking = m_PlayerGesture.FindAction("DevicePositionTracking", throwIfNotFound: true);
         m_PlayerGesture_DeviceRotationTracking = m_PlayerGesture.FindAction("DeviceRotationTracking", throwIfNotFound: true);
+        m_PlayerGesture_PointerPositionTracking = m_PlayerGesture.FindAction("PointerPositionTracking", throwIfNotFound: true);
+        m_PlayerGesture_PokePositionTracking = m_PlayerGesture.FindAction("PokePositionTracking", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -261,6 +303,8 @@ public partial class @ZipsarHandAction : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerGesture_MiddleUp;
     private readonly InputAction m_PlayerGesture_DevicePositionTracking;
     private readonly InputAction m_PlayerGesture_DeviceRotationTracking;
+    private readonly InputAction m_PlayerGesture_PointerPositionTracking;
+    private readonly InputAction m_PlayerGesture_PokePositionTracking;
     public struct PlayerGestureActions
     {
         private @ZipsarHandAction m_Wrapper;
@@ -271,6 +315,8 @@ public partial class @ZipsarHandAction : IInputActionCollection2, IDisposable
         public InputAction @MiddleUp => m_Wrapper.m_PlayerGesture_MiddleUp;
         public InputAction @DevicePositionTracking => m_Wrapper.m_PlayerGesture_DevicePositionTracking;
         public InputAction @DeviceRotationTracking => m_Wrapper.m_PlayerGesture_DeviceRotationTracking;
+        public InputAction @PointerPositionTracking => m_Wrapper.m_PlayerGesture_PointerPositionTracking;
+        public InputAction @PokePositionTracking => m_Wrapper.m_PlayerGesture_PokePositionTracking;
         public InputActionMap Get() { return m_Wrapper.m_PlayerGesture; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -298,6 +344,12 @@ public partial class @ZipsarHandAction : IInputActionCollection2, IDisposable
                 @DeviceRotationTracking.started -= m_Wrapper.m_PlayerGestureActionsCallbackInterface.OnDeviceRotationTracking;
                 @DeviceRotationTracking.performed -= m_Wrapper.m_PlayerGestureActionsCallbackInterface.OnDeviceRotationTracking;
                 @DeviceRotationTracking.canceled -= m_Wrapper.m_PlayerGestureActionsCallbackInterface.OnDeviceRotationTracking;
+                @PointerPositionTracking.started -= m_Wrapper.m_PlayerGestureActionsCallbackInterface.OnPointerPositionTracking;
+                @PointerPositionTracking.performed -= m_Wrapper.m_PlayerGestureActionsCallbackInterface.OnPointerPositionTracking;
+                @PointerPositionTracking.canceled -= m_Wrapper.m_PlayerGestureActionsCallbackInterface.OnPointerPositionTracking;
+                @PokePositionTracking.started -= m_Wrapper.m_PlayerGestureActionsCallbackInterface.OnPokePositionTracking;
+                @PokePositionTracking.performed -= m_Wrapper.m_PlayerGestureActionsCallbackInterface.OnPokePositionTracking;
+                @PokePositionTracking.canceled -= m_Wrapper.m_PlayerGestureActionsCallbackInterface.OnPokePositionTracking;
             }
             m_Wrapper.m_PlayerGestureActionsCallbackInterface = instance;
             if (instance != null)
@@ -320,6 +372,12 @@ public partial class @ZipsarHandAction : IInputActionCollection2, IDisposable
                 @DeviceRotationTracking.started += instance.OnDeviceRotationTracking;
                 @DeviceRotationTracking.performed += instance.OnDeviceRotationTracking;
                 @DeviceRotationTracking.canceled += instance.OnDeviceRotationTracking;
+                @PointerPositionTracking.started += instance.OnPointerPositionTracking;
+                @PointerPositionTracking.performed += instance.OnPointerPositionTracking;
+                @PointerPositionTracking.canceled += instance.OnPointerPositionTracking;
+                @PokePositionTracking.started += instance.OnPokePositionTracking;
+                @PokePositionTracking.performed += instance.OnPokePositionTracking;
+                @PokePositionTracking.canceled += instance.OnPokePositionTracking;
             }
         }
     }
@@ -341,5 +399,7 @@ public partial class @ZipsarHandAction : IInputActionCollection2, IDisposable
         void OnMiddleUp(InputAction.CallbackContext context);
         void OnDevicePositionTracking(InputAction.CallbackContext context);
         void OnDeviceRotationTracking(InputAction.CallbackContext context);
+        void OnPointerPositionTracking(InputAction.CallbackContext context);
+        void OnPokePositionTracking(InputAction.CallbackContext context);
     }
 }

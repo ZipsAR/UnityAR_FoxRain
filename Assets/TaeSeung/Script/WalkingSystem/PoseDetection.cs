@@ -1,15 +1,11 @@
 using QCHT.Interactions.Core;
 using QCHT.Interactions.Hands;
+using QCHT.Interactions.Proximal;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.InputSystem.Layouts;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.InputSystem.Utilities;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.Scripting;
+
 
 public class PoseDetection : MonoBehaviour
 {
@@ -31,12 +27,18 @@ public class PoseDetection : MonoBehaviour
     private void Awake()
     {
         zipsar = new();
-        input = zipsar.PlayerGesture.DevicePositionTracking;
+        input = zipsar.PlayerGesture.Grab;
     }
 
     void Start()
     {
-        StartCoroutine(GetHandClass());
+        trackingmanager = XRHandTrackingManager.InstantiateHandTrackingManager();
+
+        
+    
+        
+
+        //StartCoroutine(GetHandClass());
     }
 
     private IEnumerator GetHandClass()                                           
@@ -52,18 +54,25 @@ public class PoseDetection : MonoBehaviour
             
             yield return null;  
         }
+        print("end");
     }
 
     private void Update()
     {
+
+
         if (hand != null)
         {
-           
+            
+         //  hand.UpdateData(pose.Space, ,1)
         }
         if (drivers != null) {
-            
+           
         }
         //Recognizepose();
+
+        //print(drivers[0].transform.name);
+        
     }
 
     void Recognizepose()
@@ -84,10 +93,12 @@ public class PoseDetection : MonoBehaviour
     private void OnEnable()
     {
         input.Enable();
+        input.performed -= Onon;
+        input.canceled -= Offoff;
+
         input.performed += Onon;
         input.canceled += Offoff;
-
-
+        
     }
 
     private void OnDisable()

@@ -8,10 +8,10 @@ public class PlaneDetection : MonoBehaviour
 {
     // Start is called before the first frame update
     Ray ray;
-
     // Update is called once per frame
     void Update()
     {
+        
         RayPlaneDetection();
     }
     

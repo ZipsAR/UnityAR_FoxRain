@@ -17,27 +17,27 @@ public class FingersData : MonoBehaviour
     // Index
     [SerializeField] public HandJointUpdater indexBase;
     [SerializeField] public HandJointUpdater indexMiddle;
-    [SerializeField] private HandJointUpdater indexTop;
+    [SerializeField] public HandJointUpdater indexTop;
 
     [Space]
 
     // Middle
-    [SerializeField] private HandJointUpdater middleBase;
-    [SerializeField] private HandJointUpdater middleMiddle;
-    [SerializeField] private HandJointUpdater middleTop;
+    [SerializeField] public HandJointUpdater middleBase;
+    [SerializeField] public HandJointUpdater middleMiddle;
+    [SerializeField] public HandJointUpdater middleTop;
 
     [Space]
 
     // Ring
-    [SerializeField] private HandJointUpdater ringBase;
-    [SerializeField] private HandJointUpdater ringMiddle;
-    [SerializeField] private HandJointUpdater ringTop;
+    [SerializeField] public HandJointUpdater ringBase;
+    [SerializeField] public HandJointUpdater ringMiddle;
+    [SerializeField] public HandJointUpdater ringTop;
 
     [Space]
 
     // Pinky
-    [SerializeField] private HandJointUpdater pinkyBase;
-    [SerializeField] private HandJointUpdater pinkyMiddle;
-    [SerializeField] private HandJointUpdater pinkyTop;
+    [SerializeField] public HandJointUpdater pinkyBase;
+    [SerializeField] public HandJointUpdater pinkyMiddle;
+    [SerializeField] public HandJointUpdater pinkyTop;
 
 }

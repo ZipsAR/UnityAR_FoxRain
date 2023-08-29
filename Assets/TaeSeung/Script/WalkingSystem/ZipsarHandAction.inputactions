@@ -58,6 +58,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PointerPositionTracking",
+                    "type": "Value",
+                    "id": "377b6233-d17e-48d0-a22c-cb8ca14df525",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "PokePositionTracking",
+                    "type": "Value",
+                    "id": "e2cf7d57-1ade-45be-8579-e75caf33adef",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -146,6 +164,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "DeviceRotationTracking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "775c3577-6107-4cc9-98b8-dd650f3c6f1d",
+                    "path": "<HandTrackingDevice>/pointerPosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PointerPositionTracking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b3167c09-f698-41da-a558-5274026c5060",
+                    "path": "<HandTrackingDevice>/pokePosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PokePositionTracking",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

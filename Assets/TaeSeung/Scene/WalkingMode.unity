@@ -1915,6 +1915,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750281285}
   m_CullTransparentMesh: 1
+--- !u!1 &1777661401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1777661403}
+  - component: {fileID: 1777661402}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1777661402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777661401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d95a6de1fd83e4eeeba10de1048a28e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ARSessions: {fileID: 0}
+  currentPlayMode: 0
+  interactManager: {fileID: 0}
+  interactAudioManager: {fileID: 0}
+  strollManager: {fileID: 0}
+  leftHand: {fileID: 0}
+  rightHand: {fileID: 0}
+  curPetType: 0
+  storeGet: 0
+--- !u!4 &1777661403
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777661401}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1833005081
 GameObject:
   m_ObjectHideFlags: 0
@@ -1959,8 +2012,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ff8f345f6d9ad949b6002601e8f13bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pose: {fileID: 11400000, guid: b63244111e7a3ff4d9941917ac18001b, type: 2}
-  trackingmanager: {fileID: 1155172702}
+  pose: {fileID: 11400000, guid: 345f359db00cd4ecd848a4e35771a22a, type: 2}
+  trackingmanager: {fileID: 0}
   input:
     m_Name: Input
     m_Type: 0
@@ -1970,8 +2023,8 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: eb37a491-a1ed-4047-9119-390fc501171c
-      m_Path: <HandTrackingDevice>/isTracked
+      m_Id: 50b36ee3-10fd-4cfb-9728-59e373c66b57
+      m_Path: <HandTrackingDevice>/gripPressed
       m_Interactions: 
       m_Processors: 
       m_Groups: 
