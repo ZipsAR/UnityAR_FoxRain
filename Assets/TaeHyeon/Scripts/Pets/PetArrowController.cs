@@ -45,7 +45,7 @@ public class PetArrowController : MonoBehaviour
         screenHeightHalf = Screen.height / 2;
 
         petTransform = e.petObj.transform;
-        circleBoundaryRadius = 300f;
+        circleBoundaryRadius = screenWidthHalf - 600f;
         isPetInitialized = true;
     }
 
@@ -78,6 +78,13 @@ public class PetArrowController : MonoBehaviour
 
         // Set arrow Position
         arrowRectTransform.localPosition = cameraToPet * circleBoundaryRadius;
+        Vector3 arrowposition = arrowRectTransform.localPosition;
+
+        if ((screenHeightHalf - 75f) < Mathf.Abs(arrowRectTransform.localPosition.y))
+        {
+            arrowposition.y = (arrowRectTransform.localPosition.y/Mathf.Abs(arrowRectTransform.localPosition.y))*(screenHeightHalf - 75f);
+            arrowRectTransform.localPosition = arrowposition;
+        }
     }
 
     private bool IsPetInView()
