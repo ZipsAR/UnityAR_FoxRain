@@ -6,32 +6,36 @@ using Logger = ZipsAR.Logger;
 
 public class PasswordController : MonoBehaviour
 {
-    [SerializeField] List<PasswordDot> passwordDots;
-    [SerializeField] GameObject dotPrefab;
+    [SerializeField] private List<PasswordDot> passwordDots;
+    [SerializeField] private GameObject dotPrefab;
     [SerializeField] private Material defaultMaterial;
     [SerializeField] private Material selectedMaterial;
     
     private LineRenderer lineRenderer;
-    private List<int> selectedPasswordIndices = new();
-    private int validateFingerId = -1;
+    private List<int> selectedPasswordIndices;
+    private int validateFingerId;
     
-    private float dx;
-    private float dy;
+    private float xInterval;
+    private float yInterval;
     
     private void Awake()
     {
-        dx = 0.2f;
-        dy = 0.2f;
-
+        xInterval = 0.2f;
+        yInterval = 0.2f;
+        validateFingerId = -1;
+        
         lineRenderer = GetComponent<LineRenderer>();
+        selectedPasswordIndices = new List<int>();
         
         int passwordNum = 1;
+        
+        // Create password dots
         for(int yIdx = 1; yIdx >= -1; yIdx--)
         {
             for (int xIdx = -1; xIdx <= 1; xIdx++)
             {
                 GameObject dot = Instantiate(dotPrefab, transform);
-                dot.transform.localPosition = new Vector3(dx * xIdx, dy * yIdx, 0f);
+                dot.transform.localPosition = new Vector3(xInterval * xIdx, yInterval * yIdx, 0f);
                 dot.GetComponent<PasswordDot>().Init(this, passwordNum++, defaultMaterial, selectedMaterial);
                 passwordDots.Add(dot.GetComponent<PasswordDot>());
             }
@@ -67,15 +71,6 @@ public class PasswordController : MonoBehaviour
         return true;
     }
     
-    public void ResetPassword()
-    {
-        validateFingerId = -1;
-        foreach (var dot in passwordDots)
-        {
-            dot.UnSelected();
-        }
-    }
-
     public void AddSelectedPasswordIndex(int num)
     {
         selectedPasswordIndices.Add(num - 1);
@@ -93,6 +88,16 @@ public class PasswordController : MonoBehaviour
                 dot.SetActiveFingerId(validateFingerId);
             }
         }
+    }
+    
+    public void ResetPassword()
+    {
+        validateFingerId = -1;
+        foreach (var dot in passwordDots)
+        {
+            dot.UnSelected();
+        }
+        selectedPasswordIndices.Clear();
     }
     
     public string GetPassword()

@@ -5,16 +5,16 @@ using UnityEngine;
 using UnityEngine.Events;
 using Logger = ZipsAR.Logger;
 
+[RequireComponent( typeof( ConfigurableJoint ) )]
 public class PhysicsButton : MonoBehaviour
 {
     [SerializeField] private float threshold = 0.1f;
-    [SerializeField] private float deadzone = 0.025f;
+    [SerializeField] private float deadZone = 0.025f;
+    public UnityEvent onPressed, onReleased;
 
     private bool isPressed;
     private Vector3 startPos;
     private ConfigurableJoint joint;
-    
-    public UnityEvent onPressed, onReleased;
 
     private void Start()
     {
@@ -39,7 +39,7 @@ public class PhysicsButton : MonoBehaviour
     {
         var value = Vector3.Distance(startPos, transform.localPosition) / joint.linearLimit.limit;
 
-        if (Math.Abs(value) < deadzone)
+        if (Math.Abs(value) < deadZone)
         {
             value = 0;
         }
