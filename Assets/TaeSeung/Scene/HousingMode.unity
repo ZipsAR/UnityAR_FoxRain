@@ -783,12 +783,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 985c1b201e9299a42b2b054fb271c7b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorial: {fileID: 1623693365}
-  menuPanel: {fileID: 1717634754}
-  HousingButtonPrefab: {fileID: 3324446682687189555, guid: 61c418a5b1554e34e99d440a22d2cb5d,
+  Tutorial: {fileID: 1623693365}
+  _menuPanel: {fileID: 1717634754}
+  _housingButtonPrefab: {fileID: 3324446682687189555, guid: 61c418a5b1554e34e99d440a22d2cb5d,
     type: 3}
-  itemdatabase: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
-  prefab: {fileID: 993405782}
+  _itemDatabase: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e, type: 2}
 --- !u!1 &1369904037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,9 +1050,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialog: {fileID: 411228925}
-  Sessionorigin: {fileID: 0}
-  Sessionorigincamera: {fileID: 0}
-  housingtutorial: 
+  SessionOrigin: {fileID: 0}
+  SessionOriginCamera: {fileID: 0}
 --- !u!4 &1623693366
 Transform:
   m_ObjectHideFlags: 0

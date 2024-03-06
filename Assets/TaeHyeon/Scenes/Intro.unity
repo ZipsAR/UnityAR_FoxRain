@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17267907, g: 0.2157718, b: 0.29767066, a: 1}
+  m_IndirectSpecularColor: {r: 0.17276841, g: 0.21589246, b: 0.2978262, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -750,7 +750,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1446032768}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &405939149
 BoxCollider:
@@ -1090,74 +1090,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c42d747c81fc5c4cb479566ad26d02d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invendatabase:
-    money: 10000
-    mydata:
-    - id: 1000
-      count: 2
-    - id: 1001
-      count: 1
-    - id: 1002
-      count: 3
-    - id: 1003
-      count: 2
-    - id: 1004
-      count: 2
-    - id: 1005
-      count: 1
-    - id: 1006
-      count: 1
-    - id: 1007
-      count: 1
-    - id: 1008
-      count: 2
-    - id: 1009
-      count: 3
-    - id: 1010
-      count: 3
-    - id: 1011
-      count: 1
-    - id: 1012
-      count: 3
-    - id: 1013
-      count: 2
-    - id: 1014
-      count: 1
-    - id: 1015
-      count: 1
-    - id: 2000
-      count: 3
-    - id: 2001
-      count: 1
-    - id: 2002
-      count: 2
-    - id: 2003
-      count: 2
-    - id: 2004
-      count: 1
-    - id: 2005
-      count: 2
-    - id: 2006
-      count: 1
-    - id: 2007
-      count: 2
-    - id: 2008
-      count: 2
-    - id: 3000
-      count: 1
-    - id: 3001
-      count: 1
-    - id: 3002
-      count: 3
-    - id: 3003
-      count: 2
-    - id: 3004
-      count: 1
-  housingdatabase:
-    objectsLocation: []
-  statdatabase:
+  InvenDatabase:
+    money: 0
+    mydata: []
+  PathName: 
+  StatDatabase:
     savedStats: []
-  path: 
 --- !u!4 &628937821
 Transform:
   m_ObjectHideFlags: 0
@@ -1231,6 +1169,11 @@ PrefabInstance:
       objectReference: {fileID: 1446032769}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: _grid
+      value: 
+      objectReference: {fileID: 1446032769}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: gridv
       value: 
       objectReference: {fileID: 1446032770}
@@ -1288,6 +1231,16 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: _cursorSystem
+      value: 
+      objectReference: {fileID: 2093615340}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: _inputManager
+      value: 
+      objectReference: {fileID: 815894877}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: cellIndicator
       value: 
       objectReference: {fileID: 2093615335}
@@ -1298,9 +1251,19 @@ PrefabInstance:
       objectReference: {fileID: 1446032771}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: _spawnPointObj
+      value: 
+      objectReference: {fileID: 1552930676}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: mouseIndicator
       value: 
       objectReference: {fileID: 1468521799}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: _cellIndicatorObj
+      value: 
+      objectReference: {fileID: 2093615335}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
       propertyPath: gridVisualization
@@ -1313,7 +1276,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: _mouseIndicatorObj
+      value: 
+      objectReference: {fileID: 1468521799}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: _objectLocationObj
+      value: 
+      objectReference: {fileID: 1029435794}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: _gridVisualizationObj
+      value: 
+      objectReference: {fileID: 1446032770}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: curve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: AniCurve.m_Curve.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
@@ -1328,6 +1311,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: AniCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: curve.m_Curve.Array.data[0].inSlope
       value: 0
       objectReference: {fileID: 0}
@@ -1338,6 +1326,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: AniCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: curve.m_Curve.Array.data[0].outSlope
       value: 0
       objectReference: {fileID: 0}
@@ -1345,6 +1338,36 @@ PrefabInstance:
         type: 3}
       propertyPath: curve.m_Curve.Array.data[1].outSlope
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: AniCurve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: AniCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: AniCurve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: AniCurve.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: AniCurve.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: AniCurve.m_Curve.Array.data[1].tangentMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7377371042895526926, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
@@ -1490,7 +1513,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1446032768}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &753711585
 MeshCollider:
@@ -1733,7 +1756,7 @@ MonoBehaviour:
   placementLayermask:
     serializedVersion: 2
     m_Bits: 8
-  Plane: {fileID: 1029435794}
+  PlaneObj: {fileID: 1029435794}
 --- !u!4 &815894878
 Transform:
   m_ObjectHideFlags: 0
@@ -4538,15 +4561,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59622c3846c8e9f4bb4a0f9617b9ba82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tileMapObj: {fileID: 1446032771}
+  _tileObj: {fileID: 2093615335}
+  _cursorObj: {fileID: 1468521799}
+  _planeObj: {fileID: 1029435794}
+  _gridGraphMaterial: {fileID: 2100000, guid: 02ab6df9cc8e7dd498f822b9b181a2ed, type: 2}
+  l_IsHousingTutorialFinish: 010101010101
   Mapsize: {x: 10, y: 10}
-  MapScale: 16
-  initialize: 0
-  TileMap: {fileID: 1446032771}
-  Tile: {fileID: 2093615335}
-  Cursor: {fileID: 1468521799}
-  Plane: {fileID: 1029435794}
-  gridgraph: {fileID: 2100000, guid: 02ab6df9cc8e7dd498f822b9b181a2ed, type: 2}
-  housingtutorial: 0101010101
+  MapScale: 1
+  IsInitialize: 1
 --- !u!4 &1855138420
 Transform:
   m_ObjectHideFlags: 0

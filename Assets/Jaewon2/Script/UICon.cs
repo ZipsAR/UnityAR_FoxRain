@@ -11,8 +11,8 @@ public class UICon : MonoBehaviour
     private void Start()
     {
         isSelected = false;
-        T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
-        FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+        T_money.text = FileIOSystem.Instance.InvenDatabase.money.ToString();
+        FileIOSystem.Instance.Load(FileIOSystem.Instance.InvenDatabase, FileIOSystem.InvenFileName);
 
     }
     public void BuyItem()
@@ -25,81 +25,81 @@ public class UICon : MonoBehaviour
         if(StoreManager.Instance.itemindex == -1) return;
         
         //GetComponent<GetData>().ItemInfo();
-        T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
+        T_money.text = FileIOSystem.Instance.InvenDatabase.money.ToString();
 
         //TaeSeung CODING
-        int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
+        int idx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
         if (idx == -1)
         {
             MyData data = new();
             data.id = itemdata.ItemData[StoreManager.Instance.itemindex].ID;
             data.count = 0;
-            FileIOSystem.Instance.invendatabase.mydata.Add(data);
-            for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
+            FileIOSystem.Instance.InvenDatabase.mydata.Add(data);
+            for (int i = 0; i < FileIOSystem.Instance.InvenDatabase.mydata.Count; i++)
             {
-                if (FileIOSystem.Instance.invendatabase.mydata[i].id == StoreManager.Instance.itemindex)
+                if (FileIOSystem.Instance.InvenDatabase.mydata[i].id == StoreManager.Instance.itemindex)
                 {
-                    if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
+                    if (FileIOSystem.Instance.InvenDatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
                     {
-                        FileIOSystem.Instance.invendatabase.mydata[i].count++;
+                        FileIOSystem.Instance.InvenDatabase.mydata[i].count++;
                     }
                 }
             }
         }
-            if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
+            if (FileIOSystem.Instance.InvenDatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
             {
-                for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
+                for (int i = 0; i < FileIOSystem.Instance.InvenDatabase.mydata.Count; i++)
                 {
-                    if(FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
                     {
-                        FileIOSystem.Instance.invendatabase.mydata[i].count++;
+                        FileIOSystem.Instance.InvenDatabase.mydata[i].count++;
                     }
                 }
-                FileIOSystem.Instance.invendatabase.money -= (int)itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
+                FileIOSystem.Instance.InvenDatabase.money -= (int)itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice;
             }
         //
 
-        FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase,FileIOSystem.InvenFilename);
-        FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+        FileIOSystem.Instance.Save(FileIOSystem.Instance.InvenDatabase,FileIOSystem.InvenFileName);
+        FileIOSystem.Instance.Load(FileIOSystem.Instance.InvenDatabase, FileIOSystem.InvenFileName);
         GetComponent<GetData>().ItemInfo_Inven();
         GetComponent<GetData>().ItemInfo();
         //GetComponent<GetData>().GetInfo();
-        string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
+        string c = JsonUtility.ToJson(FileIOSystem.Instance.InvenDatabase);
         Debug.Log("구매 완료 = " + c);
-        T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
+        T_money.text = FileIOSystem.Instance.InvenDatabase.money.ToString();
     }
     public void Sell()
     {
         if(StoreManager.Instance.itemindex == -1) return;
 
-        T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
-        int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
-        for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
+        T_money.text = FileIOSystem.Instance.InvenDatabase.money.ToString();
+        int idx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
+        for (int i = 0; i < FileIOSystem.Instance.InvenDatabase.mydata.Count; i++)
         {
-            if(FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
+            if(FileIOSystem.Instance.InvenDatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
             {
-                Debug.Log("갯수 추출 = " + FileIOSystem.Instance.invendatabase.mydata[i].count);
-                if (FileIOSystem.Instance.invendatabase.mydata[i].count <= 0)
+                Debug.Log("갯수 추출 = " + FileIOSystem.Instance.InvenDatabase.mydata[i].count);
+                if (FileIOSystem.Instance.InvenDatabase.mydata[i].count <= 0)
                 {
                     Debug.Log("판매버튼 비활성화");
                 }
                 else
                 {
-                    FileIOSystem.Instance.invendatabase.mydata[i].count--;
-                    Debug.Log("판매 완료 = " + FileIOSystem.Instance.invendatabase.mydata[i].count);
-                    FileIOSystem.Instance.invendatabase.money += (int)itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice;
+                    FileIOSystem.Instance.InvenDatabase.mydata[i].count--;
+                    Debug.Log("판매 완료 = " + FileIOSystem.Instance.InvenDatabase.mydata[i].count);
+                    FileIOSystem.Instance.InvenDatabase.money += (int)itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice;
                 }
 
             }
         }
-        FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
-        FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+        FileIOSystem.Instance.Save(FileIOSystem.Instance.InvenDatabase, FileIOSystem.InvenFileName);
+        FileIOSystem.Instance.Load(FileIOSystem.Instance.InvenDatabase, FileIOSystem.InvenFileName);
         GetComponent<GetData>().ItemInfo_Inven();
         GetComponent<GetData>().ItemInfo();
         //GetComponent<GetData>().GetInfo();
-        string c = JsonUtility.ToJson(FileIOSystem.Instance.invendatabase);
+        string c = JsonUtility.ToJson(FileIOSystem.Instance.InvenDatabase);
         Debug.Log("판매 완료 = " + c);
-        T_money.text = FileIOSystem.Instance.invendatabase.money.ToString();
+        T_money.text = FileIOSystem.Instance.InvenDatabase.money.ToString();
 
     }
 }

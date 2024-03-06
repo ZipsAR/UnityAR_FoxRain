@@ -76,10 +76,10 @@ public class GiftMovement : MonoBehaviour
     private void AddToInventory()
     {
         // add to inventory
-        int existMoney = FileIOSystem.Instance.invendatabase.money;
+        int existMoney = FileIOSystem.Instance.InvenDatabase.money;
         int moneyAfterEarned = existMoney + coinEarnedValue;
 
-        FileIOSystem.Instance.invendatabase.money = moneyAfterEarned;
+        FileIOSystem.Instance.InvenDatabase.money = moneyAfterEarned;
         
         InteractEventManager.NotifyPetStatChanged(PetStatNames.Money, existMoney, moneyAfterEarned);
         Destroy(gameObject);

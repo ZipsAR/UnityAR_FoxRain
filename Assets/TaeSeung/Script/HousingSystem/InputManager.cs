@@ -12,34 +12,18 @@ public class InputManager: Singleton<InputManager>
     // Start is called before the first frame update
     [SerializeField]
     private Camera sceneCamera;
-    private Vector3 lastPosition;
-
     [SerializeField]
     private LayerMask placementLayermask;
-    private bool hitting;
-    public GameObject Plane;
-    //public GameObject Wall;
 
+    public GameObject PlaneObj;
+    private Vector3 _lastPos;
     private Ray ray;
-
-    //[Obsolete]
-    //public event Action OnClicked, OnExit;
-
-    private void Start()
-    {
-
-    }
-
-    private void Update()
-    {
+    private bool _isHit;
 
 
-    }
+    public bool IsPointerOverUI() => EventSystem.current.IsPointerOverGameObject();
+    public bool IsHit() => _isHit;
 
-    public bool IsPointerOverUI()
-        => EventSystem.current.IsPointerOverGameObject();
-
-    
     /// <summary>
     /// object 위치를 기준으로 그리드 포지션을 가져와주는 함수
     /// </summary>
@@ -48,25 +32,25 @@ public class InputManager: Singleton<InputManager>
     public Vector3 GetSelectedMapPositionbyObject(Transform transform)
     {
         Vector3 Planepos = transform.position;
-        Planepos.y = Plane.transform.position.y - 1;
+        Planepos.y = PlaneObj.transform.position.y - 1;
 
         ray.origin = Planepos;
         //ray.origin = transform.position;
-        //ray.direction = Plane.transform.up * -1;
-        ray.direction = Plane.transform.up;
+        //ray.direction = PlaneObj.transform.up * -1;
+        ray.direction = PlaneObj.transform.up;
 
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 1000, placementLayermask))
         {
-            // UIButtonScript.Instance.DebuggingText("hitting : " +hit.collider.gameObject.name);
-            lastPosition = hit.point;
-            hitting = true;
+            // UIButtonScript.Instance.DebuggingText("_isHit : " +hit.collider.gameObject.name);
+            _lastPos = hit.point;
+            _isHit = true;
         }
         else
-            hitting = false;
+            _isHit = false;
 
-        return lastPosition;
+        return _lastPos;
     }
 
 
@@ -84,15 +68,15 @@ public class InputManager: Singleton<InputManager>
 
         if (Physics.Raycast(ray, out hit, 1000, placementLayermask))
         {
-            // UIButtonScript.Instance.DebuggingText("hitting : " +hit.collider.gameObject.name);
+            // UIButtonScript.Instance.DebuggingText("_isHit : " +hit.collider.gameObject.name);
             print(hit.transform.name);
-            lastPosition = hit.point;
-            hitting = true;
+            _lastPos = hit.point;
+            _isHit = true;
         }
         else
-            hitting = false;
+            _isHit = false;
 
-        return lastPosition;
+        return _lastPos;
     }
 
 
@@ -108,42 +92,13 @@ public class InputManager: Singleton<InputManager>
         {
             for (int i = 0; i < hit.Length; i++)
             {
-                HousingUISystem.Instance.DebuggingText("hitting : " + hit[i].collider.gameObject.name);
-                lastPosition = hit[i].point;
-                hitting = true;
+                HousingUISystem.Instance.DebuggingText("_isHit : " + hit[i].collider.gameObject.name);
+                _lastPos = hit[i].point;
+                _isHit = true;
             }
         }
         else
-            hitting = false;
-
+            _isHit = false;
         return hit;
     }
-
-
-
-    public bool ishit() => hitting;
-
-    [Obsolete]
-    public Vector3 GetSelectedMapPositionInComputer()
-    {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = sceneCamera.nearClipPlane;
-        ray = sceneCamera.ScreenPointToRay(mousePos);
-
-
-        ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 1000, placementLayermask))
-        {
-            // UIButtonScript.Instance.DebuggingText("hitting : " +hit.collider.gameObject.name);
-            lastPosition = hit.point;
-            hitting = true;
-        }
-        else
-            hitting = false;
-        return lastPosition;
-    }
-
 }

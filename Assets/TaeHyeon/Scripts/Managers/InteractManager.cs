@@ -211,34 +211,34 @@ public class InteractManager : MonoBehaviour
                 emptyList.Add(new PetStatBase());
             }
 
-            FileIOSystem.Instance.statdatabase.savedStats = emptyList;
+            FileIOSystem.Instance.StatDatabase.savedStats = emptyList;
         }
 
         private void SaveStat()
         {
             PetType curPetType = GameManager.Instance.curPetType;
             
-            List<PetStatBase> existingStatList = FileIOSystem.Instance.statdatabase.savedStats;
+            List<PetStatBase> existingStatList = FileIOSystem.Instance.StatDatabase.savedStats;
             existingStatList[(int)curPetType] =  pet.GetStat();
-            FileIOSystem.Instance.statdatabase.savedStats = existingStatList;
-            FileIOSystem.Instance.Save(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
+            FileIOSystem.Instance.StatDatabase.savedStats = existingStatList;
+            FileIOSystem.Instance.Save(FileIOSystem.Instance.StatDatabase, FileIOSystem.StatFileName);
         }
 
         private PetStatBase LoadStat(int idx)
         {
-            FileIOSystem.Instance.Load(FileIOSystem.Instance.statdatabase, FileIOSystem.StatFilename);
-            return FileIOSystem.Instance.statdatabase.savedStats[idx];
+            FileIOSystem.Instance.Load(FileIOSystem.Instance.StatDatabase, FileIOSystem.StatFileName);
+            return FileIOSystem.Instance.StatDatabase.savedStats[idx];
         }
 
         private void SaveMoney()
         {
-            FileIOSystem.Instance.Save(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+            FileIOSystem.Instance.Save(FileIOSystem.Instance.InvenDatabase, FileIOSystem.InvenFileName);
             Logger.Log("Save Money call");
         }
 
         private void LoadMoney()
         {
-            FileIOSystem.Instance.Load(FileIOSystem.Instance.invendatabase, FileIOSystem.InvenFilename);
+            FileIOSystem.Instance.Load(FileIOSystem.Instance.InvenDatabase, FileIOSystem.InvenFileName);
             Logger.Log("Load Money call");            
         }
         

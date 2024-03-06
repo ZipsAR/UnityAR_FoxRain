@@ -1,29 +1,27 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class MapInfo : Singleton<MapInfo>
 {
+    [SerializeField]
+    private GameObject _tileMapObj, _tileObj, _cursorObj, _planeObj;
+    [SerializeField]
+    private Material _gridGraphMaterial;
+
     // Start is called before the first frame update
+    public List<bool> l_IsHousingTutorialFinish;
     public Vector2Int Mapsize;
     public float MapScale;
-    private float FirstScale;
-    public bool initialize;
+    public bool IsInitialize;
 
-    [SerializeField]
-    private GameObject TileMap, Tile, Cursor, Plane;
-    [SerializeField]
-    private Material gridgraph;
-
-    private Vector3 TileMapscale, TileScale, CursorScale, TileEffectScale;
-
-    public List<bool> housingtutorial;
+    private Vector3 _tileMapScale, _tileScale, _cursorScale, _tileEffectScale;
+    private float _firstScale;
 
     private void Start()
     {
-        if(initialize) MapInitialize();
-        TileEffectScale = Tile.transform.GetChild(0).localScale;
+        if(IsInitialize) MapInitialize();
+        _tileEffectScale = _tileObj.transform.GetChild(0).localScale;
         SetOrigin();
     }
 
@@ -33,43 +31,42 @@ public class MapInfo : Singleton<MapInfo>
         this.transform.eulerAngles = new Vector3(0, 0, 0);
     }
 
-    public void SetAnotherPosition(Vector3 newposition)
-    {
-        this.transform.position = newposition;
-    }
+    public void SetAnotherPosition(Vector3 newposition) => this.transform.position = newposition;
+    
 
 
     public void MapInitialize()
     {
         float reverseMapScale = 1 / MapScale;
-        FirstScale = MapScale;
-        if (TileMap)
+        _firstScale = MapScale;
+        if (_tileMapObj)
         {
-            TileMapscale = TileMap.transform.localScale;
-            TileMap.transform.localScale = TileMapscale * reverseMapScale;
+            _tileMapScale = _tileMapObj.transform.localScale;
+            print(_tileMapScale);
+            _tileMapObj.transform.localScale = _tileMapScale * reverseMapScale;
         }
-        if (Cursor)
+        if (_cursorObj)
         {
-            CursorScale = Cursor.transform.localScale;
-            Cursor.transform.localScale = CursorScale * reverseMapScale;
+            _cursorScale = _cursorObj.transform.localScale;
+            _cursorObj.transform.localScale = _cursorScale * reverseMapScale;
         }
-        if (gridgraph)
+        if (_gridGraphMaterial)
         {
-            gridgraph.SetVector("_Size", new Vector2(1, 1));
-            TileScale = gridgraph.GetVector("_Size");
-            gridgraph.SetVector("_Size", TileScale * MapScale);
+            _gridGraphMaterial.SetVector("_Size", new Vector2(1, 1));
+            _tileScale = _gridGraphMaterial.GetVector("_Size");
+            _gridGraphMaterial.SetVector("_Size", _tileScale * MapScale);
         }
     }
 
     
     public void SetTileScale(Vector3 scale)
     {
-        Tile.transform.localScale = scale;
-        Vector3 effectscale = TileEffectScale;
+        _tileObj.transform.localScale = scale;
+        Vector3 effectscale = _tileEffectScale;
         effectscale.x = effectscale.x / scale.x;
         effectscale.y = effectscale.y / scale.y;
         effectscale.z = effectscale.z / scale.z;
-        Tile.transform.GetChild(0).localScale = effectscale;
+        _tileObj.transform.GetChild(0).localScale = effectscale;
     }
 
 
@@ -80,25 +77,22 @@ public class MapInfo : Singleton<MapInfo>
         MapScale = rescale;
         float reverseMapScale = 1 / MapScale;
 
-        if (TileMap)
-            TileMap.transform.localScale = TileMapscale * reverseMapScale;
+        if (_tileMapObj)
+            _tileMapObj.transform.localScale = _tileMapScale * reverseMapScale;
 
-        if (Cursor)
-            Cursor.transform.localScale = CursorScale * reverseMapScale;
+        if (_cursorObj)
+            _cursorObj.transform.localScale = _cursorScale * reverseMapScale;
 
-        if (gridgraph)
-            gridgraph.SetVector("_Size", TileScale * MapScale);
+        if (_gridGraphMaterial)
+            _gridGraphMaterial.SetVector("_Size", _tileScale * MapScale);
     }
 
-    public void ResetTileScale()
-    {
-        Tile.transform.GetChild(0).localScale = TileEffectScale;
-    }
+    public void ResetTileScale() => _tileObj.transform.GetChild(0).localScale = _tileEffectScale;
+    
 
     public void SetMapHousingmode()
     {
         PlacementSystem.Instance.ReleaseGrib();
-        
         if(HousingUISystem.Instance!=null) HousingUISystem.Instance.transform.gameObject.SetActive(true);
         if (EffectSystem.Instance != null) EffectSystem.Instance.gameObject.SetActive(true);
         if(SoundSystem.Instance != null) SoundSystem.Instance.gameObject.SetActive(true);
@@ -108,7 +102,7 @@ public class MapInfo : Singleton<MapInfo>
     public void SetMapNormalmode()
     {
        PlacementSystem.Instance.ProtectGrib();
-        Tile.SetActive(false);
+        _tileObj.SetActive(false);
         if (HousingUISystem.Instance != null)  HousingUISystem.Instance.transform.gameObject.SetActive(false);
        if (EffectSystem.Instance != null) EffectSystem.Instance.gameObject.SetActive(false);
        if (SoundSystem.Instance != null)SoundSystem.Instance.gameObject.SetActive(false);
@@ -117,45 +111,33 @@ public class MapInfo : Singleton<MapInfo>
 
     public void SetInvisiblemode()
     {
-        Tile.SetActive(false);
+        _tileObj.SetActive(false);
         this.gameObject.SetActive(false);
     }
 
-    public void SetVisiblemode()
-    {
-        this.gameObject.SetActive(true);
-    }
-
-
-    public void MapGrabmode(){
-        this.GetComponent<XRGrabInteractable>().enabled = true;
-    }
-
-    public void MapUnGrabmode() {
-        this.GetComponent<XRGrabInteractable>().enabled = false;
-    }
+    public void SetVisiblemode() => this.gameObject.SetActive(true);
+    public void MapGrabmode() => this.GetComponent<XRGrabInteractable>().enabled = true;
+    public void MapUnGrabmode()=> this.GetComponent<XRGrabInteractable>().enabled = false;
+    
 
     public void CatchObjectInitialize()
     {
 
-            if (PlacementSystem.Instance.InsertObject != null)
+            if (PlacementSystem.Instance.InsertObj != null)
             {
-                SelectEnterEventArgs p = PlacementSystem.Instance.InsertManager;
+                SelectEnterEventArgs p = PlacementSystem.Instance.InsertObjSelectEventArgs;
                 p.manager.CancelInteractableSelection(p.interactableObject);
                 p.manager.CancelInvoke();
             }
-            if(PlacementSystem.Instance.CreateObject != null)
+            if(PlacementSystem.Instance.CreateObj != null)
             {
-                SelectEnterEventArgs p = PlacementSystem.Instance.CreateManager;
-                GameObject a = PlacementSystem.Instance.CreateObject;
-                PlacementSystem.Instance.CreateObject = null;
+                SelectEnterEventArgs p = PlacementSystem.Instance.CreateObjSelectEventArgs;
+                GameObject a = PlacementSystem.Instance.CreateObj;
+                PlacementSystem.Instance.CreateObj = null;
                 PlacementSystem.Instance.SetCatchmode(false);    
                 Destroy(a);
 
-            if (p != null)
-            {
-                p.manager.CancelInteractableSelection(p.interactableObject);
-            }
+            if (p != null)  p.manager.CancelInteractableSelection(p.interactableObject);
             }
     }
 

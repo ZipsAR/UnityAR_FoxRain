@@ -75,21 +75,21 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 2000);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2000);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2000);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2"));
-                            calledBtn.transform.GetChild(0).Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
-                            calledBtn.transform.parent.Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                         else
@@ -119,21 +119,21 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 2001);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2001);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2001);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
-                            calledBtn.transform.GetChild(0).Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
-                            calledBtn.transform.parent.Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                         else
@@ -160,21 +160,21 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 2002);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2002);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2002);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton4")); 
-                            calledBtn.transform.GetChild(0).Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
-                            calledBtn.transform.parent.Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
@@ -202,22 +202,22 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 2003);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2003);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2003);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton5")); 
-                            calledBtn.transform.GetChild(0).Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
-                            calledBtn.transform.parent.Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                         else
@@ -244,22 +244,22 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 2004);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2004);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2004);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton6")); 
-                            calledBtn.transform.GetChild(0).Find("Circle6").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle6").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton6"));
-                            calledBtn.transform.parent.Find("Circle6").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle6").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                         else
@@ -289,22 +289,22 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 2005);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2005);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2005);
                     Debug.Log(invenIdx+" line 73");
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
-                            calledBtn.transform.GetChild(0).Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
-                            calledBtn.transform.parent.Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                         else
@@ -334,22 +334,22 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 2006);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2006);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2006);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
-                            calledBtn.transform.GetChild(0).Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
-                            calledBtn.transform.parent.Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                         else
@@ -376,22 +376,22 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 2007);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2007);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2007);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton4")); 
-                            calledBtn.transform.GetChild(0).Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
-                            calledBtn.transform.parent.Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
                         else
@@ -418,21 +418,21 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 2008);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2008);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2008);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton5")); 
-                            calledBtn.transform.GetChild(0).Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
-                            calledBtn.transform.parent.Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
@@ -467,21 +467,21 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 3000);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3000);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3000);
                     Debug.Log(invenIdx+" line 73");
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton2")); 
-                            calledBtn.transform.GetChild(0).Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj1 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton2"));
-                            calledBtn.transform.parent.Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle2").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
@@ -512,21 +512,21 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 3001);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3001);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3001);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton3")); 
-                            calledBtn.transform.GetChild(0).Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj2 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton3"));
-                            calledBtn.transform.parent.Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle3").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
@@ -554,21 +554,21 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 3002);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3002);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3002);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton4")); 
-                            calledBtn.transform.GetChild(0).Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj3 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton4"));
-                            calledBtn.transform.parent.Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle4").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
@@ -596,21 +596,21 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 3003);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3003);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3003);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton5")); 
-                            calledBtn.transform.GetChild(0).Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj4 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton5"));
-                            calledBtn.transform.parent.Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle5").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
@@ -638,21 +638,21 @@ public class ButtonManager : MonoBehaviour
                 idx = database.ItemData.FindIndex(data => data.ID == 3004);
                 try
                 {
-                    invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3004);
+                    invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3004);
                     Debug.Log(invenIdx);
-                    if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count >= 0)
+                    if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count >= 0)
                     {
                         // ButtonBackpack에서 함수가 실행된 경우에 Radial을 찾아서 child로 생성합니다. 생각해보니 calledBtn기준으로 parsing하는 게 아니라 ButtonManager기준으로 child tree 찾아가는게 낫겠네요(추후 수정할게요)
                         if(calledBtn.name == "ButtonBackpack")
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.GetChild(0).Find("RadialButton6")); 
-                            calledBtn.transform.GetChild(0).Find("Circle6").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.GetChild(0).Find("Circle6").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                         }
                         // RadialPrev, Next에서 실행된 경우에 Radial을 찾아서 child로 생성합니다.
                         else if(calledBtn.name == "RadialPrev" || calledBtn.name == "RadialNext")
                         {
                             RadialObj5 = Instantiate(database.ItemData[idx].Prefab, calledBtn.transform.parent.Find("RadialButton6"));
-                            calledBtn.transform.parent.Find("Circle6").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.invendatabase.mydata[invenIdx].count.ToString();
+                            calledBtn.transform.parent.Find("Circle6").GetChild(0).GetComponent<Text>().text = FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count.ToString();
                             
                         }
                         /*// 그 외(radialbutton에서 실행된 경우에, 본인의 child로 생성합니다.)
@@ -820,16 +820,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 2000);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2000);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2000);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -848,16 +848,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 2005);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2005);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2005);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -876,16 +876,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 3000);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3000);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3000);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -916,16 +916,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 2001);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2001);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2001);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -944,16 +944,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 2006);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2006);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2006);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -972,16 +972,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 3001);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3001);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3001);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -1012,16 +1012,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 2002);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2002);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2002);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -1040,16 +1040,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 2007);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2007);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2007);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -1068,16 +1068,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 3002);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3002);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3002);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -1108,16 +1108,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 2003);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2003);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2003);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -1136,16 +1136,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 2008);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2008);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2008);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -1164,16 +1164,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 3003);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3003);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3003);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -1204,16 +1204,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 2004);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 2004);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 2004);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else
@@ -1234,16 +1234,16 @@ public class ButtonManager : MonoBehaviour
                             int idx = database.ItemData.FindIndex(data => data.ID == 3004);
                             try
                             {
-                                int invenIdx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == 3004);
+                                int invenIdx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == 3004);
                                 Debug.Log(invenIdx);
-                                if(FileIOSystem.Instance.invendatabase.mydata[invenIdx].count > 0)
+                                if(FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count > 0)
                                 {
                                     GameObject consumedItem = Instantiate(database.ItemData[idx].Prefab, transform.position + new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z).normalized * (-0.1f), transform.rotation);
                                     // 중력속성, 크기, 위치 등 조정
                                     consumedItem.GetComponent<Rigidbody>().useGravity = false;
                                     Debug.Log(consumedItem.name + "생성");
                                     // 갯수 1개 줄이기
-                                    FileIOSystem.Instance.invendatabase.mydata[invenIdx].count --;
+                                    FileIOSystem.Instance.InvenDatabase.mydata[invenIdx].count --;
                                     Debug.Log(consumedItem + " 인벤토리에서 갯수 1개 차감");
                                 }
                                 else

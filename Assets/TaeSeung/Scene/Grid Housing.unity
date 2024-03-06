@@ -987,6 +987,7 @@ MonoBehaviour:
   placementLayermask:
     serializedVersion: 2
     m_Bits: 8
+  PlaneObj: {fileID: 1634754667}
 --- !u!4 &920066993
 Transform:
   m_ObjectHideFlags: 0
@@ -1050,14 +1051,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59622c3846c8e9f4bb4a0f9617b9ba82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tileMapObj: {fileID: 1894772645}
+  _tileObj: {fileID: 1086197329}
+  _cursorObj: {fileID: 990112179}
+  _planeObj: {fileID: 1634754667}
+  _gridGraphMaterial: {fileID: 2100000, guid: 02ab6df9cc8e7dd498f822b9b181a2ed, type: 2}
+  l_IsHousingTutorialFinish: 
   Mapsize: {x: 10, y: 10}
   MapScale: 1
-  initialize: 0
-  TileMap: {fileID: 686084824}
-  Tile: {fileID: 1086197329}
-  Cursor: {fileID: 990112179}
-  Plane: {fileID: 0}
-  gridgraph: {fileID: 2100000, guid: 02ab6df9cc8e7dd498f822b9b181a2ed, type: 2}
+  IsInitialize: 0
 --- !u!1 &990112179 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7279712198611558326, guid: feb89c3d83a7ba84cbc848a806dfae05,
@@ -2482,9 +2484,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 985c1b201e9299a42b2b054fb271c7b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  database: {fileID: 11400000, guid: 23cf6525873a6204e9d5744689468456, type: 2}
-  menuPanel: {fileID: 835961747}
-  countlist: []
+  Tutorial: {fileID: 0}
+  _menuPanel: {fileID: 0}
+  _housingButtonPrefab: {fileID: 0}
+  _itemDatabase: {fileID: 0}
 --- !u!1 &2066760633
 GameObject:
   m_ObjectHideFlags: 0
@@ -3198,6 +3201,11 @@ PrefabInstance:
       objectReference: {fileID: 543465739}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: _grid
+      value: 
+      objectReference: {fileID: 543465739}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: UIscript
       value: 
       objectReference: {fileID: 2059011923}
@@ -3218,6 +3226,22 @@ PrefabInstance:
       objectReference: {fileID: 920066992}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: itemdatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: 420ae39b78d474b4cb3efc98f518a08e,
+        type: 2}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: _cursorSystem
+      value: 
+      objectReference: {fileID: 990112184}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: _inputManager
+      value: 
+      objectReference: {fileID: 920066992}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: cellIndicator
       value: 
       objectReference: {fileID: 1086197329}
@@ -3233,6 +3257,11 @@ PrefabInstance:
       objectReference: {fileID: 990112179}
     - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
+      propertyPath: _cellIndicatorObj
+      value: 
+      objectReference: {fileID: 1086197329}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
       propertyPath: gridVisualization
       value: 
       objectReference: {fileID: 1894772645}
@@ -3241,6 +3270,16 @@ PrefabInstance:
       propertyPath: StructureControlUI
       value: 
       objectReference: {fileID: 1222149368}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: _mouseIndicatorObj
+      value: 
+      objectReference: {fileID: 990112179}
+    - target: {fileID: 7377371042895526920, guid: 2e48c7404c950f74ea2b900dc3caa892,
+        type: 3}
+      propertyPath: _gridVisualizationObj
+      value: 
+      objectReference: {fileID: 1894772645}
     - target: {fileID: 7377371042895526926, guid: 2e48c7404c950f74ea2b900dc3caa892,
         type: 3}
       propertyPath: m_Name

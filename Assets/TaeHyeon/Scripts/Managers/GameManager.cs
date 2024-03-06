@@ -85,7 +85,7 @@ public class GameManager : Singleton<GameManager>
         if(sceneName == "HousingMode"){
             MapInfo.Instance.SetMapHousingmode();
             MapInfo.Instance.SetOrigin();
-            MapInfo.Instance.SetReScale(16);
+            MapInfo.Instance.SetReScale(16f);
             MapInfo.Instance.MapUnGrabmode();
         }
         if(sceneName == "StoreScene")

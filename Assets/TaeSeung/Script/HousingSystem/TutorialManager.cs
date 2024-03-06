@@ -6,19 +6,17 @@ using UnityEngine.InputSystem.XR;
 public class TutorialManager : MonoBehaviour
 {
     public DialogController dialog;
+    public Transform SessionOrigin;
+    public Transform SessionOriginCamera;
+    //public List<bool> l_isPlayingHousingTutorial;
 
-    private Transform dialogpanel;
-    public Transform Sessionorigin;
-    public Transform Sessionorigincamera;
+    private Transform _dialogPanel;
     private bool isRotateFinish = false;
-
-    public List<bool> housingtutorial;
-
 
     void Start()
     {
-        Sessionorigin = Camera.main.transform.parent;
-        Sessionorigincamera =  Camera.main.transform;
+        SessionOrigin = Camera.main.transform.parent;
+        SessionOriginCamera =  Camera.main.transform;
         StartCoroutine(GetDialogpanel());
     }
 
@@ -29,17 +27,12 @@ public class TutorialManager : MonoBehaviour
         {
           if(dialog.GetComponentInChildren<RectTransform>() != null)
             {
-                dialogpanel = dialog.GetComponentInChildren<RectTransform>().transform;
+                _dialogPanel = dialog.GetComponentInChildren<RectTransform>().transform;
                 yield break;
             }
             
-            if (count == 1500)
-            {
-                yield break;
-            }
-
+            if (count == 1500) yield break;
             count++;
-
             yield return new WaitForSeconds(0.05f);
         }
     }
@@ -48,43 +41,43 @@ public class TutorialManager : MonoBehaviour
     public void CameraRotateOrigin()
     {
         Quaternion origin = new();
-        Sessionorigin.transform.rotation = origin;
+        SessionOrigin.transform.rotation = origin;
     }
 
     public IEnumerator CameraRotateToSomeObject(Transform transform, float Rotatetime)
     {
-       // Sessionorigin.LookAt(transform);
+       // SessionOrigin.LookAt(transform);
 
-        Quaternion targetRotation = Quaternion.LookRotation(transform.position - Sessionorigincamera.position);
-        Sessionorigincamera.GetComponent<TrackedPoseDriver>().enabled = false;
+        Quaternion targetRotation = Quaternion.LookRotation(transform.position - SessionOriginCamera.position);
+        SessionOriginCamera.GetComponent<TrackedPoseDriver>().enabled = false;
 
-        while (Sessionorigincamera.rotation != targetRotation)
+        while (SessionOriginCamera.rotation != targetRotation)
         {
-            targetRotation = Quaternion.LookRotation(transform.position - Sessionorigincamera.position);
-            Sessionorigincamera.rotation = Quaternion.Lerp(Sessionorigincamera.rotation, targetRotation, Time.deltaTime * Rotatetime);
+            targetRotation = Quaternion.LookRotation(transform.position - SessionOriginCamera.position);
+            SessionOriginCamera.rotation = Quaternion.Lerp(SessionOriginCamera.rotation, targetRotation, Time.deltaTime * Rotatetime);
             yield return null;
         }
 
-        Sessionorigincamera.GetComponent<TrackedPoseDriver>().enabled = true;
+        SessionOriginCamera.GetComponent<TrackedPoseDriver>().enabled = true;
     }
 
     public IEnumerator CameraRotateToDialog()
     {
-        //Sessionorigin.LookAt(dialogpanel);
-        Sessionorigin.transform.position = new Vector3(0, 0, -1f);
+        //SessionOrigin.LookAt(_dialogPanel);
+        SessionOrigin.transform.position = new Vector3(0, 0, -1f);
 
-        Quaternion targetRotation = Quaternion.LookRotation(dialogpanel.position - Sessionorigincamera.position);
-        Sessionorigincamera.GetComponent<TrackedPoseDriver>().enabled = false;
+        Quaternion targetRotation = Quaternion.LookRotation(_dialogPanel.position - SessionOriginCamera.position);
+        SessionOriginCamera.GetComponent<TrackedPoseDriver>().enabled = false;
 
-        while (Sessionorigincamera.rotation != targetRotation)
+        while (SessionOriginCamera.rotation != targetRotation)
         {
-                targetRotation = Quaternion.LookRotation(dialogpanel.position - Sessionorigincamera.position);
-                Sessionorigincamera.rotation = Quaternion.Lerp(Sessionorigincamera.rotation, targetRotation, Time.deltaTime * 2.5f);
+                targetRotation = Quaternion.LookRotation(_dialogPanel.position - SessionOriginCamera.position);
+                SessionOriginCamera.rotation = Quaternion.Lerp(SessionOriginCamera.rotation, targetRotation, Time.deltaTime * 2.5f);
                 yield return null;
         }
 
-        Sessionorigincamera.GetComponent<TrackedPoseDriver>().enabled = true;
-        Sessionorigin.transform.position = new Vector3(0, 0, 0f);
+        SessionOriginCamera.GetComponent<TrackedPoseDriver>().enabled = true;
+        SessionOrigin.transform.position = new Vector3(0, 0, 0f);
     }
 
 

@@ -66,27 +66,27 @@ public class GetData : MonoBehaviour
     }
     public void ItemInfo()
     {
-        int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
+        int idx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.itemindex].ID);
         if (idx == -1)
         {
             MyData data = new();
             data.id = itemdata.ItemData[StoreManager.Instance.itemindex].ID;
             data.count = 0;
-            FileIOSystem.Instance.invendatabase.mydata.Add(data);
+            FileIOSystem.Instance.InvenDatabase.mydata.Add(data);
         }
         //GetInfo();
-        for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
+        for (int i = 0; i < FileIOSystem.Instance.InvenDatabase.mydata.Count; i++)
         {
-            if (FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
+            if (FileIOSystem.Instance.InvenDatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
             {
-               if (FileIOSystem.Instance.invendatabase.mydata[i].count <= 0)
+               if (FileIOSystem.Instance.InvenDatabase.mydata[i].count <= 0)
                 {
                     sellButtonSprite.color = new Color32(85,85,85,255);
                     sellButtonText.color = new Color32(255, 255, 255, 255);
                     sellButtonText.fontSize = 30;
                     sellButtonText.text = "갯수가 부족합니다";
                 }
-                if (FileIOSystem.Instance.invendatabase.mydata[i].count > 0)
+                if (FileIOSystem.Instance.InvenDatabase.mydata[i].count > 0)
                 {
                     sellButtonSprite.color = new Color32(255, 255, 255, 255);
                     sellButtonText.color = new Color32(50, 50, 50, 255);
@@ -95,24 +95,24 @@ public class GetData : MonoBehaviour
                 }
                 itemDetail.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
                 Debug.Log("\n 판매2 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice.ToString());
-                itemDetail2.text = "현재 보유 수 " + FileIOSystem.Instance.invendatabase.mydata[i].count.ToString() + "\n 판매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice.ToString() + "\n 구매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice.ToString();
+                itemDetail2.text = "현재 보유 수 " + FileIOSystem.Instance.InvenDatabase.mydata[i].count.ToString() + "\n 판매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice.ToString() + "\n 구매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice.ToString();
                 itemDetail3.text = "판매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].SellPrice.ToString();
                 itemDetail4.text = "구매 가격 = " + itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice.ToString();
 
             }
         }
-        for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
+        for (int i = 0; i < FileIOSystem.Instance.InvenDatabase.mydata.Count; i++)
         {
-            if (FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
+            if (FileIOSystem.Instance.InvenDatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.itemindex].ID)
             {
-                if (FileIOSystem.Instance.invendatabase.money < itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
+                if (FileIOSystem.Instance.InvenDatabase.money < itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
                 {
                     buyButtonSprite.color = new Color32(85, 85, 85, 255);
                     buyButtonText.color = new Color32(255, 255, 255, 255);
                     buyButtonText.fontSize = 30;
                     buyButtonText.text = "골드가 부족합니다";
                 }
-                if (FileIOSystem.Instance.invendatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
+                if (FileIOSystem.Instance.InvenDatabase.money >= itemdata.ItemData[StoreManager.Instance.itemindex].BuyPrice)
                 {
                     buyButtonSprite.color = new Color32(255, 255, 255, 255);
                     buyButtonText.color = new Color32(50, 50, 50, 255);
@@ -120,27 +120,27 @@ public class GetData : MonoBehaviour
                     buyButtonText.text = "구매하기";
                 }
                 itemDetail.text = itemdata.ItemData[StoreManager.Instance.itemindex].DetailInfo;
-                itemDetail2.text = "현재 보유 수 " + FileIOSystem.Instance.invendatabase.mydata[i].count.ToString();
+                itemDetail2.text = "현재 보유 수 " + FileIOSystem.Instance.InvenDatabase.mydata[i].count.ToString();
             }
         }
 
     }
     public void ItemInfo_Inven()
     {
-        int idx = FileIOSystem.Instance.invendatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].ID);
+        int idx = FileIOSystem.Instance.InvenDatabase.mydata.FindIndex(data => data.id == itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].ID);
         if (idx == -1)
         {
             MyData data = new();
             data.id = itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].ID;
             data.count = 0;
-            FileIOSystem.Instance.invendatabase.mydata.Add(data);
+            FileIOSystem.Instance.InvenDatabase.mydata.Add(data);
         }
-        for (int i = 0; i < FileIOSystem.Instance.invendatabase.mydata.Count; i++)
+        for (int i = 0; i < FileIOSystem.Instance.InvenDatabase.mydata.Count; i++)
         {
-            if (FileIOSystem.Instance.invendatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].ID)
+            if (FileIOSystem.Instance.InvenDatabase.mydata[i].id == itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].ID)
             {
                 itemDetail_Inven.text = itemdata.ItemData[StoreManager.Instance.Itemindex_Inven].DetailInfo;
-                itemDetail2_Inven.text = "현재 보유 수 " + FileIOSystem.Instance.invendatabase.mydata[i].count.ToString();
+                itemDetail2_Inven.text = "현재 보유 수 " + FileIOSystem.Instance.InvenDatabase.mydata[i].count.ToString();
             }
         }
     }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,20 +5,15 @@ using UnityEngine;
 /// </summary>
 public class CursorCollisionSystem : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private MeshRenderer[] _childMaterials;
+    private MeshRenderer _thisMaterial;
 
-    private MeshRenderer[] childmaterial;
-    private MeshRenderer thismaterial;
-
-    Color childInitializecolor;
-    Color thisInitializecolor;
-
-    bool iscollision = true;
+    private bool _isCollision = true;
 
     private void Start()
     {
-        thismaterial = this.GetComponent<MeshRenderer>();
-        childmaterial = this.GetComponentsInChildren<MeshRenderer>();
+        _thisMaterial = this.GetComponent<MeshRenderer>();
+        _childMaterials = this.GetComponentsInChildren<MeshRenderer>();
 
     }
 
@@ -29,35 +22,31 @@ public class CursorCollisionSystem : MonoBehaviour
         //ObjectCursorcollision
         int mask = 7;
 
-        if (PlacementSystem.Instance.CatchObject != null)
+        if (PlacementSystem.Instance.CatchObj != null)
         { 
-            if (other.gameObject.layer == mask && PlacementSystem.Instance.CatchObject.transform.GetInstanceID() != other.gameObject.transform.parent.GetInstanceID())
+            if (other.gameObject.layer == mask && PlacementSystem.Instance.CatchObj.transform.GetInstanceID() != other.gameObject.transform.parent.GetInstanceID())
             {
-                iscollision = false;
-                thismaterial.material.SetColor("_Color", new Vector4(1,0,0,0.5f));
-                childmaterial[1].material.SetColor("_Color", new Vector4(1,0,0,0.5f));
+                _isCollision = false;
+                _thisMaterial.material.SetColor("_Color", new Vector4(1,0,0,0.5f));
+                _childMaterials[1].material.SetColor("_Color", new Vector4(1,0,0,0.5f));
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        iscollision = true;
-        thismaterial.material.SetColor("_Color", new Vector4(1,1,1,1));
-        childmaterial[1].material.SetColor("_Color", new Vector4(0, 1, 0, 0.5f));
+        _isCollision = true;
+        _thisMaterial.material.SetColor("_Color", new Vector4(1,1,1,1));
+        _childMaterials[1].material.SetColor("_Color", new Vector4(0, 1, 0, 0.5f));
 
     }
 
 
     public void ColorCursorsetting(Vector4 Color1, Vector4 Color2)
     {
-        thismaterial.material.SetColor("_Color", Color1);
-        childmaterial[1].material.SetColor("_Color", Color2);
+        _thisMaterial.material.SetColor("_Color", Color1);
+        _childMaterials[1].material.SetColor("_Color", Color2);
     }
 
-
-    public bool Iscollision() => iscollision;
-
-
-
+    public bool Iscollision() => _isCollision;
 }

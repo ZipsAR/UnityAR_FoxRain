@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
@@ -8,35 +6,29 @@ using UnityEngine;
 
 public class FileIOSystem : Singleton<FileIOSystem>
 {
-    public InventoryDatabase invendatabase;
-    [HideInInspector]
-    public HousingObjectdatabase housingdatabase;
-    [HideInInspector]
-    public StatDatabase statdatabase;
-    public string path;
+    public InventoryDatabase InvenDatabase;
+    public string PathName;
 
     [HideInInspector]
-    public const string InvenFilename = "Invendatabase";
+    public HousingObjectdatabase HousingDatabase;
     [HideInInspector]
-    public const string HousingFilename = "Housingdatabase";
+    public StatDatabase StatDatabase;
     [HideInInspector]
-    public const string StatFilename = "Statdatabase";
+    public const string InvenFileName = "Invendatabase";
+    [HideInInspector]
+    public const string HousingFileName = "Housingdatabase";
+    [HideInInspector]
+    public const string StatFileName = "Statdatabase";
 
     private void Start()
     {
-        path = Application.persistentDataPath;
-
-        if (IsFileExist(InvenFilename)){
-            AllLoad();
-        }
-        else
-        {
-            print("aaasdasd!");
-            Save(housingdatabase, HousingFilename);
-            Save(invendatabase, InvenFilename);
+        PathName = Application.persistentDataPath;
+        if (IsFileExist(InvenFileName))  AllLoad();
+        else{
+            Save(HousingDatabase, HousingFileName);
+            Save(InvenDatabase, InvenFileName);
         }
     }
-
 
     /// <summary>
     /// Check file exist
@@ -45,23 +37,15 @@ public class FileIOSystem : Singleton<FileIOSystem>
     /// <returns>exist: true, else: false </returns>
     public bool IsFileExist(string filename)
     {
-        if (File.Exists(path + "/" + filename + ".json"))
-            return true;
-
-        else
-            return false;
+        if (File.Exists(PathName + "/" + filename + ".json")) return true;
+        else return false;
     }
-
-
-
 
     //Save data file
     public void Save<T>(T database, string Filename)
     {
-        FileStream filestream = new FileStream(string.Format("{0}/{1}.json",path, Filename), FileMode.Create);
-
+        FileStream filestream = new FileStream(string.Format("{0}/{1}.json",PathName, Filename), FileMode.Create);
         string jsondata;
-
         jsondata = JsonConvert.SerializeObject(database);
         byte[] data = Encoding.UTF8.GetBytes(jsondata);
         filestream.Write(data, 0, data.Length);
@@ -72,7 +56,7 @@ public class FileIOSystem : Singleton<FileIOSystem>
     //Load data file
     public void Load<T>(T database, string Filename)
     {
-        FileStream filestream = new FileStream(string.Format("{0}/{1}.json", path, Filename), FileMode.Open);
+        FileStream filestream = new FileStream(string.Format("{0}/{1}.json", PathName, Filename), FileMode.Open);
         print(database.GetType());
         byte[] data = new byte[filestream.Length];
         filestream.Read(data, 0, data.Length);
@@ -85,23 +69,23 @@ public class FileIOSystem : Singleton<FileIOSystem>
 
     public void AllSave()
     {
-        FileSave<InventoryDatabase>("Invendatabase", invendatabase);
-        FileSave<HousingObjectdatabase>("Housingdatabase", housingdatabase);
-        FileSave<StatDatabase>("Statdatabase", statdatabase);
+        FileSave<InventoryDatabase>("Invendatabase", InvenDatabase);
+        FileSave<HousingObjectdatabase>("Housingdatabase", HousingDatabase);
+        FileSave<StatDatabase>("Statdatabase", StatDatabase);
     }
 
     //Load data file
     public void AllLoad()
     {
-        invendatabase = JsonUtility.FromJson<InventoryDatabase>(FileOpen(InvenFilename));
-        housingdatabase = JsonConvert.DeserializeObject<HousingObjectdatabase>(FileOpen(HousingFilename));
-        statdatabase = JsonUtility.FromJson<StatDatabase>(FileOpen(StatFilename));
+        InvenDatabase = JsonUtility.FromJson<InventoryDatabase>(FileOpen(InvenFileName));
+        HousingDatabase = JsonConvert.DeserializeObject<HousingObjectdatabase>(FileOpen(HousingFileName));
+        StatDatabase = JsonUtility.FromJson<StatDatabase>(FileOpen(StatFileName));
     }
 
 
     private string FileOpen(string filename)
     {
-        FileStream filestream = new FileStream(string.Format("{0}/{1}.json", path, filename), FileMode.Open);
+        FileStream filestream = new FileStream(string.Format("{0}/{1}.json", PathName, filename), FileMode.Open);
         byte[] data = new byte[filestream.Length];
         filestream.Read(data, 0, data.Length);
         filestream.Close();
@@ -112,7 +96,7 @@ public class FileIOSystem : Singleton<FileIOSystem>
 
     private void FileSave<T>(string filename, T database)
     {
-        FileStream filestream = new FileStream(string.Format("{0}/{1}.json", path, filename), FileMode.Create);
+        FileStream filestream = new FileStream(string.Format("{0}/{1}.json", PathName, filename), FileMode.Create);
         string jsondata = JsonUtility.ToJson(database);
         byte[] data = Encoding.UTF8.GetBytes(jsondata);
         filestream.Write(data, 0, data.Length);

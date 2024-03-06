@@ -93,7 +93,7 @@ public class InteractUIManager : MonoBehaviour
         expSlider.value = initializedPetStat.exp / 100f;
         
         // Gold
-        moneyText.text = FileIOSystem.Instance.invendatabase.money.ToString();
+        moneyText.text = FileIOSystem.Instance.InvenDatabase.money.ToString();
         
         // Stat
         foreach (StatUIRef statUIRef in statUIList)
